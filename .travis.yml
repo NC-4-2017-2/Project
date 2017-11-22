@@ -1,0 +1,19 @@
+language: java
+jdk:
+- oraclejdk8
+sudo: false
+script: mvn clean package
+notifications:
+  email:
+    recipients:
+      - mykhailo.skrypkin@netcracker.com
+      - viktor.mazepa@netcracker.com
+      - maksym.dobrynin@netcracker.com
+      - daryav97@yahoo.com
+      - developeregor96@gmail.com
+      - artemkunitsyn@gmail.com
+      - mikhailov.oleg.m@gmail.com
+      - sergei.svinariov@gmail.com
+      - yanov.alexander@gmail.com
+    on_success: always
+    on_failure: always

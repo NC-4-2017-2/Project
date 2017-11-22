@@ -18,76 +18,52 @@ public class Project {
   private Sprint sprint;
 
 
-  public BigInteger getProjectId() {
-    return projectId;
+  private Project(ProjectBuilder builder) {
+    this.projectId = builder.projectId;
+    this.name = builder.name;
+    this.startDate = builder.startDate;
+    this.endDate = builder.endDate;
+    this.status = builder.status;
+    this.projectManager = builder.projectManager;
+    this.users = builder.users;
+    this.tasks = builder.tasks;
+    this.sprint = builder.sprint;
   }
 
-  public void setProjectId(BigInteger projectId) {
-    this.projectId = projectId;
+  public BigInteger getProjectId() {
+    return projectId;
   }
 
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public Date getStartDate() {
     return startDate;
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
   }
 
   public Date getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
-
   public ProjectStatus getStatus() {
     return status;
-  }
-
-  public void setStatus(ProjectStatus status) {
-    this.status = status;
   }
 
   public BigInteger getProjectManager() {
     return projectManager;
   }
 
-  public void setProjectManager(BigInteger projectManager) {
-    this.projectManager = projectManager;
-  }
-
   public Collection<User> getUsers() {
     return users;
-  }
-
-  public void setUsers(Collection<User> users) {
-    this.users = users;
   }
 
   public Collection<Task> getTasks() {
     return tasks;
   }
 
-  public void setTasks(Collection<Task> tasks) {
-    this.tasks = tasks;
-  }
-
   public Sprint getSprint() {
     return sprint;
-  }
-
-  public void setSprint(Sprint sprint) {
-    this.sprint = sprint;
   }
 
   public static class ProjectBuilder {
@@ -102,12 +78,48 @@ public class Project {
     private Collection<Task> tasks;
     private Sprint sprint;
 
-    public ProjectBuilder(BigInteger projectId, String name,
-        Date startDate, Date endDate) {
+    public ProjectBuilder(BigInteger projectId, String name) {
       this.projectId = projectId;
       this.name = name;
+    }
+
+    public ProjectBuilder startDate(Date startDate) {
       this.startDate = startDate;
+      return this;
+    }
+
+    public ProjectBuilder endDate(Date endDate) {
       this.endDate = endDate;
+      return this;
+    }
+
+    public ProjectBuilder projectStatus(ProjectStatus status) {
+      this.status = status;
+      return this;
+    }
+
+    public ProjectBuilder projectManager(BigInteger projectManager) {
+      this.projectManager = projectManager;
+      return this;
+    }
+
+    public ProjectBuilder users(Collection<User> users) {
+      this.users = users;
+      return this;
+    }
+
+    public ProjectBuilder tasks(Collection<Task> tasks) {
+      this.tasks = tasks;
+      return this;
+    }
+
+    public ProjectBuilder sprint(Sprint sprint) {
+      this.sprint = sprint;
+      return this;
+    }
+
+    public Project build() {
+      return new Project(this);
     }
 
   }

@@ -111,6 +111,7 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
+
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.github.jsimone</groupId>
@@ -119,9 +120,17 @@
                                     <destFileName>webapp-runner.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
+
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>

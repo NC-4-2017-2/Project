@@ -4,8 +4,11 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import main.net.cracker.project.model.TaskDAO;
+import main.net.cracker.project.model.TaskDAO.TaskPriority;
+import main.net.cracker.project.model.TaskDAO.TaskStatus;
+import main.net.cracker.project.model.TaskDAO.TaskType;
 
-public class Task implements TaskDAO {
+public class Task  {
 
   private BigInteger taskId;
   private TaskType taskType;
@@ -128,36 +131,5 @@ public class Task implements TaskDAO {
     this.projectId = projectId;
   }
 
-  public void createTask(Task task) {
 
-  }
-
-  public void updateTask(BigInteger id) {
-
-  }
-
-  public Collection<Task> findTaskByProjectld(BigInteger id) {
-    return null;
-  }
-
-  public Collection<Task> findTaskByUserld(BigInteger id) {
-    return null;
-  }
-
-  public Collection<Task> findTaskByDate(Date date, BigInteger id) {
-    return null;
-  }
-
-  public Collection<Task> findTaskByPriority(TaskPriority taskPriority,
-      BigInteger employeeID) {
-    return null;
-  }
-
-  public Task findTaskByStatusAndUserId(String status, BigInteger id) {
-    return null;
-  }
-
-  public String updateStatus(TaskStatus status) {
-    return null;
-  }
 }

@@ -3,9 +3,8 @@ package main.net.cracker.project.model.entity;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import main.net.cracker.project.model.BusinessTripDAO;
 
-public class BusinessTrip implements BusinessTripDAO {
+public class BusinessTrip {
 
   private BigInteger businessTripId;
   private BigInteger projectId;
@@ -87,21 +86,5 @@ public class BusinessTrip implements BusinessTripDAO {
 
   public void setStatus(Status status) {
     this.status = status;
-  }
-
-  public void createTrip(BusinessTrip trip) {
-
-  }
-
-  public void updateTrip(BigInteger id, BusinessTrip trip) {
-
-  }
-
-  public Collection<BusinessTrip> findTripByUserld(BigInteger id) {
-    return null;
-  }
-
-  public BusinessTrip findTripByProjectId(BigInteger id) {
-    return null;
   }
 }

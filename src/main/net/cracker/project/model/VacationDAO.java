@@ -2,7 +2,6 @@ package main.net.cracker.project.model;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import main.net.cracker.project.model.entity.Status;
 import main.net.cracker.project.model.entity.Vacation;
 
 public interface VacationDAO {

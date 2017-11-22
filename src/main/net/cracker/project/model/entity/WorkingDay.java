@@ -2,10 +2,8 @@ package main.net.cracker.project.model.entity;
 
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.Map;
-import main.net.cracker.project.model.WorkingDayDAO;
 
-public class WorkingDay implements WorkingDayDAO{
+public class WorkingDay {
 
   private BigInteger userId;
   private Date date;
@@ -62,17 +60,4 @@ public class WorkingDay implements WorkingDayDAO{
     this.pmId = pmId;
   }
 
-  public Boolean addHoursPerDay(Double hours, User user, BigInteger taskId) {
-    return null;
-  }
-
-  public Map<String, BigInteger> findHoursPerWeek(Integer numberOfWeek,
-      BigInteger userId) {
-    return null;
-  }
-
-  public Integer findHoursPerPeriod(Integer userId, Date startDate,
-      Date endDate) {
-    return null;
-  }
 }

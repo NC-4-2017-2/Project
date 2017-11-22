@@ -5,9 +5,10 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import main.net.cracker.project.model.UserDAO;
+import main.net.cracker.project.model.UserDAO.JobTitle;
 import main.net.cracker.project.model.UserDAO.WorkPeriod;
 
-public class User implements UserDAO{
+public class User{
   private BigInteger userId;
   private String firstName;
   private String lastName;
@@ -137,45 +138,5 @@ public class User implements UserDAO{
     this.projectStatus = projectStatus;
   }
 
-  public User createUser(User user) {
-    return null;
-  }
-
-  public void updateUser(BigInteger id, User user) {
-
-  }
-
-  public User findUserByUserId(BigInteger id) {
-    return null;
-  }
-
-  public User findUserByLogin(String login) {
-    return null;
-  }
-
-  public void updatePhoneNumber(BigInteger id, String phoneNumber) {
-
-  }
-
-  public void updateEmail(BigInteger id, String email) {
-
-  }
-
-  public void updatePassword(BigInteger id, String password) {
-
-  }
-
-  public void updatePhoto(BigInteger id, File photo) {
-
-  }
-
-  public void updateWorkingPeriodByUserId(BigInteger userId,
-      BigInteger projectId) {
-
-  }
-
-  private class JobTitle {
-
-  }
 
 }

@@ -155,8 +155,8 @@ public class Task {
             return this;
         }
 
-        public TaskBuilder users(Collection<User> usersCollection) {
-            users.addAll(usersCollection);
+        public TaskBuilder users(Collection<User> users) {
+            this.users = users;
             return this;
         }
 

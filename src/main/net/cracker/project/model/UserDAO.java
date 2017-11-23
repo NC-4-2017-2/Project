@@ -53,16 +53,16 @@ public interface UserDAO {
     }
   }
 
-  enum Status {
+  enum UserStatus {
     WORKING, FIRED;
 
     private Integer id;
 
-    Status(Integer id) {
+    UserStatus(Integer id) {
       this.id = id;
     }
 
-    Status() {
+    UserStatus() {
       this.id = 0;
     }
   }

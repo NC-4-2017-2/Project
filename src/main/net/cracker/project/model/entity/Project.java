@@ -78,9 +78,17 @@ public class Project {
     private Collection<Task> tasks;
     private Sprint sprint;
 
-    public ProjectBuilder(BigInteger projectId, String name) {
+    public ProjectBuilder() {
+    }
+
+    public ProjectBuilder projectId(BigInteger projectId) {
       this.projectId = projectId;
+      return this;
+    }
+
+    public ProjectBuilder name(String name) {
       this.name = name;
+      return this;
     }
 
     public ProjectBuilder startDate(Date startDate) {

@@ -8,7 +8,9 @@ public class Sprint {
   private BigInteger sprintId;
   private String name;
   private Date startDate;
+  private Date plannedEndDate;
   private Date endDate;
+  private SprintStatus status;
 
   public Sprint(BigInteger sprintId, String name, Date startDate,
       Date endDate) {
@@ -48,5 +50,35 @@ public class Sprint {
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
+  }
+
+  public Date getPlannedEndDate() {
+    return plannedEndDate;
+  }
+
+  public void setPlannedEndDate(Date plannedEndDate) {
+    this.plannedEndDate = plannedEndDate;
+  }
+
+  public SprintStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(SprintStatus status) {
+    this.status = status;
+  }
+
+  public enum SprintStatus {
+    OPEN, CLOSED;
+
+    private Integer id;
+
+    SprintStatus(Integer id) {
+      this.id = id;
+    }
+
+    SprintStatus() {
+      this(0);
+    }
   }
 }

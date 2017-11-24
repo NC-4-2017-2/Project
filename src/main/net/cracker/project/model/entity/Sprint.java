@@ -2,6 +2,7 @@ package main.net.cracker.project.model.entity;
 
 import java.math.BigInteger;
 import java.util.Date;
+import main.net.cracker.project.model.ProjectDAO.OCStatus;
 
 public class Sprint {
 
@@ -10,14 +11,17 @@ public class Sprint {
   private Date startDate;
   private Date plannedEndDate;
   private Date endDate;
-  private SprintStatus status;
+  private OCStatus status;
 
   public Sprint(BigInteger sprintId, String name, Date startDate,
-      Date endDate) {
+      Date plannedEndDate, Date endDate,
+      OCStatus status) {
     this.sprintId = sprintId;
     this.name = name;
     this.startDate = startDate;
+    this.plannedEndDate = plannedEndDate;
     this.endDate = endDate;
+    this.status = status;
   }
 
   public BigInteger getSprintId() {
@@ -60,25 +64,11 @@ public class Sprint {
     this.plannedEndDate = plannedEndDate;
   }
 
-  public SprintStatus getStatus() {
+  public OCStatus getStatus() {
     return status;
   }
 
-  public void setStatus(SprintStatus status) {
+  public void setStatus(OCStatus status) {
     this.status = status;
-  }
-
-  public enum SprintStatus {
-    OPEN, CLOSED;
-
-    private Integer id;
-
-    SprintStatus(Integer id) {
-      this.id = id;
-    }
-
-    SprintStatus() {
-      this(0);
-    }
   }
 }

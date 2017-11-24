@@ -3,7 +3,7 @@ package main.net.cracker.project.model.entity;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import main.net.cracker.project.model.ProjectDAO.ProjectStatus;
+import main.net.cracker.project.model.ProjectDAO.OCStatus;
 
 public class Project {
 
@@ -11,7 +11,7 @@ public class Project {
   private String name;
   private Date startDate;
   private Date endDate;
-  private ProjectStatus status;
+  private OCStatus status;
   private BigInteger projectManager;
   private Collection<User> users;
   private Collection<Task> tasks;
@@ -46,7 +46,7 @@ public class Project {
     return endDate;
   }
 
-  public ProjectStatus getStatus() {
+  public OCStatus getStatus() {
     return status;
   }
 
@@ -72,7 +72,7 @@ public class Project {
     private String name;
     private Date startDate;
     private Date endDate;
-    private ProjectStatus status;
+    private OCStatus status;
     private BigInteger projectManager;
     private Collection<User> users;
     private Collection<Task> tasks;
@@ -101,7 +101,7 @@ public class Project {
       return this;
     }
 
-    public ProjectBuilder projectStatus(ProjectStatus status) {
+    public ProjectBuilder projectStatus(OCStatus status) {
       this.status = status;
       return this;
     }

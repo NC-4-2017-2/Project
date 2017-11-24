@@ -20,16 +20,16 @@ public interface ProjectDAO {
 
   void addUser(BigInteger userId, BigInteger projectId);
 
-  enum ProjectStatus {
+  enum OCStatus {
     OPEN, CLOSED;
 
     private Integer id;
 
-    ProjectStatus(Integer id) {
+    OCStatus(Integer id) {
       this.id = id;
     }
 
-    ProjectStatus() {
+    OCStatus() {
       this.id = 0;
     }
   }

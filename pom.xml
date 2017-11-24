@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <!-- should be changed -->
     <groupId>com.changeme</groupId>
@@ -20,6 +20,7 @@
         <jstl.version>1.2</jstl.version>
         <jackson.version>2.5.4</jackson.version>
         <javax.version>3.1.0</javax.version>
+        <springmailer.version>4.2.5.RELEASE</springmailer.version>
     </properties>
 
     <dependencies>
@@ -59,6 +60,8 @@
             <version>${jackson.version}</version>
         </dependency>
 
+
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -93,6 +96,12 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${springmailer.version}</version>
         </dependency>
     </dependencies>
 

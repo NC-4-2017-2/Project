@@ -3,6 +3,7 @@ package main.com.netcracker.project.model;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 import main.com.netcracker.project.model.entity.User;
 
@@ -23,6 +24,10 @@ public interface UserDAO {
   void updatePassword(BigInteger id, String password);
 
   void updatePhoto(BigInteger id, File photo);
+
+  List<WorkPeriod> findWorkPeriodsByUserId(BigInteger id);
+
+  List<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId, BigInteger projectId);
 
   void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId);
 
@@ -68,19 +73,52 @@ public interface UserDAO {
     }
   }
 
-
   class WorkPeriod {
 
-    BigInteger userId;
-    BigInteger projectId;
-    Date startWorkDate;
-    Date endWorkDate;
+    BigInteger userId, projectId;
+    Date startWorkDate, endWorkDate;
+
+    public WorkPeriod() {
+
+    }
 
     public WorkPeriod(BigInteger userId, BigInteger projectId,
         Date startWorkDate, Date endWorkDate) {
       this.userId = userId;
       this.projectId = projectId;
       this.startWorkDate = startWorkDate;
+      this.endWorkDate = endWorkDate;
+    }
+
+    public BigInteger getUserId() {
+      return userId;
+    }
+
+    public void setUserId(BigInteger userId) {
+      this.userId = userId;
+    }
+
+    public BigInteger getProjectId() {
+      return projectId;
+    }
+
+    public void setProjectId(BigInteger projectId) {
+      this.projectId = projectId;
+    }
+
+    public Date getStartWorkDate() {
+      return startWorkDate;
+    }
+
+    public void setStartWorkDate(Date startWorkDate) {
+      this.startWorkDate = startWorkDate;
+    }
+
+    public Date getEndWorkDate() {
+      return endWorkDate;
+    }
+
+    public void setEndWorkDate(Date endWorkDate) {
       this.endWorkDate = endWorkDate;
     }
   }

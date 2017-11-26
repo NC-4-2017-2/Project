@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@ComponentScan("main.net.cracker.project")
+@ComponentScan("main.com.netcracker.project")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override

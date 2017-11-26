@@ -207,6 +207,10 @@ public class User {
       this.projectStatus = projectStatus;
       return this;
     }
+
+    public User build() {
+      return new User(this);
+    }
   }
 
 

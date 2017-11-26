@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.JstlView;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("main.net.cracker.project")
+@ComponentScan("main.com.netcracker.project")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override

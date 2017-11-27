@@ -11,8 +11,6 @@ public interface UserDAO {
 
   User createUser(User user);
 
-  void updateUser(BigInteger id, User user);
-
   User findUserByUserId(BigInteger id);
 
   User findUserByLogin(String login);
@@ -25,11 +23,13 @@ public interface UserDAO {
 
   void updatePhoto(BigInteger id, File photo);
 
+//  void updateProjectStatus(BigInteger id, String status);
+
   List<WorkPeriod> findWorkPeriodsByUserId(BigInteger id);
 
   List<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId, BigInteger projectId);
 
-  void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId);
+  void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod);
 
   enum JobTitle {
     PROJECT_MANAGER, LINE_MANAGER, SOFTWARE_ENGINEER;

@@ -92,4 +92,11 @@ public class UsersDaoTest {
             LOGGER.log(Level.INFO, wk.getEndWorkDate().toString());
         }
     }
+
+    @Test
+    public void updateWorkingPeriodByUserId() {
+        UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
+        workPeriod.setEndWorkDate(new Date());
+        userDao.updateWorkingPeriodByUserId(BigInteger.valueOf(2), BigInteger.valueOf(4), workPeriod);
+    }
 }

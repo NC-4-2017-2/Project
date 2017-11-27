@@ -5,5 +5,6 @@
 
     <import resource="Spring-Datasource.xml"/>
     <import resource="Spring-User.xml"/>
+    <import resource="Spring-Project.xml"/>
 
 </beans>

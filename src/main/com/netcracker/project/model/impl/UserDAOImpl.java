@@ -148,6 +148,26 @@ public class UserDAOImpl implements UserDAO {
             "PROJECT_ID.OBJECT_ID = PROJECT_WP_REF.REFERENCE AND " +
             "PROJECT_ID.OBJECT_ID = ? AND " +
             "USER_WP_REF.OBJECT_ID = PROJECT_WP_REF.OBJECT_ID";
+    private static final String UPDATE_WORKING_PERIOD_END_DATE = "UPDATE ATTRIBUTES " +
+            "SET ATTRIBUTES.VALUE = ? " +
+            "WHERE ATTRIBUTES.ATTR_ID = 62 AND " +
+            "ATTRIBUTES.OBJECT_ID = " +
+            "(SELECT WORKING_PERIOD_ID.OBJECT_ID " +
+            "FROM OBJECTS WORKING_PERIOD_ID, OBJECTS USER_ID, OBJECTS PROJECT_ID, " +
+            "OBJREFERENCE USER_WP_REF, OBJREFERENCE PROJECT_WP_REF, " +
+            "ATTRIBUTES START_DATE_ATTR, ATTRIBUTES END_DATE_ATTR " +
+            "WHERE USER_WP_REF.ATTR_ID = 63 AND " +
+            "WORKING_PERIOD_ID.OBJECT_ID = USER_WP_REF.OBJECT_ID AND " +
+            "USER_ID.OBJECT_ID = USER_WP_REF.REFERENCE AND " +
+            "USER_ID.OBJECT_ID = ? AND " +
+            "START_DATE_ATTR.OBJECT_ID = USER_WP_REF.OBJECT_ID AND " +
+            "START_DATE_ATTR.ATTR_ID = 61 AND " +
+            "END_DATE_ATTR.OBJECT_ID = USER_WP_REF.OBJECT_ID AND " +
+            "END_DATE_ATTR.ATTR_ID = 62 AND " +
+            "PROJECT_WP_REF.ATTR_ID = 64 AND " +
+            "PROJECT_ID.OBJECT_ID = PROJECT_WP_REF.REFERENCE AND " +
+            "PROJECT_ID.OBJECT_ID = ? AND " +
+            "USER_WP_REF.OBJECT_ID = PROJECT_WP_REF.OBJECT_ID)";
 
     public void setDataSource(DataSource dataSource) {
         template = new JdbcTemplate(dataSource);
@@ -168,11 +188,6 @@ public class UserDAOImpl implements UserDAO {
         });
 
         return user;
-    }
-
-    @Override
-    public void updateUser(BigInteger id, User user) {
-
     }
 
     @Override
@@ -205,6 +220,11 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+//    @Override
+//    public void updateProjectStatus(BigInteger id, String status) {
+//
+//    }
+
     @Override
     public List<WorkPeriod> findWorkPeriodsByUserId(BigInteger id) {
         return template.query(FIND_WORK_PERIOD_BY_USER_ID, new Object[]{id}, new WorkPeriodMapper());
@@ -216,7 +236,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId) {
-
+    public void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod) {
+        template.update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate().toString(), userId, projectId);
     }
+
 }

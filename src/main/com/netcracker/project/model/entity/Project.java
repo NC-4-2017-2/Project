@@ -11,11 +11,11 @@ public class Project {
   private String name;
   private Date startDate;
   private Date endDate;
-  private OCStatus status;
+  private OCStatus projectStatus;
   private BigInteger projectManager;
   private Collection<User> users;
   private Collection<Task> tasks;
-  private Sprint sprint;
+  private Collection<Sprint> sprints;
 
 
   private Project(ProjectBuilder builder) {
@@ -23,11 +23,11 @@ public class Project {
     this.name = builder.name;
     this.startDate = builder.startDate;
     this.endDate = builder.endDate;
-    this.status = builder.status;
+    this.projectStatus = builder.status;
     this.projectManager = builder.projectManager;
     this.users = builder.users;
     this.tasks = builder.tasks;
-    this.sprint = builder.sprint;
+    this.sprints = builder.sprints;
   }
 
   public BigInteger getProjectId() {
@@ -46,8 +46,8 @@ public class Project {
     return endDate;
   }
 
-  public OCStatus getStatus() {
-    return status;
+  public OCStatus getProjectStatus() {
+    return projectStatus;
   }
 
   public BigInteger getProjectManager() {
@@ -62,8 +62,8 @@ public class Project {
     return tasks;
   }
 
-  public Sprint getSprint() {
-    return sprint;
+  public Collection<Sprint> getSprints() {
+    return sprints;
   }
 
   public static class ProjectBuilder {
@@ -76,7 +76,7 @@ public class Project {
     private BigInteger projectManager;
     private Collection<User> users;
     private Collection<Task> tasks;
-    private Sprint sprint;
+    private Collection<Sprint> sprints;
 
     public ProjectBuilder() {
     }
@@ -121,8 +121,8 @@ public class Project {
       return this;
     }
 
-    public ProjectBuilder sprint(Sprint sprint) {
-      this.sprint = sprint;
+    public ProjectBuilder sprint(Collection<Sprint> sprint) {
+      this.sprints = sprint;
       return this;
     }
 

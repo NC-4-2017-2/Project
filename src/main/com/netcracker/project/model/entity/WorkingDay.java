@@ -59,5 +59,4 @@ public class WorkingDay {
   public void setPmId(BigInteger pmId) {
     this.pmId = pmId;
   }
-
   }

@@ -160,6 +160,50 @@ public class TaskDAOImpl implements TaskDAO {
         + "AND TASK_REOPEN_COUNTER.ATTR_ID = 28 AND TASK_REOPEN_COUNTER.OBJECT_ID = TASK.OBJECT_ID\n"
         + "AND TASK_COMMENT.ATTR_ID = 29 AND TASK_COMMENT.OBJECT_ID = TASK.OBJECT_ID;";
 
+  private static final String UPDATE_TASK = "UPDATE ATTRIBUTES SET ATTRIBUTES.LIST_VALUE_ID = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ? \n"
+        + "AND ATTRIBUTES.ATTR_ID = 21;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ?\n"
+        + "AND ATTRIBUTES.ATTR_ID = 22;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ?\n"
+        + "AND ATTRIBUTES.ATTR_ID = 22;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ? \n"
+        + "AND ATTRIBUTES.ATTR_ID = 23;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ? \n"
+        + "AND ATTRIBUTES.ATTR_ID = 24;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.LIST_VALUE_ID = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = 6 \n"
+        + "AND ATTRIBUTES.ATTR_ID = 25;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.LIST_VALUE_ID = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ?\n"
+        + "AND ATTRIBUTES.ATTR_ID = 26;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ?\n"
+        + "AND ATTRIBUTES.ATTR_ID = 27;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ? \n"
+        + "AND ATTRIBUTES.ATTR_ID = 28;\n"
+        + "\n"
+        + "UPDATE ATTRIBUTES SET ATTRIBUTES.VALUE = ?\n"
+        + "WHERE ATTRIBUTES.OBJECT_ID = ? \n"
+        + "AND ATTRIBUTES.ATTR_ID = 29;";
+
+    private static final String UPDATE_STATUS = "UPDATE ATTRIBUTES SET ATTRIBUTES.LIST_VALUE_ID = ? \n"
+                                                + "WHERE ATTRIBUTES.OBJECT_ID = ? \n"
+                                                + "AND ATTRIBUTES.ATTR_ID = 26;";
+
     public void setDataSource(DataSource dataSource){
         template = new JdbcTemplate(dataSource);
     }
@@ -183,8 +227,8 @@ public class TaskDAOImpl implements TaskDAO {
 
     @Override
     @Transactional
-    public void updateTask(BigInteger id) {
-
+    public void updateTask(Task task) {
+      template.update(UPDATE_TASK, task);
     }
 
     @Override
@@ -214,7 +258,8 @@ public class TaskDAOImpl implements TaskDAO {
 
     @Override
     @Transactional
-    public String updateStatus(TaskStatus status) {
-        return null;
+    public TaskStatus updateStatus(TaskStatus status) {
+        template.update(UPDATE_STATUS, status);
+        return status;
     }
 }

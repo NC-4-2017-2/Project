@@ -7,4 +7,7 @@
     <import resource="Spring-User.xml"/>
     <import resource="Spring-Project.xml"/>
 
+    <import resource="Spring-Project.xml"/>
+
+
 </beans>

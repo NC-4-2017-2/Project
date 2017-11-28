@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.entity.Project;
 import org.junit.Before;
@@ -17,8 +18,10 @@ public class ProjectDaoTest {
   private ApplicationContext context;
   private ProjectDAO projectDAO;
 
+
   @Before
   public void setUp() {
+    Locale.setDefault(Locale.ENGLISH);
     context = new ClassPathXmlApplicationContext("Spring-Module.xml");
     projectDAO = (ProjectDAO) context.getBean("projectDAO");
   }

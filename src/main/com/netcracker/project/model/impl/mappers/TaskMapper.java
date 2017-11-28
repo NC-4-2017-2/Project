@@ -16,7 +16,10 @@ public class TaskMapper implements RowMapper<Task> {
   @Override
   public Task mapRow(ResultSet resultSet, int numRow) throws SQLException {
 
-    Date startDate = null, plannedEndDate = null, endDate = null;
+    Date startDate = null;
+    Date plannedEndDate = null;
+    Date endDate = null;
+
     converter = new MapperDateConverter();
 
     String dateStart = resultSet.getString("START_DATE");

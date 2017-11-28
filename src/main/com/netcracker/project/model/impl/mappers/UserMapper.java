@@ -16,6 +16,7 @@ public class UserMapper implements RowMapper<User> {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         Date dateBirth = null;
         Date dateHire = null;
+
         converter = new MapperDateConverter();
 
         dateBirth = converter.convertStringToDate(rs.getString("BIRTH_DATE"));

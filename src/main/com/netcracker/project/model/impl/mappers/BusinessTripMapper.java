@@ -17,6 +17,7 @@ public class BusinessTripMapper implements RowMapper<BusinessTrip>{
     public BusinessTrip mapRow(ResultSet resultSet, int i) throws SQLException {
         Date startDate = null;
         Date endDate = null;
+
         converter = new MapperDateConverter();
 
         startDate = converter.convertStringToDate(resultSet.getString("START_DATE"));

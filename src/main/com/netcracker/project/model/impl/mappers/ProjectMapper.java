@@ -15,6 +15,7 @@ public class ProjectMapper implements RowMapper<Project> {
   public Project mapRow(ResultSet rs, int i) throws SQLException {
     Date startDate = null;
     Date endDate = null;
+
     converter = new MapperDateConverter();
 
     String dateStart = rs.getString("START_DATE");

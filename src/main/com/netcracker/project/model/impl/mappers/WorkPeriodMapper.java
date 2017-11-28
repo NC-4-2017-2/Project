@@ -8,15 +8,14 @@ import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by Артём on 26.11.2017.
- */
 public class WorkPeriodMapper implements RowMapper<UserDAO.WorkPeriod> {
 
     private MapperDateConverter converter;
 
     public UserDAO.WorkPeriod mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Date startDate = null, endDate = null;
+        Date startDate = null;
+        Date endDate = null;
+
         UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
         converter = new MapperDateConverter();
 

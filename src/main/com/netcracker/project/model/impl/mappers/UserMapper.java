@@ -7,18 +7,19 @@ import org.springframework.jdbc.core.RowMapper;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserMapper implements RowMapper<User> {
 
-    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Date dateBirth = null, dateHire = null;
+    private MapperDateConverter converter;
 
-        dateBirth = convertStringToDate(rs.getString("BIRTH_DATE"));
-        dateHire = convertStringToDate(rs.getString("HIRE_DATE"));
+    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Date dateBirth = null;
+        Date dateHire = null;
+        converter = new MapperDateConverter();
+
+        dateBirth = converter.convertStringToDate(rs.getString("BIRTH_DATE"));
+        dateHire = converter.convertStringToDate(rs.getString("HIRE_DATE"));
 
         return new User.UserBuilder()
                 .userId(new BigInteger(rs.getString("USER_ID")))
@@ -33,15 +34,4 @@ public class UserMapper implements RowMapper<User> {
                 .build();
     }
 
-    private Date convertStringToDate(String str) {
-        Date date = null;
-        DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-
-        try {
-            date = dateFormat.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
 }

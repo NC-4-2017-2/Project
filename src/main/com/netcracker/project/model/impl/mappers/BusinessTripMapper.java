@@ -7,9 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BusinessTripMapper implements RowMapper<BusinessTrip>{
@@ -20,6 +17,7 @@ public class BusinessTripMapper implements RowMapper<BusinessTrip>{
     public BusinessTrip mapRow(ResultSet resultSet, int i) throws SQLException {
         Date startDate = null;
         Date endDate = null;
+        converter = new MapperDateConverter();
 
         startDate = converter.convertStringToDate(resultSet.getString("START_DATE"));
         endDate = converter.convertStringToDate(resultSet.getString("END_DATE"));

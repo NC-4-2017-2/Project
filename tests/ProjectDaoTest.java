@@ -18,7 +18,6 @@ public class ProjectDaoTest {
   private ApplicationContext context;
   private ProjectDAO projectDAO;
 
-
   @Before
   public void setUp() {
     Locale.setDefault(Locale.ENGLISH);

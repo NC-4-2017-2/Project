@@ -7,21 +7,21 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Артём on 26.11.2017.
  */
 public class WorkPeriodMapper implements RowMapper<UserDAO.WorkPeriod> {
 
+    private MapperDateConverter converter;
+
     public UserDAO.WorkPeriod mapRow(ResultSet rs, int rowNum) throws SQLException {
         Date startDate = null, endDate = null;
         UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
+        converter = new MapperDateConverter();
 
-        startDate = convertStringToDate(rs.getString("START_DATE"));
-        endDate = convertStringToDate(rs.getString("END_DATE"));
+        startDate = converter.convertStringToDate(rs.getString("START_DATE"));
+        endDate = converter.convertStringToDate(rs.getString("END_DATE"));
 
         workPeriod.setUserId(new BigInteger(rs.getString("USER_ID")));
         workPeriod.setProjectId(new BigInteger(rs.getString("PROJECT_ID")));
@@ -31,14 +31,4 @@ public class WorkPeriodMapper implements RowMapper<UserDAO.WorkPeriod> {
         return workPeriod;
     }
 
-    private java.util.Date convertStringToDate(String str) {
-        Date date = null;
-        DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-        try {
-            date = dateFormat.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
 }

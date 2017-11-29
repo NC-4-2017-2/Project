@@ -58,7 +58,7 @@ public class WorkingDay {
     private Double workingHours;
     private Status status;
     private BigInteger pmId;
-    public BigInteger workingDayId;
+    private BigInteger workingDayId;
 
     public WorkingDayBuilder(){
     }
@@ -96,6 +96,10 @@ public class WorkingDay {
     public WorkingDayBuilder pmId(BigInteger pmId) {
       this.pmId = pmId;
       return this;
+    }
+
+    public WorkingDay build() {
+      return new WorkingDay(this);
     }
   }
 }

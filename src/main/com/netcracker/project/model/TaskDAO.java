@@ -15,12 +15,12 @@ public interface TaskDAO {
 
   Collection<Task> findTaskByUserId(BigInteger id);
 
-  Collection<Task> findTaskByDate(Date date, BigInteger id);
+  Collection<Task> findTaskByUserIdAndDate(Date date, BigInteger id);
 
   Collection<Task> findTaskByPriority(TaskPriority taskPriority,
       BigInteger employeeID);
 
-  Task findTaskByStatusAndUserId(String status, BigInteger id);
+  Task findTaskByStatusAndUserId(TaskStatus status, BigInteger id);
 
   TaskStatus updateStatus(TaskStatus status);
 

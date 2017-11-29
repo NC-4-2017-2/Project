@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
 import main.com.netcracker.project.model.UserDAO;
+import main.com.netcracker.project.model.UserDAO.JobTitle;
+import main.com.netcracker.project.model.UserDAO.ProjectStatus;
+import main.com.netcracker.project.model.UserDAO.UserRole;
+import main.com.netcracker.project.model.UserDAO.UserStatus;
 import main.com.netcracker.project.model.entity.User;
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,8 +53,12 @@ public class UsersDaoTest {
         .dateOfBirth(date)
         .hireDate(date)
         .phoneNumber("qwe")
+        .jobTitle(JobTitle.SOFTWARE_ENGINEER)
+        .projectStatus(ProjectStatus.WORKING)
         .login("qwe")
         .password("qwe")
+        .role(UserRole.ROLE_SE)
+        .userStatus(UserStatus.WORKING)
         .build();
 
     User returnedUser = userDao.createUser(user);
@@ -77,7 +85,7 @@ public class UsersDaoTest {
         .findWorkPeriodsByUserId(BigInteger.valueOf(2));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
-      LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());
+      LOGGER.log(Level.INFO, wk.getWorkPeriodId().toString());
       LOGGER.log(Level.INFO, wk.getUserId().toString());
       LOGGER.log(Level.INFO, wk.getProjectId().toString());
       LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
@@ -91,7 +99,7 @@ public class UsersDaoTest {
         .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
-      LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());
+      LOGGER.log(Level.INFO, wk.getWorkPeriodId().toString());
       LOGGER.log(Level.INFO, wk.getUserId().toString());
       LOGGER.log(Level.INFO, wk.getProjectId().toString());
       LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
@@ -107,11 +115,16 @@ public class UsersDaoTest {
             BigInteger.valueOf(4));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
-      LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());
+      LOGGER.log(Level.INFO, wk.getWorkPeriodId().toString());
       LOGGER.log(Level.INFO, wk.getUserId().toString());
       LOGGER.log(Level.INFO, wk.getProjectId().toString());
       LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
       LOGGER.log(Level.INFO, wk.getEndWorkDate().toString());
     }
+  }
+
+  @Test
+  public void updateProjectStatus() {
+    userDao.updateProjectStatus(BigInteger.valueOf(2), 1);
   }
 }

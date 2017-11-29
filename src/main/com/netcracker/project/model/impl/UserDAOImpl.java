@@ -19,19 +19,19 @@ public class UserDAOImpl implements UserDAO {
     private JdbcTemplate template;
 
     private static final String CREATE_USER = "INSERT ALL " +
-            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (100,NULL,1,?,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (1,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (2,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (3,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (4,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (5,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (6,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (8,100,NULL,NULL,1) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (9,100,NULL,NULL,0) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (10,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (11,100,?,NULL,NULL) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (12,100,NULL,NULL,3) " +
-            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (13,100,NULL,NULL,0) " +
+            "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (101,NULL,1,?,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (1,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (2,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (3,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (4,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (5,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (6,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (8,101,NULL,NULL,?) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (9,101,NULL,NULL,?) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (10,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (11,101,?,NULL,NULL) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (12,101,NULL,NULL,?) " +
+            "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (13,101,NULL,NULL,?) " +
             "SELECT * " +
             "FROM Dual";
 
@@ -124,6 +124,11 @@ public class UserDAOImpl implements UserDAO {
             "WHERE ATTRIBUTES.OBJECT_ID = ? AND " +
             "ATTRIBUTES.ATTR_ID = 11";
 
+    private static final String UPDATE_USER_PROJECT_STATUS = "UPDATE ATTRIBUTES "
+        + "SET ATTRIBUTES.LIST_VALUE_ID = ? "
+        + "WHERE ATTRIBUTES.OBJECT_ID = ? AND "
+        + "ATTRIBUTES.ATTR_ID = 9";
+
     private static final String FIND_WORK_PERIOD_BY_USER_ID = "SELECT WORK_PERIOD.OBJECT_ID AS PERIOD_ID, USER_ID.OBJECT_ID AS USER_ID, PROJECT_ID.OBJECT_ID AS PROJECT_ID, " +
             "START_DATE_ATTR.VALUE AS START_DATE, END_DATE_ATTR.VALUE AS END_DATE " +
             "FROM OBJECTS USER_ID, OBJECTS PROJECT_ID, OBJECTS WORK_PERIOD, " +
@@ -212,8 +217,12 @@ public class UserDAOImpl implements UserDAO {
                 user.getDateOfBirth(),
                 user.getHireDate(),
                 user.getPhoneNumber(),
+                user.getJobTitle().getId(),
+                user.getProjectStatus().getId(),
                 user.getLogin(),
-                user.getPassword()
+                user.getPassword(),
+                user.getUserRole().getId(),
+                user.getUserStatus().getId()
         });
 
         return user;
@@ -254,10 +263,11 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
-//    @Override
-//    public void updateProjectStatus(BigInteger id, String status) {
-//
-//    }
+    @Override
+    public void updateProjectStatus(BigInteger id, Integer status) {
+        logger.debug("Entering updateProjectStatus(id=" + id + "," + " status=" + status + ")");
+        template.update(UPDATE_USER_PROJECT_STATUS, status, id);
+    }
 
     @Override
     public Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id) {

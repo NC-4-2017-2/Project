@@ -3,6 +3,8 @@ package main.com.netcracker.project.model.entity;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
+
+import main.com.netcracker.project.model.UserDAO.UserRole;
 import main.com.netcracker.project.model.UserDAO.JobTitle;
 import main.com.netcracker.project.model.UserDAO.ProjectStatus;
 import main.com.netcracker.project.model.UserDAO.UserStatus;
@@ -21,6 +23,7 @@ public class User {
   private JobTitle jobTitle;
   private String login;
   private String password;
+  private UserRole userRole;
   private Collection<WorkPeriod> workPeriods;
   private UserStatus userStatus;
   private ProjectStatus projectStatus;
@@ -37,6 +40,7 @@ public class User {
     this.jobTitle = builder.jobTitle;
     this.login = builder.login;
     this.password = builder.password;
+    this.userRole = builder.role;
     this.workPeriods = builder.workPeriods;
     this.userStatus = builder.userStatus;
     this.projectStatus = builder.projectStatus;
@@ -106,6 +110,10 @@ public class User {
     return password;
   }
 
+  public UserRole getUserRole() {
+    return userRole;
+  }
+
   public Collection<WorkPeriod> getWorkPeriods() {
     return workPeriods;
   }
@@ -117,6 +125,8 @@ public class User {
   public ProjectStatus getProjectStatus() {
     return projectStatus;
   }
+
+
 
   public static class UserBuilder {
 
@@ -131,6 +141,7 @@ public class User {
     private JobTitle jobTitle;
     private String login;
     private String password;
+    private UserRole role;
     private Collection<WorkPeriod> workPeriods;
     private UserStatus userStatus;
     private ProjectStatus projectStatus;
@@ -190,6 +201,11 @@ public class User {
 
     public UserBuilder password(String password) {
       this.password = password;
+      return this;
+    }
+
+    public UserBuilder role(UserRole role) {
+      this.role = role;
       return this;
     }
 

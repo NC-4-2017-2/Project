@@ -23,7 +23,7 @@ public interface UserDAO {
 
   void updatePhoto(BigInteger id, File photo);
 
-//  void updateProjectStatus(BigInteger id, String status);
+  void updateProjectStatus(BigInteger id, Integer status);
 
   Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id);
 
@@ -75,6 +75,20 @@ public interface UserDAO {
     }
   }
 
+  enum UserRole {
+    ROLE_ADMIN(0), ROLE_PM(1), ROLE_LM(2), ROLE_SE(3);
+
+    private int id;
+
+    UserRole(int id) {
+      this.id = id;
+    }
+
+    public int getId(){
+      return id;
+    }
+  }
+
   class WorkPeriod {
 
     BigInteger workPeriodId, userId, projectId;
@@ -93,7 +107,7 @@ public interface UserDAO {
       this.endWorkDate = endWorkDate;
     }
 
-    public BigInteger getWorkPeiodId() {
+    public BigInteger getWorkPeriodId() {
       return workPeriodId;
     }
 

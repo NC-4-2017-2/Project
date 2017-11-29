@@ -9,7 +9,7 @@ public class BusinessTrip {
     private BigInteger projectId;
     private BigInteger userId;
     private BigInteger authorId;
-    private String userName;
+    private BigInteger pmId;
     private String country;
     private Date startDate;
     private Date endDate;
@@ -20,7 +20,7 @@ public class BusinessTrip {
         this.projectId = builder.projectId;
         this.userId = builder.userId;
         this.authorId = builder.authorId;
-        this.userName = builder.userName;
+        this.pmId = builder.pmId;
         this.country = builder.country;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
@@ -43,10 +43,6 @@ public class BusinessTrip {
         return authorId;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
     public String getCountry() {
         return country;
     }
@@ -63,12 +59,16 @@ public class BusinessTrip {
         return status;
     }
 
+    public BigInteger getPmId() {
+        return pmId;
+    }
+
     public static class BusinessTripBuilder {
         private BigInteger businessTripId;
         private BigInteger projectId;
         private BigInteger userId;
         private BigInteger authorId;
-        private String userName;
+        private BigInteger pmId;
         private String country;
         private Date startDate;
         private Date endDate;
@@ -80,6 +80,11 @@ public class BusinessTrip {
 
         public BusinessTripBuilder businessTripId(BigInteger businessTripId) {
             this.businessTripId = businessTripId;
+            return this;
+        }
+
+        public BusinessTripBuilder pmId(BigInteger pmId) {
+            this.pmId = pmId;
             return this;
         }
 
@@ -95,11 +100,6 @@ public class BusinessTrip {
 
         public BusinessTripBuilder authorId(BigInteger authorId) {
             this.authorId = authorId;
-            return this;
-        }
-
-        public BusinessTripBuilder userName(String userName) {
-            this.userName = userName;
             return this;
         }
 

@@ -11,14 +11,12 @@ import java.util.Date;
 
 public class BusinessTripMapper implements RowMapper<BusinessTrip>{
 
-    private MapperDateConverter converter;
+    private MapperDateConverter converter = new MapperDateConverter();
 
     @Override
     public BusinessTrip mapRow(ResultSet resultSet, int i) throws SQLException {
         Date startDate = null;
         Date endDate = null;
-
-        converter = new MapperDateConverter();
 
         startDate = converter.convertStringToDate(resultSet.getString("START_DATE"));
         endDate = converter.convertStringToDate(resultSet.getString("END_DATE"));
@@ -28,7 +26,7 @@ public class BusinessTripMapper implements RowMapper<BusinessTrip>{
                 .projectId(new BigInteger(resultSet.getString("PROJECT_ID")))
                 .userId(new BigInteger(resultSet.getString("USER_ID")))
                 .authorId(new BigInteger(resultSet.getString("AUTHOR_ID")))
-                .userName(resultSet.getString("USER_NAME"))
+                .pmId(new BigInteger(resultSet.getString("PM_ID")))
                 .country(resultSet.getString("COUNTRY"))
                 .startDate(startDate)
                 .endDate(endDate)

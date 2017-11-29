@@ -12,5 +12,5 @@ public interface BusinessTripDAO {
 
   Collection<BusinessTrip> findTripByUserId(BigInteger id);
 
-  BusinessTrip findTripByProjectId(BigInteger id);
+  Collection<BusinessTrip> findTripByProjectId(BigInteger id);
 }

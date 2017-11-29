@@ -1,6 +1,7 @@
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -73,7 +74,7 @@ public class UsersDaoTest {
 
   @Test
   public void findWorkPeriodsByUserId() {
-    List<UserDAO.WorkPeriod> workPeriodList = userDao
+    Collection<UserDAO.WorkPeriod> workPeriodList = userDao
         .findWorkPeriodsByUserId(BigInteger.valueOf(2));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
@@ -86,8 +87,23 @@ public class UsersDaoTest {
   }
 
   @Test
+  public void findWorkPeriodsByProjectId() {
+    Collection<UserDAO.WorkPeriod> workPeriodList = userDao
+            .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
+
+    for (UserDAO.WorkPeriod wk : workPeriodList) {
+      LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());
+      LOGGER.log(Level.INFO, wk.getUserId().toString());
+      LOGGER.log(Level.INFO, wk.getProjectId().toString());
+      LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
+      LOGGER.log(Level.INFO, wk.getEndWorkDate().toString());
+    }
+  }
+
+
+  @Test
   public void findWorkPeriodByUserIdAndProjectId() {
-    List<UserDAO.WorkPeriod> workPeriodList = userDao
+    Collection<UserDAO.WorkPeriod> workPeriodList = userDao
         .findWorkPeriodByUserIdAndProjectId(BigInteger.valueOf(2),
             BigInteger.valueOf(4));
 

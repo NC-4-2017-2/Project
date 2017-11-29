@@ -27,6 +27,8 @@ public interface UserDAO {
 
   Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id);
 
+  Collection<WorkPeriod> findWorkPeriodsByProjectId(BigInteger id);
+
   Collection<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId, BigInteger projectId);
 
   void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod);

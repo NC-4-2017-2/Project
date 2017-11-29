@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import main.com.netcracker.project.model.ProjectDAO.OCStatus;
 import main.com.netcracker.project.model.entity.Project;
 import org.springframework.jdbc.core.RowMapper;
 

@@ -4,11 +4,14 @@ import static org.junit.Assert.assertThat;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.entity.Project;
+import main.com.netcracker.project.model.entity.Sprint;
+import main.com.netcracker.project.model.impl.ProjectDAOImpl;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +64,22 @@ public class ProjectDaoTest {
   }
 
   @Test
+  public void addUserTest() {
+    //INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (23,NULL,1,'Test User Test',NULL);
+    projectDAO.addUser(BigInteger.valueOf(4), BigInteger.valueOf(23));
+    List<BigInteger> users = projectDAO.getIdUsers(BigInteger.valueOf(4));
+    assertThat(3, is(users.size()));
+  }
+
+  @Test
+  public void deleteUserTest() {
+    projectDAO
+        .deleteUserByUserId(BigInteger.valueOf(23), BigInteger.valueOf(4));
+    List<BigInteger> users = projectDAO.getIdUsers(BigInteger.valueOf(4));
+    assertThat(users.size(), is(2));
+  }
+
+  @Test
   public void createProjectTest() {
     MapperDateConverter mp = new MapperDateConverter();
     Date start = mp.convertStringToDate("13.11.14");
@@ -77,6 +96,13 @@ public class ProjectDaoTest {
 
     Project result = projectDAO.findProjectByProjectId(BigInteger.valueOf(204));
     assertThat(BigInteger.valueOf(204), is(result.getProjectId()));
+  }
+
+  @Test
+  public void getALlSprintsTest() {
+    Collection<Sprint> collection = projectDAO.getAllSprints(BigInteger.valueOf(5));
+
+    assertThat(collection.size(), is(3));
   }
 }
 

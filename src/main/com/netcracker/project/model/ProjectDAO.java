@@ -1,10 +1,12 @@
 package main.com.netcracker.project.model;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
 
 import java.util.List;
 import main.com.netcracker.project.model.entity.Project;
+import main.com.netcracker.project.model.entity.Sprint;
 
 public interface ProjectDAO {
 
@@ -16,14 +18,18 @@ public interface ProjectDAO {
 
   List<Project> findProjectByDate(Date startDate);
 
+  List<BigInteger> getIdUsers(BigInteger projectId);
+
   void deleteUserByUserId(BigInteger userId, BigInteger projectID);
 
   void updateProject(Project project);
 
   void addUser(BigInteger userId, BigInteger projectId);
 
+  Collection<Sprint> getAllSprints(BigInteger projectID);
+
   enum OCStatus {
-    OPEN(0), CLOSED(1);
+    OPENED(0), CLOSED(1);
 
     private int id;
 

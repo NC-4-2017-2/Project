@@ -22,6 +22,7 @@ public class WorkPeriodMapper implements RowMapper<UserDAO.WorkPeriod> {
         startDate = converter.convertStringToDate(rs.getString("START_DATE"));
         endDate = converter.convertStringToDate(rs.getString("END_DATE"));
 
+        workPeriod.setWorkPeriodId(new BigInteger(rs.getString("PERIOD_ID")));
         workPeriod.setUserId(new BigInteger(rs.getString("USER_ID")));
         workPeriod.setProjectId(new BigInteger(rs.getString("PROJECT_ID")));
         workPeriod.setStartWorkDate(startDate);

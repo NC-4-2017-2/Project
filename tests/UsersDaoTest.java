@@ -77,6 +77,7 @@ public class UsersDaoTest {
         .findWorkPeriodsByUserId(BigInteger.valueOf(2));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
+      LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());
       LOGGER.log(Level.INFO, wk.getUserId().toString());
       LOGGER.log(Level.INFO, wk.getProjectId().toString());
       LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
@@ -91,6 +92,7 @@ public class UsersDaoTest {
             BigInteger.valueOf(4));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
+      LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());
       LOGGER.log(Level.INFO, wk.getUserId().toString());
       LOGGER.log(Level.INFO, wk.getProjectId().toString());
       LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());

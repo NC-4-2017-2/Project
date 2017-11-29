@@ -75,19 +75,28 @@ public interface UserDAO {
 
   class WorkPeriod {
 
-    BigInteger userId, projectId;
+    BigInteger workPeriodId, userId, projectId;
     Date startWorkDate, endWorkDate;
 
     public WorkPeriod() {
 
     }
 
-    public WorkPeriod(BigInteger userId, BigInteger projectId,
+    public WorkPeriod(BigInteger workPeriodId, BigInteger userId, BigInteger projectId,
         Date startWorkDate, Date endWorkDate) {
+      this.workPeriodId = workPeriodId;
       this.userId = userId;
       this.projectId = projectId;
       this.startWorkDate = startWorkDate;
       this.endWorkDate = endWorkDate;
+    }
+
+    public BigInteger getWorkPeiodId() {
+      return workPeriodId;
+    }
+
+    public void setWorkPeriodId(BigInteger workPeriodId) {
+      this.workPeriodId = workPeriodId;
     }
 
     public BigInteger getUserId() {

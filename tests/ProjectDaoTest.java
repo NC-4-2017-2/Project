@@ -27,8 +27,8 @@ public class ProjectDaoTest {
 
   @Test
   public void findProjectByIDTest() {
-    Project project = projectDAO.findProjectByProjectId(BigInteger.ONE);
-    assertThat(BigInteger.valueOf(2), is(project.getProjectId()));
+    Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
+    assertThat(BigInteger.valueOf(4), is(project.getProjectId()));
   }
 
   @Test

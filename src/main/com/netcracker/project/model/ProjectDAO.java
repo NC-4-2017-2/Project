@@ -17,7 +17,7 @@ public interface ProjectDAO {
 
   void deleteUserByUserId(BigInteger userId, BigInteger projectID);
 
-  void updateProject(BigInteger id, Project project);
+  void updateProject(Project project);
 
   void addUser(BigInteger userId, BigInteger projectId);
 

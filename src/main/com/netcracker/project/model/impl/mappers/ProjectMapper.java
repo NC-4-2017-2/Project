@@ -17,21 +17,23 @@ public class ProjectMapper implements RowMapper<Project> {
     Date endDate = null;
 
     converter = new MapperDateConverter();
-
-    String dateStart = rs.getString("START_DATE");
-    String dateEnd = rs.getString("END_DATE");
-    BigInteger projectManagerId = new BigInteger(
-        rs.getString("MANAGES_PROJECT"));
+/*
+  private OCStatus projectStatus;
+  private Collection<Task> tasks;
+  private Collection<Sprint> sprints;
+* */
+    String dateStart = rs.getString("START_DATE_PR");
+    String dateEnd = rs.getString("END_DATE_PR");
 
     startDate = converter.convertStringToDate(dateStart);
     endDate = converter.convertStringToDate(dateEnd);
 
     return new Project.ProjectBuilder()
         .projectId(new BigInteger(rs.getString("PROJECT_ID")))
+        .name(rs.getString("NAME"))
         .startDate(startDate)
         .endDate(endDate)
-        .projectStatus(OCStatus.valueOf(rs.getString("PROJECT_STATUS")))
-        .projectManager(projectManagerId)
+        //.projectStatus(OCStatus.valueOf(rs.getString("PROJECT_STATUS")))
         .build();
   }
 

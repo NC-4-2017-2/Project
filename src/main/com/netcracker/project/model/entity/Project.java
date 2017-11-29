@@ -12,7 +12,7 @@ public class Project {
   private Date startDate;
   private Date endDate;
   private OCStatus projectStatus;
-  private BigInteger projectManager;
+  private User projectManager;
   private Collection<User> users;
   private Collection<Task> tasks;
   private Collection<Sprint> sprints;
@@ -24,8 +24,6 @@ public class Project {
     this.startDate = builder.startDate;
     this.endDate = builder.endDate;
     this.projectStatus = builder.status;
-    this.projectManager = builder.projectManager;
-    this.users = builder.users;
     this.tasks = builder.tasks;
     this.sprints = builder.sprints;
   }
@@ -50,7 +48,7 @@ public class Project {
     return projectStatus;
   }
 
-  public BigInteger getProjectManager() {
+  public User getProjectManager() {
     return projectManager;
   }
 
@@ -66,6 +64,14 @@ public class Project {
     return sprints;
   }
 
+  public void setUsers(Collection<User> users) {
+    this.users = users;
+  }
+
+  public void setProjectManager(User projectManager) {
+    this.projectManager = projectManager;
+  }
+
   public static class ProjectBuilder {
 
     private BigInteger projectId;
@@ -73,8 +79,6 @@ public class Project {
     private Date startDate;
     private Date endDate;
     private OCStatus status;
-    private BigInteger projectManager;
-    private Collection<User> users;
     private Collection<Task> tasks;
     private Collection<Sprint> sprints;
 
@@ -103,16 +107,6 @@ public class Project {
 
     public ProjectBuilder projectStatus(OCStatus status) {
       this.status = status;
-      return this;
-    }
-
-    public ProjectBuilder projectManager(BigInteger projectManager) {
-      this.projectManager = projectManager;
-      return this;
-    }
-
-    public ProjectBuilder users(Collection<User> users) {
-      this.users = users;
       return this;
     }
 

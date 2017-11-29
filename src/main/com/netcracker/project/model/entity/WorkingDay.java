@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class WorkingDay {
 
+  private BigInteger workingDayId;
   private BigInteger userId;
   private Date date;
   private Integer weekNumber;
@@ -13,6 +14,7 @@ public class WorkingDay {
   private BigInteger pmId;
 
   private WorkingDay(WorkingDayBuilder builder) {
+    this.workingDayId = builder.workingDayId;
     this.userId = builder.userId;
     this.date = builder.date ;
     this.weekNumber = builder.weekNumber;
@@ -45,6 +47,10 @@ public class WorkingDay {
     return pmId;
   }
 
+  public BigInteger getWorkingDayId() {
+    return workingDayId;
+  }
+
   public static class WorkingDayBuilder{
     private BigInteger userId;
     private Date date;
@@ -52,12 +58,18 @@ public class WorkingDay {
     private Double workingHours;
     private Status status;
     private BigInteger pmId;
+    public BigInteger workingDayId;
 
     public WorkingDayBuilder(){
     }
 
     public WorkingDayBuilder userId(BigInteger userId) {
       this.userId = userId;
+      return this;
+    }
+
+    public WorkingDayBuilder workingDayId(BigInteger workingDayId) {
+      this.workingDayId = workingDayId;
       return this;
     }
 

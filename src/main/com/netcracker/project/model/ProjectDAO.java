@@ -1,8 +1,10 @@
 package main.com.netcracker.project.model;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
 
+import java.util.List;
 import main.com.netcracker.project.model.entity.Project;
 
 public interface ProjectDAO {
@@ -13,7 +15,7 @@ public interface ProjectDAO {
 
   Project findProjectByName(String name);
 
-  Project findProjectByDate(Date startDate);
+  List<Project> findProjectByDate(Date startDate);
 
   void deleteUserByUserId(BigInteger userId, BigInteger projectID);
 

@@ -17,11 +17,7 @@ public class ProjectMapper implements RowMapper<Project> {
     Date endDate = null;
 
     converter = new MapperDateConverter();
-/*
-  private OCStatus projectStatus;
-  private Collection<Task> tasks;
-  private Collection<Sprint> sprints;
-* */
+
     String dateStart = rs.getString("START_DATE_PR");
     String dateEnd = rs.getString("END_DATE_PR");
 
@@ -33,7 +29,6 @@ public class ProjectMapper implements RowMapper<Project> {
         .name(rs.getString("NAME"))
         .startDate(startDate)
         .endDate(endDate)
-        //.projectStatus(OCStatus.valueOf(rs.getString("PROJECT_STATUS")))
         .build();
   }
 

@@ -5,9 +5,11 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.entity.Project;
+import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -47,8 +49,35 @@ public class ProjectDaoTest {
       e.printStackTrace();
     }
 
-    Project project = projectDAO.findProjectByDate(d);
+    List<Project> projects = projectDAO.findProjectByDate(d);
 
-    assertThat(BigInteger.valueOf(2), is(project.getProjectId()));
+    if (projects.size() == 1) {
+      assertThat(BigInteger.valueOf(4), is(projects.get(0).getProjectId()));
+    }
+    if (projects.size() == 2) {
+      assertThat(BigInteger.valueOf(4), is(projects.get(0).getProjectId()));
+      assertThat(BigInteger.valueOf(200), is(projects.get(1).getProjectId()));
+    }
+  }
+
+  @Test
+  public void createProjectTest() {
+    MapperDateConverter mp = new MapperDateConverter();
+    Date start = mp.convertStringToDate("13.11.14");
+    Date end = mp.convertStringToDate("13.11.20");
+    Project project = new Project.ProjectBuilder()
+        .projectId(BigInteger.valueOf(204))
+        .name("Test")
+        .startDate(start)
+        .endDate(end)
+        .build();
+    project.setProjectManager(BigInteger.ONE);
+
+    projectDAO.createProject(project);
+
+    Project result = projectDAO.findProjectByProjectId(BigInteger.valueOf(204));
+    assertThat(BigInteger.valueOf(204), is(result.getProjectId()));
   }
 }
+
+

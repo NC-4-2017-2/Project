@@ -12,9 +12,9 @@ public class Project {
   private Date startDate;
   private Date endDate;
   private OCStatus projectStatus;
-  private User projectManager;
-  private Collection<User> users;
-  private Collection<Task> tasks;
+  private BigInteger projectManager;
+  private Collection<BigInteger> users;
+  private Collection<BigInteger> tasks;
   private Collection<Sprint> sprints;
 
 
@@ -24,7 +24,6 @@ public class Project {
     this.startDate = builder.startDate;
     this.endDate = builder.endDate;
     this.projectStatus = builder.status;
-    this.tasks = builder.tasks;
     this.sprints = builder.sprints;
   }
 
@@ -48,15 +47,15 @@ public class Project {
     return projectStatus;
   }
 
-  public User getProjectManager() {
+  public BigInteger getProjectManager() {
     return projectManager;
   }
 
-  public Collection<User> getUsers() {
+  public Collection<BigInteger> getUsers() {
     return users;
   }
 
-  public Collection<Task> getTasks() {
+  public Collection<BigInteger> getTasks() {
     return tasks;
   }
 
@@ -64,12 +63,16 @@ public class Project {
     return sprints;
   }
 
-  public void setUsers(Collection<User> users) {
+  public void setUsers(Collection<BigInteger> users) {
     this.users = users;
   }
 
-  public void setProjectManager(User projectManager) {
+  public void setProjectManager(BigInteger projectManager) {
     this.projectManager = projectManager;
+  }
+
+  public void setTasks(Collection<BigInteger> tasks) {
+    this.tasks = tasks;
   }
 
   public static class ProjectBuilder {
@@ -79,7 +82,6 @@ public class Project {
     private Date startDate;
     private Date endDate;
     private OCStatus status;
-    private Collection<Task> tasks;
     private Collection<Sprint> sprints;
 
     public ProjectBuilder() {
@@ -107,11 +109,6 @@ public class Project {
 
     public ProjectBuilder projectStatus(OCStatus status) {
       this.status = status;
-      return this;
-    }
-
-    public ProjectBuilder tasks(Collection<Task> tasks) {
-      this.tasks = tasks;
       return this;
     }
 

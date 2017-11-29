@@ -3,7 +3,6 @@ package main.com.netcracker.project.model;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.entity.Task;
 
 public interface TaskDAO {
@@ -26,41 +25,42 @@ public interface TaskDAO {
   TaskStatus updateStatus(TaskStatus status);
 
   enum TaskPriority {
-    CRITICAL, HIGH, NORMAL, LOW;
-    private Integer id;
+    CRITICAL(0), HIGH(1), NORMAL(2), LOW(3);
+    private int id;
 
-    TaskPriority(Integer id) {
+    TaskPriority(int id) {
       this.id = id;
     }
 
-    TaskPriority() {
-      this.id = 0;
+    public int getId(){
+      return id;
     }
   }
 
   enum TaskStatus {
-    COMPLETED, CLOSED, REOPEN, READY_FOR_TESTING;
-    private Integer id;
+    COMPLETED(0), CLOSED(1), REOPEN(2), READY_FOR_TESTING(3);
+    private int id;
 
-    TaskStatus(Integer id) {
+    TaskStatus(int id) {
       this.id = id;
     }
 
-    TaskStatus() {
-      this.id = 0;
+
+    public int getId(){
+      return id;
     }
   }
 
   enum TaskType {
-    REQUEST_TASK, PROJECT_TASK;
-    private Integer id;
+    REQUEST_TASK(0), PROJECT_TASK(1);
+    private int id;
 
-    TaskType(Integer id) {
+    TaskType(int id) {
       this.id = id;
     }
 
-    TaskType() {
-      this.id = 0;
+    public int getId(){
+      return id;
     }
   }
 

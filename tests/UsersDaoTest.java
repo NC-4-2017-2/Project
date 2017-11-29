@@ -3,7 +3,6 @@ import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import main.com.netcracker.project.model.UserDAO;
@@ -89,7 +88,7 @@ public class UsersDaoTest {
   @Test
   public void findWorkPeriodsByProjectId() {
     Collection<UserDAO.WorkPeriod> workPeriodList = userDao
-            .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
+        .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
 
     for (UserDAO.WorkPeriod wk : workPeriodList) {
       LOGGER.log(Level.INFO, wk.getWorkPeiodId().toString());

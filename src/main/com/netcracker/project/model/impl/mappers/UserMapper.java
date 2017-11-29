@@ -23,16 +23,15 @@ public class UserMapper implements RowMapper<User> {
         dateHire = converter.convertStringToDate(rs.getString("HIRE_DATE"));
 
         return new User.UserBuilder()
-                .userId(new BigInteger(rs.getString("USER_ID")))
-                .lastName(rs.getString("LAST_NAME"))
-                .firstName(rs.getString("FIRST_NAME"))
-                .email(rs.getString("EMAIL"))
-                .dateOfBirth(dateBirth)
-                .hireDate(dateHire)
-                .phoneNumber(rs.getString("PHONE_NUMBER"))
-                .jobTitle(UserDAO.JobTitle.valueOf(rs.getString("JOB_TITLE")))
-                .projectStatus(UserDAO.ProjectStatus.valueOf(rs.getString("PROJECT_STATUS")))
-                .build();
+            .userId(new BigInteger(rs.getString("USER_ID")))
+            .lastName(rs.getString("LAST_NAME"))
+            .firstName(rs.getString("FIRST_NAME"))
+            .email(rs.getString("EMAIL"))
+            .dateOfBirth(dateBirth)
+            .hireDate(dateHire)
+            .phoneNumber(rs.getString("PHONE_NUMBER"))
+            .jobTitle(UserDAO.JobTitle.valueOf(rs.getString("JOB_TITLE")))
+            .projectStatus(UserDAO.ProjectStatus.valueOf(rs.getString("PROJECT_STATUS")))
+            .build();
     }
-
 }

@@ -1,15 +1,14 @@
 package main.com.netcracker.project.model.entity;
 
 public enum Status {
-  APPROVED, DISAPPROVED;
-  private Integer id;
+  APPROVED(0), DISAPPROVED(1);
+  private int id;
 
-  Status(Integer id) {
+  Status(int id) {
     this.id = id;
   }
 
-  Status() {
-    this.id = 0;
+  public int getId(){
+    return id;
   }
-
 }

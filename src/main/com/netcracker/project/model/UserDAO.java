@@ -34,44 +34,44 @@ public interface UserDAO {
   void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod);
 
   enum JobTitle {
-    PROJECT_MANAGER, LINE_MANAGER, SOFTWARE_ENGINEER;
+    PROJECT_MANAGER(0), LINE_MANAGER(1), SOFTWARE_ENGINEER(2);
 
-    private Integer id;
+    private int id;
 
-    JobTitle(Integer id) {
+    JobTitle(int id) {
       this.id = id;
     }
 
-    JobTitle() {
-      this.id = 0;
+    public int getId(){
+      return id;
     }
   }
 
   enum ProjectStatus {
-    WORKING, TRANSIT;
+    WORKING(0), TRANSIT(1);
 
-    private Integer id;
+    private int id;
 
-    ProjectStatus(Integer id) {
+    ProjectStatus(int id) {
       this.id = id;
     }
 
-    ProjectStatus() {
-      this.id = 0;
+    public int getId(){
+      return id;
     }
   }
 
   enum UserStatus {
-    WORKING, FIRED;
+    WORKING(0), FIRED(1);
 
-    private Integer id;
+    private int id;
 
-    UserStatus(Integer id) {
+    UserStatus(int id) {
       this.id = id;
     }
 
-    UserStatus() {
-      this.id = 0;
+    public int getId(){
+      return id;
     }
   }
 

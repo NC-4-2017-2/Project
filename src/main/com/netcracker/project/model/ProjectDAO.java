@@ -1,7 +1,6 @@
 package main.com.netcracker.project.model;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
 
 import java.util.List;
@@ -24,16 +23,16 @@ public interface ProjectDAO {
   void addUser(BigInteger userId, BigInteger projectId);
 
   enum OCStatus {
-    OPEN, CLOSED;
+    OPEN(0), CLOSED(1);
 
-    private Integer id;
+    private int id;
 
-    OCStatus(Integer id) {
+    OCStatus(int id) {
       this.id = id;
     }
 
-    OCStatus() {
-      this.id = 0;
+    public int getId(){
+      return id;
     }
   }
 }

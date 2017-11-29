@@ -2,8 +2,8 @@ package main.com.netcracker.project.model;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import main.com.netcracker.project.model.entity.User;
 
@@ -25,9 +25,9 @@ public interface UserDAO {
 
 //  void updateProjectStatus(BigInteger id, String status);
 
-  List<WorkPeriod> findWorkPeriodsByUserId(BigInteger id);
+  Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id);
 
-  List<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId, BigInteger projectId);
+  Collection<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId, BigInteger projectId);
 
   void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod);
 

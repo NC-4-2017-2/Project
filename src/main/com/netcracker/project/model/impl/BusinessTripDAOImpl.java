@@ -3,10 +3,12 @@ package main.com.netcracker.project.model.impl;
 import main.com.netcracker.project.model.BusinessTripDAO;
 import main.com.netcracker.project.model.entity.BusinessTrip;
 import main.com.netcracker.project.model.impl.mappers.BusinessTripMapper;
+import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigInteger;
 import java.util.Collection;
+import org.springframework.transaction.annotation.Transactional;
 
 public class BusinessTripDAOImpl implements BusinessTripDAO {
 
@@ -91,6 +93,26 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
       + "      PM_ID.OBJECT_ID = TRIP_PROJ_REF.OBJECT_ID AND "
       + "      PM_ID.ATTR_ID = 40;";
 
+  private static final String UPDATE_COUNTRY = "UPDATE ATTRIBUTES "
+      + "    SET ATTRIBUTES.VALUE = 'BULGARIA' "
+      + "    WHERE ATTRIBUTES.OBJECT_ID = 50 AND "
+      + "    ATTRIBUTES.ATTR_ID = 33;";
+
+  private static final String UPDATE_START_DATE = "UPDATE ATTRIBUTES "
+      + "    SET ATTRIBUTES.VALUE = '29.11.17' "
+      + "    WHERE ATTRIBUTES.OBJECT_ID = 50 AND "
+      + "    ATTRIBUTES.ATTR_ID = 34;";
+
+  private static final String UPDATE_END_DATE = "UPDATE ATTRIBUTES "
+      + "    SET ATTRIBUTES.VALUE = '22.12.17' "
+      + "    WHERE ATTRIBUTES.OBJECT_ID = 50 AND "
+      + "    ATTRIBUTES.ATTR_ID = 35;";
+
+  private static  final String UPDATE_STATUS = "UPDATE ATTRIBUTES "
+      + "    SET ATTRIBUTES.LIST_VALUE_ID = 1 "
+      + "    WHERE ATTRIBUTES.OBJECT_ID = 50 AND "
+      + "    ATTRIBUTES.ATTR_ID = 36;";
+
   @Override
   public void createTrip(BusinessTrip trip) {
     template.update(CREATE_TRIP, new Object[]{
@@ -109,9 +131,15 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
     });
   }
 
+  @Transactional
   @Override
-  public void updateTrip(BigInteger id, BusinessTrip trip) {
+  public void updateTrip(BusinessTrip trip) {
+    MapperDateConverter converter = new MapperDateConverter();
 
+    updateCountry(trip.getCountry(), trip.getBusinessTripId());
+    updateStartDate(converter.convertDateTosString(trip.getStartDate()), trip.getBusinessTripId());
+    updateEndDate(converter.convertDateTosString(trip.getEndDate()), trip.getBusinessTripId());
+    updateStatus(trip.getStatus().toString(), trip.getBusinessTripId());
   }
 
   @Override
@@ -124,5 +152,21 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   public Collection<BusinessTrip> findTripByProjectId(BigInteger id) {
     return template.query(FIND_TRIP_BY_PROJECT_ID, new Object[]{id},
         new BusinessTripMapper());
+  }
+
+  private void updateCountry(String country, BigInteger businessTripId) {
+    template.update(UPDATE_COUNTRY, country, businessTripId);
+  }
+
+  private void updateStartDate(String startDate, BigInteger businessTripId) {
+    template.update(UPDATE_START_DATE, startDate, businessTripId);
+  }
+
+  private void updateEndDate(String endDate, BigInteger businessTripId) {
+    template.update(UPDATE_END_DATE, endDate, businessTripId);
+  }
+
+  private void updateStatus(String status, BigInteger businessTripId) {
+    template.update(UPDATE_END_DATE, status, businessTripId);
   }
 }

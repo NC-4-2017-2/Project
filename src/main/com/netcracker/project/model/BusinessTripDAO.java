@@ -8,7 +8,7 @@ public interface BusinessTripDAO {
 
   void createTrip(BusinessTrip trip);
 
-  void updateTrip(BigInteger id, BusinessTrip trip);
+  void updateTrip(BusinessTrip trip);
 
   Collection<BusinessTrip> findTripByUserId(BigInteger id);
 

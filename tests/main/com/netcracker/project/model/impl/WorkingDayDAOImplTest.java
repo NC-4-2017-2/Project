@@ -16,8 +16,10 @@ import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.entity.WorkingDay;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -27,6 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:Spring-Module.xml"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WorkingDayDAOImplTest {
 
   private ApplicationContext context;
@@ -54,7 +57,7 @@ public class WorkingDayDAOImplTest {
   }
 
   @Test
-  public void createWorkingDayTest() {
+  public void test1CreateWorkingDay() {
     Date date1 = converter.convertStringToDate("09.09.91");
     Date date2 = converter.convertStringToDate("15.09.91");
 
@@ -83,7 +86,7 @@ public class WorkingDayDAOImplTest {
   }
 
   @Test
-  public void findHoursPerPeriodTest() {
+  public void test2findHoursPerPeriod() {
     Date startDate = converter.convertStringToDate("09.05.91");
     Date endDate = converter.convertStringToDate("17.09.91");
 
@@ -103,7 +106,7 @@ public class WorkingDayDAOImplTest {
   }
 
   @Test
-  public void deleteWorkingDayTest() {
+  public void test3DeleteWorkingDay() {
     BigInteger id1 = BigInteger.valueOf(44);
     BigInteger id2 = BigInteger.valueOf(45);
 

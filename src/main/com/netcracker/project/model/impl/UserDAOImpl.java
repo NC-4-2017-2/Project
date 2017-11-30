@@ -208,7 +208,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User createUser(User user) {
-        logger.debug("Entering insert(user=" + user + ")");
+        logger.info("Entering insert(user=" + user + ")");
         this.template.update(CREATE_USER, new Object[]{
                 user.getLastName() + " " + user.getFirstName(),
                 user.getLastName(),
@@ -230,31 +230,31 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User findUserByUserId(BigInteger id) {
-        logger.debug("Entering findUserByUserId()");
+        logger.info("Entering findUserByUserId()");
         return template.queryForObject(FIND_USER_BY_USER_ID, new Object[]{id}, new UserMapper());
     }
 
     @Override
     public User findUserByLogin(String login) {
-        logger.debug("Entering findUserByLogin()");
+        logger.info("Entering findUserByLogin()");
         return template.queryForObject(FIND_USER_BY_LOGIN, new Object[]{login}, new UserMapper());
     }
 
     @Override
     public void updatePhoneNumber(BigInteger id, String phoneNumber) {
-        logger.debug("Entering updatePhoneNumber(id=" + id + "," + " phoneNumber=" + phoneNumber + ")");
+        logger.info("Entering updatePhoneNumber(id=" + id + "," + " phoneNumber=" + phoneNumber + ")");
         template.update(UPDATE_PHONE_NUMBER, phoneNumber, id);
     }
 
     @Override
     public void updateEmail(BigInteger id, String email) {
-        logger.debug("Entering updateEmail(id=" + id + "," + " email=" + email + ")");
+        logger.info("Entering updateEmail(id=" + id + "," + " email=" + email + ")");
         template.update(UPDATE_EMAIL, email, id);
     }
 
     @Override
     public void updatePassword(BigInteger id, String password) {
-        logger.debug("Entering updatePassword(id=" + id + "," + " password=" + password + ")");
+        logger.info("Entering updatePassword(id=" + id + "," + " password=" + password + ")");
         template.update(UPDATE_PASSWORD, password, id);
     }
 
@@ -265,31 +265,31 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateProjectStatus(BigInteger id, Integer status) {
-        logger.debug("Entering updateProjectStatus(id=" + id + "," + " status=" + status + ")");
+        logger.info("Entering updateProjectStatus(id=" + id + "," + " status=" + status + ")");
         template.update(UPDATE_USER_PROJECT_STATUS, status, id);
     }
 
     @Override
     public Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id) {
-        logger.debug("Entering findWorkPeriodsByUserId(id=" + id + ")");
+        logger.info("Entering findWorkPeriodsByUserId(id=" + id + ")");
         return template.query(FIND_WORK_PERIOD_BY_USER_ID, new Object[]{id}, new WorkPeriodMapper());
     }
 
     @Override
     public Collection<WorkPeriod> findWorkPeriodsByProjectId(BigInteger id) {
-        logger.debug("Entering findWorkPeriodsByProjectId(id=" + id + ")");
+        logger.info("Entering findWorkPeriodsByProjectId(id=" + id + ")");
         return template.query(FIND_WORK_PERIOD_BY_PROJECT_ID, new Object[]{id}, new WorkPeriodMapper());
     }
 
     @Override
     public Collection<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId, BigInteger projectId) {
-        logger.debug("Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId=" + projectId + ")");
+        logger.info("Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId=" + projectId + ")");
         return template.query(FIND_WORK_PERIOD_BY_USER_ID_AND_PROJECT_ID, new Object[]{userId, projectId}, new WorkPeriodMapper());
     }
 
     @Override
     public void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod) {
-        logger.debug("Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId=" + projectId + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
+        logger.info("Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId=" + projectId + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
         template.update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate().toString(), userId, projectId);
     }
 

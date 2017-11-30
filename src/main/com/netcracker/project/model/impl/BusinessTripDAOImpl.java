@@ -1,5 +1,6 @@
 package main.com.netcracker.project.model.impl;
 
+import javax.sql.DataSource;
 import main.com.netcracker.project.model.BusinessTripDAO;
 import main.com.netcracker.project.model.entity.BusinessTrip;
 import main.com.netcracker.project.model.entity.Status;
@@ -14,22 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class BusinessTripDAOImpl implements BusinessTripDAO {
 
   private JdbcTemplate template;
+  private MapperDateConverter converter = new MapperDateConverter();
 
   private static final String CREATE_TRIP = "INSERT ALL " +
       "INTO OBJECTS(OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) " +
-      "VALUES (50, NULL, 4, ?, NULL) " +
+      "VALUES (56, NULL, 4, ?, NULL) " +
       "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) " +
-      "VALUES (33, 50, ?, NULL, NULL) " +
+      "VALUES (33, 56, ?, NULL, NULL) " +
       "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) " +
-      "VALUES (34, 50, ?, NULL, NULL) " +
+      "VALUES (34, 56, ?, NULL, NULL) " +
       "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) " +
-      "VALUES (35, 50, ?, NULL, NULL) " +
+      "VALUES (35, 56, ?, NULL, NULL) " +
       "INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) " +
-      "VALUES (36, 50, NULL, NULL, ?) " +
-      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (37, ?, ?) " +
-      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (38, ?, ?) " +
-      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (39, ?, ?) " +
-      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (40, ?, ?) " +
+      "VALUES (36, 56, NULL, NULL, ?) " +
+      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (37, 56, ?) " +
+      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (38, 56, ?) " +
+      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (39, 56, ?) " +
+      "INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) VALUES (40, 56, ?) " +
       "SELECT * FROM DUAL";
 
   private static final String FIND_TRIP_BY_USER_ID =
@@ -115,29 +117,29 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
       + "    WHERE ATTRIBUTES.OBJECT_ID = ? AND "
       + "    ATTRIBUTES.ATTR_ID = 36";
 
+
   @Override
   public void createTrip(BusinessTrip trip) {
     template.update(CREATE_TRIP, new Object[]{
         "BUSINESS_TRIP " + trip.getBusinessTripId(),
         trip.getCountry(),
-        trip.getStartDate(),
-        trip.getEndDate(),
+        converter.convertDateTosString(trip.getStartDate()),
+        converter.convertDateTosString(trip.getEndDate()),
         trip.getStatus().getId(),
-        trip.getBusinessTripId(),
         trip.getUserId(),
-        trip.getBusinessTripId(),
         trip.getAuthorId(),
-        trip.getBusinessTripId(),
         trip.getProjectId(),
-        trip.getBusinessTripId(),
         trip.getPmId()
     });
+  }
+
+  public void setDataSource(DataSource dataSource) {
+    template = new JdbcTemplate(dataSource);
   }
 
   @Transactional
   @Override
   public void updateTrip(BusinessTrip trip) {
-    MapperDateConverter converter = new MapperDateConverter();
 
     updateCountry(trip.getCountry(), trip.getBusinessTripId());
     updateStartDate(converter.convertDateTosString(trip.getStartDate()),

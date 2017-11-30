@@ -1,6 +1,7 @@
 package main.com.netcracker.project.model.impl;
 
 import java.util.Collection;
+import javax.sql.DataSource;
 import main.com.netcracker.project.model.WorkingDayDAO;
 
 import java.util.Date;
@@ -60,6 +61,10 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
           + "WORKING_HOURS_STATUS.LIST_VALUE_ID = "
           + "WORKING_HOURS_STATUS_VALUE.LIST_VALUE_ID";
 
+
+  public void setDataSource(DataSource dataSource) {
+    template = new JdbcTemplate(dataSource);
+  }
 
   @Override
   public void addHoursPerDay(WorkingDay workingDay) {

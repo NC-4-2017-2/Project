@@ -63,6 +63,21 @@ public class BusinessTrip {
         return pmId;
     }
 
+    @Override
+    public String toString() {
+        return "BusinessTrip{" +
+            "businessTripId=" + businessTripId +
+            ", projectId=" + projectId +
+            ", userId=" + userId +
+            ", authorId=" + authorId +
+            ", pmId=" + pmId +
+            ", country='" + country + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", status=" + status +
+            '}';
+    }
+
     public static class BusinessTripBuilder {
         private BigInteger businessTripId;
         private BigInteger projectId;

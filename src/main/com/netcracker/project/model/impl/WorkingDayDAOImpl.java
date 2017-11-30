@@ -9,10 +9,12 @@ import java.util.Date;
 import main.com.netcracker.project.model.entity.WorkingDay;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import main.com.netcracker.project.model.impl.mappers.WorkingDayMapper;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class WorkingDayDAOImpl implements WorkingDayDAO {
 
+  private Logger logger = Logger.getLogger(WorkingDayDAOImpl.class);
   private JdbcTemplate template;
   private MapperDateConverter converter = new MapperDateConverter();
 
@@ -71,6 +73,7 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
 
   @Override
   public void addHoursPerDay(WorkingDay workingDay) {
+    logger.info("Entering addHoursPerDay(workingDay=" + workingDay + ")");
     String date = converter.convertDateTosString(workingDay.getDate());
 
     template.update(ADD_HOURS_PER_DAY, new Object[]{
@@ -95,6 +98,7 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   public Collection<WorkingDay> findHoursPerPeriod(BigInteger userId,
       Date startDate,
       Date endDate) {
+    logger.info("Entering findHoursPerPeriod(projectId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
 
     String startDateString = converter.convertDateTosString(startDate);
     String endDateString = converter.convertDateTosString(endDate);

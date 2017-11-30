@@ -230,13 +230,13 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User findUserByUserId(BigInteger id) {
-        logger.info("Entering findUserByUserId()");
+        logger.info("Entering findUserByUserId(" + id + ")");
         return template.queryForObject(FIND_USER_BY_USER_ID, new Object[]{id}, new UserMapper());
     }
 
     @Override
     public User findUserByLogin(String login) {
-        logger.info("Entering findUserByLogin()");
+        logger.info("Entering findUserByLogin(" + login + ")");
         return template.queryForObject(FIND_USER_BY_LOGIN, new Object[]{login}, new UserMapper());
     }
 

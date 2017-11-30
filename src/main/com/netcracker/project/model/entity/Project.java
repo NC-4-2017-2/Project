@@ -12,9 +12,9 @@ public class Project {
   private Date startDate;
   private Date endDate;
   private OCStatus projectStatus;
-  private BigInteger projectManager;
-  private Collection<BigInteger> users;
-  private Collection<BigInteger> tasks;
+  private BigInteger projectManagerId;
+  private Collection<BigInteger> usersId;
+  private Collection<BigInteger> tasksId;
   private Collection<Sprint> sprints;
 
 
@@ -23,7 +23,6 @@ public class Project {
     this.name = builder.name;
     this.startDate = builder.startDate;
     this.endDate = builder.endDate;
-    this.projectStatus = builder.status;
   }
 
   public BigInteger getProjectId() {
@@ -46,36 +45,40 @@ public class Project {
     return projectStatus;
   }
 
-  public BigInteger getProjectManager() {
-    return projectManager;
+  public BigInteger getProjectManagerId() {
+    return projectManagerId;
   }
 
-  public Collection<BigInteger> getUsers() {
-    return users;
+  public Collection<BigInteger> getUsersId() {
+    return usersId;
   }
 
-  public Collection<BigInteger> getTasks() {
-    return tasks;
+  public Collection<BigInteger> getTasksId() {
+    return tasksId;
   }
 
   public Collection<Sprint> getSprints() {
     return sprints;
   }
 
-  public void setUsers(Collection<BigInteger> users) {
-    this.users = users;
+  public void setUsersId(Collection<BigInteger> usersId) {
+    this.usersId = usersId;
   }
 
-  public void setProjectManager(BigInteger projectManager) {
-    this.projectManager = projectManager;
+  public void setProjectManagerId(BigInteger projectManagerId) {
+    this.projectManagerId = projectManagerId;
   }
 
   public void setSprints(Collection<Sprint> sprints) {
     this.sprints = sprints;
   }
 
-  public void setTasks(Collection<BigInteger> tasks) {
-    this.tasks = tasks;
+  public void setTasksId(Collection<BigInteger> tasksId) {
+    this.tasksId = tasksId;
+  }
+
+  public void setProjectStatus(OCStatus projectStatus) {
+    this.projectStatus = projectStatus;
   }
 
   public static class ProjectBuilder {
@@ -84,7 +87,6 @@ public class Project {
     private String name;
     private Date startDate;
     private Date endDate;
-    private OCStatus status;
 
     public ProjectBuilder() {
     }
@@ -108,12 +110,6 @@ public class Project {
       this.endDate = endDate;
       return this;
     }
-
-    public ProjectBuilder projectStatus(OCStatus status) {
-      this.status = status;
-      return this;
-    }
-
 
     public Project build() {
       return new Project(this);

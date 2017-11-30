@@ -14,9 +14,9 @@ public class SprintMapper implements RowMapper<Sprint> {
 
   @Override
   public Sprint mapRow(ResultSet rs, int i) throws SQLException {
-    Date startDate = null;
-    Date endDate = null;
-    Date plannedEndDate = null;
+    Date startDate;
+    Date endDate;
+    Date plannedEndDate;
 
     converter = new MapperDateConverter();
 

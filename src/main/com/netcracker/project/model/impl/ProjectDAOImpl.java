@@ -17,15 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class ProjectDAOImpl implements ProjectDAO {
 
   private JdbcTemplate template;
-  /*
-  *Params:
-  * id
-  * name
-  * start
-  * end
-  * status
-  * projectManager
-  */
+
   private static final String CREATE_PROJECT =
       "INSERT ALL "
           + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (204,NULL,2,'Project'||?,NULL) "
@@ -40,7 +32,7 @@ public class ProjectDAOImpl implements ProjectDAO {
       "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (19,?,?)";
 
   private static final String DELETE_USERS_IN_PROJECT =
-      "";
+      "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ? AND REFERENCE = ?";
 
   private static final String FIND_PROJECT_BY_PROJECT_ID =
       "SELECT PR.OBJECT_ID AS PROJECT_ID, PR_NAME.VALUE AS NAME, START_DATE.VALUE "
@@ -84,7 +76,7 @@ public class ProjectDAOImpl implements ProjectDAO {
           + "AND PR_STATUS_VALUE.ATTR_ID = 59 "
           + "AND PR_STATUS_VALUE.LIST_VALUE_ID = PR_STATUS.LIST_VALUE_ID";
 
-  private static final String GET_ALL_SPRINT = "SELECT "
+  private static final String GET_SPRINTS = "SELECT "
       + "  REF.OBJECT_ID AS SPRINT_ID, "
       + "  NAME.VALUE AS SPRINT_NAME, "
       + "  START_DATE.VALUE AS SPRINT_START, "
@@ -111,46 +103,88 @@ public class ProjectDAOImpl implements ProjectDAO {
       + "      AND STATUS_VALUE.ATTR_ID = 59 "
       + "      AND STATUS_VALUE.LIST_VALUE_ID = STATUS.LIST_VALUE_ID";
 
+  private static final String CREATE_SPRINT =
+      "INSERT ALL "
+          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (61,NULL,7,'Sprint'||61,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (55,61,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (56,61,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (57,61,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (58,61,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (59,61,NULL,NULL,?) "
+          + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (60,61,?) "
+          + " SELECT * FROM dual";
+
+
+  private static final String GET_ID_USERS = "SELECT USER_PROJ_REF.REFERENCE "
+      + "FROM OBJREFERENCE USER_PROJ_REF "
+      + "WHERE USER_PROJ_REF.ATTR_ID = 19 AND "
+      + "USER_PROJ_REF.OBJECT_ID = ?";
+
+  private static final String GET_PM_ID = "SELECT USER_PROJ_REF.REFERENCE "
+      + "FROM OBJREFERENCE USER_PROJ_REF "
+      + "WHERE USER_PROJ_REF.ATTR_ID = 18 AND "
+      + "USER_PROJ_REF.OBJECT_ID = ?";
+
+  private static final String GET_PROJECT_ID_BY_DATE =
+      "SELECT PR.OBJECT_ID AS PROJECT_ID "
+          + "FROM OBJTYPE PR_TYPE, OBJECTS PR, "
+          + "ATTRIBUTES PR_NAME, ATTRIBUTES START_DATE "
+          + "WHERE "
+          + "PR_TYPE.CODE = 'PROJECT' "
+          + "AND PR_NAME.ATTR_ID = 14 "
+          + "AND PR_NAME.OBJECT_ID = PR.OBJECT_ID "
+          + "AND START_DATE.VALUE = ? "
+          + "AND START_DATE.ATTR_ID = 15 "
+          + "AND START_DATE.OBJECT_ID = PR.OBJECT_ID";
+
+  private static final String GET_TASKS_BY_PROJECT_ID =
+      "SELECT OBJECT_ID FROM OBJREFERENCE "
+          + "WHERE ATTR_ID = 32 "
+          + "AND REFERENCE = ?";
+  private static final String UPDATE_END_DATE =
+      "UPDATE ATTRIBUTES SET VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 16 AND OBJECT_ID = ?";
+
+  private static final String UPDATE_STATUS =
+      "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? "
+          + "WHERE ATTR_ID = 17 AND OBJECT_ID = ? ";
+  private static final String GET_STATUS_BY_PROJECT_ID =
+      "SELECT "
+          + "  STATUS.VALUE "
+          + "FROM ATTRIBUTES STATUS_VALUE, LISTVALUE STATUS, OBJECTS PROJECT "
+          + "WHERE "
+          + "  PROJECT.OBJECT_ID = ? "
+          + "  AND PROJECT.OBJECT_TYPE_ID = 2 "
+          + "  AND STATUS_VALUE.ATTR_ID = 17 "
+          + "  AND STATUS_VALUE.OBJECT_ID = PROJECT.OBJECT_ID "
+          + "  AND STATUS.LIST_VALUE_ID = STATUS_VALUE.LIST_VALUE_ID "
+          + "  AND STATUS.ATTR_ID = 59";
+
+  private static final String UPDATE_PROJECT_PM_ID =
+      "UPDATE OBJREFERENCE "
+          + "SET REFERENCE = ? "
+          + "WHERE ATTR_ID = 18 AND OBJECT_ID = ?";
 
   public void setDataSource(DataSource dataSource) {
     template = new JdbcTemplate(dataSource);
   }
 
-  /*
-    private OCStatus projectStatus;
-    private Collection<Task> tasks;
-    private Collection<Sprint> sprints;
-  * */
-
   @Override
-
   public void createProject(Project project) {
     template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
         project.getName(),
         project.getStartDate(),
         project.getEndDate(),
-        project.getProjectManager()});
+        project.getProjectManagerId()});
   }
 
   @Override
   public Project findProjectByProjectId(BigInteger id) {
-    List<BigInteger> idUsers = getIdUsers(id);
-    Collection<Sprint> sprints = getAllSprints(id);
-    BigInteger idPms = getIdPM(id);
 
     Project project = template
         .queryForObject(FIND_PROJECT_BY_PROJECT_ID, new Object[]{id},
             new ProjectMapper());
 
-    if (idUsers.size() != 0) {
-      project.setUsers(idUsers);
-    }
-    if (idPms != null) {
-      project.setProjectManager(idPms);
-    }
-    if (sprints.size() != 0) {
-      project.setSprints(sprints);
-    }
+    addUsersPMSprintToProject(project);
 
     return project;
   }
@@ -159,9 +193,41 @@ public class ProjectDAOImpl implements ProjectDAO {
   //todo add more attributes
   @Override
   public Project findProjectByName(String name) {
-    return template.queryForObject(FIND_PROJECT_BY_NAME, new Object[]{name},
-        new ProjectMapper());
+
+    Project project = template
+        .queryForObject(FIND_PROJECT_BY_NAME, new Object[]{name},
+            new ProjectMapper());
+
+    addUsersPMSprintToProject(project);
+
+    return project;
   }
+
+  private void addUsersPMSprintToProject(Project project) {
+    List<BigInteger> idUsers = getIdUsers(project.getProjectId());
+    Collection<BigInteger> tasks = getAllTaskIdByProject(
+        project.getProjectId());
+    Collection<Sprint> sprints = getAllSprints(project.getProjectId());
+    BigInteger idPms = getIdPM(project.getProjectId());
+    OCStatus status = getStatusById(project.getProjectId());
+
+    if (idUsers.size() != 0) {
+      project.setUsersId(idUsers);
+    }
+    if (idPms != null) {
+      project.setProjectManagerId(idPms);
+    }
+    if (sprints.size() != 0) {
+      project.setSprints(sprints);
+    }
+    if (tasks.size() != 0) {
+      project.setTasksId(tasks);
+    }
+    if (status != null) {
+      project.setProjectStatus(status);
+    }
+  }
+
 
   //todo add more attributes
   @Override
@@ -171,8 +237,8 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     List<BigInteger> projectId = findAllProjectIdFromDate(formattedDate);
     List<Project> projects = new ArrayList<>();
-    for (int i = 0; i < projectId.size(); i++) {
-      Project project = this.findProjectByProjectId(projectId.get(i));
+    for (BigInteger aProjectId : projectId) {
+      Project project = this.findProjectByProjectId(aProjectId);
       projects.add(project);
     }
 
@@ -181,9 +247,22 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   @Override
   public void deleteUserByUserId(BigInteger projectId, BigInteger userId) {
-    template.update(
-        "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ? AND REFERENCE = ?",
-        userId, projectId);
+    template.update(DELETE_USERS_IN_PROJECT, userId, projectId);
+  }
+
+  @Override
+  public void updateEndDate(BigInteger projectId, Date endDate) {
+    template.update(UPDATE_END_DATE, endDate, projectId);
+  }
+
+  @Override
+  public void updateStatus(BigInteger projectId, OCStatus ocStatus) {
+    template.update(UPDATE_STATUS, ocStatus.getId(), projectId);
+  }
+
+  @Override
+  public void updatePM(BigInteger projectId, BigInteger userId) {
+    template.update(UPDATE_PROJECT_PM_ID, userId, projectId);
   }
 
   @Override
@@ -191,48 +270,52 @@ public class ProjectDAOImpl implements ProjectDAO {
     template.update(UPDATE_USERS_IN_PROJECT, projectId, userId);
   }
 
-  @Override
-  public void updateProject(Project project) {
-
-  }
 
   @Override
   public List<BigInteger> getIdUsers(BigInteger projectId) {
-    return template.queryForList("SELECT USER_PROJ_REF.REFERENCE "
-        + "FROM OBJREFERENCE USER_PROJ_REF "
-        + "WHERE USER_PROJ_REF.ATTR_ID = 19 AND "
-        + "USER_PROJ_REF.OBJECT_ID = " + projectId, BigInteger.class);
+    return template.queryForList(GET_ID_USERS, BigInteger.class, projectId);
   }
 
   @Override
   public Collection<Sprint> getAllSprints(BigInteger projectId) {
-    return template.query(GET_ALL_SPRINT, new SprintMapper(), projectId);
+    return template.query(GET_SPRINTS, new SprintMapper(), projectId);
+  }
+
+  @Override
+  public void createSprint(Sprint sprint, BigInteger projectId) {
+    template.update(CREATE_SPRINT,
+        //sprint.getSprintId(),
+        sprint.getName(),
+        sprint.getStartDate(),
+        sprint.getPlannedEndDate(),
+        sprint.getEndDate(),
+        sprint.getStatus().getId(),
+        projectId
+    );
+  }
+
+  private Collection<BigInteger> getAllTaskIdByProject(BigInteger projectId) {
+    return template
+        .queryForList(GET_TASKS_BY_PROJECT_ID, BigInteger.class, projectId);
   }
 
   private BigInteger getIdPM(BigInteger id) {
     return BigInteger
-        .valueOf(template.queryForObject("SELECT USER_PROJ_REF.REFERENCE "
-            + "FROM OBJREFERENCE USER_PROJ_REF "
-            + "WHERE USER_PROJ_REF.ATTR_ID = 18 AND "
-            + "USER_PROJ_REF.OBJECT_ID = " + id, Integer.class));
+        .valueOf(template.queryForObject(GET_PM_ID, Integer.class, id));
   }
 
 
   private List<BigInteger> findAllProjectIdFromDate(String formattedDate) {
     List<BigInteger> projectsId = template
-        .queryForList("select PR.OBJECT_ID AS PROJECT_ID "
-                + "FROM OBJTYPE PR_TYPE, OBJECTS PR, "
-                + "ATTRIBUTES PR_NAME, ATTRIBUTES START_DATE "
-                + "where "
-                + "PR_TYPE.CODE = 'PROJECT' "
-                + "and PR_NAME.ATTR_ID = 14 "
-                + "and PR_NAME.OBJECT_ID = PR.OBJECT_ID "
-                + "and START_DATE.VALUE = '" + formattedDate + "' "
-                + "and START_DATE.ATTR_ID = 15 "
-                + "and START_DATE.OBJECT_ID = PR.OBJECT_ID",
-            BigInteger.class);
+        .queryForList(GET_PROJECT_ID_BY_DATE, BigInteger.class,
+            formattedDate);
 
     return projectsId;
   }
 
+
+  private OCStatus getStatusById(BigInteger projectId) {
+    return OCStatus.valueOf(template
+        .queryForObject(GET_STATUS_BY_PROJECT_ID, String.class, projectId));
+  }
 }

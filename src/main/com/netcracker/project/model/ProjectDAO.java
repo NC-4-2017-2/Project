@@ -22,11 +22,17 @@ public interface ProjectDAO {
 
   void deleteUserByUserId(BigInteger userId, BigInteger projectID);
 
-  void updateProject(Project project);
+  void updateEndDate(BigInteger projectId, Date endDate);
+
+  void updateStatus(BigInteger projectId, OCStatus ocStatus);
+
+  void updatePM(BigInteger projectId, BigInteger userId);
 
   void addUser(BigInteger userId, BigInteger projectId);
 
   Collection<Sprint> getAllSprints(BigInteger projectID);
+
+  void createSprint(Sprint sprint, BigInteger projectId);
 
   enum OCStatus {
     OPENED(0), CLOSED(1);

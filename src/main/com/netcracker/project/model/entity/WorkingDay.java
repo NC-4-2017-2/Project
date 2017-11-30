@@ -51,6 +51,19 @@ public class WorkingDay {
     return workingDayId;
   }
 
+  @Override
+  public String toString() {
+    return "WorkingDay{" +
+        "workingDayId=" + workingDayId +
+        ", userId=" + userId +
+        ", date=" + date +
+        ", weekNumber=" + weekNumber +
+        ", workingHours=" + workingHours +
+        ", status=" + status +
+        ", pmId=" + pmId +
+        '}';
+  }
+
   public static class WorkingDayBuilder{
     private BigInteger userId;
     private Date date;

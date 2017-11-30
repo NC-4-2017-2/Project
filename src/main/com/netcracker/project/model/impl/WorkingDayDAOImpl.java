@@ -1,5 +1,6 @@
 package main.com.netcracker.project.model.impl;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import javax.sql.DataSource;
 import main.com.netcracker.project.model.WorkingDayDAO;
@@ -13,22 +14,24 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class WorkingDayDAOImpl implements WorkingDayDAO {
 
   private JdbcTemplate template;
+  private MapperDateConverter converter = new MapperDateConverter();
+
 
   private static final String ADD_HOURS_PER_DAY = "INSERT ALL "
       + "    INTO OBJECTS(OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) "
-      + "VALUES (200, NULL, 6, ?, NULL) "
+      + "VALUES (? , NULL, 6, ?, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (49, 200, ?, NULL, NULL) "
+      + "VALUES (49, ?, ?, NULL, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (50, 200, ?, NULL, NULL) "
+      + "VALUES (50, ?, ?, NULL, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (51, 200, ?, NULL, NULL) "
+      + "VALUES (51, ?, ?, NULL, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (52, 200, NULL, NULL, ?) "
+      + "VALUES (52, ?, NULL, NULL, ?) "
       + "    INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) "
-      + "VALUES (53, 200, ?) "
+      + "VALUES (53, ?, ?) "
       + "    INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) "
-      + "VALUES (54, 200, ?) "
+      + "VALUES (54, ?, ?) "
       + "SELECT * FROM DUAL";
 
   private static final String FIND_HOURS_PER_PERIOD =
@@ -46,8 +49,8 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
           + "      USER_ID.OBJECT_ID = ? AND "
           + "WORKING_DAY_DATE.OBJECT_ID = WD_USER_REF.OBJECT_ID AND "
           + "WORKING_DAY_DATE.ATTR_ID = 49 AND "
-          + "TO_DATE(WORKING_DAY_DATE.VALUE) "
-          + "BETWEEN TO_DATE(?) AND TO_DATE(?) AND "
+          + "TO_DATE(WORKING_DAY_DATE.VALUE, 'DD.MM.YY') "
+          + "BETWEEN TO_DATE(TO_CHAR(?),'DD.MM.YY') AND TO_DATE(TO_CHAR(?), 'DD.MM.YY') AND "
           + "WORKING_WEEK_NUM.OBJECT_ID = WD_USER_REF.OBJECT_ID AND "
           + "WORKING_WEEK_NUM.ATTR_ID = 50 AND "
           + "WORKING_DAY_HOURS.OBJECT_ID = WD_USER_REF.OBJECT_ID AND "
@@ -68,22 +71,31 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
 
   @Override
   public void addHoursPerDay(WorkingDay workingDay) {
+    String date = converter.convertDateTosString(workingDay.getDate());
+
     template.update(ADD_HOURS_PER_DAY, new Object[]{
+        workingDay.getWorkingDayId(),
         "WORKDAY" + workingDay.getWorkingDayId(),
-        workingDay.getDate(),
+        workingDay.getWorkingDayId(),
+        date,
+        workingDay.getWorkingDayId(),
         workingDay.getWeekNumber(),
+        workingDay.getWorkingDayId(),
         workingDay.getWorkingHours(),
+        workingDay.getWorkingDayId(),
         workingDay.getStatus().getId(),
+        workingDay.getWorkingDayId(),
         workingDay.getUserId(),
+        workingDay.getWorkingDayId(),
         workingDay.getPmId()
     });
   }
 
   @Override
-  public Collection<WorkingDay> findHoursPerPeriod(Integer userId,
+  public Collection<WorkingDay> findHoursPerPeriod(BigInteger userId,
       Date startDate,
       Date endDate) {
-    MapperDateConverter converter = new MapperDateConverter();
+
     String startDateString = converter.convertDateTosString(startDate);
     String endDateString = converter.convertDateTosString(endDate);
 

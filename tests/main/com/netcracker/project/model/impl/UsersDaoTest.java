@@ -1,3 +1,5 @@
+package main.com.netcracker.project.model.impl;
+
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 import java.math.BigInteger;

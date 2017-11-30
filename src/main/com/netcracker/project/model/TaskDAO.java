@@ -3,6 +3,7 @@ package main.com.netcracker.project.model;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
+import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.entity.Task;
 
 public interface TaskDAO {
@@ -11,18 +12,17 @@ public interface TaskDAO {
 
   void updateTask(Task task);
 
-  Collection<Task> findTaskByProjectId(BigInteger id);
+  Collection<Task> findTaskByProjectId(BigInteger projectId);
 
-  Collection<Task> findTaskByUserId(BigInteger id);
+  Collection<Task> findTaskByUserId(BigInteger userId);
 
-  Collection<Task> findTaskByUserIdAndDate(Date date, BigInteger id);
+  Collection<Task> findTaskByUserIdAndDate(Date date, BigInteger userId);
 
-  Collection<Task> findTaskByPriority(TaskPriority taskPriority,
-      BigInteger employeeID);
+  Collection<Task> findTaskByPriority(TaskPriority taskPriority);
 
   Task findTaskByStatusAndUserId(TaskStatus status, BigInteger id);
 
-  TaskStatus updateStatus(TaskStatus status);
+  void updateStatus(Status status, BigInteger taskId);
 
   enum TaskPriority {
     CRITICAL(0), HIGH(1), NORMAL(2), LOW(3);

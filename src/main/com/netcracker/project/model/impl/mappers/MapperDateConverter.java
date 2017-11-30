@@ -9,7 +9,7 @@ public class MapperDateConverter {
 
   public Date convertStringToDate(String str) {
     Date date = null;
-    DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
+    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
 
     try {
       date = dateFormat.parse(str);
@@ -21,9 +21,9 @@ public class MapperDateConverter {
 
   public String convertDateTosString(Date startDate) {
     String dateStr = startDate.toString();
-    DateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+    DateFormat readFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
 
-    DateFormat writeFormat = new SimpleDateFormat("dd.mm.yy");
+    DateFormat writeFormat = new SimpleDateFormat("dd.MM.yy");
     Date date = null;
     try {
       date = readFormat.parse(dateStr);

@@ -15,6 +15,7 @@ import main.com.netcracker.project.model.BusinessTripDAO;
 import main.com.netcracker.project.model.entity.BusinessTrip;
 import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +53,7 @@ public class BusinessTripDAOImplTest {
     this.dataSource = dataSource;
   }
 
-  @Test
+  @Before
   public void createTripTest() {
     MapperDateConverter converter = new MapperDateConverter();
     Date startDate = converter.convertStringToDate("11.11.11");
@@ -97,10 +98,10 @@ public class BusinessTripDAOImplTest {
     Collection<BusinessTrip> tripByUserId = businessTrip
         .findTripByUserId(BigInteger.valueOf(56));
 
-    assertEquals("[BusinessTrip{businessTripId=56, projectId=4, "
-        + "userId=1, authorId=2, pmId=3, country='SLOVAKIA', "
-        + "startDate=Thu Jan 15 00:11:00 EET 11, "
-        + "endDate=Mon Jan 25 00:12:00 EET 12, status=DISAPPROVED}]",
+    assertEquals("[BusinessTrip{businessTripId=56,"
+            + " projectId=4, userId=1, authorId=2, pmId=3, country='SLOVAKIA',"
+            + " startDate=Tue Nov 15 00:00:00 EET 2011, "
+            + "endDate=Tue Dec 25 00:00:00 EET 2012, status=DISAPPROVED}]",
         tripByUserId.toString());
   }
 
@@ -113,25 +114,25 @@ public class BusinessTripDAOImplTest {
     Collections.sort(tripList, trip);
 
     assertEquals("[BusinessTrip{businessTripId=56, projectId=4, "
-        + "userId=1, authorId=2, pmId=3, country='MOLDOVA', "
-        + "startDate=Sun Jan 11 00:11:00 EET 11, "
-        + "endDate=Tue Jan 12 00:12:00 EET 12, status=APPROVED}, "
-        + "BusinessTrip{businessTripId=50, projectId=4, userId=1, "
-        + "authorId=2, pmId=3, country='UKRAINE', "
-        + "startDate=Thu Jan 28 00:10:00 EET 17, "
-        + "endDate=Sun Jan 10 00:11:00 EET 17, status=APPROVED}, "
-        + "BusinessTrip{businessTripId=9, projectId=4, userId=3, "
-        + "authorId=3, pmId=1, country='Switzerland', "
-        + "startDate=Wed Jan 13 00:12:00 EET 12, "
-        + "endDate=Fri Jan 13 00:02:00 EET 13, status=APPROVED}, "
-        + "BusinessTrip{businessTripId=8, projectId=4, userId=2, "
-        + "authorId=2, pmId=1, country='USA', "
-        + "startDate=Wed Jan 13 00:12:00 EET 12, "
-        + "endDate=Fri Jan 13 00:02:00 EET 13, status=APPROVED}]",
+            + "userId=1, authorId=2, pmId=3, country='MOLDOVA', "
+            + "startDate=Fri Nov 11 00:00:00 EET 2011, "
+            + "endDate=Wed Dec 12 00:00:00 EET 2012, status=APPROVED}, "
+            + "BusinessTrip{businessTripId=50, projectId=4, userId=1, "
+            + "authorId=2, pmId=3, country='UKRAINE', "
+            + "startDate=Sat Oct 28 00:00:00 EEST 2017, "
+            + "endDate=Fri Nov 10 00:00:00 EET 2017, status=APPROVED}, "
+            + "BusinessTrip{businessTripId=9, projectId=4, userId=3, "
+            + "authorId=3, pmId=1, country='Switzerland', "
+            + "startDate=Thu Dec 13 00:00:00 EET 2012, "
+            + "endDate=Wed Feb 13 00:00:00 EET 2013, status=APPROVED}, "
+            + "BusinessTrip{businessTripId=8, projectId=4, userId=2, "
+            + "authorId=2, pmId=1, country='USA', "
+            + "startDate=Thu Dec 13 00:00:00 EET 2012, "
+            + "endDate=Wed Feb 13 00:00:00 EET 2013, status=APPROVED}]",
         tripByProjectId.toString());
   }
 
-  @Test
+  @After
   public void deleteFromTable() {
     BigInteger id = BigInteger.valueOf(56);
 

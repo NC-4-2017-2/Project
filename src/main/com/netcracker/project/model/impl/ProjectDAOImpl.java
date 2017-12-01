@@ -22,12 +22,12 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   private static final String CREATE_PROJECT =
       "INSERT ALL "
-          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (204,NULL,2,'Project'||?,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (14,204,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (15,204,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (16,204,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (17,204,NULL,NULL,0) "
-          + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (18,204,?)"
+          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (202,NULL,2,'Project'||?,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (14,202,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (15,202,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (16,202,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (17,202,NULL,NULL,?) "
+          + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (18,202,?)"
           + " SELECT * FROM dual";
 
   private static final String UPDATE_USERS_IN_PROJECT =
@@ -107,13 +107,13 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   private static final String CREATE_SPRINT =
       "INSERT ALL "
-          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (61,NULL,7,'Sprint'||61,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (55,61,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (56,61,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (57,61,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (58,61,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (59,61,NULL,NULL,?) "
-          + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (60,61,?) "
+          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (58,NULL,7,'Sprint'||58,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (55,58,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (56,58,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (57,58,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (58,58,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (59,58,NULL,NULL,?) "
+          + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (60,58,?) "
           + " SELECT * FROM dual";
 
 
@@ -173,10 +173,12 @@ public class ProjectDAOImpl implements ProjectDAO {
   @Override
   public void createProject(Project project) {
     logger.info("Entering createProject(project=" + project + ")");
+    MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
         project.getName(),
-        project.getStartDate(),
-        project.getEndDate(),
+        mdc.convertDateTosString(project.getStartDate()),
+        mdc.convertDateTosString(project.getEndDate()),
+        project.getProjectStatus().getId(),
         project.getProjectManagerId()});
   }
 
@@ -252,31 +254,41 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   @Override
   public void deleteUserByUserId(BigInteger projectId, BigInteger userId) {
-    logger.info("Entering deleteUserByUserId(projectId=" + projectId + "," + " userId=" + userId + ")");
+    logger.info(
+        "Entering deleteUserByUserId(projectId=" + projectId + "," + " userId="
+            + userId + ")");
     template.update(DELETE_USERS_IN_PROJECT, userId, projectId);
   }
 
   @Override
   public void updateEndDate(BigInteger projectId, Date endDate) {
-    logger.info("Entering updateEndDate(projectId=" + projectId + "," + " endDate=" + endDate + ")");
+    logger.info(
+        "Entering updateEndDate(projectId=" + projectId + "," + " endDate="
+            + endDate + ")");
     template.update(UPDATE_END_DATE, endDate, projectId);
   }
 
   @Override
   public void updateStatus(BigInteger projectId, OCStatus ocStatus) {
-    logger.info("Entering updateStatus(projectId=" + projectId + "," + " ocStatus=" + ocStatus + ")");
+    logger.info(
+        "Entering updateStatus(projectId=" + projectId + "," + " ocStatus="
+            + ocStatus + ")");
     template.update(UPDATE_STATUS, ocStatus.getId(), projectId);
   }
 
   @Override
   public void updatePM(BigInteger projectId, BigInteger userId) {
-    logger.info("Entering updatePM(projectId=" + projectId + "," + " userId=" + userId + ")");
+    logger.info(
+        "Entering updatePM(projectId=" + projectId + "," + " userId=" + userId
+            + ")");
     template.update(UPDATE_PROJECT_PM_ID, userId, projectId);
   }
 
   @Override
   public void addUser(BigInteger projectId, BigInteger userId) {
-    logger.info("Entering addUser(projectId=" + projectId + "," + " userId=" + userId + ")");
+    logger.info(
+        "Entering addUser(projectId=" + projectId + "," + " userId=" + userId
+            + ")");
     template.update(UPDATE_USERS_IN_PROJECT, projectId, userId);
   }
 
@@ -295,13 +307,15 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   @Override
   public void createSprint(Sprint sprint, BigInteger projectId) {
-    logger.info("Entering createSprint(sprint=" + sprint + "," + " projectId=" + projectId + ")");
+    logger.info("Entering createSprint(sprint=" + sprint + "," + " projectId="
+        + projectId + ")");
+    MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_SPRINT,
         //sprint.getSprintId(),
         sprint.getName(),
-        sprint.getStartDate(),
-        sprint.getPlannedEndDate(),
-        sprint.getEndDate(),
+        mdc.convertDateTosString(sprint.getStartDate()),
+        mdc.convertDateTosString(sprint.getPlannedEndDate()),
+        mdc.convertDateTosString(sprint.getEndDate()),
         sprint.getStatus().getId(),
         projectId
     );
@@ -321,7 +335,9 @@ public class ProjectDAOImpl implements ProjectDAO {
 
 
   private List<BigInteger> findAllProjectIdFromDate(String formattedDate) {
-    logger.info("Entering findAllProjectIdFromDate(formattedDate=" + formattedDate + ")");
+    logger.info(
+        "Entering findAllProjectIdFromDate(formattedDate=" + formattedDate
+            + ")");
     List<BigInteger> projectsId = template
         .queryForList(GET_PROJECT_ID_BY_DATE, BigInteger.class,
             formattedDate);

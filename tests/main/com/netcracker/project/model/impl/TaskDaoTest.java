@@ -44,35 +44,33 @@ public class TaskDaoTest {
 
   @Test
   public void findTaskByProjectId(){
-    Task task = (Task) taskDao.findTaskByProjectId(BigInteger.valueOf(6));
-    assertThat(BigInteger.valueOf(6), is(task.getProjectId()));
+    Collection<Task> tasks = taskDao.findTaskByProjectId(BigInteger.valueOf(4));
   }
 
   @Test
-  public void findTaskByDate(){
+  public void findStatusByUserIdAndDate(){
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yy");
     Date date = null;
     try {
-      date = dateFormat.parse("29.11.2017");
+      date = dateFormat.parse("01.12.17");
     } catch (ParseException e) {
       e.printStackTrace();
     }
 
-    Task task = (Task) taskDao.findTaskByUserIdAndDate(date, BigInteger.valueOf(1));
+    Collection<Task> task = taskDao.findTaskByUserIdAndDate(date, BigInteger.valueOf(1));
 
-    assertThat(BigInteger.valueOf(2), is(task.getTaskId()));
   }
+
 
   @Test
   public void findTaskByUserId(){
-    Task task = (Task) taskDao.findTaskByUserId(BigInteger.valueOf(1));
-    assertThat(BigInteger.valueOf(2), is(task.getTaskId()));
+    Collection<Task> task = taskDao.findTaskByUserId(BigInteger.valueOf(1));
   }
 
   @Test
   public void findTaskByPriority(){
-    Task task = (Task) taskDao.findTaskByPriority(TaskPriority.CRITICAL);
-    Assert.assertEquals(TaskPriority.CRITICAL, task.getStatus());
+    Collection<Task> task =  taskDao.findTaskByPriority(BigInteger.valueOf(1));
+
   }
 
   @Test

@@ -22,9 +22,9 @@ public class TaskMapper implements RowMapper<Task> {
 
     converter = new MapperDateConverter();
 
-    String dateStart = resultSet.getString("START_DATE");
-    String datePlannedEnd = resultSet.getString("PLANNED_END_DATE");
-    String dateEnd = resultSet.getString("END_DATE");
+    String dateStart = resultSet.getString("TASK_START_DATE");
+    String datePlannedEnd = resultSet.getString("TASK_PLANNED_END_DATE");
+    String dateEnd = resultSet.getString("TASK_END_DATE");
 
     startDate = converter.convertStringToDate(dateStart);
     plannedEndDate = converter.convertStringToDate(datePlannedEnd);
@@ -33,12 +33,12 @@ public class TaskMapper implements RowMapper<Task> {
     return new Task.TaskBuilder()
         .taskId(new BigInteger(resultSet.getString("TASK_ID")))
         .name(resultSet.getString("TASK_NAME"))
-        .taskType(TaskDAO.TaskType.valueOf(resultSet.getString("TASK_TYPE_VALUE")))
+        .taskType(TaskDAO.TaskType.valueOf(resultSet.getString("TASK_TYPE")))
         .startDate(startDate)
         .plannedEndDate(plannedEndDate)
         .endDate(endDate)
-        .priority(TaskDAO.TaskPriority.valueOf(resultSet.getString("TASK_PRIORITY_VALUE")))
-        .status(TaskDAO.TaskStatus.valueOf(resultSet.getString("TASK_STATUS_VALUE")))
+        .priority(TaskDAO.TaskPriority.valueOf(resultSet.getString("TASK_PRIORITY")))
+        .status(TaskDAO.TaskStatus.valueOf(resultSet.getString("TASK_STATUS")))
         .description(resultSet.getString("TASK_DESCRIPTION"))
         .comments(resultSet.getString("TASK_COMMENT"))
         .build();

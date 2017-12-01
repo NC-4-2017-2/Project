@@ -18,9 +18,9 @@ public interface TaskDAO {
 
   Collection<Task> findTaskByUserIdAndDate(Date date, BigInteger userId);
 
-  Collection<Task> findTaskByPriority(TaskPriority taskPriority);
+  Collection<Task> findTaskByPriority(BigInteger taskPriority);
 
-  Task findTaskByStatusAndUserId(TaskStatus status, BigInteger id);
+  Task findTaskByStatusAndUserId(TaskStatus taskStatus, BigInteger id);
 
   void updateStatus(Status status, BigInteger taskId);
 

@@ -11,9 +11,9 @@ public interface VacationDAO {
 
   void updateVacation(BigInteger id, Vacation vacation);
 
-  Vacation findVacationByUserId(BigInteger id);
+  Collection<Vacation> findVacationByUserId(BigInteger id);
 
-  Vacation findVacationByProjectId(BigInteger id);
+  Collection<Vacation> findVacationByProjectId(BigInteger id);
 
   Collection<Vacation> findVacationByUserIdAndPmStatus(BigInteger id,
       Integer status);

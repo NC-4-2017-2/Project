@@ -1,7 +1,9 @@
 package main.com.netcracker.project.model.impl.mappers;
 
+import java.util.ArrayList;
 import main.com.netcracker.project.model.TaskDAO;
 import main.com.netcracker.project.model.entity.Task;
+import main.com.netcracker.project.model.entity.User;
 import org.springframework.jdbc.core.RowMapper;
 import java.math.BigInteger;
 import java.sql.ResultSet;

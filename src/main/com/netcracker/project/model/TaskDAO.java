@@ -18,11 +18,11 @@ public interface TaskDAO {
 
   Collection<Task> findTaskByUserIdAndDate(Date date, BigInteger userId);
 
-  Collection<Task> findTaskByPriority(BigInteger taskPriority);
+  Collection<Task> findTaskByPriority(Integer taskPriority);
 
-  Task findTaskByStatusAndUserId(TaskStatus taskStatus, BigInteger id);
+  Collection<Task> findTaskByStatusAndUserId(BigInteger id, Integer taskStatus);
 
-  void updateStatus(Status status, BigInteger taskId);
+  void updateStatus(Integer taskStatus, BigInteger taskId);
 
   enum TaskPriority {
     CRITICAL(0), HIGH(1), NORMAL(2), LOW(3);

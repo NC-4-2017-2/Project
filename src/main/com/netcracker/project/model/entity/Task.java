@@ -18,7 +18,7 @@ public class Task {
   private TaskDAO.TaskStatus status;
   private String description;
   private BigInteger authorId;
-  private Collection<User> users;
+  private BigInteger userId;
   private String comments;
   private Integer reopenCounter;
   private BigInteger projectId;
@@ -34,7 +34,7 @@ public class Task {
     this.status = builder.status;
     this.description = builder.description;
     this.authorId = builder.authorId;
-    this.users = builder.users;
+    this.userId = builder.userId;
     this.comments = builder.comments;
     this.reopenCounter = builder.reopenCounter;
     this.projectId = builder.projectId;
@@ -76,8 +76,8 @@ public class Task {
     return authorId;
   }
 
-  public Collection<User> getUsers() {
-    return users;
+  public BigInteger getUserId() {
+    return userId;
   }
 
   public String getComments() {
@@ -108,7 +108,7 @@ public class Task {
     private TaskDAO.TaskStatus status;
     private String description;
     private BigInteger authorId;
-    private Collection<User> users;
+    private BigInteger userId;
     private String comments;
     private Integer reopenCounter;
     private BigInteger projectId;
@@ -167,8 +167,8 @@ public class Task {
       return this;
     }
 
-    public TaskBuilder users(Collection<User> users) {
-      this.users = users;
+    public TaskBuilder userId(BigInteger userId) {
+      this.userId = userId;
       return this;
     }
 

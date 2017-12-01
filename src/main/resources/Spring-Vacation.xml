@@ -4,11 +4,9 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="Spring-Datasource.xml"/>
-  <import resource="Spring-User.xml"/>
-  <import resource="Spring-Project.xml"/>
-  <import resource="Spring-Task.xml"/>
-  <import resource="Spring-BusinessTrip.xml"/>
-  <import resource="Spring-WorkingDay.xml"/>
-  <import resource="Spring-Vacation.xml"/>
+
+  <bean id="vacationDAO" class="main.com.netcracker.project.model.impl.VacationDAOImpl">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
 
 </beans>

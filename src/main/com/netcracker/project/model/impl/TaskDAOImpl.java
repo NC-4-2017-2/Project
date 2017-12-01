@@ -223,7 +223,8 @@ public class TaskDAOImpl implements TaskDAO {
     @Override
     @Transactional
     public void createTask(Task task) {
-        this.template.update(CREATE_TASK, new Object[]{
+      logger.info("Entering createTask(task=" + task + ")");
+      this.template.update(CREATE_TASK, new Object[]{
             task.getUsers(),
             task.getName(),
             task.getTaskType(),

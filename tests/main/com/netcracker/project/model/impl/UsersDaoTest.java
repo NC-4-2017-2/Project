@@ -1,12 +1,9 @@
 package main.com.netcracker.project.model.impl;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
-
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 import javax.sql.DataSource;
 import main.com.netcracker.project.model.UserDAO;
 import main.com.netcracker.project.model.UserDAO.JobTitle;
@@ -110,28 +107,12 @@ public class UsersDaoTest {
   public void findWorkPeriodsByUserId() {
     Collection<UserDAO.WorkPeriod> workPeriodList = userDao
         .findWorkPeriodsByUserId(BigInteger.valueOf(2));
-
-    for (UserDAO.WorkPeriod wk : workPeriodList) {
-      LOGGER.log(Level.INFO, wk.getWorkPeriodId().toString());
-      LOGGER.log(Level.INFO, wk.getUserId().toString());
-      LOGGER.log(Level.INFO, wk.getProjectId().toString());
-      LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
-      LOGGER.log(Level.INFO, wk.getEndWorkDate().toString());
-    }
   }
 
   @Test
   public void findWorkPeriodsByProjectId() {
     Collection<UserDAO.WorkPeriod> workPeriodList = userDao
         .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
-
-    for (UserDAO.WorkPeriod wk : workPeriodList) {
-      LOGGER.log(Level.INFO, wk.getWorkPeriodId().toString());
-      LOGGER.log(Level.INFO, wk.getUserId().toString());
-      LOGGER.log(Level.INFO, wk.getProjectId().toString());
-      LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
-      LOGGER.log(Level.INFO, wk.getEndWorkDate().toString());
-    }
   }
 
 
@@ -140,14 +121,6 @@ public class UsersDaoTest {
     Collection<UserDAO.WorkPeriod> workPeriodList = userDao
         .findWorkPeriodByUserIdAndProjectId(BigInteger.valueOf(2),
             BigInteger.valueOf(4));
-
-    for (UserDAO.WorkPeriod wk : workPeriodList) {
-      LOGGER.log(Level.INFO, wk.getWorkPeriodId().toString());
-      LOGGER.log(Level.INFO, wk.getUserId().toString());
-      LOGGER.log(Level.INFO, wk.getProjectId().toString());
-      LOGGER.log(Level.INFO, wk.getStartWorkDate().toString());
-      LOGGER.log(Level.INFO, wk.getEndWorkDate().toString());
-    }
   }
 
   @Test

@@ -16,10 +16,10 @@ public interface VacationDAO {
   Vacation findVacationByProjectId(BigInteger id);
 
   Collection<Vacation> findVacationByUserIdAndPmStatus(BigInteger id,
-      Boolean status);
+      Integer status);
 
   Collection<Vacation> findVacationByUserIdAndLmStatus(BigInteger id,
-      Boolean status);
+      Integer status);
 
 
 }

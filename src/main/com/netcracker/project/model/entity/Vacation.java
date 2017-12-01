@@ -63,6 +63,21 @@ public class Vacation {
         return lmId;
     }
 
+    @Override
+    public String toString() {
+        return "Vacation{" +
+            "vacationId=" + vacationId +
+            ", userId=" + userId +
+            ", projectId=" + projectId +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", pmStatus=" + pmStatus +
+            ", lmStatus=" + lmStatus +
+            ", pmId=" + pmId +
+            ", lmId=" + lmId +
+            '}';
+    }
+
     public static class VacationBuilder {
         private BigInteger vacationId;
         private BigInteger userId;

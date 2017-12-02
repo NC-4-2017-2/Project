@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
@@ -67,11 +68,11 @@ public class TaskDaoTest {
         .priority(TaskPriority.CRITICAL)
         .status(TaskStatus.COMPLETED)
         .description("Good")
-        .reopenCounter(Integer.valueOf(1))
+        .reopenCounter(1)
         .comments("hard but ineteresting")
         .authorId(BigInteger.valueOf(1))
         .userId(BigInteger.valueOf(1))
-        .projectId(BigInteger.valueOf(4))
+        .projectId(BigInteger.valueOf(5))
         .build();
 
     taskDao.createTask(task);
@@ -93,35 +94,34 @@ public class TaskDaoTest {
         .priority(TaskPriority.CRITICAL)
         .status(TaskStatus.COMPLETED)
         .description("Good")
-        .reopenCounter(Integer.valueOf(1))
+        .reopenCounter(1)
         .comments("hard but ineteresting")
         .authorId(BigInteger.valueOf(1))
         .userId(BigInteger.valueOf(1))
-        .projectId(BigInteger.valueOf(4))
+        .projectId(BigInteger.valueOf(5))
         .build();
 
     taskDao.updateTask(taskUpdates);
 
-    Collection<Task> taskByProjectId = taskDao.findTaskByProjectId(BigInteger.valueOf(4));
 
-    assertEquals("[Task{taskId=300,"
-        + " name='ERP-13', taskType=PROJECT_TASK,"
-        + " startDate=Tue Nov 15 00:00:00 EET 2011,"
-        + " endDate=Tue Nov 15 00:00:00 EET 2011,"
-        + " plannedEndDate=Tue Nov 15 00:00:00 EET 2011, priority=CRITICAL,"
-        + " status=COMPLETED, description='Good',"
-        + " reopenCounter=1, comments='hard but ineteresting', authorId=1, "
-        + " userId=1, projectId=4 " + "}]", taskByProjectId.toString());
+    ArrayList<Task> tasks = (ArrayList<Task>) taskDao.findTaskByProjectId(BigInteger.valueOf(300));
+    tasks.add(taskUpdates);
+
+    assertEquals("ERP-13", tasks.get(0).getName());
   }
 
+  @Test
+  public void test3updateStatus(){
+    taskDao.updateStatus(TaskStatus.COMPLETED.getId(), BigInteger.valueOf(1));
+  }
 
   @Test
-  public void findTaskByProjectId(){
+  public void test4findTaskByProjectId(){
     Collection<Task> tasks = taskDao.findTaskByProjectId(BigInteger.valueOf(4));
   }
 
   @Test
-  public void findStatusByUserIdAndDate(){
+  public void test5findStatusByUserIdAndDate(){
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yy");
     Date date = null;
     try {
@@ -136,25 +136,21 @@ public class TaskDaoTest {
 
 
   @Test
-  public void findTaskByUserId(){
+  public void test6findTaskByUserId(){
     Collection<Task> task = taskDao.findTaskByUserId(BigInteger.valueOf(1));
   }
 
   @Test
-  public void findTaskByPriority(){
+  public void test7findTaskByPriority(){
     Collection<Task> task =  taskDao.findTaskByPriority(TaskPriority.HIGH.getId());
 
   }
 
   @Test
-  public void findTaskByStatusAndUserId(){
+  public void test8findTaskByStatusAndUserId(){
     Collection<Task> task = taskDao.findTaskByStatusAndUserId(BigInteger.valueOf(1), TaskStatus.COMPLETED.getId());
   }
 
-  @Test
-  public void updateStatus(){
-    taskDao.updateStatus(Status.APPROVED.getId(), BigInteger.valueOf(1));
-  }
 
   @Test
   public void deleteForTable(){

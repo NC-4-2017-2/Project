@@ -17,15 +17,16 @@ public class ProjectMapper implements RowMapper<Project> {
 
     converter = new MapperDateConverter();
 
-    String dateStart = rs.getString("START_DATE_PR");
-    String dateEnd = rs.getString("END_DATE_PR");
+    String dateStart = rs.getString(EnumMapper.START_DATE.getFullName());
+    String dateEnd = rs.getString(EnumMapper.END_DATE.getFullName());
 
     startDate = converter.convertStringToDate(dateStart);
     endDate = converter.convertStringToDate(dateEnd);
 
     return new Project.ProjectBuilder()
-        .projectId(new BigInteger(rs.getString("PROJECT_ID")))
-        .name(rs.getString("NAME"))
+        .projectId(
+            new BigInteger(rs.getString(EnumMapper.PROJECT_ID.getFullName())))
+        .name(rs.getString(EnumMapper.NAME.getFullName()))
         .startDate(startDate)
         .endDate(endDate)
         .build();

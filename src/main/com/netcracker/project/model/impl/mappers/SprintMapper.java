@@ -20,18 +20,22 @@ public class SprintMapper implements RowMapper<Sprint> {
 
     converter = new MapperDateConverter();
 
-    startDate = converter.convertStringToDate(rs.getString("SPRINT_START"));
-    endDate = converter.convertStringToDate(rs.getString("SPRINT_END"));
+    startDate = converter
+        .convertStringToDate(rs.getString(EnumMapper.START_DATE.getFullName()));
+    endDate = converter
+        .convertStringToDate(rs.getString(EnumMapper.END_DATE.getFullName()));
     plannedEndDate = converter
-        .convertStringToDate(rs.getString("SPRINT_PLANNED_END"));
+        .convertStringToDate(
+            rs.getString(EnumMapper.PLANNED_END_DATE.getFullName()));
 
     return new Sprint.SprintBuilder()
-        .sprintId(new BigInteger(rs.getString("SPRINT_ID")))
-        .name(rs.getString("SPRINT_NAME"))
+        .sprintId(
+            new BigInteger(rs.getString(EnumMapper.SPRINT_ID.getFullName())))
+        .name(rs.getString(EnumMapper.NAME.getFullName()))
         .startDate(startDate)
         .plannedEndDate(plannedEndDate)
         .endDate(endDate)
-        .status(OCStatus.valueOf(rs.getString("SPRINT_STATUS")))
+        .status(OCStatus.valueOf(rs.getString(EnumMapper.STATUS.getFullName())))
         .build();
   }
 }

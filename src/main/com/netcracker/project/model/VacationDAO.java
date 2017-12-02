@@ -20,6 +20,4 @@ public interface VacationDAO {
 
   Collection<Vacation> findVacationByUserIdAndLmStatus(BigInteger id,
       Integer status);
-
-
 }

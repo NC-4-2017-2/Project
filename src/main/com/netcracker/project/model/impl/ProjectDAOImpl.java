@@ -38,7 +38,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   private static final String FIND_PROJECT_BY_PROJECT_ID =
       "SELECT PR.OBJECT_ID AS PROJECT_ID, PR_NAME.VALUE AS NAME, START_DATE.VALUE "
-          + "AS START_DATE_PR, END_DATE.VALUE AS END_DATE_PR, "
+          + "AS START_DATE, END_DATE.VALUE AS END_DATE, "
           + "PR_STATUS_VALUE.VALUE AS PROJECT_STATUS "
           + "FROM OBJTYPE PR_TYPE, OBJECTS PR, "
           + "ATTRIBUTES PR_NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, "
@@ -59,7 +59,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   private static final String FIND_PROJECT_BY_NAME =
       "SELECT PR.OBJECT_ID AS PROJECT_ID, PR_NAME.VALUE AS NAME, START_DATE.VALUE "
-          + "AS START_DATE_PR, END_DATE.VALUE AS END_DATE_PR, "
+          + "AS START_DATE, END_DATE.VALUE AS END_DATE, "
           + "PR_STATUS_VALUE.VALUE AS PROJECT_STATUS "
           + "FROM OBJTYPE PR_TYPE, OBJECTS PR, "
           + "ATTRIBUTES PR_NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, "
@@ -80,11 +80,11 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   private static final String GET_SPRINTS = "SELECT "
       + "  REF.OBJECT_ID AS SPRINT_ID, "
-      + "  NAME.VALUE AS SPRINT_NAME, "
-      + "  START_DATE.VALUE AS SPRINT_START, "
-      + "  END_DATE.VALUE AS SPRINT_END, "
-      + "  PLANNED_DATE.VALUE AS SPRINT_PLANNED_END, "
-      + "  STATUS_VALUE.VALUE AS SPRINT_STATUS "
+      + "  NAME.VALUE AS NAME, "
+      + "  START_DATE.VALUE AS START_DATE, "
+      + "  END_DATE.VALUE AS END_DATE, "
+      + "  PLANNED_DATE.VALUE AS PLANNED_END_DATE, "
+      + "  STATUS_VALUE.VALUE AS STATUS "
       + "FROM OBJREFERENCE REF, OBJECTS PROJECT, "
       + "  ATTRIBUTES NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, "
       + "  ATTRIBUTES PLANNED_DATE, ATTRIBUTES STATUS, "
@@ -181,6 +181,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         project.getProjectStatus().getId(),
         project.getProjectManagerId()});
   }
+
 
   @Override
   public Project findProjectByProjectId(BigInteger id) {

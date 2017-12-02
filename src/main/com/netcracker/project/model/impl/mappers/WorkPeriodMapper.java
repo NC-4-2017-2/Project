@@ -10,25 +10,31 @@ import java.sql.SQLException;
 
 public class WorkPeriodMapper implements RowMapper<UserDAO.WorkPeriod> {
 
-    private MapperDateConverter converter;
+  private MapperDateConverter converter;
 
-    public UserDAO.WorkPeriod mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Date startDate = null;
-        Date endDate = null;
+  public UserDAO.WorkPeriod mapRow(ResultSet rs, int rowNum)
+      throws SQLException {
+    Date startDate = null;
+    Date endDate = null;
 
-        UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
-        converter = new MapperDateConverter();
+    UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
+    converter = new MapperDateConverter();
 
-        startDate = converter.convertStringToDate(rs.getString("START_DATE"));
-        endDate = converter.convertStringToDate(rs.getString("END_DATE"));
+    startDate = converter
+        .convertStringToDate(rs.getString(EnumMapper.START_DATE.getFullName()));
+    endDate = converter
+        .convertStringToDate(rs.getString(EnumMapper.END_DATE.getFullName()));
 
-        workPeriod.setWorkPeriodId(new BigInteger(rs.getString("PERIOD_ID")));
-        workPeriod.setUserId(new BigInteger(rs.getString("USER_ID")));
-        workPeriod.setProjectId(new BigInteger(rs.getString("PROJECT_ID")));
-        workPeriod.setStartWorkDate(startDate);
-        workPeriod.setEndWorkDate(endDate);
+    workPeriod.setWorkPeriodId(
+        new BigInteger(rs.getString(EnumMapper.WORK_PERIOD_ID.getFullName())));
+    workPeriod.setUserId(
+        new BigInteger(rs.getString(EnumMapper.USER_ID.getFullName())));
+    workPeriod.setProjectId(
+        new BigInteger(rs.getString(EnumMapper.PROJECT_ID.getFullName())));
+    workPeriod.setStartWorkDate(startDate);
+    workPeriod.setEndWorkDate(endDate);
 
-        return workPeriod;
-    }
+    return workPeriod;
+  }
 
 }

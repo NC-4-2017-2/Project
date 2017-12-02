@@ -24,25 +24,31 @@ public class TaskMapper implements RowMapper<Task> {
 
     converter = new MapperDateConverter();
 
-    String dateStart = resultSet.getString("TASK_START_DATE");
-    String datePlannedEnd = resultSet.getString("TASK_PLANNED_END_DATE");
-    String dateEnd = resultSet.getString("TASK_END_DATE");
+    String dateStart = resultSet.getString(EnumMapper.START_DATE.getFullName());
+    String datePlannedEnd = resultSet
+        .getString(EnumMapper.PLANNED_END_DATE.getFullName());
+    String dateEnd = resultSet.getString(EnumMapper.END_DATE.getFullName());
 
     startDate = converter.convertStringToDate(dateStart);
     plannedEndDate = converter.convertStringToDate(datePlannedEnd);
     endDate = converter.convertStringToDate(dateEnd);
 
     return new Task.TaskBuilder()
-        .taskId(new BigInteger(resultSet.getString("TASK_ID")))
-        .name(resultSet.getString("TASK_NAME"))
-        .taskType(TaskDAO.TaskType.valueOf(resultSet.getString("TASK_TYPE")))
+        .taskId(new BigInteger(
+            resultSet.getString(EnumMapper.TASK_ID.getFullName())))
+        .name(resultSet.getString(EnumMapper.NAME.getFullName()))
+        .taskType(TaskDAO.TaskType
+            .valueOf(resultSet.getString(EnumMapper.TASK_TYPE.getFullName())))
         .startDate(startDate)
         .plannedEndDate(plannedEndDate)
         .endDate(endDate)
-        .priority(TaskDAO.TaskPriority.valueOf(resultSet.getString("TASK_PRIORITY")))
-        .status(TaskDAO.TaskStatus.valueOf(resultSet.getString("TASK_STATUS")))
-        .description(resultSet.getString("TASK_DESCRIPTION"))
-        .comments(resultSet.getString("TASK_COMMENT"))
+        .priority(TaskDAO.TaskPriority.valueOf(
+            resultSet.getString(EnumMapper.TASK_PRIORITY.getFullName())))
+        .status(TaskDAO.TaskStatus
+            .valueOf(resultSet.getString(EnumMapper.STATUS.getFullName())))
+        .description(
+            resultSet.getString(EnumMapper.TASK_DESCRIPTION.getFullName()))
+        .comments(resultSet.getString(EnumMapper.TASK_COMMENT.getFullName()))
         .build();
   }
 

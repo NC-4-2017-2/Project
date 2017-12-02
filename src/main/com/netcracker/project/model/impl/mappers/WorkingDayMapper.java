@@ -16,16 +16,16 @@ public class WorkingDayMapper implements RowMapper<WorkingDay> {
   public WorkingDay mapRow(ResultSet rs, int rowNum) throws SQLException {
 
     Date working_date = converter
-        .convertStringToDate(rs.getString("WORKING_DATE"));
+        .convertStringToDate(rs.getString(EnumMapper.WORKING_DATE.getFullName()));
 
     return new WorkingDay.WorkingDayBuilder()
-        .workingDayId(new BigInteger(rs.getString("WORKING_DAY_ID")))
+        .workingDayId(new BigInteger(rs.getString(EnumMapper.WORKING_DAY_ID.getFullName())))
         .date(working_date)
-        .weekNumber(rs.getInt("WEEK_NUMBER"))
-        .workingHours(rs.getDouble("WORKING_HOURS"))
-        .status(Status.valueOf(rs.getString("STATUS")))
-        .pmId(new BigInteger(rs.getString("PM_ID")))
-        .userId(new BigInteger(rs.getString("USER_ID")))
+        .weekNumber(rs.getInt(EnumMapper.WEEK_NUMBER.getFullName()))
+        .workingHours(rs.getDouble(EnumMapper.WORKING_HOURS.getFullName()))
+        .status(Status.valueOf(rs.getString(EnumMapper.STATUS.getFullName())))
+        .pmId(new BigInteger(rs.getString(EnumMapper.PM_ID.getFullName())))
+        .userId(new BigInteger(rs.getString(EnumMapper.USER_ID.getFullName())))
         .build();
   }
 }

@@ -13,19 +13,19 @@ public class VacationMapper implements RowMapper<Vacation> {
 
   @Override
   public Vacation mapRow(ResultSet rs, int rowNum) throws SQLException {
-    Date startDate = converter.convertStringToDate(rs.getString("START_DATE"));
-    Date endDate = converter.convertStringToDate(rs.getString("END_DATE"));
+    Date startDate = converter.convertStringToDate(rs.getString(EnumMapper.START_DATE.getFullName()));
+    Date endDate = converter.convertStringToDate(rs.getString(EnumMapper.END_DATE.getFullName()));
 
     return new Vacation.VacationBuilder()
-        .vacationId(new BigInteger(rs.getString("VACATION_ID")))
-        .userId(new BigInteger(rs.getString("USER_ID")))
-        .projectId(new BigInteger(rs.getString("PROJECT_ID")))
+        .vacationId(new BigInteger(rs.getString(EnumMapper.VACATION_ID.getFullName())))
+        .userId(new BigInteger(rs.getString(EnumMapper.USER_ID.getFullName())))
+        .projectId(new BigInteger(rs.getString(EnumMapper.PROJECT_ID.getFullName())))
         .startDate(startDate)
         .endDate(endDate)
-        .pmStatus(Status.valueOf(rs.getString("PM_STATUS")))
-        .lmStatus(Status.valueOf(rs.getString("LM_STATUS")))
-        .pmId(new BigInteger(rs.getString("PM_ID")))
-        .lmId(new BigInteger(rs.getString("LM_ID")))
+        .pmStatus(Status.valueOf(rs.getString(EnumMapper.PM_STATUS.getFullName())))
+        .lmStatus(Status.valueOf(rs.getString(EnumMapper.LM_STATUS.getFullName())))
+        .pmId(new BigInteger(rs.getString(EnumMapper.PM_ID.getFullName())))
+        .lmId(new BigInteger(rs.getString(EnumMapper.LM_ID.getFullName())))
         .build();
   }
 }

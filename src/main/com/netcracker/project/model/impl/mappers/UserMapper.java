@@ -11,27 +11,31 @@ import java.util.Date;
 
 public class UserMapper implements RowMapper<User> {
 
-    private MapperDateConverter converter;
+  private MapperDateConverter converter;
 
-    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Date dateBirth = null;
-        Date dateHire = null;
+  public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+    Date dateBirth = null;
+    Date dateHire = null;
 
-        converter = new MapperDateConverter();
+    converter = new MapperDateConverter();
 
-        dateBirth = converter.convertStringToDate(rs.getString("BIRTH_DATE"));
-        dateHire = converter.convertStringToDate(rs.getString("HIRE_DATE"));
+    dateBirth = converter
+        .convertStringToDate(rs.getString(EnumMapper.BIRTH_DATE.getFullName()));
+    dateHire = converter
+        .convertStringToDate(rs.getString(EnumMapper.HIRE_DATE.getFullName()));
 
-        return new User.UserBuilder()
-            .userId(new BigInteger(rs.getString("USER_ID")))
-            .lastName(rs.getString("LAST_NAME"))
-            .firstName(rs.getString("FIRST_NAME"))
-            .email(rs.getString("EMAIL"))
-            .dateOfBirth(dateBirth)
-            .hireDate(dateHire)
-            .phoneNumber(rs.getString("PHONE_NUMBER"))
-            .jobTitle(UserDAO.JobTitle.valueOf(rs.getString("JOB_TITLE")))
-            .projectStatus(UserDAO.ProjectStatus.valueOf(rs.getString("PROJECT_STATUS")))
-            .build();
-    }
+    return new User.UserBuilder()
+        .userId(new BigInteger(rs.getString(EnumMapper.USER_ID.getFullName())))
+        .lastName(rs.getString(EnumMapper.LAST_NAME.getFullName()))
+        .firstName(rs.getString(EnumMapper.FIRST_NAME.getFullName()))
+        .email(rs.getString(EnumMapper.EMAIL.getFullName()))
+        .dateOfBirth(dateBirth)
+        .hireDate(dateHire)
+        .phoneNumber(rs.getString(EnumMapper.PHONE_NUMBER.getFullName()))
+        .jobTitle(UserDAO.JobTitle
+            .valueOf(rs.getString(EnumMapper.JOB_TITLE.getFullName())))
+        .projectStatus(UserDAO.ProjectStatus
+            .valueOf(rs.getString(EnumMapper.STATUS.getFullName())))
+        .build();
+  }
 }

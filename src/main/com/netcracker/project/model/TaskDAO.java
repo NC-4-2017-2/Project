@@ -38,7 +38,7 @@ public interface TaskDAO {
   }
 
   enum TaskStatus {
-    COMPLETED(0), CLOSED(1), REOPEN(2), READY_FOR_TESTING(3);
+    OPENED(0), CLOSED(1), REOPENED(2), READY_FOR_TESTING(3);
     private int id;
 
     TaskStatus(int id) {

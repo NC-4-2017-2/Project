@@ -66,7 +66,7 @@ public class TaskDaoTest {
         .endDate(date)
         .plannedEndDate(date)
         .priority(TaskPriority.CRITICAL)
-        .status(TaskStatus.COMPLETED)
+        .status(TaskStatus.OPENED)
         .description("Good")
         .reopenCounter(1)
         .comments("hard but ineteresting")
@@ -92,7 +92,7 @@ public class TaskDaoTest {
         .endDate(date)
         .plannedEndDate(date)
         .priority(TaskPriority.CRITICAL)
-        .status(TaskStatus.COMPLETED)
+        .status(TaskStatus.OPENED)
         .description("Good")
         .reopenCounter(1)
         .comments("hard but ineteresting")
@@ -112,7 +112,7 @@ public class TaskDaoTest {
 
   @Test
   public void test3updateStatus(){
-    taskDao.updateStatus(TaskStatus.COMPLETED.getId(), BigInteger.valueOf(1));
+    taskDao.updateStatus(TaskStatus.OPENED.getId(), BigInteger.valueOf(1));
   }
 
   @Test
@@ -148,7 +148,7 @@ public class TaskDaoTest {
 
   @Test
   public void test8findTaskByStatusAndUserId(){
-    Collection<Task> task = taskDao.findTaskByStatusAndUserId(BigInteger.valueOf(1), TaskStatus.COMPLETED.getId());
+    Collection<Task> task = taskDao.findTaskByStatusAndUserId(BigInteger.valueOf(1), TaskStatus.OPENED.getId());
   }
 
 

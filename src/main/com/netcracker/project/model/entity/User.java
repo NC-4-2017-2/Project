@@ -127,7 +127,6 @@ public class User {
   }
 
 
-
   public static class UserBuilder {
 
     private BigInteger userId;

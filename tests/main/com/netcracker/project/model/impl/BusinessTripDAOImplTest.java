@@ -59,7 +59,6 @@ public class BusinessTripDAOImplTest {
     businessTrip.createTrip(result);
   }
 
-
   @Test
   public void test2UpdateTripAndFindByUserId() {
     BusinessTrip businessTripTestSecond = getBusinessTripForUpdate();
@@ -78,7 +77,6 @@ public class BusinessTripDAOImplTest {
       }
     }
   }
-
 
   @Test
   public void test3FindTripByProjectId() {

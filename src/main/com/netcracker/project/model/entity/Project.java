@@ -17,7 +17,6 @@ public class Project {
   private Collection<BigInteger> tasksId;
   private Collection<Sprint> sprints;
 
-
   private Project(ProjectBuilder builder) {
     this.projectId = builder.projectId;
     this.name = builder.name;

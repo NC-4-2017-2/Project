@@ -1,9 +1,11 @@
 package main.com.netcracker.project.model.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigInteger;
 import java.util.Date;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
+import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 
 public class Sprint {
 
@@ -31,14 +33,17 @@ public class Sprint {
     return name;
   }
 
+  @JsonSerialize(using = MapperDateConverter.class)
   public Date getStartDate() {
     return startDate;
   }
 
+  @JsonSerialize(using = MapperDateConverter.class)
   public Date getEndDate() {
     return endDate;
   }
 
+  @JsonSerialize(using = MapperDateConverter.class)
   public Date getPlannedEndDate() {
     return plannedEndDate;
   }

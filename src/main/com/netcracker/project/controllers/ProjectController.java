@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Secured(value = {"ROLE_ADMIN"})
@@ -31,7 +32,8 @@ public class ProjectController {
   }
 
   @RequestMapping("/{projectId}")
-  public String findProjectById(Model model,
+  @ResponseBody
+  public Project findProjectById(Model model,
       @PathVariable("projectId") Integer projectId) {
     Locale.setDefault(Locale.ENGLISH);
 
@@ -40,7 +42,7 @@ public class ProjectController {
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
 
-    return "project";
+    return project;
   }
 
 }

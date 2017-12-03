@@ -95,8 +95,6 @@ public class ProjectDaoTest {
     projectDAO.addUser(BigInteger.valueOf(4), BigInteger.valueOf(140));
     List<BigInteger> users = projectDAO.getIdUsers(BigInteger.valueOf(4));
     assertThat(3, is(users.size()));
-
-    //deleteTestUser(BigInteger.valueOf(10));
   }
 
   @Test
@@ -147,7 +145,7 @@ public class ProjectDaoTest {
     Date end = mp.convertStringToDate("13.12.14");
 
     Sprint sprint = new Sprint.SprintBuilder()
-        .sprintId(BigInteger.valueOf(58))
+        .sprintId(BigInteger.valueOf(59))
         .name("Sprint3")
         .startDate(start)
         .plannedEndDate(plannedEnd)
@@ -155,15 +153,18 @@ public class ProjectDaoTest {
         .status(OCStatus.CLOSED)
         .build();
 
+
+
     projectDAO.createSprint(sprint, BigInteger.valueOf(4));
     Collection<Sprint> sprints = projectDAO
         .getAllSprints(BigInteger.valueOf(4));
-    assertThat(sprints.size(), is(1));
+    assertThat(sprints.size(), is(2));
 
     deleteSprint();
 
+
     sprints = projectDAO.getAllSprints(BigInteger.valueOf(4));
-    assertThat(sprints.size(), is(0));
+    assertThat(sprints.size(), is(1));
 
   }
 
@@ -173,7 +174,7 @@ public class ProjectDaoTest {
     Collection<Sprint> collection = projectDAO
         .getAllSprints(BigInteger.valueOf(5));
 
-    assertThat(collection.size(), is(2));
+    assertThat(collection.size(), is(1));
   }
 
   @Test
@@ -208,14 +209,12 @@ public class ProjectDaoTest {
 
   @Test
   public void deleteSprint() {
-    BigInteger sprintId = BigInteger.valueOf(58);
+    BigInteger sprintId = BigInteger.valueOf(59);
 
     Collection<Sprint> sprints = projectDAO
         .getAllSprints(BigInteger.valueOf(4));
-    if (sprints.size() == 1) {
       template.update(DELETE_FROM_ATTRIBUTES, sprintId);
       template.update(DELETE_FROM_OBJECTS, sprintId);
-    }
   }
 
   @Test

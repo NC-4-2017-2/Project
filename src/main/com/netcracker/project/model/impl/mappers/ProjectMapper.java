@@ -12,8 +12,8 @@ public class ProjectMapper implements RowMapper<Project> {
   private MapperDateConverter converter;
 
   public Project mapRow(ResultSet rs, int i) throws SQLException {
-    Date startDate = null;
-    Date endDate = null;
+    Date startDate;
+    Date endDate;
 
     converter = new MapperDateConverter();
 
@@ -22,6 +22,7 @@ public class ProjectMapper implements RowMapper<Project> {
 
     startDate = converter.convertStringToDate(dateStart);
     endDate = converter.convertStringToDate(dateEnd);
+    String name = rs.getString(EnumMapper.NAME.getFullName());
 
     return new Project.ProjectBuilder()
         .projectId(

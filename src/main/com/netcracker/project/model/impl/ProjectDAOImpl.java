@@ -89,8 +89,6 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
   }
 
-
-  //todo add more attributes
   @Override
   public List<Project> findProjectByDate(Date startDate) {
     logger.info("Entering findProjectByDate(startDate=" + startDate + ")");
@@ -166,7 +164,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         + projectId + ")");
     MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_SPRINT,
-        //sprint.getSprintId(),
+        sprint.getSprintId(),
         sprint.getName(),
         mdc.convertDateTosString(sprint.getStartDate()),
         mdc.convertDateTosString(sprint.getPlannedEndDate()),

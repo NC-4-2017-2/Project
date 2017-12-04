@@ -68,7 +68,7 @@ public class BusinessTripDAOImplTest {
     Collection<BusinessTrip> tripByUserId = businessTrip
         .findTripByUserId(BigInteger.valueOf(1));
 
-    assertEquals(2, tripByUserId.size());
+    assertEquals(1, tripByUserId.size());
 
     for (BusinessTrip result : tripByUserId) {
       if (Objects.equals(result.getBusinessTripId(), BigInteger.valueOf(56))) {
@@ -84,7 +84,7 @@ public class BusinessTripDAOImplTest {
         .findTripByProjectId(BigInteger.valueOf(4));
     Iterator<BusinessTrip> iterator = tripByProjectId.iterator();
 
-    assertEquals(4, tripByProjectId.size());
+    assertEquals(3, tripByProjectId.size());
     for (BusinessTrip trip : tripByProjectId) {
       if (Objects
           .equals(trip.getBusinessTripId(), BigInteger.valueOf(56))) {

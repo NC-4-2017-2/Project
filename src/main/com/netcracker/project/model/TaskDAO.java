@@ -3,7 +3,6 @@ package main.com.netcracker.project.model;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.entity.Task;
 
 public interface TaskDAO {
@@ -25,15 +24,22 @@ public interface TaskDAO {
   void updateStatus(Integer taskStatus, BigInteger taskId);
 
   enum TaskPriority {
-    CRITICAL(0), HIGH(1), NORMAL(2), LOW(3);
-    private int id;
+    CRITICAL(0, 5),
+    HIGH(1, 4),
+    NORMAL(2, 3),
+    LOW(3, 1);
+    private Integer[] id;
 
-    TaskPriority(int id) {
+    TaskPriority(Integer... id) {
       this.id = id;
     }
 
-    public int getId() {
-      return id;
+    public Integer getId() {
+      return id[0];
+    }
+
+    public Integer getPriorityCost() {
+      return id[1];
     }
   }
 
@@ -66,7 +72,7 @@ public interface TaskDAO {
 
   String CREATE_TASK =
       "INSERT ALL " +
-          "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) VALUES (300,NULL,3,?,NULL) "
+          "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION, OBJECT_VERSION) VALUES (300,NULL,3,?,NULL, 1) "
           +
           "INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (20,300,?,NULL,NULL) "
           +

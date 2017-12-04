@@ -31,7 +31,7 @@ public class ProjectController {
     return null;
   }
 
-  @RequestMapping("/{projectId}")
+  @RequestMapping(value = "/{projectId}", method = RequestMethod.GET)
   @ResponseBody
   public Project findProjectById(Model model,
       @PathVariable("projectId") Integer projectId) {

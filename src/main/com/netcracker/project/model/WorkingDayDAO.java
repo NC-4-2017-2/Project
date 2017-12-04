@@ -12,8 +12,8 @@ public interface WorkingDayDAO {
   Collection<WorkingDay> findHoursPerPeriod(BigInteger userId, Date startDate, Date endDate);
 
   String ADD_HOURS_PER_DAY = "INSERT ALL "
-      + "    INTO OBJECTS(OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION) "
-      + "VALUES (? , NULL, 6, ?, NULL) "
+      + "    INTO OBJECTS(OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION, OBJECT_VERSION) "
+      + "VALUES (? , NULL, 6, ?, NULL, 1) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
       + "VALUES (49, ?, ?, NULL, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "

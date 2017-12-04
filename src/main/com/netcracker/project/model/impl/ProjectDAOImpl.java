@@ -49,8 +49,6 @@ public class ProjectDAOImpl implements ProjectDAO {
     return project;
   }
 
-
-  //todo add more attributes
   @Override
   public Project findProjectByName(String name) {
     logger.info("Entering findProjectByName(name=" + name + ")");
@@ -172,6 +170,22 @@ public class ProjectDAOImpl implements ProjectDAO {
         sprint.getStatus().getId(),
         projectId
     );
+  }
+
+  @Override
+  public void updateSprintStatus(BigInteger sprintId, OCStatus ocStatus) {
+    logger.info(
+        "Entering updateSprintStatus(sprintId=" + sprintId + "," + " ocStatus="
+            + ocStatus + ")");
+    template.update(UPDATE_SPRINT_STATUS, ocStatus, sprintId);
+  }
+
+  @Override
+  public void updateSprintEndDate(BigInteger sprintId, Date endDate) {
+    logger.info(
+        "Entering updateSprintEndDate(sprintId=" + sprintId + "," + " endDate="
+            + endDate + ")");
+    template.update(UPDATE_SPRINT_END_DATE, endDate, sprintId);
   }
 
   private Collection<BigInteger> getAllTaskIdByProject(BigInteger projectId) {

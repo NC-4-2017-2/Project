@@ -2,7 +2,7 @@ package main.com.netcracker.project.model.impl;
 
 import static main.com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
 import static main.com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
-import static main.com.netcracker.project.model.entity.Sprint.*;
+import static main.com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -181,18 +181,25 @@ public class ProjectDaoTest {
         .getAllSprints(BigInteger.valueOf(5));
     Sprint expSprint = buildTestSprint();
 
-      AssertUtils.assertSprint(expSprint, collection.iterator().next());
-
+    AssertUtils.assertSprint(expSprint, collection.iterator().next());
   }
 
 
   @Test
   public void updateEndDateTest() {
     MapperDateConverter mdc = new MapperDateConverter();
-    Date endDate = mdc.convertStringToDate("10.11.10");
-    projectDAO.updateEndDate(BigInteger.valueOf(4), endDate);
+    Date defEndDate = mdc.convertStringToDate("10.11.10");
+    Date newEndDate = mdc.convertStringToDate("20.11.10");
+
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
-    assertThat(project.getEndDate(), is(endDate));
+    assertThat(project.getEndDate(), is(defEndDate));
+
+    projectDAO.updateEndDate(BigInteger.valueOf(4), newEndDate);
+
+    project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
+    assertThat(project.getEndDate(), is(newEndDate));
+
+    projectDAO.updateEndDate(BigInteger.valueOf(4), defEndDate);
   }
 
   @Test
@@ -207,6 +214,31 @@ public class ProjectDaoTest {
     projectDAO.updatePM(BigInteger.valueOf(4), BigInteger.valueOf(1));
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
     assertThat(project.getProjectManagerId(), is(BigInteger.valueOf(1)));
+  }
+
+  @Test
+  public void updateSprintEndDate() {
+    MapperDateConverter mdc = new MapperDateConverter();
+    Date defEndDate = mdc.convertStringToDate("25.12.12");
+    Date newEndDate = mdc.convertStringToDate("05.01.13");
+
+    Collection<Sprint> sprints = projectDAO
+        .getAllSprints(BigInteger.valueOf(4));
+    assertThat(sprints.iterator().next().getEndDate(), is(defEndDate));
+
+    projectDAO.updateSprintEndDate(BigInteger.valueOf(14), newEndDate);
+
+    sprints = projectDAO
+        .getAllSprints(BigInteger.valueOf(4));
+    assertThat(sprints.iterator().next().getEndDate(), is(newEndDate));
+
+    projectDAO.updateSprintEndDate(BigInteger.valueOf(14), defEndDate);
+
+  }
+
+  @Test
+  public void updateprintStatus() {
+
   }
 
   @Test

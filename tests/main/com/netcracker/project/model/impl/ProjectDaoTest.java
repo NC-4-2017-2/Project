@@ -2,6 +2,7 @@ package main.com.netcracker.project.model.impl;
 
 import static main.com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
 import static main.com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
+import static main.com.netcracker.project.model.entity.Sprint.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -13,9 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
+import main.com.netcracker.project.AssertUtils;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
 import main.com.netcracker.project.model.entity.Project;
+import main.com.netcracker.project.model.entity.Project.ProjectBuilder;
 import main.com.netcracker.project.model.entity.Sprint;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
@@ -55,21 +58,28 @@ public class ProjectDaoTest {
 
   @Test
   public void findProjectByIDTest() {
-    Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
-    assertThat(project.getProjectId(), is(BigInteger.valueOf(4)));
-    assertThat(project.getProjectManagerId(), is(BigInteger.valueOf(1)));
-    assertThat(project.getTasksId().size(), is(2));
+    Project actProject = projectDAO
+        .findProjectByProjectId(BigInteger.valueOf(4));
+    Project expProject = buildTestProject();
+
+    AssertUtils.assertProject(expProject, actProject);
   }
+
 
   @Test
   public void findProjectByNameTest() {
-    Project project = projectDAO.findProjectByName("PROJECT1");
-    assertThat("PROJECT1", is(project.getName()));
+    Project actProject = projectDAO.findProjectByName("PROJECT1");
+    Project expProject = buildTestProject();
+
+    AssertUtils.assertProject(expProject, actProject);
+
   }
 
   @Test
   public void findProjectByDateTest() {
     SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yy");
+    Project expProject = buildTestProject();
+
     Date d = null;
     try {
       d = sdf.parse("12.12.12");
@@ -80,7 +90,7 @@ public class ProjectDaoTest {
     List<Project> projects = projectDAO.findProjectByDate(d);
 
     if (projects.size() == 1) {
-      assertThat(BigInteger.valueOf(4), is(projects.get(0).getProjectId()));
+      AssertUtils.assertProject(expProject, projects.get(0));
     }
     if (projects.size() == 2) {
       assertThat(BigInteger.valueOf(4), is(projects.get(0).getProjectId()));
@@ -144,7 +154,7 @@ public class ProjectDaoTest {
     Date plannedEnd = mp.convertStringToDate("10.12.14");
     Date end = mp.convertStringToDate("13.12.14");
 
-    Sprint sprint = new Sprint.SprintBuilder()
+    Sprint sprint = new SprintBuilder()
         .sprintId(BigInteger.valueOf(59))
         .name("Sprint3")
         .startDate(start)
@@ -153,8 +163,6 @@ public class ProjectDaoTest {
         .status(OCStatus.CLOSED)
         .build();
 
-
-
     projectDAO.createSprint(sprint, BigInteger.valueOf(4));
     Collection<Sprint> sprints = projectDAO
         .getAllSprints(BigInteger.valueOf(4));
@@ -162,10 +170,8 @@ public class ProjectDaoTest {
 
     deleteSprint();
 
-
     sprints = projectDAO.getAllSprints(BigInteger.valueOf(4));
     assertThat(sprints.size(), is(1));
-
   }
 
 
@@ -173,9 +179,12 @@ public class ProjectDaoTest {
   public void getALlSprintsTest() {
     Collection<Sprint> collection = projectDAO
         .getAllSprints(BigInteger.valueOf(5));
+    Sprint expSprint = buildTestSprint();
 
-    assertThat(collection.size(), is(1));
+      AssertUtils.assertSprint(expSprint, collection.iterator().next());
+
   }
+
 
   @Test
   public void updateEndDateTest() {
@@ -213,8 +222,8 @@ public class ProjectDaoTest {
 
     Collection<Sprint> sprints = projectDAO
         .getAllSprints(BigInteger.valueOf(4));
-      template.update(DELETE_FROM_ATTRIBUTES, sprintId);
-      template.update(DELETE_FROM_OBJECTS, sprintId);
+    template.update(DELETE_FROM_ATTRIBUTES, sprintId);
+    template.update(DELETE_FROM_OBJECTS, sprintId);
   }
 
   @Test
@@ -224,6 +233,41 @@ public class ProjectDaoTest {
     List<BigInteger> users = projectDAO.getIdUsers(BigInteger.valueOf(4));
     assertThat(users.size(), is(2));
     deleteTestUser(BigInteger.valueOf(140));
+  }
+
+
+  private Project buildTestProject() {
+    MapperDateConverter mdc = new MapperDateConverter();
+    Date startDate = mdc.convertStringToDate("12.12.12");
+    Date endDate = mdc.convertStringToDate("10.11.10");
+
+    Project project = new ProjectBuilder()
+        .projectId(BigInteger.valueOf(4))
+        .name("PROJECT1")
+        .startDate(startDate)
+        .endDate(endDate)
+        .build();
+
+    project.setProjectStatus(CLOSED);
+    project.setProjectManagerId(BigInteger.valueOf(1));
+
+    return project;
+  }
+
+  private Sprint buildTestSprint() {
+    MapperDateConverter mdc = new MapperDateConverter();
+    Date startDate = mdc.convertStringToDate("14.12.12");
+    Date endDate = mdc.convertStringToDate("25.12.12");
+    Date plannedEndDate = mdc.convertStringToDate("26.12.12");
+
+    return new SprintBuilder()
+        .sprintId(BigInteger.valueOf(15))
+        .name("SPRINT2")
+        .startDate(startDate)
+        .endDate(endDate)
+        .plannedEndDate(plannedEndDate)
+        .status(CLOSED)
+        .build();
   }
 }
 

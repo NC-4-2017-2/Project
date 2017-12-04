@@ -40,6 +40,7 @@ public class ProjectDAOImpl implements ProjectDAO {
   @Override
   public Project findProjectByProjectId(BigInteger id) {
     logger.info("Entering findProjectByProjectId(id=" + id + ")");
+
     Project project = template
         .queryForObject(FIND_PROJECT_BY_PROJECT_ID, new Object[]{id},
             new ProjectMapper());
@@ -140,7 +141,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     logger.info(
         "Entering addUser(projectId=" + projectId + "," + " userId=" + userId
             + ")");
-    template.update(UPDATE_USERS_IN_PROJECT, projectId, userId);
+    template.update(INSERT_USER_TO_PROJECT, projectId, userId);
   }
 
 

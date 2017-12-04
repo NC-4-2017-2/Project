@@ -99,33 +99,24 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void addUserTest() {
-    createTestUser(BigInteger.valueOf(140));
-
-    projectDAO.addUser(BigInteger.valueOf(4), BigInteger.valueOf(140));
-    List<BigInteger> users = projectDAO.getIdUsers(BigInteger.valueOf(4));
-    assertThat(3, is(users.size()));
-  }
-
-  @Test
   public void createProjectTest() {
 
     MapperDateConverter mp = new MapperDateConverter();
     Date start = mp.convertStringToDate("13.11.14");
     Date end = mp.convertStringToDate("13.11.20");
     Project project = new Project.ProjectBuilder()
-        .projectId(BigInteger.valueOf(202))
+        .projectId(BigInteger.valueOf(200))
         .name("Test")
         .startDate(start)
         .endDate(end)
         .build();
     project.setProjectStatus(OCStatus.OPENED);
-    project.setProjectManagerId(BigInteger.valueOf(140));
+    project.setProjectManagerId(BigInteger.valueOf(2));
 
     projectDAO.createProject(project);
 
-    Project result = projectDAO.findProjectByProjectId(BigInteger.valueOf(202));
-    assertThat(BigInteger.valueOf(202), is(result.getProjectId()));
+    Project result = projectDAO.findProjectByProjectId(BigInteger.valueOf(200));
+    assertThat(BigInteger.valueOf(200), is(result.getProjectId()));
     assertThat("Test", is(result.getName()));
     assertThat(start, is(result.getStartDate()));
     assertThat(OPENED, is(result.getProjectStatus()));
@@ -133,19 +124,6 @@ public class ProjectDaoTest {
     deleteProject();
 
   }
-
-  private void createTestUser(BigInteger bigInteger) {
-    template.update(
-        "INSERT INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION)"
-            + " VALUES (?,NULL,1,'Test Testov Testin',NULL)", bigInteger);
-
-  }
-
-  private void deleteTestUser(BigInteger bigInteger) {
-    template.update(
-        "DELETE OBJECTS WHERE OBJECT_ID = ?", bigInteger);
-  }
-
 
   @Test
   public void createSprintTest() {
@@ -188,7 +166,7 @@ public class ProjectDaoTest {
   @Test
   public void updateEndDateTest() {
     MapperDateConverter mdc = new MapperDateConverter();
-    Date defEndDate = mdc.convertStringToDate("10.11.10");
+    Date defEndDate = mdc.convertStringToDate("12.12.15");
     Date newEndDate = mdc.convertStringToDate("20.11.10");
 
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
@@ -243,7 +221,7 @@ public class ProjectDaoTest {
 
   @Test
   public void deleteProject() {
-    BigInteger bigInteger = BigInteger.valueOf(202);
+    BigInteger bigInteger = BigInteger.valueOf(200);
     template.update(DELETE_FROM_ATTRIBUTES, bigInteger);
     template.update(DELETE_FROM_OBJECTS, bigInteger);
   }
@@ -258,20 +236,10 @@ public class ProjectDaoTest {
     template.update(DELETE_FROM_OBJECTS, sprintId);
   }
 
-  @Test
-  public void deleteUserTest() {
-    projectDAO
-        .deleteUserByUserId(BigInteger.valueOf(140), BigInteger.valueOf(4));
-    List<BigInteger> users = projectDAO.getIdUsers(BigInteger.valueOf(4));
-    assertThat(users.size(), is(2));
-    deleteTestUser(BigInteger.valueOf(140));
-  }
-
-
   private Project buildTestProject() {
     MapperDateConverter mdc = new MapperDateConverter();
     Date startDate = mdc.convertStringToDate("12.12.12");
-    Date endDate = mdc.convertStringToDate("10.11.10");
+    Date endDate = mdc.convertStringToDate("12.12.15");
 
     Project project = new ProjectBuilder()
         .projectId(BigInteger.valueOf(4))

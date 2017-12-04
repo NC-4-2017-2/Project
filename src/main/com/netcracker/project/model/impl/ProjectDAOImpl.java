@@ -30,8 +30,8 @@ public class ProjectDAOImpl implements ProjectDAO {
     MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
         project.getName(),
-        mdc.convertDateTosString(project.getStartDate()),
-        mdc.convertDateTosString(project.getEndDate()),
+        mdc.convertDateToString(project.getStartDate()),
+        mdc.convertDateToString(project.getEndDate()),
         project.getProjectStatus().getId(),
         project.getProjectManagerId()});
   }
@@ -91,7 +91,7 @@ public class ProjectDAOImpl implements ProjectDAO {
   public List<Project> findProjectByDate(Date startDate) {
     logger.info("Entering findProjectByDate(startDate=" + startDate + ")");
     MapperDateConverter dateConverter = new MapperDateConverter();
-    String formattedDate = dateConverter.convertDateTosString(startDate);
+    String formattedDate = dateConverter.convertDateToString(startDate);
 
     List<BigInteger> projectId = findAllProjectIdFromDate(formattedDate);
     List<Project> projects = new ArrayList<>();
@@ -164,9 +164,9 @@ public class ProjectDAOImpl implements ProjectDAO {
     template.update(CREATE_SPRINT,
         sprint.getSprintId(),
         sprint.getName(),
-        mdc.convertDateTosString(sprint.getStartDate()),
-        mdc.convertDateTosString(sprint.getPlannedEndDate()),
-        mdc.convertDateTosString(sprint.getEndDate()),
+        mdc.convertDateToString(sprint.getStartDate()),
+        mdc.convertDateToString(sprint.getPlannedEndDate()),
+        mdc.convertDateToString(sprint.getEndDate()),
         sprint.getStatus().getId(),
         projectId
     );

@@ -30,9 +30,9 @@ public class TaskDAOImpl implements TaskDAO {
         task.getTaskId(),
         task.getName(),
         task.getTaskType().getId(),
-        mapperDateConverter.convertDateTosString(task.getStartDate()),
-        mapperDateConverter.convertDateTosString(task.getEndDate()),
-        mapperDateConverter.convertDateTosString(task.getPlannedEndDate()),
+        mapperDateConverter.convertDateToString(task.getStartDate()),
+        mapperDateConverter.convertDateToString(task.getEndDate()),
+        mapperDateConverter.convertDateToString(task.getPlannedEndDate()),
         task.getPriority().getId(),
         task.getStatus().getId(),
         task.getDescription(),
@@ -51,13 +51,13 @@ public class TaskDAOImpl implements TaskDAO {
     updateTaskByName(task.getName(), task.getTaskId());
     updateTaskByType(task.getTaskType(), task.getTaskId());
     updateTaskByStartDate(
-        mapperDateConverter.convertDateTosString(task.getStartDate()),
+        mapperDateConverter.convertDateToString(task.getStartDate()),
         task.getTaskId());
     updateTaskByEndDate(
-        mapperDateConverter.convertDateTosString(task.getEndDate()),
+        mapperDateConverter.convertDateToString(task.getEndDate()),
         task.getTaskId());
     updateTaskByPlannedEndDate(
-        mapperDateConverter.convertDateTosString(task.getPlannedEndDate()),
+        mapperDateConverter.convertDateToString(task.getPlannedEndDate()),
         task.getTaskId());
     updateTaskByTaskPriority(task.getPriority(), task.getTaskId());
     updateTaskByStatus(task.getStatus(), task.getTaskId());
@@ -185,7 +185,7 @@ public class TaskDAOImpl implements TaskDAO {
         "Entering findTaskByUserIdAndDate(date=" + date + ", " + "id=" + userId
             + ")");
     MapperDateConverter dateConverter = new MapperDateConverter();
-    String formattedDate = dateConverter.convertDateTosString(date);
+    String formattedDate = dateConverter.convertDateToString(date);
     return template.query(FIND_TASK_BY_USER_ID_AND_DATE,
         new Object[]{formattedDate, userId}, new TaskMapper());
   }

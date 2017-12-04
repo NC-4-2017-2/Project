@@ -25,7 +25,7 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   @Override
   public void addHoursPerDay(WorkingDay workingDay) {
     logger.info("Entering addHoursPerDay(workingDay=" + workingDay + ")");
-    String date = converter.convertDateTosString(workingDay.getDate());
+    String date = converter.convertDateToString(workingDay.getDate());
 
     template.update(ADD_HOURS_PER_DAY, new Object[]{
         workingDay.getWorkingDayId(),
@@ -51,8 +51,8 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
       Date endDate) {
     logger.info("Entering findHoursPerPeriod(projectId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
 
-    String startDateString = converter.convertDateTosString(startDate);
-    String endDateString = converter.convertDateTosString(endDate);
+    String startDateString = converter.convertDateToString(startDate);
+    String endDateString = converter.convertDateToString(endDate);
 
     return template.query(FIND_HOURS_PER_PERIOD, new Object[]{userId,
         startDateString, endDateString}, new WorkingDayMapper());

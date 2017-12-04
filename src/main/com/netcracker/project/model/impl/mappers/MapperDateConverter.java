@@ -34,7 +34,7 @@ public class MapperDateConverter extends JsonSerializer<Date> {
     return date;
   }
 
-  public String convertDateTosString(Date startDate) {
+  public String convertDateToString(Date startDate) {
     String pattern = "E MMM dd HH:mm:ss Z yyyy";
     String patternWriteFormat = "dd.MM.yy";
     String dateStr = startDate.toString();

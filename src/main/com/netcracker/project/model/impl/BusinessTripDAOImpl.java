@@ -25,8 +25,8 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
     template.update(CREATE_TRIP, new Object[]{
         "BUSINESS_TRIP " + trip.getBusinessTripId(),
         trip.getCountry(),
-        converter.convertDateTosString(trip.getStartDate()),
-        converter.convertDateTosString(trip.getEndDate()),
+        converter.convertDateToString(trip.getStartDate()),
+        converter.convertDateToString(trip.getEndDate()),
         trip.getStatus().getId(),
         trip.getUserId(),
         trip.getAuthorId(),
@@ -44,9 +44,9 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   public void updateTrip(BusinessTrip trip) {
     logger.info("Entering updateTrip(trip=" + trip + ")");
     updateCountry(trip.getCountry(), trip.getBusinessTripId());
-    updateStartDate(converter.convertDateTosString(trip.getStartDate()),
+    updateStartDate(converter.convertDateToString(trip.getStartDate()),
         trip.getBusinessTripId());
-    updateEndDate(converter.convertDateTosString(trip.getEndDate()),
+    updateEndDate(converter.convertDateToString(trip.getEndDate()),
         trip.getBusinessTripId());
     updateStatus(trip.getStatus(), trip.getBusinessTripId());
   }

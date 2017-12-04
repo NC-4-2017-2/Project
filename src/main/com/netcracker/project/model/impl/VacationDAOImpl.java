@@ -29,8 +29,8 @@ public class VacationDAOImpl implements VacationDAO {
         "VACATION " + vacation.getVacationId(),
         vacation.getUserId(),
         vacation.getProjectId(),
-        converter.convertDateTosString(vacation.getStartDate()),
-        converter.convertDateTosString(vacation.getEndDate()),
+        converter.convertDateToString(vacation.getStartDate()),
+        converter.convertDateToString(vacation.getEndDate()),
         vacation.getPmStatus(),
         vacation.getLmStatus(),
         vacation.getPmId(),
@@ -44,9 +44,9 @@ public class VacationDAOImpl implements VacationDAO {
     logger.info(
         "Entering updateVacation(id=" + id + "," + " vacation=" + vacation
             + ")");
-    updateStartDate(converter.convertDateTosString(vacation.getStartDate()),
+    updateStartDate(converter.convertDateToString(vacation.getStartDate()),
         vacation.getVacationId());
-    updateEndDate(converter.convertDateTosString(vacation.getEndDate()),
+    updateEndDate(converter.convertDateToString(vacation.getEndDate()),
         vacation.getVacationId());
     updatePmStatus(vacation.getPmStatus(), vacation.getVacationId());
     updateLmStatus(vacation.getLmStatus(), vacation.getVacationId());

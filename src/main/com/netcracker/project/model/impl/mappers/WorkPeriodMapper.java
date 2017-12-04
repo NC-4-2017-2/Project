@@ -33,6 +33,7 @@ public class WorkPeriodMapper implements RowMapper<UserDAO.WorkPeriod> {
         new BigInteger(rs.getString(EnumMapper.PROJECT_ID.getFullName())));
     workPeriod.setStartWorkDate(startDate);
     workPeriod.setEndWorkDate(endDate);
+    workPeriod.setWorkPeriodStatus(UserDAO.WorkPeriod.WorkPeriodStatus.valueOf(rs.getString(EnumMapper.WORKING_PERIOD_STATUS.getFullName())));
 
     return workPeriod;
   }

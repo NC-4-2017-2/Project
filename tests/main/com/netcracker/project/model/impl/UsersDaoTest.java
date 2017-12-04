@@ -41,7 +41,6 @@ public class UsersDaoTest {
     context = new ClassPathXmlApplicationContext("Spring-Module.xml");
     userDao = (UserDAO) context.getBean("userDAO");
     template = new JdbcTemplate(dataSource);
-
   }
 
   @Autowired
@@ -126,6 +125,16 @@ public class UsersDaoTest {
   @Test
   public void updateProjectStatus() {
     userDao.updateProjectStatus(BigInteger.valueOf(2), 1);
+  }
+
+  @Test
+  public void updateWorkingPeriodByUserId() {
+    MapperDateConverter converter = new MapperDateConverter();
+    UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
+    workPeriod.setUserId(BigInteger.valueOf(2));
+    workPeriod.setProjectId(BigInteger.valueOf(4));
+    workPeriod.setEndWorkDate(converter.convertStringToDate("11.11.86"));
+    userDao.updateWorkingPeriodByUserId(workPeriod);
   }
 
   @Test

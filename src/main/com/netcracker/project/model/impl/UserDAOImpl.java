@@ -2,6 +2,7 @@ package main.com.netcracker.project.model.impl;
 
 import main.com.netcracker.project.model.entity.User;
 import main.com.netcracker.project.model.UserDAO;
+import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import main.com.netcracker.project.model.impl.mappers.UserMapper;
 import main.com.netcracker.project.model.impl.mappers.WorkPeriodMapper;
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import java.util.Collection;
 public class UserDAOImpl implements UserDAO {
 
     private Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private MapperDateConverter converter = new MapperDateConverter();
 
     private JdbcTemplate template;
 
@@ -30,8 +32,8 @@ public class UserDAOImpl implements UserDAO {
                 user.getLastName(),
                 user.getFirstName(),
                 user.getEmail(),
-                user.getDateOfBirth(),
-                user.getHireDate(),
+                converter.convertDateToString(user.getDateOfBirth()),
+                converter.convertDateToString(user.getHireDate()),
                 user.getPhoneNumber(),
                 user.getJobTitle().getId(),
                 user.getProjectStatus().getId(),
@@ -104,9 +106,9 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void updateWorkingPeriodByUserId(BigInteger userId, BigInteger projectId, UserDAO.WorkPeriod workPeriod) {
-        logger.info("Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId=" + projectId + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
-        template.update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate().toString(), userId, projectId);
+    public void updateWorkingPeriodByUserId(UserDAO.WorkPeriod workPeriod) {
+        logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + "," + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
+        template.update(UPDATE_WORKING_PERIOD_END_DATE, converter.convertDateToString(workPeriod.getEndWorkDate()), workPeriod.getUserId(), workPeriod.getProjectId());
     }
 
 }

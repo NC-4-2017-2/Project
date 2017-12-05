@@ -191,12 +191,15 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByPriority(Integer taskPriority) {
+  public Collection<Task> findTaskByPriorityAndUserId(Integer taskPriority,
+      BigInteger userId) {
     logger
-        .info("Entering findTaskByPriority(taskPriority=" + taskPriority + ")");
-    return template.query(FIND_TASK_BY_PRIORITY, new Object[]{taskPriority},
+        .info("Entering findTaskByPriority(userId=" + userId + ", " + "taskPriority="
+            + taskPriority + ")");
+    return template.query(FIND_TASK_BY_PRIORITY_AND_USER_ID, new Object[]{taskPriority, userId},
         new TaskMapper());
   }
+
 
   @Override
   public Collection<Task> findTaskByStatusAndUserId(BigInteger id,

@@ -13,7 +13,6 @@ import main.com.netcracker.project.model.TaskDAO;
 import main.com.netcracker.project.model.TaskDAO.TaskPriority;
 import main.com.netcracker.project.model.TaskDAO.TaskStatus;
 import main.com.netcracker.project.model.TaskDAO.TaskType;
-import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.entity.Task;
 import main.com.netcracker.project.model.entity.Task.TaskBuilder;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
@@ -142,7 +141,7 @@ public class TaskDaoTest {
 
   @Test
   public void test7findTaskByPriority(){
-    Collection<Task> task =  taskDao.findTaskByPriority(TaskPriority.HIGH.getId());
+    Collection<Task> task =  taskDao.findTaskByPriorityAndUserId(TaskPriority.LOW.getId(),BigInteger.valueOf(1));
 
   }
 

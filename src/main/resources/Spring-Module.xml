@@ -10,5 +10,6 @@
   <import resource="Spring-BusinessTrip.xml"/>
   <import resource="Spring-WorkingDay.xml"/>
   <import resource="Spring-Vacation.xml"/>
+  <import resource="Email-Service.xml"/>
 
 </beans>

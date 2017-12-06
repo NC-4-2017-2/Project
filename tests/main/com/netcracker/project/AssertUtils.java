@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import main.com.netcracker.project.model.entity.BusinessTrip;
 import main.com.netcracker.project.model.entity.Project;
 import main.com.netcracker.project.model.entity.Sprint;
+import main.com.netcracker.project.model.entity.Task;
 
 public class AssertUtils {
 
@@ -37,5 +38,22 @@ public class AssertUtils {
     assertEquals(expSprint.getEndDate(), actSprint.getEndDate());
     assertEquals(expSprint.getPlannedEndDate(), actSprint.getPlannedEndDate());
     assertEquals(expSprint.getStatus(), actSprint.getStatus());
+  }
+
+  public static void assertTask(Task expTask, Task actTask){
+    assertEquals(expTask.getTaskId(), actTask.getTaskId());
+    assertEquals(expTask.getName(), actTask.getName());
+    assertEquals(expTask.getTaskType(), actTask.getTaskType());
+    assertEquals(expTask.getStartDate(), actTask.getStartDate());
+    assertEquals(expTask.getEndDate(), actTask.getEndDate());
+    assertEquals(expTask.getPlannedEndDate(), actTask.getPlannedEndDate());
+    assertEquals(expTask.getPriority(), actTask.getPriority());
+    assertEquals(expTask.getStatus(), actTask.getStatus());
+    assertEquals(expTask.getDescription(), actTask.getDescription());
+    assertEquals(expTask.getReopenCounter(), actTask.getReopenCounter());
+    assertEquals(expTask.getComments(), actTask.getComments());
+    assertEquals(expTask.getAuthorId(), actTask.getAuthorId());
+    assertEquals(expTask.getUserId(), actTask.getUserId());
+    assertEquals(expTask.getProjectId(), actTask.getProjectId());
   }
 }

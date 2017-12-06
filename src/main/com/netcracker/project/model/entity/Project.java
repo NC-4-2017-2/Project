@@ -26,6 +26,9 @@ public class Project {
     this.endDate = builder.endDate;
   }
 
+  public Project() {
+  }
+
   public BigInteger getProjectId() {
     return projectId;
   }

@@ -10,11 +10,9 @@ public class EmailServiceImpl implements EmailService {
 
   private MailSender mailSender;
 
-
   public void setMailSender(MailSender mailSender) {
     this.mailSender = mailSender;
   }
-
 
   public void sendEmail(String to, String login, String password) {
     SimpleMailMessage message = new SimpleMailMessage();

@@ -1,5 +1,6 @@
 package main.com.netcracker.project.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -12,7 +13,7 @@ public interface ProjectDAO {
 
   void createProject(Project project);
 
-  Project findProjectByProjectId(BigInteger id);
+  Project findProjectByProjectId(BigInteger id) throws InvocationTargetException;
 
   Project findProjectByName(String name);
 
@@ -54,11 +55,11 @@ public interface ProjectDAO {
 
   String CREATE_PROJECT =
       "INSERT ALL "
-          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION, OBJECT_VERSION) VALUES (200,NULL,2,'Project'||?,NULL, 1) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (14,200,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (15,200,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (16,200,?,NULL,NULL) "
-          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (17,200,NULL,NULL,?)  "
+          + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION, OBJECT_VERSION) VALUES (201,NULL,2,'Project'||?,NULL, 1) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (14,201,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (15,201,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (16,201,?,NULL,NULL) "
+          + " INTO ATTRIBUTES (ATTR_ID,OBJECT_ID,VALUE,DATE_VALUE,LIST_VALUE_ID) VALUES (17,201,NULL,NULL,?)  "
           + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (18,200,?)"
           + " SELECT * FROM dual";
 

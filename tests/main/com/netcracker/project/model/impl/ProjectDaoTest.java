@@ -6,6 +6,7 @@ import static main.com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,7 +58,7 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void findProjectByIDTest() {
+  public void findProjectByIDTest() throws InvocationTargetException {
     Project actProject = projectDAO
         .findProjectByProjectId(BigInteger.valueOf(4));
     Project expProject = buildTestProject();
@@ -99,7 +100,7 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void createProjectTest() {
+  public void createProjectTest() throws InvocationTargetException {
 
     MapperDateConverter mp = new MapperDateConverter();
     Date start = mp.convertStringToDate("13.11.14");
@@ -164,7 +165,7 @@ public class ProjectDaoTest {
 
 
   @Test
-  public void updateEndDateTest() {
+  public void updateEndDateTest() throws InvocationTargetException {
     MapperDateConverter mdc = new MapperDateConverter();
     Date defEndDate = mdc.convertStringToDate("12.12.15");
     Date newEndDate = mdc.convertStringToDate("20.11.10");
@@ -181,14 +182,14 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void updateStatusTest() {
+  public void updateStatusTest() throws InvocationTargetException {
     projectDAO.updateStatus(BigInteger.valueOf(4), CLOSED);
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
     assertThat(project.getProjectStatus(), is(CLOSED));
   }
 
   @Test
-  public void updatePMTest() {
+  public void updatePMTest() throws InvocationTargetException {
     projectDAO.updatePM(BigInteger.valueOf(4), BigInteger.valueOf(1));
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
     assertThat(project.getProjectManagerId(), is(BigInteger.valueOf(1)));

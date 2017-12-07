@@ -1,11 +1,12 @@
 package main.com.netcracker.project.controllers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
-import java.util.Date;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
 import main.com.netcracker.project.model.entity.Project;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.access.annotation.Secured;
@@ -15,20 +16,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Secured(value = {"ROLE_ADMIN"})
 @RequestMapping("/project")
 public class ProjectController {
 
-
+  private Logger logger = Logger.getLogger(ProjectController.class);
   private ApplicationContext context =
       new ClassPathXmlApplicationContext("Spring-Module.xml");
   private ProjectDAO projectDao =
       (ProjectDAO) context.getBean("projectDAO");
 
-
+  //todo generate input lines and next page
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   public String createProject(
       @RequestParam("projectId") Integer id,
@@ -38,8 +38,7 @@ public class ProjectController {
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") Integer projectManagerId) {
     MapperDateConverter mdc = new MapperDateConverter();
-
-    Project project = new Project.ProjectBuilder()
+   Project project = new Project.ProjectBuilder()
         .projectId(BigInteger.valueOf(id))
         .name(name)
         .startDate(mdc.convertStringToDate(startDate))
@@ -47,43 +46,62 @@ public class ProjectController {
         .build();
     project.setProjectStatus(projectStatus);
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
-    projectDao.createProject(project);
-    return "response_status/success";
+    //projectDao.createProject(project);
+    return "project/add_more";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public String createProjectGet() {
-    String s = System.getenv("ERP_URL");
-    return "create";
+
+    return "project/create";
   }
 
 
   //todo check input params
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
-  public String editProject(@PathVariable("id") Integer id, Date date) {
-    projectDao.updateEndDate(BigInteger.valueOf(id), date);
-    return "response_status/success";
+  public String editProject(@PathVariable("id") Integer id, Model model) {
+
+    return "project/create";
+  }
+
+  @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
+  public String editProjectGet(@PathVariable("id") Integer id, Model model)
+      throws InvocationTargetException {
+    MapperDateConverter mdc = new MapperDateConverter();
+    Project project = projectDao.findProjectByProjectId(BigInteger.valueOf(id));
+    model.addAttribute("projectId", project.getProjectId());
+    model.addAttribute("projectName", project.getName());
+    model.addAttribute("startDate",
+        mdc.convertDateToString(project.getStartDate()));
+    model
+        .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
+    model.addAttribute("status", project.getProjectStatus());
+    model.addAttribute("pmId", project.getProjectManagerId());
+    return "project/create";
   }
 
   @RequestMapping(value = "/view={id}", method = RequestMethod.GET)
-  public String viewProject(Model model, @PathVariable("id") Integer id) {
-    Project project = projectDao
-        .findProjectByProjectId(BigInteger.valueOf(id));
-
+  public String findProjectByProjectId(Model model,
+      @PathVariable("id") Integer id) {
+    MapperDateConverter mdc = new MapperDateConverter();
+    Project project = null;
+    try {
+      project = projectDao
+          .findProjectByProjectId(BigInteger.valueOf(id));
+    } catch (InvocationTargetException e) {
+      logger.error("Project absent in DB. Project id= " + id);
+      e.printStackTrace();
+    }
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
-
-    return "project";
+    model.addAttribute("startDate",
+        mdc.convertDateToString(project.getStartDate()));
+    model
+        .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
+    model.addAttribute("status", project.getProjectStatus());
+    model.addAttribute("pmId", project.getProjectManagerId());
+    return "project/show_project";
   }
 
-  @RequestMapping(value = "/{projectId}", method = RequestMethod.GET)
-  @ResponseBody
-  public Project findProjectById(Model model,
-      @PathVariable("projectId") Integer projectId) {
-    Project project = projectDao
-        .findProjectByProjectId(BigInteger.valueOf(projectId));
-
-    return project;
-  }
 
 }

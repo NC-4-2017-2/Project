@@ -14,10 +14,10 @@ public class EmailServiceImpl implements EmailService {
     this.mailSender = mailSender;
   }
 
-  public void sendEmail(String to, String login, String password) {
+  public void sendEmail(String to, String headMsg, String password) {
     SimpleMailMessage message = new SimpleMailMessage();
     message.setTo(to);
-    message.setSubject(login);
+    message.setSubject(headMsg);
     message.setText(password);
     mailSender.send(message);
   }

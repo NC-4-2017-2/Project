@@ -6,8 +6,8 @@
   <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
     <property name="host" value="smtp.gmail.com" />
     <property name="port" value="587" />
-    <property name="username" value="myemail" />
-    <property name="password" value="mypass" />
+    <property name="username" value="team.erp.4.2017@gmail.com" />
+    <property name="password" value="netcracker2017" />
 
     <property name="javaMailProperties">
       <props>

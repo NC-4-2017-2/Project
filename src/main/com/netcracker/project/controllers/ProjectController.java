@@ -28,40 +28,54 @@ public class ProjectController {
   private ProjectDAO projectDao =
       (ProjectDAO) context.getBean("projectDAO");
 
-  //todo generate input lines and next page
-  @RequestMapping(value = "/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/create-form", method = RequestMethod.POST)
   public String createProject(
       @RequestParam("projectId") Integer id,
       @RequestParam("name") String name,
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
-      @RequestParam("projectManagerId") Integer projectManagerId) {
+      @RequestParam("projectManagerId") Integer projectManagerId,
+      Model model) {
+
     MapperDateConverter mdc = new MapperDateConverter();
-   Project project = new Project.ProjectBuilder()
+    Project project = new Project.ProjectBuilder()
         .projectId(BigInteger.valueOf(id))
         .name(name)
         .startDate(mdc.convertStringToDate(startDate))
         .endDate(mdc.convertStringToDate(endDate))
         .build();
-    project.setProjectStatus(projectStatus);
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     //projectDao.createProject(project);
-    return "project/add_more";
+    return "project/create-form";
+  }
+
+  @RequestMapping(value = "/create-form", method = RequestMethod.GET)
+  public String projectSizeGet(Model model) {
+    model.addAttribute("countSprints");
+    return "project/create-form";
+  }
+
+  @RequestMapping(value = "/create", method = RequestMethod.POST)
+  public String ProjectSizePost(
+      @RequestParam("countSprints") Integer countSprints,
+      @RequestParam("countWorkers") Integer countWorkers,
+      Model model) {
+    model.addAttribute("countSprints", countSprints);
+    model.addAttribute("countWorkers", countWorkers);
+
+    return "project/create-form";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
-  public String createProjectGet() {
-
+  public String ProjectSizeGet() {
     return "project/create";
   }
 
-
-  //todo check input params
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
   public String editProject(@PathVariable("id") Integer id, Model model) {
 
-    return "project/create";
+    return "project/create-form";
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
@@ -77,7 +91,7 @@ public class ProjectController {
         .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
-    return "project/create";
+    return "project/create-form";
   }
 
   @RequestMapping(value = "/view={id}", method = RequestMethod.GET)

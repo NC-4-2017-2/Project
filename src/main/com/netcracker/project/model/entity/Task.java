@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 
 import main.com.netcracker.project.model.TaskDAO;
+import main.com.netcracker.project.model.TaskDAO.TaskPriority;
+import main.com.netcracker.project.model.TaskDAO.TaskStatus;
+import main.com.netcracker.project.model.TaskDAO.TaskType;
 
 public class Task {
 
@@ -94,6 +97,19 @@ public class Task {
 
   public Date getPlannedEndDate() {
     return plannedEndDate;
+  }
+
+  public void setTaskType(TaskType taskType) {
+    this.taskType = taskType;
+  }
+
+  public void setPriority(
+      TaskPriority priority) {
+    this.priority = priority;
+  }
+
+  public void setStatus(TaskStatus status) {
+    this.status = status;
   }
 
   public static class TaskBuilder {

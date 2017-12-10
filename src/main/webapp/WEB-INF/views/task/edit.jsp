@@ -1,16 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Create a new task</title>
+    <title>Edit your task</title>
 </head>
 <body>
 <div align="center">
-    <form action="/task/create" method="post" name="/task/create"
+    <form action="/task/edit" method="post" name="/task/edit"
           commandName=taskForm">
         <table border="0">
             <tr>
-                <h2>Create Task</h2></td>
+                <h2>Edit your task</h2></td>
             </tr>
             <tr>
                 <td>Task Id:</td>
@@ -74,9 +73,9 @@
             <tr>
                 <input type="submit" value="Create"/></td>
             </tr>
+
         </table>
     </form>
 </div>
-
 </body>
 </html>

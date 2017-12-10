@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,85 +70,79 @@ public class TaskController {
     createTask.setStatus(status);
     taskDAO.createTask(createTask);
 
-    return "/create";
+    return "task/create";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public String createTaskWithGetParams(){
-    return "/create";
+    return "task/create";
   }
 
   @Secured(value = {"ROLE_ADMIN"})
   @RequestMapping(value = "/edit", method = RequestMethod.POST)
-  public String editTask(
-      @RequestParam("taskId") Integer id,
-      @RequestParam("name") String name,
-      @RequestParam("taskType") TaskType taskType,
-      @RequestParam("startDate") String startDate,
-      @RequestParam("endDate") String endDate,
-      @RequestParam("plannedEndDate") String plannedEndDate,
-      @RequestParam("priority") TaskPriority priority,
-      @RequestParam("status")TaskStatus status,
-      @RequestParam("description") String description,
-      @RequestParam("reopenCounter") Integer reopenCounter,
-      @RequestParam("comments") String comments,
-      @RequestParam("authorId") Integer authorId,
-      @RequestParam("userId") Integer userId,
-      @RequestParam("projectId") Integer projectId){
-
+  public String editTask(@PathVariable("taskId") Integer taskId, Model model){
     MapperDateConverter mdc = new MapperDateConverter();
-    Task updateTask = new Task.TaskBuilder()
-        .taskId(BigInteger.valueOf(id))
-        .name(name)
-        .taskType(taskType)
-        .startDate(mdc.convertStringToDate(startDate))
-        .endDate(mdc.convertStringToDate(endDate))
-        .plannedEndDate(mdc.convertStringToDate(plannedEndDate))
-        .priority(priority)
-        .status(status)
-        .description(description)
-        .reopenCounter(reopenCounter)
-        .comments(comments)
-        .authorId(BigInteger.valueOf(authorId))
-        .userId(BigInteger.valueOf(userId))
-        .projectId(BigInteger.valueOf(projectId)).build();
+    Task task = (Task) taskDAO.findTaskByProjectId(BigInteger.valueOf(taskId));
+    model.addAttribute("taskId", task.getTaskId());
+    model.addAttribute("name", task.getName());
+    model.addAttribute("taskType", task.getTaskType());
+    model.addAttribute("startDate", mdc.convertDateToString(task.getStartDate()));
+    model.addAttribute("endDate", mdc.convertDateToString(task.getEndDate()));
+    model.addAttribute("plannedEndDate",mdc.convertDateToString(task.getPlannedEndDate()));
+    model.addAttribute("priority", task.getPriority());
+    model.addAttribute("status", task.getStatus());
+    model.addAttribute("description", task.getDescription());
+    model.addAttribute("reopenCounter", task.getReopenCounter());
+    model.addAttribute("comments", task.getComments());
+    model.addAttribute("authorId", task.getAuthorId());
+    model.addAttribute("userId", task.getUserId());
+    model.addAttribute("projectId", task.getProjectId());
 
-    updateTask.setTaskType(taskType);
-    updateTask.setPriority(priority);
-    updateTask.setStatus(status);
-    taskDAO.updateTask(updateTask);
+    taskDAO.updateTask(task);
 
-    return "/edit";
+    return "task/edit";
   }
 
-  @RequestMapping(value = "/edit{taskStatus}", method = RequestMethod.GET)
+  @RequestMapping(value = "/edit", method = RequestMethod.GET)
   public String editTaskWithGetParams(){
-    return "/edit";
+    return "task/edit";
   }
 
   @Secured("ROLE_REGULAR_USER")
-  @RequestMapping(value = "/delete={taskStatus}", method = RequestMethod.GET)
+  @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
   public String updateTaskStatus(@PathVariable("taskStatus") Integer taskStatus,
-                               @PathVariable("taskId") BigInteger taskId, Model model){
-    taskDAO.updateStatus(taskStatus, taskId);
-    model.addAttribute("status", taskStatus);
-    return "/edit{taskStatus}";
+                                 @PathVariable("taskId") Integer taskId, Model model){
+    Task task = (Task) taskDAO.findTaskByProjectId(BigInteger.valueOf(taskId));
+    if (ObjectUtils.isEmpty(task)){
+      logger.warn("task is not found");
+      return "response_for_task/not_found";
+    }
+    model.addAttribute("taskStatus", taskStatus);
+    model.addAttribute("taskId", taskId);
+    taskDAO.updateStatus(taskStatus, BigInteger.valueOf(taskId));
+
+    return "task/updateStatus";
+  }
+
+  @RequestMapping(value = "/updateStatus", method = RequestMethod.GET)
+  public String updateTaskStatusWithGetParams(){
+    return "task/updateStatus";
   }
 
   @Secured("ROLE_REGULAR_USER")
-  @RequestMapping(value = "/view{projectId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/show_task", method = RequestMethod.POST)
   @ResponseBody
   public String findTask(@PathVariable("projectId") Integer projectId, Model model)
       throws InvocationTargetException{
-      Task task = null;
+
       MapperDateConverter mdc = new MapperDateConverter();
-      task = (Task) taskDAO.findTaskByProjectId(BigInteger.valueOf(projectId));
+      Task task = (Task) taskDAO.findTaskByProjectId(BigInteger.valueOf(projectId));
       model.addAttribute("taskId", task.getTaskId());
       model.addAttribute("name", task.getName());
       model.addAttribute("taskType", task.getTaskType());
-      model.addAttribute("startDate", task.getStartDate());
-      model.addAttribute("endDate", task.getEndDate());
-      model.addAttribute("plannedEndDate", task.getPlannedEndDate());
+      model.addAttribute("startDate", mdc.convertDateToString(task.getStartDate()));
+      model.addAttribute("endDate", mdc.convertDateToString(task.getEndDate()));
+      model.addAttribute("plannedEndDate",mdc.convertDateToString(task.getPlannedEndDate()));
       model.addAttribute("priority", task.getPriority());
       model.addAttribute("status", task.getStatus());
       model.addAttribute("description", task.getDescription());
@@ -157,6 +152,11 @@ public class TaskController {
       model.addAttribute("userId", task.getUserId());
       model.addAttribute("projectId", task.getProjectId());
 
-      return "task/view";
+      return "task/show_task";
+  }
+
+  @RequestMapping(value = "/show_task", method = RequestMethod.GET)
+  public String findTaskWithGetParams(){
+    return "task/show_task";
   }
 }

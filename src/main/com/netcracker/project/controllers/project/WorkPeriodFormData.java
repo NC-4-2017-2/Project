@@ -8,6 +8,9 @@ public class WorkPeriodFormData {
     this.name = name;
   }
 
+  public WorkPeriodFormData() {
+  }
+
   public String getName() {
     return name;
   }

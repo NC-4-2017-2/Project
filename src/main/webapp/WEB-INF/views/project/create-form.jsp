@@ -48,26 +48,24 @@
             </tr>
             <tr>
                 <td>Sprints</td>
-                <%--@elvariable id="model" type="main.com.netcracker.project.controllers.project.ProjectController"--%>
-                <form:form modelAttribute="model" method="post">
-                    <c:forEach items="${model.formSprintData.sprints}" var="sprint" varStatus="status">
+                <form:form modelAttribute="modelSprint" method="post">
+                    <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
                         <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" placeholder="Name"></td><br>
                         <input type="text" name="sprints[${status.index}].startDate" value="${sprint.startDate}" placeholder="Start Date"><br>
                         <input type="text" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}" placeholder="End date"><br>
                         <br>
                     </c:forEach>
-                </form:form>
             </tr>
             <tr>
                 <td>Workers:</td>
-                <form:form modelAttribute="model" method="post">
-                    <c:forEach items="${model.formWorkPeriodData.workers}" var="worker" varStatus="status">
+                <form modelAttribute="modelWork" >
+                    <c:forEach items="${modelWork.workers}" var="worker" varStatus="status">
                         <input type="text" name="workers[${status.index}].name" value="${worker.name}" placeholder="Name"></td><br>
                         <br>
                     </c:forEach>
-                </form:form>
-
+                </form>
             </tr>
+            </form:form>
             <tr>
                 <input type="submit" value="Create"/></td>
             </tr>

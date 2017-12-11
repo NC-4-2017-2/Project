@@ -3,9 +3,7 @@ package main.com.netcracker.project.controllers.project;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
 import main.com.netcracker.project.model.entity.Project;
@@ -15,13 +13,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/project")
@@ -32,8 +28,6 @@ public class ProjectController {
       new ClassPathXmlApplicationContext("Spring-Module.xml");
   private ProjectDAO projectDao =
       (ProjectDAO) context.getBean("projectDAO");
-  private static int numberOfSprint;
-  private static int numberOfWorkers;
 
 
   @RequestMapping(value = "/create-form", method = RequestMethod.POST)
@@ -44,51 +38,43 @@ public class ProjectController {
       @RequestParam("endDate") String endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") Integer projectManagerId,
-      @ModelAttribute("model") Map<String, Object> formSprintData) {
+      @ModelAttribute("modelSprint") SprintsForm sprintsForm,
+      @ModelAttribute("modelWork") WorkPeriodForm modelWorker) {
 
-    Map<String, Object> models = formSprintData;
+    List<SprintFormData> sprints = sprintsForm.getSprints();
+    List<WorkPeriodFormData> workers = modelWorker.getWorkers();
 
     MapperDateConverter mdc = new MapperDateConverter();
-
-    Project project = new Project.ProjectBuilder()
-        .projectId(BigInteger.valueOf(id))
-        .name(name)
-        .startDate(mdc.convertStringToDate(startDate))
-        .endDate(mdc.convertStringToDate(endDate))
-        .build();
-    project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
-    project.setProjectStatus(projectStatus);
-    projectDao.createProject(project);
-
-//    List<SprintFormData> sprintFormDataList = formSprintData.getSprints();
-//    List<WorkPeriodFormData> workPeriodFormDataList = formWorkPeriodData
-//        .getWorkers();
+//    Project project = new Project.ProjectBuilder()
+//        .projectId(BigInteger.valueOf(id))
+//        .name(name)
+//        .startDate(mdc.convertStringToDate(startDate))
+//        .endDate(mdc.convertStringToDate(endDate))
+//        .build();
+//    project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
+//    project.setProjectStatus(projectStatus);
+//    projectDao.createProject(project);
 
     return "response_status/success";
   }
 
-
   @RequestMapping(value = "/create", method = RequestMethod.POST)
-  public ModelAndView ProjectSizePost(
+  public String ProjectSizePost(
       @RequestParam("countSprints") Integer countSprints,
       @RequestParam("countWorkers") Integer countWorkers,
       Model model) {
-    numberOfSprint = countSprints;
-    numberOfWorkers = countWorkers;
-    Map<String, Object> models = new HashMap<>();
-
     SprintsForm formSprintData = new SprintsForm();
-    List<SprintFormData> sprints = createEmptyList(numberOfSprint);
+    List<SprintFormData> sprints = createEmptyList(countSprints);
     formSprintData.setSprints(sprints);
 
     WorkPeriodForm workPeriodForm = new WorkPeriodForm();
-    List<WorkPeriodFormData> workers = createEmptyList(numberOfWorkers);
+    List<WorkPeriodFormData> workers = createEmptyList(countWorkers);
     workPeriodForm.setWorkers(workers);
 
-    models.put("formSprintData", formSprintData);
-    models.put("formWorkPeriodData", workPeriodForm);
+    model.addAttribute("modelSprint", formSprintData);
+    model.addAttribute("modelWork", workPeriodForm);
 
-    return new ModelAndView("project/create-form", "model", models);
+    return "project/create-form";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)

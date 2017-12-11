@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
@@ -9,7 +10,7 @@
 </head>
 <body>
 <div align="center">
-    <form action="/project/create" method="post" name="/project/create"
+    <form action="/project/create-form" method="post" name="/project/create-form"
           commandName="projectForm">
         <table border="0">
             <tr>
@@ -47,14 +48,25 @@
             </tr>
             <tr>
                 <td>Sprints</td>
-                <c:forEach var="inputLine" begin="1" end="${countSprints}">
-                    <td><input type="text" name="sprints" size="40"></td><br>
-                </c:forEach></tr>
+                <%--@elvariable id="model" type="main.com.netcracker.project.controllers.project.ProjectController"--%>
+                <form:form modelAttribute="model" method="post">
+                    <c:forEach items="${model.formSprintData.sprints}" var="sprint" varStatus="status">
+                        <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" placeholder="Name"></td><br>
+                        <input type="text" name="sprints[${status.index}].startDate" value="${sprint.startDate}" placeholder="Start Date"><br>
+                        <input type="text" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}" placeholder="End date"><br>
+                        <br>
+                    </c:forEach>
+                </form:form>
+            </tr>
             <tr>
                 <td>Workers:</td>
-                <c:forEach var="inputLine" begin="1" end="${countWorkers}">
-                    <p><td><input type="text" name="workers" size="40"></td></p><br>
-                </c:forEach>
+                <form:form modelAttribute="model" method="post">
+                    <c:forEach items="${model.formWorkPeriodData.workers}" var="worker" varStatus="status">
+                        <input type="text" name="workers[${status.index}].name" value="${worker.name}" placeholder="Name"></td><br>
+                        <br>
+                    </c:forEach>
+                </form:form>
+
             </tr>
             <tr>
                 <input type="submit" value="Create"/></td>

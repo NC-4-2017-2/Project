@@ -115,6 +115,7 @@ public interface ProjectDAO {
           + "AND PR_STATUS_VALUE.ATTR_ID = 59 "
           + "AND PR_STATUS_VALUE.LIST_VALUE_ID = PR_STATUS.LIST_VALUE_ID";
 
+
   String GET_SPRINTS = "SELECT "
       + "  PROJECT_ID.OBJECT_ID, "
       + "  SPRINT_ID.OBJECT_ID    AS " + EnumMapper.SPRINT_ID + ", "

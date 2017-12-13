@@ -2,6 +2,7 @@ package main.com.netcracker.project.model.impl;
 
 import main.com.netcracker.project.model.StatisticDAO;
 import main.com.netcracker.project.model.UserDAO;
+import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.Status;
 import main.com.netcracker.project.model.impl.mappers.SprintStatisticMapper;
@@ -30,7 +31,7 @@ public class StatisticDAOImpl implements StatisticDAO {
     }
 
     @Override
-    public String findProjectsTasksStatisticsByProjectIdByPeriod(BigInteger projectId, Date startDate, Date endDate) {
+    public ProjectTaskStatistic findProjectsTasksStatisticsByProjectIdByPeriod(BigInteger projectId, Date startDate, Date endDate) {
         return null;
     }
 

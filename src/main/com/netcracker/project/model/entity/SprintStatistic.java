@@ -36,4 +36,13 @@ public class SprintStatistic {
   public void setTakeDays(Integer takeDays) {
     this.takeDays = takeDays;
   }
+
+  @Override
+  public String toString() {
+    return "SprintStatistic{" +
+            "sprintName='" + sprintName + '\'' +
+            ", plannedTakeDays=" + plannedTakeDays +
+            ", takeDays=" + takeDays +
+            '}';
+  }
 }

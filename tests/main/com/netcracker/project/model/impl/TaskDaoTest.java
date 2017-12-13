@@ -91,7 +91,7 @@ public class TaskDaoTest {
         .startDate(date)
         .endDate(date)
         .plannedEndDate(date)
-        .priority(TaskPriority.CRITICAL)
+        .priority(TaskPriority.HIGH)
         .status(TaskStatus.OPENED)
         .description("Good")
         .reopenCounter(1)

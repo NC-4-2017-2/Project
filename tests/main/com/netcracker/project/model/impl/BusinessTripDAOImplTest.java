@@ -98,9 +98,9 @@ public class BusinessTripDAOImplTest {
   public void test4DeleteFromTable() {
     BigInteger id = BigInteger.valueOf(56);
 
+    template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id});
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});
     template.update(DELETE_FROM_OBJECTS, new Object[]{id});
-    template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id});
   }
 
   private BusinessTrip getBusinessTripForUpdate() {

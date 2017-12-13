@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import main.com.netcracker.project.model.impl.BusinessTripDAOImpl;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -35,10 +36,10 @@ public class MapperDateConverter extends JsonSerializer<Date> {
   }
 
   public String convertDateToString(Date startDate) {
-    String pattern = "E MMM dd HH:mm:ss Z yyyy";
+    String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
     String patternWriteFormat = "dd.MM.yy";
     String dateStr = startDate.toString();
-    DateFormat readFormat = new SimpleDateFormat(pattern);
+    DateFormat readFormat = new SimpleDateFormat(pattern, Locale.US);
 
     DateFormat writeFormat = new SimpleDateFormat(patternWriteFormat);
     Date date = null;

@@ -168,8 +168,8 @@ public class ProjectDAOImpl implements ProjectDAO {
         sprint.getName(),
         mdc.convertDateToString(sprint.getStartDate()),
         mdc.convertDateToString(sprint.getPlannedEndDate()),
-        mdc.convertDateToString(sprint.getEndDate()),
-        sprint.getStatus().getId(),
+        mdc.convertDateToString(sprint.getPlannedEndDate()),
+        OCStatus.OPENED.getId(),
         projectId
     );
   }
@@ -179,7 +179,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     logger.info(
         "Entering updateSprintStatus(sprintId=" + sprintId + "," + " ocStatus="
             + ocStatus + ")");
-    template.update(UPDATE_SPRINT_STATUS, ocStatus, sprintId);
+    template.update(UPDATE_SPRINT_STATUS, ocStatus.getId(), sprintId);
   }
 
   @Override

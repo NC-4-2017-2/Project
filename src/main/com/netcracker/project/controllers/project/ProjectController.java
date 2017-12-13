@@ -3,10 +3,13 @@ package main.com.netcracker.project.controllers.project;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
 import main.com.netcracker.project.model.entity.Project;
+import main.com.netcracker.project.model.entity.Sprint;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -28,9 +31,10 @@ public class ProjectController {
       new ClassPathXmlApplicationContext("Spring-Module.xml");
   private ProjectDAO projectDao =
       (ProjectDAO) context.getBean("projectDAO");
+  private MapperDateConverter mdc = new MapperDateConverter();
 
 
-  @RequestMapping(value = "/create-form", method = RequestMethod.POST)
+  @RequestMapping(value = "/create_project", method = RequestMethod.POST)
   public String createProject(
       @RequestParam("projectId") Integer id,
       @RequestParam("name") String name,
@@ -44,16 +48,16 @@ public class ProjectController {
     List<SprintFormData> sprints = sprintsForm.getSprints();
     List<WorkPeriodFormData> workers = modelWorker.getWorkers();
 
-    MapperDateConverter mdc = new MapperDateConverter();
-//    Project project = new Project.ProjectBuilder()
-//        .projectId(BigInteger.valueOf(id))
-//        .name(name)
-//        .startDate(mdc.convertStringToDate(startDate))
-//        .endDate(mdc.convertStringToDate(endDate))
-//        .build();
-//    project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
-//    project.setProjectStatus(projectStatus);
-//    projectDao.createProject(project);
+    Project project = new Project.ProjectBuilder()
+        .projectId(BigInteger.valueOf(id))
+        .name(name)
+        .startDate(mdc.convertStringToDate(startDate))
+        .endDate(mdc.convertStringToDate(endDate))
+        .build();
+    project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
+    project.setProjectStatus(projectStatus);
+    //projectDao.createProject(project);
+    project.setSprints(createSprintFromJsp(sprints, project.getProjectId()));
 
     return "response_status/success";
   }
@@ -74,7 +78,7 @@ public class ProjectController {
     model.addAttribute("modelSprint", formSprintData);
     model.addAttribute("modelWork", workPeriodForm);
 
-    return "project/create-form";
+    return "project/create_project";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -83,14 +87,31 @@ public class ProjectController {
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
-  public String editProject(@PathVariable("id") Integer id, Model model) {
-    return "project/create-form";
+  public String editProjectPost(
+      @RequestParam("projectId") BigInteger projectId,
+      @RequestParam("endDate") String endDate,
+      @RequestParam("projectStatus") OCStatus projectStatus,
+      @RequestParam("projectManagerId") BigInteger projectManagerId,
+      @ModelAttribute("modelSprint") SprintsForm sprintsForm,
+      Model model) {
+
+    List<SprintFormData> sprints = sprintsForm.getSprints();
+
+    projectDao
+        .updateEndDate(projectId, mdc.convertStringToDate(endDate));
+    projectDao.updateStatus(projectId, projectStatus);
+    projectDao.updatePM(projectId, projectManagerId);
+
+    for (SprintFormData s : sprints) {
+      projectDao.updateSprintStatus(s.getId(), s.getSprintStatus());
+    }
+
+    return "response_status/success";
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
   public String editProjectGet(@PathVariable("id") Integer id, Model model)
       throws InvocationTargetException {
-    MapperDateConverter mdc = new MapperDateConverter();
     Project project = projectDao.findProjectByProjectId(BigInteger.valueOf(id));
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
@@ -100,7 +121,30 @@ public class ProjectController {
         .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
-    return "project/create-form";
+
+    Collection<Sprint> sprintss = project.getSprints();
+
+    SprintsForm formSprintData = new SprintsForm();
+    List<SprintFormData> sprints = convertSprintToSprintForm(sprintss);
+    formSprintData.setSprints(sprints);
+
+    model.addAttribute("modelSprint", formSprintData);
+
+    return "project/edit_project";
+  }
+
+  private List<SprintFormData> convertSprintToSprintForm(
+      Collection<Sprint> sprintss) {
+    List<SprintFormData> sprintForms = new ArrayList<>();
+
+    Iterator<Sprint> iterator = sprintss.iterator();
+    while (iterator.hasNext()) {
+      Sprint sprint = iterator.next();
+      sprintForms.add(new SprintFormData(sprint.getSprintId(), sprint.getName(),
+          sprint.getStatus()));
+    }
+
+    return sprintForms;
   }
 
   @RequestMapping(value = "/view={id}", method = RequestMethod.GET)
@@ -134,4 +178,24 @@ public class ProjectController {
     }
     return list;
   }
+
+  private Collection<Sprint> createSprintFromJsp(List<SprintFormData> sprints,
+      BigInteger projectId) {
+    Collection<Sprint> resultSprint = new ArrayList<>();
+    for (int i = 0; i < sprints.size(); i++) {
+      Sprint sprint = new Sprint.SprintBuilder()
+          .name(sprints.get(i).getName())
+          .startDate(mdc.convertStringToDate(sprints.get(i).getStartDate()))
+          .plannedEndDate(
+              mdc.convertStringToDate(sprints.get(i).getPlannedEndDate()))
+          .endDate(
+              mdc.convertStringToDate(sprints.get(i).getPlannedEndDate()))
+          .build();
+      resultSprint.add(sprint);
+
+      projectDao.createSprint(sprint, projectId);
+    }
+    return resultSprint;
+  }
+
 }

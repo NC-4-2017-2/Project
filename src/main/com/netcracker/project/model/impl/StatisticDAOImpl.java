@@ -36,6 +36,12 @@ public class StatisticDAOImpl implements StatisticDAO {
   @Override
   public UserTaskStatistic findUserTaskCountByProjectIdAndUserIdAndPeriod(
       BigInteger projectId, BigInteger userId, Date startDate, Date endDate) {
+    logger.info(
+        "Entering findUserTaskCountByProjectIdAndUserIdAndPeriod( "
+            + "projectId : " + projectId + ", "
+            + "userId : " + userId + ", "
+            + "startDate : " + startDate + ", "
+            + "endDate : " + endDate + ")");
     return null;
   }
 
@@ -43,24 +49,43 @@ public class StatisticDAOImpl implements StatisticDAO {
   @Override
   public UserTaskStatistic findUserTaskCountByUserIdAndPeriod(BigInteger userId,
       Date startDate, Date endDate) {
+    logger.info(
+        "Entering findUserTaskCountByUserIdAndPeriod("
+            + "userId : " + userId + ", "
+            + "startDate : " + startDate + ", "
+            + "endDate : " + endDate + ")");
     return null;
   }
 
   @Override
   public WorkingHoursStatistic findUserWorkingHoursByUserIdAndPeriod(
       BigInteger userId, Date startDate, Date endDate) {
+    logger.info(
+        "Entering findUserWorkingHoursByUserIdAndPeriod("
+            + "userId : " + userId + ", "
+            + "startDate : " + startDate + ", "
+            + "endDate : " + endDate + ")");
     return null;
   }
 
   @Override
   public String findWorkPeriodByProjectIdAndStatus(BigInteger projectId,
       UserDAO.UserStatus status) {
+    logger.info(
+        "Entering findWorkPeriodByProjectIdAndStatus("
+            + "projectId : " + projectId + ", "
+            + "status : " + status + ")");
     return null;
   }
 
   @Override
   public String findVacationsByProjectIdAndPeriod(BigInteger projectId,
       Date startDate, Date endDate) {
+    logger.info(
+        "Entering findVacationsByProjectIdAndPeriod("
+            + "projectId : " + projectId + ", "
+            + "startDate : " + startDate + ", "
+            + "endDate : " + endDate + ")");
     return null;
   }
 }

@@ -4,6 +4,6 @@
     <title>Result</title>
 </head>
 <body>
-Unsuccessful create project
+Unsuccessful operation
 </body>
 </html>

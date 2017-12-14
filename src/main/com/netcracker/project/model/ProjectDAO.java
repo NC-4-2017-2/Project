@@ -13,7 +13,8 @@ public interface ProjectDAO {
 
   void createProject(Project project);
 
-  Project findProjectByProjectId(BigInteger id) throws InvocationTargetException;
+  Project findProjectByProjectId(BigInteger id)
+      throws InvocationTargetException;
 
   Project findProjectByName(String name);
 
@@ -38,6 +39,8 @@ public interface ProjectDAO {
   void updateSprintStatus(BigInteger sprintId, OCStatus ocStatus);
 
   void updateSprintEndDate(BigInteger sprintId, Date endDate);
+
+  void updateSprintPlannedEndDate(BigInteger sprintId, Date endDate);
 
   enum OCStatus {
     OPENED(0), CLOSED(1);
@@ -215,6 +218,9 @@ public interface ProjectDAO {
   String UPDATE_SPRINT_END_DATE =
       "UPDATE ATTRIBUTES SET VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 57 AND OBJECT_ID = ?";
 
+  String UPDATE_SPRINT_PLANNED_END_DATE =
+      "UPDATE ATTRIBUTES SET VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 58 AND OBJECT_ID = ?";
+
   String UPDATE_SPRINT_STATUS = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? "
       + "WHERE ATTR_ID = 59 AND OBJECT_ID = ? ";
-  }
+}

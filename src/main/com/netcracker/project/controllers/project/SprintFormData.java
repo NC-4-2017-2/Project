@@ -20,7 +20,8 @@ public class SprintFormData {
   }
 
   public SprintFormData(BigInteger id, String name,
-      OCStatus sprintStatus) {
+      OCStatus sprintStatus, String plannedEndDate) {
+    this.plannedEndDate = plannedEndDate;
     this.id = id;
     this.name = name;
     this.sprintStatus = sprintStatus;

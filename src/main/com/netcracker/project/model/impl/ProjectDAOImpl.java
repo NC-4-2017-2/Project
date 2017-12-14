@@ -190,6 +190,16 @@ public class ProjectDAOImpl implements ProjectDAO {
     template.update(UPDATE_SPRINT_END_DATE, endDate, sprintId);
   }
 
+  @Override
+  public void updateSprintPlannedEndDate(BigInteger sprintId,
+      Date plannedEndDate) {
+    logger.info(
+        "Entering updateSprintPlannedEndDate(sprintId=" + sprintId + ","
+            + " plannedEndDate="
+            + plannedEndDate + ")");
+    template.update(UPDATE_SPRINT_PLANNED_END_DATE, plannedEndDate, sprintId);
+  }
+
   private Collection<BigInteger> getAllTaskIdByProject(BigInteger projectId) {
     logger.info("Entering getAllTaskIdByProject(projectId=" + projectId + ")");
     return template

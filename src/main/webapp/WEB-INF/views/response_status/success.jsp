@@ -4,6 +4,6 @@
     <title>Result</title>
 </head>
 <body>
-Successful create project
+Successful operation
 </body>
 </html>

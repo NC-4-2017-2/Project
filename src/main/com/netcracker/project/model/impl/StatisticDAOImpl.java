@@ -6,6 +6,7 @@ import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
 import main.com.netcracker.project.model.impl.mappers.SprintStatisticMapper;
+import main.com.netcracker.project.model.impl.mappers.UserTaskStatisticMapper;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -34,27 +35,28 @@ public class StatisticDAOImpl implements StatisticDAO {
   }
 
   @Override
-  public UserTaskStatistic findUserTaskCountByProjectIdAndUserIdAndPeriod(
-      BigInteger projectId, BigInteger userId, Date startDate, Date endDate) {
+  public List<UserTaskStatistic> findUserTaskCountByProjectIdAndPeriod(
+      BigInteger projectId, String startDate, String endDate) {
     logger.info(
-        "Entering findUserTaskCountByProjectIdAndUserIdAndPeriod( "
+        "Entering findUserTaskCountByProjectIdAndPeriod( "
             + "projectId : " + projectId + ", "
-            + "userId : " + userId + ", "
             + "startDate : " + startDate + ", "
             + "endDate : " + endDate + ")");
-    return null;
+    return template
+            .query(FIND_USER_TASK_COUNT_BY_PROJECT_ID_AND_PERIOD, new Object[]{projectId, startDate, endDate},
+                    new UserTaskStatisticMapper());
   }
 
 
   @Override
   public UserTaskStatistic findUserTaskCountByUserIdAndPeriod(BigInteger userId,
-      Date startDate, Date endDate) {
+      String startDate, String endDate) {
     logger.info(
         "Entering findUserTaskCountByUserIdAndPeriod("
             + "userId : " + userId + ", "
             + "startDate : " + startDate + ", "
             + "endDate : " + endDate + ")");
-    return null;
+    return template.queryForObject(FIND_USER_TASK_COUNT_BY_USER_ID_AND_PERIOD, new Object[]{userId, startDate, endDate}, new UserTaskStatisticMapper());
   }
 
   @Override

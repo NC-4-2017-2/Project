@@ -2,6 +2,7 @@ package main.com.netcracker.project.model.impl;
 
 import main.com.netcracker.project.model.StatisticDAO;
 import main.com.netcracker.project.model.entity.SprintStatistic;
+import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -52,6 +53,19 @@ public class StatisticDAOImplTest {
                 " SprintStatistic{sprintName='Sprint4', plannedTakeDays=39, takeDays=31}," +
                 " SprintStatistic{sprintName='Sprint5', plannedTakeDays=26, takeDays=31}," +
                 " SprintStatistic{sprintName='Sprint6', plannedTakeDays=36, takeDays=28}]", sprintStatisticList.toString());
+    }
+
+    @Test
+    public void findUserTaskCountByProjectIdAndPeriod() {
+        List<UserTaskStatistic> result = statisticDAO.findUserTaskCountByProjectIdAndPeriod(BigInteger.valueOf(4), "11.11.11", "16.12.12");
+        assertEquals("[UserTaskStatistic{userId=2, critical=2, high=1, normal=0, low=0}," +
+                " UserTaskStatistic{userId=3, critical=0, high=1, normal=0, low=0}]", result.toString());
+    }
+
+    @Test
+    public void findUserTaskCountByUserIdAndPeriod() {
+        UserTaskStatistic result = statisticDAO.findUserTaskCountByUserIdAndPeriod(BigInteger.valueOf(2), "11.11.11", "16.12.12");
+        assertEquals("UserTaskStatistic{userId=2, critical=2, high=1, normal=0, low=0}", result.toString());
     }
 
 }

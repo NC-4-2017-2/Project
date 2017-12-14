@@ -78,4 +78,15 @@ public class UserTaskStatistic {
       return new UserTaskStatistic(this);
     }
   }
+
+  @Override
+  public String toString() {
+    return "UserTaskStatistic{" +
+            "userId=" + userId +
+            ", critical=" + critical +
+            ", high=" + high +
+            ", normal=" + normal +
+            ", low=" + low +
+            '}';
+  }
 }

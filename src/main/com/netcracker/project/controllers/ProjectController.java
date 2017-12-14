@@ -63,7 +63,7 @@ public class ProjectController {
         .build();
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     project.setProjectStatus(projectStatus);
-    //projectDao.createProject(project_form);
+    //projectDao.createProject(project);
     logger.info("createProject request from DB. Project id: " + id);
     project.setSprints(createSprintFromJsp(sprints, project.getProjectId()));
 
@@ -88,13 +88,13 @@ public class ProjectController {
     model.addAttribute("modelSprint", formSprintData);
     model.addAttribute("modelWork", workPeriodForm);
 
-    return "project_form/create_project";
+    return "project/create_project";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public String projectSizeGet() {
-    logger.info("projectSizeGet() method. Return project_form/create");
-    return "project_form/create";
+    logger.info("projectSizeGet() method. Return project/create");
+    return "project/create";
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)

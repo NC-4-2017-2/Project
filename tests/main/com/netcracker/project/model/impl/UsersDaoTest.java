@@ -1,5 +1,7 @@
 package main.com.netcracker.project.model.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -10,9 +12,10 @@ import main.com.netcracker.project.model.UserDAO.JobTitle;
 import main.com.netcracker.project.model.UserDAO.ProjectStatus;
 import main.com.netcracker.project.model.UserDAO.UserRole;
 import main.com.netcracker.project.model.UserDAO.UserStatus;
+import main.com.netcracker.project.model.UserDAO.WorkPeriod;
+import main.com.netcracker.project.model.UserDAO.WorkPeriod.WorkPeriodStatus;
 import main.com.netcracker.project.model.entity.User;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,15 +55,15 @@ public class UsersDaoTest {
   @Test
   public void findUserByUserId() {
     User user = userDao.findUserByUserId(BigInteger.valueOf(1));
-    Assert.assertEquals(BigInteger.valueOf(1), user.getUserId());
-    Assert.assertEquals("Ivanov", user.getLastName());
+    assertEquals(BigInteger.valueOf(1), user.getUserId());
+    assertEquals("Ivanov", user.getLastName());
   }
 
   @Test
   public void findUserByUserLogin() {
     User user = userDao.findUserByLogin("ivanov");
-    Assert.assertEquals("Ivanov", user.getLastName());
-    Assert.assertEquals(BigInteger.valueOf(1), user.getUserId());
+    assertEquals("Ivanov", user.getLastName());
+    assertEquals(BigInteger.valueOf(1), user.getUserId());
   }
 
   @Test
@@ -143,5 +146,13 @@ public class UsersDaoTest {
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});
     template.update(DELETE_FROM_OBJECTS, new Object[]{id});
+  }
+
+  @Test
+  public void findWorkPeriodByProjectIdAndStatus() {
+    Collection<WorkPeriod> result = userDao
+        .findWorkPeriodByProjectIdAndStatus(BigInteger.valueOf(4),
+            WorkPeriodStatus.WORKING.getId());
+    assertEquals(2, result.size());
   }
 }

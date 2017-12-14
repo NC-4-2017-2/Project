@@ -106,6 +106,13 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public Collection<WorkPeriod> findWorkPeriodByProjectIdAndStatus(
+        BigInteger projectId, Integer status) {
+        logger.info("Entering findWorkPeriodByProjectIdAndStatus(projectId=" + projectId + "," + " status=" + status + ")");
+        return template.query(FIND_WORKING_PERIOD_BY_PROJECT_ID_AND_STATUS, new Object[]{status, projectId}, new WorkPeriodMapper());
+    }
+
+    @Override
     public void updateWorkingPeriodByUserId(UserDAO.WorkPeriod workPeriod) {
         logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + "," + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
         template.update(UPDATE_WORKING_PERIOD_END_DATE, converter.convertDateToString(workPeriod.getEndWorkDate()), workPeriod.getUserId(), workPeriod.getProjectId());

@@ -183,7 +183,7 @@ public class ProjectController {
     model.addAttribute("projectName", project.getName());
     model.addAttribute("startDate",
         mdc.convertDateToString(project.getStartDate()));
-    model
+        model
         .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());

@@ -5,12 +5,18 @@
 
 <html>
 <head>
+    <style type="text/css">
+        div.project{
+            align: center;
+            text-align: center;
+        }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Create Project</title>
 </head>
 <body>
-<div align="center">
-    <form action="/project/create-form" method="post" name="/project/create-form"
+<div class="project">
+    <form action="/project/create_project" method="post" name="/project/create_project"
           commandName="projectForm">
         <table border="0">
             <tr>
@@ -38,8 +44,11 @@
             </tr>
             <tr>
                 <td>Status:</td>
-                <td><input type="text" name="projectStatus" size="70"
-                           value=${status}></td>
+                <td>
+                    <select name="projectStatus" >
+                        <option value="OPENED">OPENED</option>
+                        <option value="CLOSED">CLOSED</option>
+                    </select>
             </tr>
             <tr>
                 <td>Project Manager:</td>
@@ -50,6 +59,7 @@
                 <td>Sprints</td>
                 <form:form modelAttribute="modelSprint" method="post">
                     <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
+                        Sprint ${status.index} :<br>
                         <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" placeholder="Name"></td><br>
                         <input type="text" name="sprints[${status.index}].startDate" value="${sprint.startDate}" placeholder="Start Date"><br>
                         <input type="text" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}" placeholder="End date"><br>
@@ -60,6 +70,7 @@
                 <td>Workers:</td>
                 <form modelAttribute="modelWork" >
                     <c:forEach items="${modelWork.workers}" var="worker" varStatus="status">
+                        Worker ${status.index} :<br>
                         <input type="text" name="workers[${status.index}].name" value="${worker.name}" placeholder="Name"></td><br>
                         <br>
                     </c:forEach>

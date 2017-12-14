@@ -27,4 +27,12 @@ public class VacationStatistic {
   public void setCountDays(Integer countDays) {
     this.countDays = countDays;
   }
+
+  @Override
+  public String toString() {
+    return "VacationStatistic{" +
+        "userId=" + userId +
+        ", countDays=" + countDays +
+        '}';
+  }
 }

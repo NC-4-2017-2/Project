@@ -10,8 +10,8 @@ public class WorkPeriodStatisticMapper implements RowMapper<WorkPeriodStatistic>
   @Override
   public WorkPeriodStatistic mapRow(ResultSet rs, int rowNum)
       throws SQLException {
-    int allTimeWorkers = rs.getInt(EnumMapper.ALL_TIME_WORKERS.getFullName());
-    int currentWorkers = rs.getInt(EnumMapper.CURRENT_WORKERS.getFullName());
+    int allTimeWorkers = rs.getInt(EnumMapper.CURRENT_WORKERS.getFullName());
+    int currentWorkers = rs.getInt(EnumMapper.FIRED_WORKERS.getFullName());
     return new WorkPeriodStatistic(allTimeWorkers, currentWorkers);
   }
 }

@@ -8,12 +8,14 @@ import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
 import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
 import main.com.netcracker.project.model.impl.mappers.SprintStatisticMapper;
 import main.com.netcracker.project.model.impl.mappers.UserTaskStatisticMapper;
+import main.com.netcracker.project.model.impl.mappers.VacationStatisticMapper;
+import main.com.netcracker.project.model.impl.mappers.WorkPeriodStatisticMapper;
+import main.com.netcracker.project.model.impl.mappers.WorkingHoursStatisticMapper;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.util.Date;
 import java.util.List;
 
 public class StatisticDAOImpl implements StatisticDAO {
@@ -62,13 +64,13 @@ public class StatisticDAOImpl implements StatisticDAO {
 
   @Override
   public WorkingHoursStatistic findUserWorkingHoursByUserIdAndPeriod(
-      BigInteger userId, Date startDate, Date endDate) {
+      BigInteger userId, String startDate, String endDate) {
     logger.info(
         "Entering findUserWorkingHoursByUserIdAndPeriod("
             + "userId : " + userId + ", "
             + "startDate : " + startDate + ", "
             + "endDate : " + endDate + ")");
-    return null;
+    return template.queryForObject(FIND_USER_WORKING_HOURS_BY_USER_ID_AND_PERIOD, new Object[]{userId, startDate, endDate}, new WorkingHoursStatisticMapper());
   }
 
   @Override
@@ -76,17 +78,19 @@ public class StatisticDAOImpl implements StatisticDAO {
     logger.info(
         "Entering findWorkPeriodByProjectIdAndStatus("
             + "projectId : " + projectId + ")");
-    return null;
+    return template.queryForObject(FIND_WORK_PERIOD_BY_PROJECT_ID_AND_STATUS, new Object[]{projectId}, new WorkPeriodStatisticMapper());
   }
 
   @Override
-  public VacationStatistic findVacationsByProjectIdAndPeriod(BigInteger projectId,
-      Date startDate, Date endDate) {
+  public List<VacationStatistic> findVacationsByProjectIdAndPeriod(BigInteger projectId,
+      String startDate, String endDate) {
     logger.info(
         "Entering findVacationsByProjectIdAndPeriod("
             + "projectId : " + projectId + ", "
             + "startDate : " + startDate + ", "
             + "endDate : " + endDate + ")");
-    return null;
+    return template
+        .query(FIND_VACATION_DAYS_BY_PROJECT_ID_AND_PERIOD, new Object[]{projectId, startDate, endDate},
+            new VacationStatisticMapper());
   }
 }

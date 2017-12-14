@@ -26,4 +26,12 @@ public class WorkPeriodStatistic {
   public void setCurrentWorkers(Integer currentWorkers) {
     this.currentWorkers = currentWorkers;
   }
+
+  @Override
+  public String toString() {
+    return "WorkPeriodStatistic{" +
+        "allTimeWorkers=" + allTimeWorkers +
+        ", currentWorkers=" + currentWorkers +
+        '}';
+  }
 }

@@ -3,6 +3,9 @@ package main.com.netcracker.project.model.impl;
 import main.com.netcracker.project.model.StatisticDAO;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
+import main.com.netcracker.project.model.entity.VacationStatistic;
+import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
+import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -66,6 +69,26 @@ public class StatisticDAOImplTest {
     public void findUserTaskCountByUserIdAndPeriod() {
         UserTaskStatistic result = statisticDAO.findUserTaskCountByUserIdAndPeriod(BigInteger.valueOf(2), "11.11.11", "16.12.12");
         assertEquals("UserTaskStatistic{userId=2, critical=2, high=1, normal=0, low=0}", result.toString());
+    }
+
+    @Test
+    public void findUserWorkingHoursByUserIdAndPeriod() {
+        WorkingHoursStatistic workingHoursStatistic = statisticDAO.findUserWorkingHoursByUserIdAndPeriod(BigInteger.valueOf(2), "12.12.12", "15.12.12");
+        assertEquals("WorkingHoursStatistic{userId=2, workingDayDate='14.12.12', hoursCount=8}", workingHoursStatistic.toString());
+    }
+
+    @Test
+    public void findWorkPeriodByProjectIdAndStatus() {
+        WorkPeriodStatistic workPeriodStatistic = statisticDAO.findWorkPeriodByProjectIdAndStatus(BigInteger.valueOf(4));
+        assertEquals("WorkPeriodStatistic{allTimeWorkers=2, currentWorkers=0}", workPeriodStatistic.toString());
+
+    }
+
+    @Test
+    public void findVacationsByProjectIdAndPeriod() {
+        List<VacationStatistic> result = statisticDAO.findVacationsByProjectIdAndPeriod(BigInteger.valueOf(4), "16.12.12", "28.12.12");
+        assertEquals("[VacationStatistic{userId=2, countDays=10}, VacationStatistic{userId=3, countDays=9}]", result.toString());
+
     }
 
 }

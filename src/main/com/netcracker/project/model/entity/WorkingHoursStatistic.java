@@ -39,5 +39,14 @@ public class WorkingHoursStatistic {
   public void setUserId(BigInteger userId) {
     this.userId = userId;
   }
+
+  @Override
+  public String toString() {
+    return "WorkingHoursStatistic{" +
+        "userId=" + userId +
+        ", workingDayDate='" + workingDayDate + '\'' +
+        ", hoursCount=" + hoursCount +
+        '}';
+  }
 }
 

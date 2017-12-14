@@ -131,13 +131,44 @@ public class UsersDaoTest {
   }
 
   @Test
-  public void updateWorkingPeriodByUserId() {
+  public void updateWorkingPeriodEndDateByUserId() {
     MapperDateConverter converter = new MapperDateConverter();
     UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
     workPeriod.setUserId(BigInteger.valueOf(2));
     workPeriod.setProjectId(BigInteger.valueOf(4));
     workPeriod.setEndWorkDate(converter.convertStringToDate("11.11.86"));
-    userDao.updateWorkingPeriodByUserId(workPeriod);
+    userDao.updateWorkingPeriodEndDateByUserId(workPeriod);
+  }
+
+  @Test
+  public void updateWorkingPeriodStatusByUserId() {
+    UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
+    workPeriod.setUserId(BigInteger.valueOf(2));
+    workPeriod.setProjectId(BigInteger.valueOf(4));
+    workPeriod.setWorkPeriodStatus(WorkPeriodStatus.FIRED);
+    userDao.updateWorkingPeriodStatusByUserId(workPeriod);
+  }
+
+  @Test
+  public void findWorkPeriodByProjectIdAndStatus() {
+    Collection<WorkPeriod> result = userDao
+        .findWorkPeriodByProjectIdAndStatus(BigInteger.valueOf(4),
+            WorkPeriodStatus.WORKING.getId());
+    assertEquals(2, result.size());
+  }
+
+  @Test
+  public void createWorkPeriod() {
+    WorkPeriod workPeriod = new WorkPeriod();
+    MapperDateConverter converter = new MapperDateConverter();
+    Date startDate = converter.convertStringToDate("11.11.13");
+    Date endDate = converter.convertStringToDate("11.12.13");
+    workPeriod.setStartWorkDate(startDate);
+    workPeriod.setEndWorkDate(endDate);
+    workPeriod.setWorkPeriodStatus(WorkPeriodStatus.WORKING);
+    workPeriod.setUserId(BigInteger.valueOf(2));
+    workPeriod.setProjectId(BigInteger.valueOf(4));
+    userDao.createWorkPeriod(workPeriod);
   }
 
   @Test
@@ -148,11 +179,5 @@ public class UsersDaoTest {
     template.update(DELETE_FROM_OBJECTS, new Object[]{id});
   }
 
-  @Test
-  public void findWorkPeriodByProjectIdAndStatus() {
-    Collection<WorkPeriod> result = userDao
-        .findWorkPeriodByProjectIdAndStatus(BigInteger.valueOf(4),
-            WorkPeriodStatus.WORKING.getId());
-    assertEquals(2, result.size());
-  }
+
 }

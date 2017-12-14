@@ -112,10 +112,29 @@ public class UserDAOImpl implements UserDAO {
         return template.query(FIND_WORKING_PERIOD_BY_PROJECT_ID_AND_STATUS, new Object[]{status, projectId}, new WorkPeriodMapper());
     }
 
-    @Override
-    public void updateWorkingPeriodByUserId(UserDAO.WorkPeriod workPeriod) {
-        logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + "," + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
-        template.update(UPDATE_WORKING_PERIOD_END_DATE, converter.convertDateToString(workPeriod.getEndWorkDate()), workPeriod.getUserId(), workPeriod.getProjectId());
-    }
+  @Override
+  public void updateWorkingPeriodEndDateByUserId(UserDAO.WorkPeriod workPeriod) {
+       logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + "," + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
+       template.update(UPDATE_WORKING_PERIOD_END_DATE, converter.convertDateToString(workPeriod.getEndWorkDate()), workPeriod.getUserId(), workPeriod.getProjectId());
+  }
+
+  @Override
+  public void updateWorkingPeriodStatusByUserId(UserDAO.WorkPeriod workPeriod) {
+       logger.info("Entering updateWorkingPeriodStatusByUserId(userId=" + workPeriod.getUserId() + "," + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
+       template.update(UPDATE_WORKING_PERIOD_STATUS, workPeriod.getWorkPeriodStatus().getId(), workPeriod.getUserId(), workPeriod.getProjectId());
+  }
+
+  @Override
+  public void createWorkPeriod(UserDAO.WorkPeriod workPeriod) {
+      logger.info("Entering createWorkPeriod(workPeriod=" + workPeriod + ")");
+      this.template.update(CREATE_WORK_PERIOD, new Object[]{
+          "WorkPeriod" + workPeriod.getWorkPeriodId(),
+          converter.convertDateToString(workPeriod.getStartWorkDate()),
+          converter.convertDateToString(workPeriod.getEndWorkDate()),
+          workPeriod.getWorkPeriodStatus().getId(),
+          workPeriod.getUserId(),
+          workPeriod.getProjectId()
+      });
+  }
 
 }

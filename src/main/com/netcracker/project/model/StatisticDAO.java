@@ -3,10 +3,10 @@ package main.com.netcracker.project.model;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
-import main.com.netcracker.project.model.UserDAO.UserStatus;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
-import main.com.netcracker.project.model.entity.Status;
+import main.com.netcracker.project.model.entity.VacationStatistic;
+import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
 import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
 
 public interface StatisticDAO {
@@ -22,10 +22,9 @@ public interface StatisticDAO {
   WorkingHoursStatistic findUserWorkingHoursByUserIdAndPeriod(BigInteger userId,
       Date startDate, Date endDate);
 
-  String findWorkPeriodByProjectIdAndStatus(BigInteger projectId,
-      UserStatus status);
+  WorkPeriodStatistic findWorkPeriodByProjectIdAndStatus(BigInteger projectId);
 
-  String findVacationsByProjectIdAndPeriod(BigInteger projectId,
+  VacationStatistic findVacationsByProjectIdAndPeriod(BigInteger projectId,
       Date startDate, Date endDate);
 
   String FIND_PROJECT_SPRINT_STAT_BY_PROJECT_ID =

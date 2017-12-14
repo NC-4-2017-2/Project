@@ -1,9 +1,10 @@
 package main.com.netcracker.project.model.impl;
 
 import main.com.netcracker.project.model.StatisticDAO;
-import main.com.netcracker.project.model.UserDAO;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
+import main.com.netcracker.project.model.entity.VacationStatistic;
+import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
 import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
 import main.com.netcracker.project.model.impl.mappers.SprintStatisticMapper;
 import main.com.netcracker.project.model.impl.mappers.UserTaskStatisticMapper;
@@ -71,17 +72,15 @@ public class StatisticDAOImpl implements StatisticDAO {
   }
 
   @Override
-  public String findWorkPeriodByProjectIdAndStatus(BigInteger projectId,
-      UserDAO.UserStatus status) {
+  public WorkPeriodStatistic findWorkPeriodByProjectIdAndStatus(BigInteger projectId) {
     logger.info(
         "Entering findWorkPeriodByProjectIdAndStatus("
-            + "projectId : " + projectId + ", "
-            + "status : " + status + ")");
+            + "projectId : " + projectId + ")");
     return null;
   }
 
   @Override
-  public String findVacationsByProjectIdAndPeriod(BigInteger projectId,
+  public VacationStatistic findVacationsByProjectIdAndPeriod(BigInteger projectId,
       Date startDate, Date endDate) {
     logger.info(
         "Entering findVacationsByProjectIdAndPeriod("

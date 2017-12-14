@@ -40,7 +40,10 @@ public enum EnumMapper {
   CRITICAL("CRITICAL"),
   HIGH("HIGH"),
   NORMAL("NORMAL"),
-  LOW("LOW");
+  LOW("LOW"),
+  ALL_TIME_WORKERS("ALL_TIME_WORKERS"),
+  CURRENT_WORKERS("CURRENT_WORKERS"),
+  COUNT_DAYS("COUNT_DAYS");
 
   private String fullName;
 

@@ -2,7 +2,7 @@ package main.com.netcracker.project.model.entity;
 
 import java.math.BigInteger;
 
-public class ProjectTaskStatistic {
+public class UserTaskStatistic {
 
   private BigInteger userId;
   private Integer critical;
@@ -10,7 +10,7 @@ public class ProjectTaskStatistic {
   private Integer normal;
   private Integer low;
 
-  public ProjectTaskStatistic(ProjectTaskStatisticBuilder builder) {
+  public UserTaskStatistic(UserTaskStatisticBuilder builder) {
     this.userId = builder.userId;
     this.critical = builder.critical;
     this.high = builder.high;
@@ -38,7 +38,7 @@ public class ProjectTaskStatistic {
     return low;
   }
 
-  public static class ProjectTaskStatisticBuilder {
+  public static class UserTaskStatisticBuilder {
 
     private BigInteger userId;
     private Integer critical;
@@ -46,36 +46,36 @@ public class ProjectTaskStatistic {
     private Integer normal;
     private Integer low;
 
-    public ProjectTaskStatisticBuilder() {
+    public UserTaskStatisticBuilder() {
     }
 
-    public ProjectTaskStatisticBuilder userId(BigInteger userId) {
+    public UserTaskStatisticBuilder userId(BigInteger userId) {
       this.userId = userId;
       return this;
     }
 
-    public ProjectTaskStatisticBuilder critical(Integer critical) {
+    public UserTaskStatisticBuilder critical(Integer critical) {
       this.critical = critical;
       return this;
     }
 
-    public ProjectTaskStatisticBuilder high(Integer high) {
+    public UserTaskStatisticBuilder high(Integer high) {
       this.high = high;
       return this;
     }
 
-    public ProjectTaskStatisticBuilder normal(Integer normal) {
+    public UserTaskStatisticBuilder normal(Integer normal) {
       this.normal = normal;
       return this;
     }
 
-    public ProjectTaskStatisticBuilder low(Integer low) {
+    public UserTaskStatisticBuilder low(Integer low) {
       this.low = low;
       return this;
     }
 
-    public ProjectTaskStatistic build(){
-      return new ProjectTaskStatistic(this);
+    public UserTaskStatistic build(){
+      return new UserTaskStatistic(this);
     }
   }
 }

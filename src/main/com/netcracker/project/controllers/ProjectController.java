@@ -1,12 +1,18 @@
-package main.com.netcracker.project.controllers.project;
+package main.com.netcracker.project.controllers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import main.com.netcracker.project.controllers.project_form.SprintFormData;
+import main.com.netcracker.project.controllers.project_form.SprintsForm;
+import main.com.netcracker.project.controllers.project_form.WorkPeriodForm;
+import main.com.netcracker.project.controllers.project_form.WorkPeriodFormData;
 import main.com.netcracker.project.model.ProjectDAO;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
+import main.com.netcracker.project.model.UserDAO;
+import main.com.netcracker.project.model.UserDAO.WorkPeriod.WorkPeriodStatus;
 import main.com.netcracker.project.model.entity.Project;
 import main.com.netcracker.project.model.entity.Sprint;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
@@ -30,6 +36,7 @@ public class ProjectController {
       new ClassPathXmlApplicationContext("Spring-Module.xml");
   private ProjectDAO projectDao =
       (ProjectDAO) context.getBean("projectDAO");
+  private UserDAO userDAO = (UserDAO) context.getBean("userDAO");
   private MapperDateConverter mdc = new MapperDateConverter();
 
 
@@ -56,7 +63,7 @@ public class ProjectController {
         .build();
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     project.setProjectStatus(projectStatus);
-    //projectDao.createProject(project);
+    //projectDao.createProject(project_form);
     logger.info("createProject request from DB. Project id: " + id);
     project.setSprints(createSprintFromJsp(sprints, project.getProjectId()));
 
@@ -81,13 +88,13 @@ public class ProjectController {
     model.addAttribute("modelSprint", formSprintData);
     model.addAttribute("modelWork", workPeriodForm);
 
-    return "project/create_project";
+    return "project_form/create_project";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public String projectSizeGet() {
-    logger.info("projectSizeGet() method. Return project/create");
-    return "project/create";
+    logger.info("projectSizeGet() method. Return project_form/create");
+    return "project_form/create";
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
@@ -97,6 +104,8 @@ public class ProjectController {
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") BigInteger projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
+      @ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm,
+      @ModelAttribute("workPeriodStatus") WorkPeriodStatus workPeriodStatus,
       Model model) {
     logger.info("editProjectPost() method. Project id" + projectId
         + "endDate: " + endDate
@@ -105,6 +114,7 @@ public class ProjectController {
         + "sprintsForm: " + sprintsForm);
 
     List<SprintFormData> sprints = sprintsForm.getSprints();
+    List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
 
     projectDao
         .updateEndDate(projectId, mdc.convertStringToDate(endDate));
@@ -116,6 +126,11 @@ public class ProjectController {
       projectDao.updateSprintPlannedEndDate(s.getId(),
           mdc.convertStringToDate(s.getPlannedEndDate()));
     }
+
+    for (WorkPeriodFormData wp : workings) {
+      //todo create workPeriod()
+    }
+
     return "response_status/success";
   }
 
@@ -132,14 +147,21 @@ public class ProjectController {
         .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
+    model.addAttribute("pmId", project.getProjectManagerId());
 
     Collection<Sprint> sprintss = project.getSprints();
+    Collection<BigInteger> workerss = project.getUsersId();
 
-    SprintsForm formSprintData = new SprintsForm();
+    SprintsForm sprintForm = new SprintsForm();
     List<SprintFormData> sprints = convertSprintToSprintForm(sprintss);
-    formSprintData.setSprints(sprints);
+    sprintForm.setSprints(sprints);
 
-    model.addAttribute("modelSprint", formSprintData);
+    WorkPeriodForm workPeriodForm = new WorkPeriodForm();
+    List<WorkPeriodFormData> workPeriodFormData = createEmptyList(4);
+    workPeriodForm.setWorkers(workPeriodFormData);
+
+    model.addAttribute("modelSprint", sprintForm);
+    model.addAttribute("modelWork", workPeriodForm);
 
     return "project/edit_project";
   }

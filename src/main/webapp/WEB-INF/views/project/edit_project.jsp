@@ -56,19 +56,35 @@
 
             <tr>
                 <td>Sprints:</td>
-                <%--@elvariable id="modelSprint" type="main.com.netcracker.project.controllers.project.ProjectController"--%>
+                <%--@elvariable id="modelSprint" type="main.com.netcracker.project.controllers.ProjectController"--%>
                 <form:form modelAttribute="modelSprint" method="post">
                 <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
                     <input type="hidden" name="sprints[${status.index}].id" value="${sprint.id}"></td><br>
                     Sprint ${status.index} :<br>
                     <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" readonly="readonly"></td><br>
                     <input type="text" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}"></td><br>
-                    <select name="sprints[${status.index}].sprintStatus" >
-                        <option value="OPENED">OPENED</option>
-                        <option value="CLOSED">CLOSED</option>
+                    <select name="sprints[${status.index}].workPeriodStatus" >
+                        <option value="WORKING">WORKING</option>
+                        <option value="FIRED">FIRED</option>
                     </select><br>
                     <br>
                 </c:forEach>
+            </tr>
+            <tr>
+                <td>Workers:</td>
+                <form modelAttribute="modelWork" >
+                    <c:forEach items="${modelWork.workers}" var="worker" varStatus="status">
+                        Worker ${status.index} :<br>
+                        <input type="text" name="workers[${status.index}].userId" value="${worker.userId}" placeholder="User id"></td><br>
+                        <input type="text" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date"></td><br>
+                        <input type="text" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"></td><br>
+                        <select name="sprints[${status.index}].workPeriodStatus" >
+                            <option value="OPENED">OPENED</option>
+                            <option value="CLOSED">CLOSED</option>
+                        </select><br>
+                        <br>
+                    </c:forEach>
+                </form>
             </tr>
             </form:form>
 

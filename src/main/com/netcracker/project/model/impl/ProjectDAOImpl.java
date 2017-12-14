@@ -26,7 +26,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   @Override
   public void createProject(Project project) {
-    logger.info("Entering createProject(project=" + project + ")");
+    logger.info("Entering createProject(project_form=" + project + ")");
     MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
         project.getName(),
@@ -64,7 +64,7 @@ public class ProjectDAOImpl implements ProjectDAO {
   }
 
   private void addUsersPMSprintToProject(Project project) {
-    logger.info("Entering addUsersPMSprintToProject(project=" + project + ")");
+    logger.info("Entering addUsersPMSprintToProject(project_form=" + project + ")");
     List<BigInteger> idUsers = getIdUsers(project.getProjectId());
     Collection<BigInteger> tasks = getAllTaskIdByProject(
         project.getProjectId());

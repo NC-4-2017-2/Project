@@ -13,8 +13,7 @@ public interface ProjectDAO {
 
   void createProject(Project project);
 
-  Project findProjectByProjectId(BigInteger id)
-      throws InvocationTargetException;
+  Project findProjectByProjectId(BigInteger id);
 
   Project findProjectByName(String name);
 
@@ -46,6 +45,9 @@ public interface ProjectDAO {
     OPENED(0), CLOSED(1);
 
     private int id;
+
+    OCStatus() {
+    }
 
     OCStatus(int id) {
       this.id = id;

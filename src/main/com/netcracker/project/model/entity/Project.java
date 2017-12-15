@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import main.com.netcracker.project.model.ProjectDAO.OCStatus;
+import main.com.netcracker.project.model.UserDAO.WorkPeriod;
 import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
 
 public class Project {
@@ -17,6 +18,7 @@ public class Project {
   private BigInteger projectManagerId;
   private Collection<BigInteger> usersId;
   private Collection<BigInteger> tasksId;
+  private Collection<WorkPeriod> workPeriods;
   private Collection<Sprint> sprints;
 
   private Project(ProjectBuilder builder) {
@@ -85,6 +87,15 @@ public class Project {
 
   public void setProjectStatus(OCStatus projectStatus) {
     this.projectStatus = projectStatus;
+  }
+
+  public Collection<WorkPeriod> getWorkPeriods() {
+    return workPeriods;
+  }
+
+  public void setWorkPeriods(
+      Collection<WorkPeriod> workPeriods) {
+    this.workPeriods = workPeriods;
   }
 
   public static class ProjectBuilder {

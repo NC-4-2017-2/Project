@@ -13,6 +13,25 @@ public class WorkPeriodFormData {
   private String endWorkDate;
   private WorkPeriodStatus workPeriodStatus;
 
+  public WorkPeriodFormData(BigInteger workPeriodId, BigInteger userId,
+      String startWorkDate,
+      String endWorkDate,
+      WorkPeriodStatus workPeriodStatus) {
+    this.workPeriodId = workPeriodId;
+    this.userId = userId;
+    this.startWorkDate = startWorkDate;
+    this.endWorkDate = endWorkDate;
+    this.workPeriodStatus = workPeriodStatus;
+  }
+
+  public WorkPeriodFormData(
+      WorkPeriodStatus workPeriodStatus) {
+    this.workPeriodStatus = workPeriodStatus;
+  }
+
+  public WorkPeriodFormData() {
+  }
+
   public String getName() {
     return name;
   }

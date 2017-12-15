@@ -71,7 +71,14 @@
                 <form modelAttribute="modelWork" >
                     <c:forEach items="${modelWork.workers}" var="worker" varStatus="status">
                         Worker ${status.index} :<br>
-                        <input type="text" name="workers[${status.index}].name" value="${worker.name}" placeholder="Name"></td><br>
+                        Id:         <input type="text" name="workers[${status.index}].workPeriodId" value="${worker.workPeriodId}"></td><br>
+                        Worker id:  <input type="text" name="workers[${status.index}].userId" value="${worker.userId}" placeholder="Id"></td><br>
+                        Start date: <input type="text" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date"></td><br>
+                        End date:   <input type="text" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"></td><br>
+                        <select name="workers[${status.index}].workPeriodStatus" >
+                            <option value="WORKING">WORKING</option>
+                            <option value="FIRED">FIRED</option>
+                        </select><br>
                         <br>
                     </c:forEach>
                 </form>

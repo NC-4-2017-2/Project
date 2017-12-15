@@ -64,7 +64,9 @@ public class ProjectDAOImpl implements ProjectDAO {
   }
 
   private void addUsersPMSprintToProject(Project project) {
-    logger.info("Entering addUsersPMSprintToProject(project_form=" + project + ")");
+    logger.info(
+        "Entering addUsersPMSprintToProject(project_form=" + project + ")");
+    //todo delete List users id and set workPeriods from projectController
     List<BigInteger> idUsers = getIdUsers(project.getProjectId());
     Collection<BigInteger> tasks = getAllTaskIdByProject(
         project.getProjectId());
@@ -145,7 +147,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     template.update(INSERT_USER_TO_PROJECT, projectId, userId);
   }
 
-
+  @Deprecated
   @Override
   public List<BigInteger> getIdUsers(BigInteger projectId) {
     logger.info("Entering getIdUsers(projectId=" + projectId + ")");

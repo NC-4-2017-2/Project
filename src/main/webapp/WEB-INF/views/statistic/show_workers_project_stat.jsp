@@ -35,7 +35,7 @@
         }
       },
       series: [{
-        name: 'Count',
+        name: 'Percentage',
         colorByPoint: true,
         data: [{
           name: 'Working',

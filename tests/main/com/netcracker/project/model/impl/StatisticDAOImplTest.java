@@ -1,7 +1,6 @@
 package main.com.netcracker.project.model.impl;
 
 import main.com.netcracker.project.model.StatisticDAO;
-import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.VacationStatistic;
@@ -61,14 +60,14 @@ public class StatisticDAOImplTest {
 
     @Test
     public void findProjectTaskStatisticCountByProjectIdAndPeriod() {
-        ProjectTaskStatistic result = statisticDAO.findProjectTaskStatisticCountByProjectIdAndPeriod(BigInteger.valueOf(4), "11.11.11", "16.12.12");
-        assertEquals("ProjectTaskStatistic{critical=1, high=2, normal=0, low=0}", result.toString());
+        UserTaskStatistic result = statisticDAO.findProjectTaskStatisticCountByProjectIdAndPeriod(BigInteger.valueOf(4), "11.11.11", "16.12.12");
+        assertEquals("UserTaskStatistic{critical=1, high=2, normal=0, low=0}", result.toString());
     }
 
     @Test
     public void findUserTaskCountByUserIdAndPeriod() {
         UserTaskStatistic result = statisticDAO.findUserTaskCountByUserIdAndPeriod(BigInteger.valueOf(2), "11.11.11", "16.12.12");
-        assertEquals("UserTaskStatistic{userId=2, critical=2, high=1, normal=0, low=0}", result.toString());
+        assertEquals("UserTaskStatistic{critical=2, high=1, normal=0, low=0}", result.toString());
     }
 
     @Test

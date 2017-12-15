@@ -2,7 +2,6 @@ package main.com.netcracker.project.model;
 
 import java.math.BigInteger;
 import java.util.List;
-import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.VacationStatistic;
@@ -13,7 +12,7 @@ public interface StatisticDAO {
 
   List<SprintStatistic> findProjectSprintStatByProjectId(BigInteger projectId);
 
-  ProjectTaskStatistic findProjectTaskStatisticCountByProjectIdAndPeriod(
+  UserTaskStatistic findProjectTaskStatisticCountByProjectIdAndPeriod(
       BigInteger projectId, String startDate, String endDate);
 
   UserTaskStatistic findUserTaskCountByUserIdAndPeriod(BigInteger userId,
@@ -43,7 +42,7 @@ public interface StatisticDAO {
       "FOR TASK_PRIORITY IN ('CRITICAL' AS \"CRITICAL\", 'HIGH' AS \"HIGH\", 'NORMAL' AS \"NORMAL\", 'LOW' AS \"LOW\"))";
 
   String FIND_USER_TASK_COUNT_BY_USER_ID_AND_PERIOD = "SELECT * FROM ( " +
-      "SELECT USER_ID, TASK_PRIORITY " +
+      "SELECT TASK_PRIORITY " +
       "FROM PROJECT_USER_TASK_STAT " +
       "WHERE USER_ID = ? AND " +
       "TO_DATE(START_DATE, 'DD.MM.YY') >= TO_DATE(TO_CHAR(?), 'DD.MM.YY') AND TO_DATE(START_DATE, 'DD.MM.YY') <= TO_DATE(TO_CHAR(?), 'DD.MM.YY')) " +

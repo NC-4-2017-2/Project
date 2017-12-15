@@ -1,13 +1,11 @@
 package main.com.netcracker.project.model.impl;
 
 import main.com.netcracker.project.model.StatisticDAO;
-import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.VacationStatistic;
 import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
 import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
-import main.com.netcracker.project.model.impl.mappers.ProjectTaskStatisticMapper;
 import main.com.netcracker.project.model.impl.mappers.SprintStatisticMapper;
 import main.com.netcracker.project.model.impl.mappers.UserTaskStatisticMapper;
 import main.com.netcracker.project.model.impl.mappers.VacationStatisticMapper;
@@ -40,7 +38,7 @@ public class StatisticDAOImpl implements StatisticDAO {
   }
 
   @Override
-  public ProjectTaskStatistic findProjectTaskStatisticCountByProjectIdAndPeriod(
+  public UserTaskStatistic findProjectTaskStatisticCountByProjectIdAndPeriod(
       BigInteger projectId, String startDate, String endDate) {
     logger.info(
         "Entering findUserTaskCountByProjectIdAndPeriod( "
@@ -49,7 +47,7 @@ public class StatisticDAOImpl implements StatisticDAO {
             + "endDate : " + endDate + ")");
     return template
             .queryForObject(FIND_USER_TASK_COUNT_BY_PROJECT_ID_AND_PERIOD, new Object[]{projectId, startDate, endDate},
-                    new ProjectTaskStatisticMapper());
+                    new UserTaskStatisticMapper());
   }
 
 

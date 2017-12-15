@@ -3,7 +3,6 @@ package main.com.netcracker.project.controllers;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.VacationStatistic;
@@ -53,7 +52,7 @@ public class StatisticController {
   public String taskCountByProjectIdPieChart(@PathVariable("id") BigInteger id,
       Model model) {
     logger.info("taskCountByProjectIdPieChart() method. id = " + id);
-    ProjectTaskStatistic projectTasks = statisticService
+    UserTaskStatistic projectTasks = statisticService
         .getTaskCountByProjectIdPieChart(id, "10.12.12", "13.12.12");
     model.addAttribute("critical", projectTasks.getCritical());
     model.addAttribute("high", projectTasks.getHigh());
@@ -102,7 +101,7 @@ public class StatisticController {
       Model model) {
     logger.info("vacationsByProjectIdAndPeriod() method. id = " + id);
     List<VacationStatistic>  vacationsByProjectId = statisticService
-        .getVacationsByProjectId(id, "16.12.12", "28.12.12");
+        .getVacationsByProjectId(id, "11.12.12", "30.12.12");
 
     model.addAttribute("vacationsList", vacationsByProjectId);
     return "statistic/show_workers_vacations";

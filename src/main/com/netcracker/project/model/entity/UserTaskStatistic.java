@@ -1,26 +1,19 @@
 package main.com.netcracker.project.model.entity;
 
-import java.math.BigInteger;
-
 public class UserTaskStatistic {
 
-  private BigInteger userId;
   private Integer critical;
   private Integer high;
   private Integer normal;
   private Integer low;
 
   public UserTaskStatistic(UserTaskStatisticBuilder builder) {
-    this.userId = builder.userId;
     this.critical = builder.critical;
     this.high = builder.high;
     this.normal = builder.normal;
     this.low = builder.low;
   }
 
-  public BigInteger getUserId() {
-    return userId;
-  }
 
   public Integer getCritical() {
     return critical;
@@ -40,18 +33,12 @@ public class UserTaskStatistic {
 
   public static class UserTaskStatisticBuilder {
 
-    private BigInteger userId;
     private Integer critical;
     private Integer high;
     private Integer normal;
     private Integer low;
 
     public UserTaskStatisticBuilder() {
-    }
-
-    public UserTaskStatisticBuilder userId(BigInteger userId) {
-      this.userId = userId;
-      return this;
     }
 
     public UserTaskStatisticBuilder critical(Integer critical) {
@@ -82,8 +69,7 @@ public class UserTaskStatistic {
   @Override
   public String toString() {
     return "UserTaskStatistic{" +
-            "userId=" + userId +
-            ", critical=" + critical +
+            "critical=" + critical +
             ", high=" + high +
             ", normal=" + normal +
             ", low=" + low +

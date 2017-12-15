@@ -2,7 +2,6 @@ package main.com.netcracker.project.services;
 
 import java.math.BigInteger;
 import java.util.List;
-import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.VacationStatistic;
@@ -14,7 +13,7 @@ public interface StatisticService {
 
   List<SprintStatistic> getProjectSprintStatLineChart(BigInteger projectId);
 
-  ProjectTaskStatistic getTaskCountByProjectIdPieChart(BigInteger projectId,
+  UserTaskStatistic getTaskCountByProjectIdPieChart(BigInteger projectId,
       String startDate, String endDate);
 
   UserTaskStatistic getTaskCountByUserIdPieChart(BigInteger userId,

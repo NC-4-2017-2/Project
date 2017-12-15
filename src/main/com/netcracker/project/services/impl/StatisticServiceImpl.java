@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import main.com.netcracker.project.model.StatisticDAO;
-import main.com.netcracker.project.model.entity.ProjectTaskStatistic;
 import main.com.netcracker.project.model.entity.SprintStatistic;
 import main.com.netcracker.project.model.entity.UserTaskStatistic;
 import main.com.netcracker.project.model.entity.VacationStatistic;
@@ -35,8 +34,11 @@ public class StatisticServiceImpl implements StatisticService {
   }
 
   @Override
-  public ProjectTaskStatistic getTaskCountByProjectIdPieChart(
+  public UserTaskStatistic getTaskCountByProjectIdPieChart(
       BigInteger projectId, String startDate, String endDate) {
+    logger.info(
+        "getTaskCountByProjectIdPieChart() method. projectId = " + projectId
+            + " startDate : " + startDate + " endDate : " + endDate);
     return statistic
         .findProjectTaskStatisticCountByProjectIdAndPeriod(projectId, startDate,
             endDate);
@@ -45,6 +47,9 @@ public class StatisticServiceImpl implements StatisticService {
   @Override
   public UserTaskStatistic getTaskCountByUserIdPieChart(BigInteger userId,
       String startDate, String endDate) {
+    logger.info(
+        "getTaskCountByUserIdPieChart() method. userId = " + userId
+            + " startDate : " + startDate + " endDate : " + endDate);
     return statistic
         .findUserTaskCountByUserIdAndPeriod(userId, startDate, endDate);
   }
@@ -52,18 +57,27 @@ public class StatisticServiceImpl implements StatisticService {
   @Override
   public List<WorkingHoursStatistic> getWorkingHoursByUserId(BigInteger userId,
       String startDate, String endDate) {
+    logger.info(
+        "getWorkingHoursByUserId() method. userId = " + userId
+            + " startDate : " + startDate + " endDate : " + endDate);
     return statistic
         .findUserWorkingHoursByUserIdAndPeriod(userId, startDate, endDate);
   }
 
   @Override
   public WorkPeriodStatistic getWorkPeriodByProjectId(BigInteger projectId) {
+    logger.info(
+        "getWorkPeriodByProjectId() method. projectId = " + projectId);
     return statistic.findWorkPeriodByProjectIdAndStatus(projectId);
   }
 
   @Override
   public List<VacationStatistic> getVacationsByProjectId(BigInteger projectId,
       String startDate, String endDate) {
-    return statistic.findVacationsByProjectIdAndPeriod(projectId, startDate, endDate);
+    logger.info(
+        "getVacationsByProjectId() method. projectId = " + projectId
+            + " startDate : " + startDate + " endDate : " + endDate);
+    return statistic
+        .findVacationsByProjectIdAndPeriod(projectId, startDate, endDate);
   }
 }

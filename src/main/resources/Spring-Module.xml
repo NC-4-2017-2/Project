@@ -10,7 +10,7 @@
   <import resource="Spring-BusinessTrip.xml"/>
   <import resource="Spring-WorkingDay.xml"/>
   <import resource="Spring-Vacation.xml"/>
-  <import resource="Spring-SprintStatistic.xml"/>
+  <import resource="Spring-Statistic.xml"/>
   <import resource="Email-Service.xml"/>
 
 </beans>

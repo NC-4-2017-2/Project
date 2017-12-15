@@ -1,21 +1,30 @@
 package main.com.netcracker.project.services;
 
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Map;
-import main.com.netcracker.project.model.entity.Sprint;
-import main.com.netcracker.project.model.entity.Task;
-import main.com.netcracker.project.model.entity.User;
+import java.util.Date;
+import java.util.List;
+import main.com.netcracker.project.model.entity.SprintStatistic;
+import main.com.netcracker.project.model.entity.UserTaskStatistic;
+import main.com.netcracker.project.model.entity.VacationStatistic;
+import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
+import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
 
 
 public interface StatisticService {
 
-  String generatePiechart(Map<String, Double> param);
+  List<SprintStatistic> getProjectSprintStatLineChart(BigInteger projectId);
 
-  String generateCurve(Collection<Sprint> sprint);
+  List<UserTaskStatistic> getTaskCountByProjectIdPieChart(BigInteger projectId,
+      String startDate, String endDate);
 
-  Map<String, Double> calculatePerformance(Collection<User> users, Collection<Task> tasks);
+  UserTaskStatistic getTaskCountByUserIdPieChart(BigInteger userId,
+      String startDate, String endDate);
 
-  Double getAllHours(BigInteger userId);
+  WorkingHoursStatistic getWorkingHoursByUserId(BigInteger userId,
+      Date startDate, Date endDate);
 
+  WorkPeriodStatistic getWorkPeriodByProjectId(BigInteger projectId);
+
+  VacationStatistic getVacationsByProjectId(BigInteger projectId,
+      Date startDate, Date endDate);
 }

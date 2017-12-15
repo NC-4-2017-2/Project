@@ -1,6 +1,6 @@
-CREATE OR REPLACE TYPE number_array IS VARRAY(100) OF NUMBER;
+create or replace TYPE number_array IS VARRAY(100) OF NUMBER;
 
-CREATE OR REPLACE PROCEDURE merge_from_temp_to_tables
+create or replace PROCEDURE merge_from_temp_to_tables
 IS
   counter       NUMBER := 0;
   splitter_num  NUMBER := 2;
@@ -55,7 +55,7 @@ BEGIN
     --delete from temp DONT FORGET
 END;
 
-CREATE OR REPLACE FUNCTION return_counter(obj_type_id IN NUMBER, splitter_num IN NUMBER)
+create or replace FUNCTION return_counter(obj_type_id IN NUMBER, splitter_num IN NUMBER)
 RETURN NUMBER IS
   counter NUMBER(20) := 0;
 BEGIN
@@ -69,7 +69,7 @@ END;
 
 
 
-CREATE OR REPLACE FUNCTION return_object_varray(obj_type_id IN NUMBER, start_rnum IN NUMBER, end_rnum IN NUMBER)
+create or replace FUNCTION return_object_varray(obj_type_id IN NUMBER, start_rnum IN NUMBER, end_rnum IN NUMBER)
 RETURN NUMBER_ARRAY IS
     objects_array NUMBER_ARRAY;
 BEGIN
@@ -85,7 +85,7 @@ BEGIN
 END;
 
 
-CREATE OR REPLACE PROCEDURE commit_merge_from_temp(obj_type_id  IN NUMBER,
+create or replace PROCEDURE commit_merge_from_temp(obj_type_id  IN NUMBER,
                                                    splitter_num IN NUMBER)
 IS
   objects_array NUMBER_ARRAY;

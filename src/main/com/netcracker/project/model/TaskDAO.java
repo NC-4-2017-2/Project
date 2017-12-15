@@ -24,22 +24,22 @@ public interface TaskDAO {
   void updateStatus(Integer taskStatus, BigInteger taskId);
 
   enum TaskPriority {
-    CRITICAL(0, 5),
-    HIGH(1, 4),
-    NORMAL(2, 3),
-    LOW(3, 1);
-    private Integer[] id;
+    CRITICAL(0),
+    HIGH(1),
+    NORMAL(2),
+    LOW(3);
+    private int id;
 
-    TaskPriority(Integer... id) {
+    TaskPriority(int id) {
       this.id = id;
     }
 
     public Integer getId() {
-      return id[0];
+      return id;
     }
 
     public Integer getPriorityCost() {
-      return id[1];
+      return id;
     }
   }
 

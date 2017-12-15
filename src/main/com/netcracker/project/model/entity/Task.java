@@ -1,7 +1,6 @@
 package main.com.netcracker.project.model.entity;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
 
 import main.com.netcracker.project.model.TaskDAO;
@@ -26,7 +25,7 @@ public class Task {
   private Integer reopenCounter;
   private BigInteger projectId;
 
-  private Task(TaskBuilder builder) {
+  public Task(TaskBuilder builder) {
     this.taskId = builder.taskId;
     this.taskType = builder.taskType;
     this.name = builder.name;
@@ -41,6 +40,10 @@ public class Task {
     this.comments = builder.comments;
     this.reopenCounter = builder.reopenCounter;
     this.projectId = builder.projectId;
+  }
+
+  public Task() {
+
   }
 
   public BigInteger getTaskId() {
@@ -143,7 +146,7 @@ public class Task {
       return this;
     }
 
-    public TaskBuilder taskType(TaskDAO.TaskType taskType) {
+    public TaskBuilder taskType(TaskType taskType) {
       this.taskType = taskType;
       return this;
     }
@@ -163,12 +166,12 @@ public class Task {
       return this;
     }
 
-    public TaskBuilder priority(TaskDAO.TaskPriority priority) {
+    public TaskBuilder priority(TaskPriority priority) {
       this.priority = priority;
       return this;
     }
 
-    public TaskBuilder status(TaskDAO.TaskStatus status) {
+    public TaskBuilder status(TaskStatus status) {
       this.status = status;
       return this;
     }
@@ -193,6 +196,30 @@ public class Task {
       return this;
     }
 
+    public BigInteger getAuthorId() {
+      return authorId;
+    }
+
+    public BigInteger getUserId() {
+      return userId;
+    }
+
+    public BigInteger getProjectId() {
+      return projectId;
+    }
+
+    public void setAuthorId(BigInteger authorId) {
+      this.authorId = authorId;
+    }
+
+    public void setUserId(BigInteger userId) {
+      this.userId = userId;
+    }
+
+    public void setProjectId(BigInteger projectId) {
+      this.projectId = projectId;
+    }
+
     public TaskBuilder reopenCounter(Integer reopenCounter) {
       this.reopenCounter = reopenCounter;
       return this;
@@ -206,5 +233,6 @@ public class Task {
     public Task build() {
       return new Task(this);
     }
+
   }
 }

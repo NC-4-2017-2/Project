@@ -2,36 +2,36 @@ package main.com.netcracker.project.model.entity;
 
 public class WorkPeriodStatistic {
 
-  private Integer allTimeWorkers;
-  private Integer currentWorkers;
+  private Integer working;
+  private Integer fired;
 
   public WorkPeriodStatistic(Integer allTimeWorkers,
       Integer currentWorkers) {
-    this.allTimeWorkers = allTimeWorkers;
-    this.currentWorkers = currentWorkers;
+    this.working = allTimeWorkers;
+    this.fired = currentWorkers;
   }
 
-  public Integer getAllTimeWorkers() {
-    return allTimeWorkers;
+  public Integer getWorking() {
+    return working;
   }
 
-  public void setAllTimeWorkers(Integer allTimeWorkers) {
-    this.allTimeWorkers = allTimeWorkers;
+  public void setWorking(Integer working) {
+    this.working = working;
   }
 
-  public Integer getCurrentWorkers() {
-    return currentWorkers;
+  public Integer getFired() {
+    return fired;
   }
 
-  public void setCurrentWorkers(Integer currentWorkers) {
-    this.currentWorkers = currentWorkers;
+  public void setFired(Integer fired) {
+    this.fired = fired;
   }
 
   @Override
   public String toString() {
     return "WorkPeriodStatistic{" +
-        "allTimeWorkers=" + allTimeWorkers +
-        ", currentWorkers=" + currentWorkers +
+        "working=" + working +
+        ", fired=" + fired +
         '}';
   }
 }

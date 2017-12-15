@@ -79,7 +79,7 @@ public class StatisticController {
       Model model) {
     logger.info("workingHoursByUserId() method. id = " + id);
     List<WorkingHoursStatistic> workingHoursStatisticList = statisticService
-        .getWorkingHoursByUserId(id, "12.12.12", "15.12.12");
+        .getWorkingHoursByUserId(id, "10.12.12", "15.12.12");
     model.addAttribute("workingHoursStatisticList", workingHoursStatisticList);
     return "statistic/show_user_hours_stat";
   }

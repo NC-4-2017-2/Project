@@ -1,60 +1,3 @@
-create or replace TYPE number_array IS VARRAY(100) OF NUMBER;
-
-create or replace PROCEDURE merge_from_temp_to_tables
-IS
-  counter       NUMBER := 0;
-  splitter_num  NUMBER := 2;
-BEGIN
-
-    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
-    INTO counter
-    FROM OBJECT_VERSION_TEMP 
-    WHERE OBJ_TYPE_ID = 3;
-    IF (counter != 0)
-    THEN
-      commit_merge_from_temp(3, splitter_num);
-    END IF;
-    
-    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
-    INTO counter
-    FROM OBJECT_VERSION_TEMP 
-    WHERE OBJ_TYPE_ID = 5;
-    IF (counter != 0)
-    THEN
-      commit_merge_from_temp(5, splitter_num);
-    END IF;
-    
-    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
-    INTO counter
-    FROM OBJECT_VERSION_TEMP 
-    WHERE OBJ_TYPE_ID = 6;
-    IF (counter != 0)
-    THEN
-      commit_merge_from_temp(6, splitter_num);
-    END IF;
-    
-    
-    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
-    INTO counter
-    FROM OBJECT_VERSION_TEMP 
-    WHERE OBJ_TYPE_ID = 7;
-    IF (counter != 0)
-    THEN
-      commit_merge_from_temp(7, splitter_num);
-    END IF;
-    
-    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
-    INTO counter
-    FROM OBJECT_VERSION_TEMP 
-    WHERE OBJ_TYPE_ID = 8;
-    IF (counter != 0)
-    THEN
-      commit_merge_from_temp(8, splitter_num);
-    END IF;
-    
-    --delete from temp DONT FORGET
-END;
-
 create or replace FUNCTION return_counter(obj_type_id IN NUMBER, splitter_num IN NUMBER)
 RETURN NUMBER IS
   counter NUMBER(20) := 0;
@@ -168,3 +111,58 @@ IS
 
     END IF;
   END;
+
+create or replace PROCEDURE merge_from_temp_to_tables
+IS
+  counter       NUMBER := 0;
+  splitter_num  NUMBER := 2;
+BEGIN
+
+    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
+    INTO counter
+    FROM OBJECT_VERSION_TEMP
+    WHERE OBJ_TYPE_ID = 3;
+    IF (counter != 0)
+    THEN
+      commit_merge_from_temp(3, splitter_num);
+    END IF;
+
+    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
+    INTO counter
+    FROM OBJECT_VERSION_TEMP
+    WHERE OBJ_TYPE_ID = 5;
+    IF (counter != 0)
+    THEN
+      commit_merge_from_temp(5, splitter_num);
+    END IF;
+
+    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
+    INTO counter
+    FROM OBJECT_VERSION_TEMP
+    WHERE OBJ_TYPE_ID = 6;
+    IF (counter != 0)
+    THEN
+      commit_merge_from_temp(6, splitter_num);
+    END IF;
+
+
+    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
+    INTO counter
+    FROM OBJECT_VERSION_TEMP
+    WHERE OBJ_TYPE_ID = 7;
+    IF (counter != 0)
+    THEN
+      commit_merge_from_temp(7, splitter_num);
+    END IF;
+
+    SELECT CEIL(COUNT(OBJECT_ID) / splitter_num)
+    INTO counter
+    FROM OBJECT_VERSION_TEMP
+    WHERE OBJ_TYPE_ID = 8;
+    IF (counter != 0)
+    THEN
+      commit_merge_from_temp(8, splitter_num);
+    END IF;
+
+    --delete from temp DONT FORGET
+END;

@@ -50,7 +50,7 @@ public class StatisticServiceImpl implements StatisticService {
   }
 
   @Override
-  public WorkingHoursStatistic getWorkingHoursByUserId(BigInteger userId,
+  public List<WorkingHoursStatistic> getWorkingHoursByUserId(BigInteger userId,
       String startDate, String endDate) {
     return statistic
         .findUserWorkingHoursByUserIdAndPeriod(userId, startDate, endDate);

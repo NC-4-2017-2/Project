@@ -73,8 +73,8 @@ public class StatisticDAOImplTest {
 
     @Test
     public void findUserWorkingHoursByUserIdAndPeriod() {
-        WorkingHoursStatistic workingHoursStatistic = statisticDAO.findUserWorkingHoursByUserIdAndPeriod(BigInteger.valueOf(2), "12.12.12", "15.12.12");
-        assertEquals("WorkingHoursStatistic{userId=2, workingDayDate='14.12.12', hoursCount=8}", workingHoursStatistic.toString());
+        List<WorkingHoursStatistic> result = statisticDAO.findUserWorkingHoursByUserIdAndPeriod(BigInteger.valueOf(2), "12.12.12", "15.12.12");
+        assertEquals("[WorkingHoursStatistic{userId=2, workingDayDate='14.12.12', hoursCount=8}]", result.toString());
     }
 
     @Test

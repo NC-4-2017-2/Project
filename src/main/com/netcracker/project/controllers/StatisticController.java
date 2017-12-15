@@ -79,9 +79,9 @@ public class StatisticController {
   public String workingHoursByUserId(@PathVariable("id") BigInteger id,
       Model model) {
     logger.info("workingHoursByUserId() method. id = " + id);
-    WorkingHoursStatistic workingHoursByUserId = statisticService
+    List<WorkingHoursStatistic> workingHoursStatisticList = statisticService
         .getWorkingHoursByUserId(id, "12.12.12", "15.12.12");
-    model.addAttribute("workingHours", workingHoursByUserId);
+    model.addAttribute("workingHoursStatisticList", workingHoursStatisticList);
     return "statistic/show_user_hours_stat";
   }
 

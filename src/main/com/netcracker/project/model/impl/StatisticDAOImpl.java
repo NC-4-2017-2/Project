@@ -65,14 +65,14 @@ public class StatisticDAOImpl implements StatisticDAO {
   }
 
   @Override
-  public WorkingHoursStatistic findUserWorkingHoursByUserIdAndPeriod(
+  public List<WorkingHoursStatistic> findUserWorkingHoursByUserIdAndPeriod(
       BigInteger userId, String startDate, String endDate) {
     logger.info(
         "Entering findUserWorkingHoursByUserIdAndPeriod("
             + "userId : " + userId + ", "
             + "startDate : " + startDate + ", "
             + "endDate : " + endDate + ")");
-    return template.queryForObject(FIND_USER_WORKING_HOURS_BY_USER_ID_AND_PERIOD, new Object[]{userId, startDate, endDate}, new WorkingHoursStatisticMapper());
+    return template.query(FIND_USER_WORKING_HOURS_BY_USER_ID_AND_PERIOD, new Object[]{userId, startDate, endDate}, new WorkingHoursStatisticMapper());
   }
 
   @Override

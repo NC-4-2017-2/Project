@@ -19,7 +19,7 @@ public interface StatisticDAO {
   UserTaskStatistic findUserTaskCountByUserIdAndPeriod(BigInteger userId,
       String startDate, String endDate);
 
-  WorkingHoursStatistic findUserWorkingHoursByUserIdAndPeriod(BigInteger userId,
+  List<WorkingHoursStatistic> findUserWorkingHoursByUserIdAndPeriod(BigInteger userId,
       String startDate, String endDate);
 
   WorkPeriodStatistic findWorkPeriodByProjectIdAndStatus(BigInteger projectId);
@@ -51,12 +51,11 @@ public interface StatisticDAO {
       "(COUNT(TASK_PRIORITY) " +
       "FOR TASK_PRIORITY IN ('CRITICAL' AS \"CRITICAL\", 'HIGH' AS \"HIGH\", 'NORMAL' AS \"NORMAL\", 'LOW' AS \"LOW\"))";
 
-  String FIND_USER_WORKING_HOURS_BY_USER_ID_AND_PERIOD = "SELECT USER_ID AS USER_ID, WORKING_DAY_DATE AS WORKING_DATE, SUM(HOURS_COUNT) AS WORKING_HOURS " +
+  String FIND_USER_WORKING_HOURS_BY_USER_ID_AND_PERIOD = "SELECT USER_ID AS USER_ID, WORKING_DAY_DATE AS WORKING_DATE, HOURS_COUNT AS WORKING_HOURS " +
       "FROM USER_WORKING_HOURS_STAT " +
       "WHERE USER_ID = ? AND " +
       "TO_DATE(WORKING_DAY_DATE, 'DD.MM.YY') >= TO_DATE(TO_CHAR(?), 'DD.MM.YY') AND " +
-      "TO_DATE(WORKING_DAY_DATE, 'DD.MM.YY') <= TO_DATE(TO_CHAR(?), 'DD.MM.YY') " +
-      "GROUP BY USER_ID, WORKING_DAY_DATE";
+      "TO_DATE(WORKING_DAY_DATE, 'DD.MM.YY') <= TO_DATE(TO_CHAR(?), 'DD.MM.YY')";
 
   String FIND_WORK_PERIOD_BY_PROJECT_ID_AND_STATUS = "SELECT * FROM ( " +
       "SELECT STATUS " +

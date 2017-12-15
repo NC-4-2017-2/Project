@@ -20,7 +20,7 @@ public interface StatisticService {
   UserTaskStatistic getTaskCountByUserIdPieChart(BigInteger userId,
       String startDate, String endDate);
 
-  WorkingHoursStatistic getWorkingHoursByUserId(BigInteger userId,
+  List<WorkingHoursStatistic> getWorkingHoursByUserId(BigInteger userId,
       String startDate, String endDate);
 
   WorkPeriodStatistic getWorkPeriodByProjectId(BigInteger projectId);

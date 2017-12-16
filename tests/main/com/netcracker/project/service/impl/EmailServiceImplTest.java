@@ -37,7 +37,7 @@ public class EmailServiceImplTest {
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
 
 
-  private Logger logger = Logger.getLogger(EmailServiceImplTest.class);
+  private static final Logger logger = Logger.getLogger(EmailServiceImplTest.class);
 
 
   @Before

@@ -21,8 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,9 +30,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WorkingDayDAOImplTest {
 
-  private ApplicationContext context;
+  @Autowired
   private WorkingDayDAO workingDay;
   private JdbcTemplate template;
+  @Autowired
   private DataSource dataSource;
   private WorkingDay workingDayTest1;
   private WorkingDay workingDayTest2;
@@ -46,8 +45,6 @@ public class WorkingDayDAOImplTest {
   @Before
   public void setUP() {
     Locale.setDefault(Locale.ENGLISH);
-    context = new ClassPathXmlApplicationContext("Spring-Module.xml");
-    workingDay = (WorkingDayDAO) context.getBean("workingDayDAO");
     template = new JdbcTemplate(dataSource);
   }
 
@@ -111,11 +108,11 @@ public class WorkingDayDAOImplTest {
     BigInteger id2 = BigInteger.valueOf(45);
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id1});
-    template.update(DELETE_FROM_OBJECTS, new Object[]{id1});
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id1});
+    template.update(DELETE_FROM_OBJECTS, new Object[]{id1});
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id2});
-    template.update(DELETE_FROM_OBJECTS, new Object[]{id2});
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id2});
+    template.update(DELETE_FROM_OBJECTS, new Object[]{id2});
   }
 }

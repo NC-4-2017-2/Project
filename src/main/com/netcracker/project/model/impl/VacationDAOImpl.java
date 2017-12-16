@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class VacationDAOImpl implements VacationDAO {
 
-  private Logger logger = Logger.getLogger(VacationDAOImpl.class);
+  private static final Logger logger = Logger.getLogger(VacationDAOImpl.class);
   private JdbcTemplate template;
   private MapperDateConverter converter = new MapperDateConverter();
 

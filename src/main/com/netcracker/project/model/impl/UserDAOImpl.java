@@ -15,7 +15,7 @@ import java.util.Collection;
 
 public class UserDAOImpl implements UserDAO {
 
-    private Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
     private MapperDateConverter converter = new MapperDateConverter();
 
     private JdbcTemplate template;

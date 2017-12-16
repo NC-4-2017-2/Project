@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapperDateConverter extends JsonSerializer<Date> {
 
-  private Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
+  private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
   private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
       "dd.MM.yy");
 

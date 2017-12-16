@@ -23,7 +23,7 @@ public class StatisticController {
 
   @Autowired
   private StatisticService statisticService;
-  private Logger logger = Logger.getLogger(StatisticService.class);
+  private static final Logger logger = Logger.getLogger(StatisticService.class);
 
   @RequestMapping(value = "/view_sprint={id}", method = RequestMethod.GET)
   public String projectSprintStatLineChart(@PathVariable("id") BigInteger id,

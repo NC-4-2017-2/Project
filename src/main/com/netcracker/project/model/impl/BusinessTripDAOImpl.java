@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class BusinessTripDAOImpl implements BusinessTripDAO {
 
-  private Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
+  private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
   private JdbcTemplate template;
   private MapperDateConverter converter = new MapperDateConverter();
 

@@ -22,7 +22,7 @@ public class StatisticServiceImpl implements StatisticService {
       new ClassPathXmlApplicationContext("Spring-Module.xml");
   private StatisticDAO statistic =
       (StatisticDAO) context.getBean("statisticDAO");
-  private Logger logger = Logger.getLogger(StatisticServiceImpl.class);
+  private static final Logger logger = Logger.getLogger(StatisticServiceImpl.class);
 
 
   @Override

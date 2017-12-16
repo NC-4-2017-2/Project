@@ -20,7 +20,7 @@ import java.util.List;
 
 public class StatisticDAOImpl implements StatisticDAO {
 
-  private Logger logger = Logger.getLogger(UserDAOImpl.class);
+  private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
 
   private JdbcTemplate template;
 

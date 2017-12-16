@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public class ProjectDAOImpl implements ProjectDAO {
 
-  private Logger logger = Logger.getLogger(ProjectDAOImpl.class);
+  private static final Logger logger = Logger.getLogger(ProjectDAOImpl.class);
   private JdbcTemplate template;
 
   public void setDataSource(DataSource dataSource) {

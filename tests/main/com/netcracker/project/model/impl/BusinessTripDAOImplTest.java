@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,9 +29,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BusinessTripDAOImplTest {
 
-  private ApplicationContext context;
+  @Autowired
   private BusinessTripDAO businessTrip;
   private JdbcTemplate template;
+  @Autowired
   private DataSource dataSource;
   private static final String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
@@ -42,14 +41,7 @@ public class BusinessTripDAOImplTest {
   @Before
   public void setUp() {
       Locale.setDefault(Locale.ENGLISH);
-      context = new ClassPathXmlApplicationContext("Spring-Module.xml");
-      businessTrip = (BusinessTripDAO) context.getBean("businessTripDAO");
       template = new JdbcTemplate(dataSource);
-  }
-
-  @Autowired
-  public void setDataSource(DataSource dataSource) {
-    this.dataSource = dataSource;
   }
 
   @Test

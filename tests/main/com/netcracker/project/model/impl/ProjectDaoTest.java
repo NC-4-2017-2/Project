@@ -26,8 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -35,25 +33,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:Spring-Module.xml"})
 public class ProjectDaoTest {
-
-  private ApplicationContext context;
+  @Autowired
   private ProjectDAO projectDAO;
+  @Autowired
   private DataSource dataSource;
   private JdbcTemplate template;
 
   private static final String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
 
-  @Autowired
-  public void setDataSource(DataSource dataSource) {
-    this.dataSource = dataSource;
-  }
-
   @Before
   public void setUp() {
     Locale.setDefault(Locale.ENGLISH);
-    context = new ClassPathXmlApplicationContext("Spring-Module.xml");
-    projectDAO = (ProjectDAO) context.getBean("projectDAO");
     template = new JdbcTemplate(dataSource);
   }
 

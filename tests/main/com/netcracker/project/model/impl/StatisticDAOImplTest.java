@@ -12,8 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,21 +28,15 @@ import static org.junit.Assert.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StatisticDAOImplTest {
 
-    private StatisticDAO statisticDAO;
-    private ApplicationContext context;
-    private JdbcTemplate template;
-    private DataSource dataSource;
-
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    private StatisticDAO statisticDAO;
+    private JdbcTemplate template;
+    @Autowired
+    private DataSource dataSource;
 
     @Before
     public void setUp() {
         Locale.setDefault(Locale.ENGLISH);
-        context = new ClassPathXmlApplicationContext("Spring-Module.xml");
-        statisticDAO = (StatisticDAO) context.getBean("statisticDAO");
         template = new JdbcTemplate(dataSource);
     }
 

@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public class WorkingDayDAOImpl implements WorkingDayDAO {
 
-  private Logger logger = Logger.getLogger(WorkingDayDAOImpl.class);
+  private static final Logger logger = Logger.getLogger(WorkingDayDAOImpl.class);
   private JdbcTemplate template;
   private MapperDateConverter converter = new MapperDateConverter();
 

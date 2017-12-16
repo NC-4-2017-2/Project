@@ -1,9 +1,5 @@
 package com.netcracker.project.controllers;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import com.netcracker.project.controllers.project_form.SprintFormData;
 import com.netcracker.project.controllers.project_form.SprintsForm;
 import com.netcracker.project.controllers.project_form.WorkPeriodForm;
@@ -17,7 +13,12 @@ import com.netcracker.project.model.entity.Sprint;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ConvertJspDataService;
 import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -36,8 +37,12 @@ public class ProjectController {
       .getLogger(com.netcracker.project.controllers.ProjectController.class);
   private ApplicationContext context =
       new ClassPathXmlApplicationContext("Spring-Module.xml");
-  private ProjectDAO projectDao = (ProjectDAO) context.getBean("projectDAO");
-  private UserDAO userDAO = (UserDAO) context.getBean("userDAO");
+  //private ProjectDAO projectDAO = (ProjectDAO) context.getBean("projectDAO");
+  @Autowired
+  private ProjectDAO projectDAO;
+  //private UserDAO userDAO = (UserDAO) context.getBean("userDAO");
+  @Autowired
+  private UserDAO userDAO;
 
   private MapperDateConverter converter = new MapperDateConverter();
   private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
@@ -66,11 +71,11 @@ public class ProjectController {
         .build();
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     project.setProjectStatus(projectStatus);
-    //projectDao.createProject(project);
+    //projectDAO.createProject(project);
     logger.info("createProject request from DB. Project id: " + id);
 
     project.setSprints(convertService.createSprintFromJsp(sprints, project.getProjectId()));
-    //project.getSprints().forEach(sprint -> projectDao.createSprint(sprint, project.getProjectId()));
+    //project.getSprints().forEach(sprint -> projectDAO.createSprint(sprint, project.getProjectId()));
 
     project.setWorkPeriods(convertService.createWorkPeriod(workers, project.getProjectId()));
     //project.getWorkPeriods().forEach(workPeriod -> userDAO.createWorkPeriod(workPeriod));
@@ -125,14 +130,14 @@ public class ProjectController {
     List<SprintFormData> sprints = sprintsForm.getSprints();
     List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
 
-    projectDao
+    projectDAO
         .updateEndDate(projectId, converter.convertStringToDate(endDate));
-    projectDao.updateStatus(projectId, projectStatus);
-    projectDao.updatePM(projectId, projectManagerId);
+    projectDAO.updateStatus(projectId, projectStatus);
+    projectDAO.updatePM(projectId, projectManagerId);
 
     sprints.forEach(sprintData -> {
-      projectDao.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
-      projectDao.updateSprintPlannedEndDate(sprintData.getId(),
+      projectDAO.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
+      projectDAO.updateSprintPlannedEndDate(sprintData.getId(),
           converter.convertStringToDate(sprintData.getPlannedEndDate()));
     });
 
@@ -153,7 +158,7 @@ public class ProjectController {
   @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
   public String editProjectGet(@PathVariable("id") Integer id, Model model) {
     logger.info("editProjectGet() method. Id: " + id);
-    Project project = projectDao.findProjectByProjectId(BigInteger.valueOf(id));
+    Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(id));
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
     model.addAttribute("startDate",
@@ -191,7 +196,7 @@ public class ProjectController {
       @PathVariable("id") Integer id) {
     logger.info("findProjectByProjectId() method. Id: " + id);
     MapperDateConverter mdc = new MapperDateConverter();
-    Project project = projectDao
+    Project project = projectDAO
         .findProjectByProjectId(BigInteger.valueOf(id));
 
     model.addAttribute("projectId", project.getProjectId());

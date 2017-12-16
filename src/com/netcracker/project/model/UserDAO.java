@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.netcracker.project.model.entity.User;
+import org.springframework.stereotype.Component;
 
 public interface UserDAO {
 

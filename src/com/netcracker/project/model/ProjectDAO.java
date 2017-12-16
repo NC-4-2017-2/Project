@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
+import org.springframework.stereotype.Component;
 
 public interface ProjectDAO {
 

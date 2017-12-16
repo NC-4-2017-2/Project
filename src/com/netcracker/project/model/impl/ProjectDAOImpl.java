@@ -13,13 +13,19 @@ import java.util.List;
 import javax.sql.DataSource;
 import com.netcracker.project.model.impl.mappers.ProjectMapper;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Component
 public class ProjectDAOImpl implements ProjectDAO {
 
   private static final Logger logger = Logger.getLogger(ProjectDAOImpl.class);
   private JdbcTemplate template;
 
+  @Autowired
   public void setDataSource(DataSource dataSource) {
     template = new JdbcTemplate(dataSource);
   }

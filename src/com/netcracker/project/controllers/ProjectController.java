@@ -1,8 +1,7 @@
 package com.netcracker.project.controllers;
 
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import com.netcracker.project.controllers.project_form.SprintFormData;
@@ -15,7 +14,9 @@ import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.UserDAO.WorkPeriod;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
-import com.netcracker.project.model.entity.Sprint.SprintBuilder;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.ConvertJspDataService;
+import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -31,13 +32,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/project")
 public class ProjectController {
 
-  private Logger logger = Logger.getLogger(ProjectController.class);
+  private static final Logger logger = Logger
+      .getLogger(com.netcracker.project.controllers.ProjectController.class);
   private ApplicationContext context =
       new ClassPathXmlApplicationContext("Spring-Module.xml");
-  private ProjectDAO projectDao =
-      (ProjectDAO) context.getBean("projectDAO");
+  private ProjectDAO projectDao = (ProjectDAO) context.getBean("projectDAO");
   private UserDAO userDAO = (UserDAO) context.getBean("userDAO");
-  private MapperDateConverter mdc = new MapperDateConverter();
+
+  private MapperDateConverter converter = new MapperDateConverter();
+  private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
 
 
   @RequestMapping(value = "/create_project", method = RequestMethod.POST)
@@ -58,16 +61,19 @@ public class ProjectController {
     Project project = new Project.ProjectBuilder()
         .projectId(BigInteger.valueOf(id))
         .name(name)
-        .startDate(mdc.convertStringToDate(startDate))
-        .endDate(mdc.convertStringToDate(endDate))
+        .startDate(converter.convertStringToDate(startDate))
+        .endDate(converter.convertStringToDate(endDate))
         .build();
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     project.setProjectStatus(projectStatus);
     //projectDao.createProject(project);
     logger.info("createProject request from DB. Project id: " + id);
-    project.setSprints(createSprintFromJsp(sprints, project.getProjectId()));
-    project.setWorkPeriods(createWorkPeriod(workers, project.getProjectId()));
 
+    project.setSprints(convertService.createSprintFromJsp(sprints, project.getProjectId()));
+    //project.getSprints().forEach(sprint -> projectDao.createSprint(sprint, project.getProjectId()));
+
+    project.setWorkPeriods(convertService.createWorkPeriod(workers, project.getProjectId()));
+    //project.getWorkPeriods().forEach(workPeriod -> userDAO.createWorkPeriod(workPeriod));
     return "response_status/success";
   }
 
@@ -78,12 +84,15 @@ public class ProjectController {
       Model model) {
     logger.info("projectSizePost() method. CountSprint: " + countSprints
         + ", countWorkers: " + countWorkers);
+
     SprintsForm formSprintData = new SprintsForm();
-    List<SprintFormData> sprints = createEmptyList(countSprints);
+    List<SprintFormData> sprints = Arrays
+        .asList(new SprintFormData[countSprints]);
     formSprintData.setSprints(sprints);
 
     WorkPeriodForm workPeriodForm = new WorkPeriodForm();
-    List<WorkPeriodFormData> workers = createEmptyList(countWorkers);
+    List<WorkPeriodFormData> workers = Arrays
+        .asList(new WorkPeriodFormData[countWorkers]);
     workPeriodForm.setWorkers(workers);
 
     model.addAttribute("modelSprint", formSprintData);
@@ -117,26 +126,26 @@ public class ProjectController {
     List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
 
     projectDao
-        .updateEndDate(projectId, mdc.convertStringToDate(endDate));
+        .updateEndDate(projectId, converter.convertStringToDate(endDate));
     projectDao.updateStatus(projectId, projectStatus);
     projectDao.updatePM(projectId, projectManagerId);
 
-    for (SprintFormData s : sprints) {
-      projectDao.updateSprintStatus(s.getId(), s.getSprintStatus());
-      projectDao.updateSprintPlannedEndDate(s.getId(),
-          mdc.convertStringToDate(s.getPlannedEndDate()));
-    }
+    sprints.forEach(sprintData -> {
+      projectDao.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
+      projectDao.updateSprintPlannedEndDate(sprintData.getId(),
+          converter.convertStringToDate(sprintData.getPlannedEndDate()));
+    });
 
-    for (WorkPeriodFormData wp : workings) {
+    workings.forEach(wp -> {
       WorkPeriod workPeriod = new WorkPeriod();
       workPeriod.setProjectId(wp.getProjectId());
       workPeriod.setUserId(wp.getUserId());
-      workPeriod.setEndWorkDate(mdc.convertStringToDate(wp.getEndWorkDate()));
+      workPeriod.setEndWorkDate(converter.convertStringToDate(wp.getEndWorkDate()));
       workPeriod.setProjectId(projectId);
       workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
       userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
       userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
-    }
+    });
 
     return "response_status/success";
   }
@@ -148,9 +157,9 @@ public class ProjectController {
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
     model.addAttribute("startDate",
-        mdc.convertDateToString(project.getStartDate()));
+        converter.convertDateToString(project.getStartDate()));
     model
-        .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
+        .addAttribute("endDate", converter.convertDateToString(project.getEndDate()));
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
     model.addAttribute("pmId", project.getProjectManagerId());
@@ -162,11 +171,11 @@ public class ProjectController {
             project.getProjectStatus().getId());
 
     SprintsForm sprintForm = new SprintsForm();
-    List<SprintFormData> sprints = convertSprintToSprintForm(sprintCollection);
+    List<SprintFormData> sprints = convertService.convertSprintToSprintForm(sprintCollection);
     sprintForm.setSprints(sprints);
 
     WorkPeriodForm workPeriodForm = new WorkPeriodForm();
-    List<WorkPeriodFormData> workPeriodFormData = convertWorkPeriodToWPForm(
+    List<WorkPeriodFormData> workPeriodFormData = convertService.convertWorkPeriodToWPForm(
         workPeriodCollection);
     workPeriodForm.setWorkers(workPeriodFormData);
 
@@ -194,83 +203,6 @@ public class ProjectController {
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
     return "project/show_project";
-  }
-
-
-  private List createEmptyList(int i) {
-    List<SprintFormData> list = new ArrayList<>();
-    for (int j = 0; j < i; j++) {
-      list.add(null);
-    }
-    return list;
-  }
-
-  private List<SprintFormData> convertSprintToSprintForm(
-      Collection<Sprint> sprints) {
-    List<SprintFormData> sprintForms = new ArrayList<>();
-
-    for (Sprint sprint : sprints) {
-      sprintForms.add(new SprintFormData(
-          sprint.getSprintId(),
-          sprint.getName(),
-          sprint.getStatus(),
-          mdc.convertDateToString(sprint.getPlannedEndDate())));
-    }
-    return sprintForms;
-  }
-
-  private List<WorkPeriodFormData> convertWorkPeriodToWPForm(
-      Collection<WorkPeriod> workPeriodCollection) {
-    List<WorkPeriodFormData> workPeriods = new ArrayList<>();
-    for (WorkPeriod w : workPeriodCollection) {
-      workPeriods.add(
-          new WorkPeriodFormData(w.getWorkPeriodId(), w.getUserId(),
-              mdc.convertDateToString(w.getStartWorkDate()),
-              mdc.convertDateToString(w.getEndWorkDate()),
-              w.getWorkPeriodStatus()));
-    }
-    return workPeriods;
-  }
-
-
-  private Collection<Sprint> createSprintFromJsp(List<SprintFormData> sprints,
-      BigInteger projectId) {
-    Collection<Sprint> resultSprint = new ArrayList<>();
-    for (SprintFormData sprint1 : sprints) {
-      Sprint sprint = new SprintBuilder()
-          .name(sprint1.getName())
-          .startDate(mdc.convertStringToDate(sprint1.getStartDate()))
-          .plannedEndDate(
-              mdc.convertStringToDate(sprint1.getPlannedEndDate()))
-          .endDate(
-              mdc.convertStringToDate(sprint1.getPlannedEndDate()))
-          .build();
-      resultSprint.add(sprint);
-
-      //projectDao.createSprint(sprint, projectId);
-    }
-    return resultSprint;
-  }
-
-  private Collection<WorkPeriod> createWorkPeriod(
-      List<WorkPeriodFormData> workers,
-      BigInteger projectId) {
-    Collection<WorkPeriod> resultPeriod = new ArrayList<>();
-    for (WorkPeriodFormData w : workers) {
-      WorkPeriod workPeriod = new WorkPeriod();
-      workPeriod.setWorkPeriodId(w.getWorkPeriodId());
-      workPeriod
-          .setStartWorkDate(mdc.convertStringToDate(w.getStartWorkDate()));
-      workPeriod.setEndWorkDate(mdc.convertStringToDate(w.getEndWorkDate()));
-      workPeriod.setWorkPeriodStatus(w.getWorkPeriodStatus());
-      workPeriod.setProjectId(projectId);
-      workPeriod.setUserId(w.getUserId());
-
-      resultPeriod.add(workPeriod);
-      //userDAO.createWorkPeriod(workPeriod);
-    }
-
-    return resultPeriod;
   }
 
 }

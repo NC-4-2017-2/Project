@@ -1,4 +1,4 @@
-package main.com.netcracker.project.service.impl;
+package com.netcracker.project.service.impl;
 
 
 import java.math.BigInteger;

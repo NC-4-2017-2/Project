@@ -1,4 +1,4 @@
-package main.com.netcracker.project.model.impl;
+package com.netcracker.project.model.impl;
 
 import static org.junit.Assert.assertEquals;
 import java.math.BigInteger;

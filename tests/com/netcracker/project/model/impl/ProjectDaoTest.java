@@ -1,4 +1,4 @@
-package main.com.netcracker.project.model.impl;
+package com.netcracker.project.model.impl;
 
 import static com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
 import static com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
@@ -6,6 +6,7 @@ import static com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import com.netcracker.project.AssertUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -15,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
-import main.com.netcracker.project.AssertUtils;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.ProjectDAO.OCStatus;
 import com.netcracker.project.model.entity.Project;

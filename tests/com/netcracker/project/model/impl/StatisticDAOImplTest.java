@@ -1,4 +1,4 @@
-package main.com.netcracker.project.model.impl;
+package com.netcracker.project.model.impl;
 
 import com.netcracker.project.model.StatisticDAO;
 import com.netcracker.project.model.entity.SprintStatistic;

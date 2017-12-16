@@ -1,4 +1,4 @@
-package main.com.netcracker.project;
+package com.netcracker.project;
 
 import static org.junit.Assert.assertEquals;
 

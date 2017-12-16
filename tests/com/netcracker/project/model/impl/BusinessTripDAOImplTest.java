@@ -1,7 +1,8 @@
-package main.com.netcracker.project.model.impl;
+package com.netcracker.project.model.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import com.netcracker.project.AssertUtils;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -9,7 +10,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
 import javax.sql.DataSource;
-import main.com.netcracker.project.AssertUtils;
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Status;

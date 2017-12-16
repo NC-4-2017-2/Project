@@ -1,8 +1,8 @@
 package main.com.netcracker.project.model.impl;
 
-import static main.com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
-import static main.com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
-import static main.com.netcracker.project.model.entity.Sprint.SprintBuilder;
+import static com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
+import static com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
+import static com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
 import main.com.netcracker.project.AssertUtils;
-import main.com.netcracker.project.model.ProjectDAO;
-import main.com.netcracker.project.model.ProjectDAO.OCStatus;
-import main.com.netcracker.project.model.entity.Project;
-import main.com.netcracker.project.model.entity.Project.ProjectBuilder;
-import main.com.netcracker.project.model.entity.Sprint;
-import main.com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.model.ProjectDAO;
+import com.netcracker.project.model.ProjectDAO.OCStatus;
+import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.Project.ProjectBuilder;
+import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

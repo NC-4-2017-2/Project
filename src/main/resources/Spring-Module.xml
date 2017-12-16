@@ -11,6 +11,7 @@
   <import resource="Spring-WorkingDay.xml"/>
   <import resource="Spring-Vacation.xml"/>
   <import resource="Spring-Statistic.xml"/>
+  <import resource="Spring-SecurityUser.xml"/>
   <import resource="Email-Service.xml"/>
 
 </beans>

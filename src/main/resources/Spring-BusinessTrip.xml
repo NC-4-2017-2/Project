@@ -5,7 +5,7 @@
 
   <import resource="Spring-Datasource.xml"/>
 
-  <bean id="businessTripDAO" class="main.com.netcracker.project.model.impl.BusinessTripDAOImpl">
+  <bean id="businessTripDAO" class="com.netcracker.project.model.impl.BusinessTripDAOImpl">
     <property name="dataSource" ref="dataSource"/>
   </bean>
 

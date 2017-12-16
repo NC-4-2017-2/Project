@@ -6,7 +6,7 @@
   <import resource="Spring-Datasource.xml"/>
 
   <bean id="workingDayDAO"
-    class="main.com.netcracker.project.model.impl.WorkingDayDAOImpl">
+    class="com.netcracker.project.model.impl.WorkingDayDAOImpl">
     <property name="dataSource" ref="dataSource"/>
   </bean>
 

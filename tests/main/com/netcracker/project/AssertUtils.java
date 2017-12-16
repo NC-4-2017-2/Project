@@ -2,10 +2,10 @@ package main.com.netcracker.project;
 
 import static org.junit.Assert.assertEquals;
 
-import main.com.netcracker.project.model.entity.BusinessTrip;
-import main.com.netcracker.project.model.entity.Project;
-import main.com.netcracker.project.model.entity.Sprint;
-import main.com.netcracker.project.model.entity.Task;
+import com.netcracker.project.model.entity.BusinessTrip;
+import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.Task;
 
 public class AssertUtils {
 

@@ -5,7 +5,7 @@
 
     <import resource="Spring-Datasource.xml"/>
 
-    <bean id="userDAO" class="main.com.netcracker.project.model.impl.UserDAOImpl">
+    <bean id="userDAO" class="com.netcracker.project.model.impl.UserDAOImpl">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 

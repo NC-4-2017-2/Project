@@ -1,11 +1,11 @@
 package main.com.netcracker.project.model.impl;
 
-import main.com.netcracker.project.model.StatisticDAO;
-import main.com.netcracker.project.model.entity.SprintStatistic;
-import main.com.netcracker.project.model.entity.UserTaskStatistic;
-import main.com.netcracker.project.model.entity.VacationStatistic;
-import main.com.netcracker.project.model.entity.WorkPeriodStatistic;
-import main.com.netcracker.project.model.entity.WorkingHoursStatistic;
+import com.netcracker.project.model.StatisticDAO;
+import com.netcracker.project.model.entity.SprintStatistic;
+import com.netcracker.project.model.entity.UserTaskStatistic;
+import com.netcracker.project.model.entity.VacationStatistic;
+import com.netcracker.project.model.entity.WorkPeriodStatistic;
+import com.netcracker.project.model.entity.WorkingHoursStatistic;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

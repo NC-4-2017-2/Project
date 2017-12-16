@@ -56,7 +56,7 @@
 
             <tr>
                 <td>Sprints:</td>
-                <%--@elvariable id="modelSprint" type="main.com.netcracker.project.controllers.ProjectController"--%>
+                <%--@elvariable id="modelSprint" type="com.netcracker.project.controllers.ProjectController"--%>
                 <form:form modelAttribute="modelSprint" method="post">
                 <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
                     <input type="hidden" name="sprints[${status.index}].id" value="${sprint.id}"><br>

@@ -17,7 +17,7 @@
     </property>
   </bean>
 
-  <bean id="emailServiceImpl" class="main.com.netcracker.project.services.impl.EmailServiceImpl">
+  <bean id="emailServiceImpl" class="com.netcracker.project.services.impl.EmailServiceImpl">
     <property name="mailSender" ref="mailSender"/>
   </bean>
 

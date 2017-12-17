@@ -1,5 +1,6 @@
 package com.netcracker.project.model;
 
+import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.impl.mappers.EnumMapper;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public interface ProjectDAO {
 
   void updateSprintPlannedEndDate(BigInteger sprintId, Date endDate);
 
-  enum OCStatus {
+    enum OCStatus {
     OPENED(0), CLOSED(1);
 
     private int id;
@@ -181,7 +182,6 @@ public interface ProjectDAO {
           + " INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (60,59,?) "
           + " SELECT * FROM dual";
 
-
   String GET_ID_USERS = "SELECT USER_PROJ_REF.REFERENCE "
       + "FROM OBJREFERENCE USER_PROJ_REF "
       + "WHERE USER_PROJ_REF.ATTR_ID = 19 AND "
@@ -208,12 +208,14 @@ public interface ProjectDAO {
       "SELECT OBJECT_ID FROM OBJREFERENCE "
           + "WHERE ATTR_ID = 32 "
           + "AND REFERENCE = ?";
+
   String UPDATE_END_DATE =
       "UPDATE ATTRIBUTES SET VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 16 AND OBJECT_ID = ?";
 
   String UPDATE_STATUS =
       "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? "
           + "WHERE ATTR_ID = 17 AND OBJECT_ID = ? ";
+
   String GET_STATUS_BY_PROJECT_ID =
       "SELECT STATUS.VALUE "
           + "FROM ATTRIBUTES STATUS_VALUE, LISTVALUE STATUS, OBJECTS PROJECT "

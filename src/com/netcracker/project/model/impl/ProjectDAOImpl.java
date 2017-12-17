@@ -3,8 +3,10 @@ package com.netcracker.project.model.impl;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.model.impl.mappers.SprintMapper;
+import com.netcracker.project.model.impl.mappers.UserMapper;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -227,7 +229,6 @@ public class ProjectDAOImpl implements ProjectDAO {
     return BigInteger
         .valueOf(template.queryForObject(GET_PM_ID, Integer.class, id));
   }
-
 
   private List<BigInteger> findAllProjectIdFromDate(String formattedDate) {
     logger.info(

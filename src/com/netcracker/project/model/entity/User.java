@@ -227,5 +227,24 @@ public class User {
     }
   }
 
-
+  @Override
+  public String toString() {
+    return "User{" +
+        "userId=" + userId +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", email='" + email + '\'' +
+        ", dateOfBirth=" + dateOfBirth +
+        ", hireDate=" + hireDate +
+        ", phoneNumber='" + phoneNumber + '\'' +
+        ", photo='" + photo + '\'' +
+        ", jobTitle=" + jobTitle +
+        ", login='" + login + '\'' +
+        ", password='" + password + '\'' +
+        ", userRole=" + userRole +
+        ", workPeriods=" + workPeriods +
+        ", userStatus=" + userStatus +
+        ", projectStatus=" + projectStatus +
+        '}';
+  }
 }

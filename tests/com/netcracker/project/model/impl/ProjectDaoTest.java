@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import com.netcracker.project.AssertUtils;
+import com.netcracker.project.model.entity.User;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.text.ParseException;

@@ -58,6 +58,11 @@ public class UsersDaoTest {
   }
 
   @Test
+  public void findUserByLastNameAndFirstName() {
+    Collection result = userDao.findUserByLastNameAndFirstName("Ivanov", "Ivan");
+  }
+
+  @Test
   public void insertUser() {
     MapperDateConverter converter = new MapperDateConverter();
     Date dateOfBirth = converter.convertStringToDate("11.11.86");

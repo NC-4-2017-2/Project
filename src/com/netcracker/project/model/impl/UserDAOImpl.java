@@ -62,6 +62,15 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public Collection<User> findUserByLastNameAndFirstName(String lastName, String firstName) {
+    logger.info("Entering findUserByFirstNameAndLastName(lastName=" + lastName + "," + " firstName=" + firstName + ")");
+    return template
+        .query(FIND_USER_BY_LAST_NAME_AND_FIRST_NAME, new Object[]{lastName, firstName},
+            new UserMapper());
+  }
+
+
+  @Override
   public void updatePhoneNumber(BigInteger id, String phoneNumber) {
     logger.info("Entering updatePhoneNumber(id=" + id + "," + " phoneNumber=" + phoneNumber + ")");
     template.update(UPDATE_PHONE_NUMBER, phoneNumber, id);

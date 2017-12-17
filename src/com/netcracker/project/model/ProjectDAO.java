@@ -19,6 +19,8 @@ public interface ProjectDAO {
 
   List<Project> findProjectByDate(Date startDate);
 
+  Collection<String> findAllOpenedProjects();
+
   List<BigInteger> getIdUsers(BigInteger projectId);
 
   void deleteUserByUserId(BigInteger userId, BigInteger projectID);
@@ -120,7 +122,6 @@ public interface ProjectDAO {
           + "AND PR_STATUS_VALUE.ATTR_ID = 59 "
           + "AND PR_STATUS_VALUE.LIST_VALUE_ID = PR_STATUS.LIST_VALUE_ID";
 
-
   String GET_SPRINTS = "SELECT "
       + "  PROJECT_ID.OBJECT_ID, "
       + "  SPRINT_ID.OBJECT_ID    AS " + EnumMapper.SPRINT_ID + ", "
@@ -156,6 +157,18 @@ public interface ProjectDAO {
       + " "
       + "      AND STATUS_VALUE.ATTR_ID = 59 "
       + "      AND STATUS_VALUE.LIST_VALUE_ID = STATUS.LIST_VALUE_ID";
+
+  String FIND_ALL_OPENED_PROJECTS = "SELECT PROJECT_NAME.VALUE "
+      + "FROM OBJECTS PROJECT_ID, "
+      + "ATTRIBUTES PROJECT_NAME, ATTRIBUTES PROJECT_STATUS, "
+      + "LISTVALUE PROJECT_STATUS_VALUE "
+      + "WHERE PROJECT_NAME.ATTR_ID = 14 AND "
+      + "PROJECT_ID.OBJECT_ID = PROJECT_NAME.OBJECT_ID AND "
+      + "PROJECT_STATUS.ATTR_ID = 17 AND "
+      + "PROJECT_STATUS.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      + "PROJECT_STATUS_VALUE.LIST_VALUE_ID = PROJECT_STATUS.LIST_VALUE_ID AND "
+      + "PROJECT_STATUS_VALUE.ATTR_ID = PROJECT_STATUS.ATTR_ID AND "
+      + "PROJECT_STATUS_VALUE.VALUE = 'OPENED'";
 
   String CREATE_SPRINT =
       "INSERT ALL "

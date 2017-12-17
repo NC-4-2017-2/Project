@@ -98,6 +98,14 @@ public class ProjectDAOImpl implements ProjectDAO {
   }
 
   @Override
+  public Collection<String> findAllOpenedProjects() {
+    logger.info(
+        "Entering findAllOpenedProjects()");
+    return template.queryForList(FIND_ALL_OPENED_PROJECTS, String.class);
+  }
+
+
+  @Override
   public List<Project> findProjectByDate(Date startDate) {
     logger.info("Entering findProjectByDate(startDate=" + startDate + ")");
     MapperDateConverter dateConverter = new MapperDateConverter();

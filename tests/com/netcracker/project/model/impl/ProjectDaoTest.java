@@ -4,6 +4,7 @@ import static com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
 import static com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
 import static com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import com.netcracker.project.AssertUtils;
@@ -56,7 +57,6 @@ public class ProjectDaoTest {
 
     AssertUtils.assertProject(expProject, actProject);
   }
-
 
   @Test
   public void findProjectByNameTest() {
@@ -144,7 +144,6 @@ public class ProjectDaoTest {
     assertThat(sprints.size(), is(1));
   }
 
-
   @Test
   public void getALlSprintsTest() {
     Collection<Sprint> collection = projectDAO
@@ -154,6 +153,11 @@ public class ProjectDaoTest {
     AssertUtils.assertSprint(expSprint, collection.iterator().next());
   }
 
+  @Test
+  public void findAllOpenedProjects() {
+    Collection<String> projectNameCollection = projectDAO.findAllOpenedProjects();
+    assertEquals("[PROJECT1, PROJECT2]", projectNameCollection.toString());
+  }
 
   @Test
   public void updateEndDateTest() throws InvocationTargetException {

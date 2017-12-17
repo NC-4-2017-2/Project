@@ -10,8 +10,10 @@ import com.netcracker.project.model.entity.Status;
 import com.netcracker.project.model.entity.Vacation;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 public class VacationDAOImpl implements VacationDAO {
 
   private static final Logger logger = Logger.getLogger(VacationDAOImpl.class);

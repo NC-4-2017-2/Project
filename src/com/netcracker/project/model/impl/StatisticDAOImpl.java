@@ -17,7 +17,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StatisticDAOImpl implements StatisticDAO {
 
   private static final Logger logger = Logger.getLogger(UserDAOImpl.class);

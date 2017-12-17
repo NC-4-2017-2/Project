@@ -11,7 +11,9 @@ import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.model.impl.mappers.WorkingDayMapper;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WorkingDayDAOImpl implements WorkingDayDAO {
 
   private static final Logger logger = Logger.getLogger(WorkingDayDAOImpl.class);

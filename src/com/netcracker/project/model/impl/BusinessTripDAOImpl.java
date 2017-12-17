@@ -11,8 +11,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigInteger;
 import java.util.Collection;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 public class BusinessTripDAOImpl implements BusinessTripDAO {
 
   private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);

@@ -64,4 +64,17 @@ public class MapperDateConverter extends JsonSerializer<Date> {
 
     jsonGenerator.writeString(formattedDate);
   }
+
+  public Date convertStringToDateFromJSP(String str) {
+    Date date = null;
+    String pattern = "yyyy-MM-dd";
+    DateFormat dateFormat = new SimpleDateFormat(pattern);
+
+    try {
+      date = dateFormat.parse(str);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return date;
+  }
 }

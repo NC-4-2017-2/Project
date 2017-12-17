@@ -6,7 +6,6 @@ import com.netcracker.project.AssertUtils;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
 import javax.sql.DataSource;
@@ -74,7 +73,6 @@ public class BusinessTripDAOImplTest {
   public void test3FindTripByProjectId() {
     Collection<BusinessTrip> tripByProjectId = businessTrip
         .findTripByProjectId(BigInteger.valueOf(4));
-    Iterator<BusinessTrip> iterator = tripByProjectId.iterator();
 
     assertEquals(3, tripByProjectId.size());
     for (BusinessTrip trip : tripByProjectId) {

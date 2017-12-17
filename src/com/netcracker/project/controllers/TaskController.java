@@ -28,7 +28,7 @@ public class TaskController {
       new ClassPathXmlApplicationContext("Spring-Module.xml");
 
   private TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");
-  private Logger logger = Logger.getLogger(TaskController.class);
+  private static Logger logger = Logger.getLogger(TaskController.class);
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   public String createTask(

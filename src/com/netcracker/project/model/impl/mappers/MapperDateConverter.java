@@ -19,12 +19,13 @@ public class MapperDateConverter extends JsonSerializer<Date> {
 
   private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
   private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-      "dd.MM.yy");
+      "dd.MM.yyyy");
 
 
   public Date convertStringToDate(String str) {
     Date date = null;
-    String pattern = "dd.MM.yy";
+    //String pattern = "yyyy-MM-dd";
+    String pattern = "dd.MM.yyyy";
     DateFormat dateFormat = new SimpleDateFormat(pattern);
 
     try {
@@ -37,7 +38,7 @@ public class MapperDateConverter extends JsonSerializer<Date> {
 
   public String convertDateToString(Date startDate) {
     String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
-    String patternWriteFormat = "dd.MM.yy";
+    String patternWriteFormat = "dd.MM.yyyy";
     String dateStr = startDate.toString();
     DateFormat readFormat = new SimpleDateFormat(pattern, Locale.US);
 

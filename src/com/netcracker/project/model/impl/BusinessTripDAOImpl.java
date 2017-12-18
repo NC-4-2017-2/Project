@@ -5,6 +5,7 @@ import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Status;
 import com.netcracker.project.model.impl.mappers.BusinessTripMapper;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import java.util.Date;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,14 +22,19 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   private JdbcTemplate template;
   private MapperDateConverter converter = new MapperDateConverter();
 
+  public void setDataSource(DataSource dataSource) {
+    template = new JdbcTemplate(dataSource);
+  }
+
+
   @Override
   public void createTrip(BusinessTrip trip) {
     logger.info("Entering createTrip(trip=" + trip + ")");
     template.update(CREATE_TRIP, new Object[]{
         "BUSINESS_TRIP " + trip.getBusinessTripId(),
         trip.getCountry(),
-        converter.convertDateToString(trip.getStartDate()),
-        converter.convertDateToString(trip.getEndDate()),
+        trip.getStartDate(),
+        trip.getEndDate(),
         trip.getStatus().getId(),
         trip.getUserId(),
         trip.getAuthorId(),
@@ -37,19 +43,13 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
     });
   }
 
-  public void setDataSource(DataSource dataSource) {
-    template = new JdbcTemplate(dataSource);
-  }
-
   @Transactional
   @Override
   public void updateTrip(BusinessTrip trip) {
     logger.info("Entering updateTrip(trip=" + trip + ")");
     updateCountry(trip.getCountry(), trip.getBusinessTripId());
-    updateStartDate(converter.convertDateToString(trip.getStartDate()),
-        trip.getBusinessTripId());
-    updateEndDate(converter.convertDateToString(trip.getEndDate()),
-        trip.getBusinessTripId());
+    updateStartDate(trip.getStartDate(), trip.getBusinessTripId());
+    updateEndDate(trip.getEndDate(), trip.getBusinessTripId());
     updateStatus(trip.getStatus(), trip.getBusinessTripId());
   }
 
@@ -74,13 +74,13 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
     template.update(UPDATE_COUNTRY, country, businessTripId);
   }
 
-  private void updateStartDate(String startDate, BigInteger businessTripId) {
+  private void updateStartDate(Date startDate, BigInteger businessTripId) {
     logger.info("Entering updateStartDate(startDate=" + startDate + ","
         + " businessTripId=" + businessTripId + ")");
     template.update(UPDATE_START_DATE, startDate, businessTripId);
   }
 
-  private void updateEndDate(String endDate, BigInteger businessTripId) {
+  private void updateEndDate(Date endDate, BigInteger businessTripId) {
     logger.info(
         "Entering updateEndDate(endDate=" + endDate + "," + " businessTripId="
             + businessTripId + ")");

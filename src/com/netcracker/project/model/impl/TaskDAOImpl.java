@@ -34,9 +34,9 @@ public class TaskDAOImpl implements TaskDAO {
         task.getTaskId(),
         task.getName(),
         task.getTaskType().getId(),
-        mapperDateConverter.convertDateToString(task.getStartDate()),
-        mapperDateConverter.convertDateToString(task.getEndDate()),
-        mapperDateConverter.convertDateToString(task.getPlannedEndDate()),
+        task.getStartDate(),
+        task.getEndDate(),
+        task.getPlannedEndDate(),
         task.getPriority().getId(),
         task.getStatus().getId(),
         task.getDescription(),
@@ -54,15 +54,9 @@ public class TaskDAOImpl implements TaskDAO {
     logger.info("Entering updateTask(task=" + task + ")");
     updateTaskByName(task.getName(), task.getTaskId());
     updateTaskByType(task.getTaskType(), task.getTaskId());
-    updateTaskByStartDate(
-        mapperDateConverter.convertDateToString(task.getStartDate()),
-        task.getTaskId());
-    updateTaskByEndDate(
-        mapperDateConverter.convertDateToString(task.getEndDate()),
-        task.getTaskId());
-    updateTaskByPlannedEndDate(
-        mapperDateConverter.convertDateToString(task.getPlannedEndDate()),
-        task.getTaskId());
+    updateTaskByStartDate(task.getStartDate(), task.getTaskId());
+    updateTaskByEndDate(task.getEndDate(), task.getTaskId());
+    updateTaskByPlannedEndDate(task.getPlannedEndDate(), task.getTaskId());
     updateTaskByTaskPriority(task.getPriority(), task.getTaskId());
     updateTaskByStatus(task.getStatus(), task.getTaskId());
     updateTaskByDescription(task.getDescription(), task.getTaskId());
@@ -88,21 +82,21 @@ public class TaskDAOImpl implements TaskDAO {
     template.update(UPDATE_TASK_BY_TYPE, typeTask.getId(), taskId);
   }
 
-  private void updateTaskByStartDate(String startDate, BigInteger taskId) {
+  private void updateTaskByStartDate(Date startDate, BigInteger taskId) {
     logger.info(
         "Entering updateStartDate(startDate=" + startDate + "," + " taskId="
             + taskId + ")");
     template.update(UPDATE_TASK_BY_START_DATE, startDate, taskId);
   }
 
-  private void updateTaskByEndDate(String endDate, BigInteger taskId) {
+  private void updateTaskByEndDate(Date endDate, BigInteger taskId) {
     logger.info(
         "Entering updateTaskByEndDate(endDate=" + endDate + "," + " taskId="
             + taskId + ")");
     template.update(UPDATE_TASK_BY_END_DATE, endDate, taskId);
   }
 
-  private void updateTaskByPlannedEndDate(String plannedEndDate,
+  private void updateTaskByPlannedEndDate(Date plannedEndDate,
       BigInteger taskId) {
     logger.info(
         "Entering updateTaskByPlannedEndDate(plannedEndDate=" + plannedEndDate
@@ -188,10 +182,8 @@ public class TaskDAOImpl implements TaskDAO {
     logger.info(
         "Entering findTaskByUserIdAndDate(date=" + date + ", " + "id=" + userId
             + ")");
-    MapperDateConverter dateConverter = new MapperDateConverter();
-    String formattedDate = dateConverter.convertDateToString(date);
     return template.query(FIND_TASK_BY_USER_ID_AND_DATE,
-        new Object[]{formattedDate, userId}, new TaskMapper());
+        new Object[]{date, userId}, new TaskMapper());
   }
 
   @Override

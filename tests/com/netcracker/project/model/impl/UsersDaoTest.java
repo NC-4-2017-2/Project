@@ -47,26 +47,29 @@ public class UsersDaoTest {
   public void findUserByUserId() {
     User user = userDao.findUserByUserId(BigInteger.valueOf(1));
     assertEquals(BigInteger.valueOf(1), user.getUserId());
-    assertEquals("Ivanov", user.getLastName());
+    assertEquals("User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}", user.toString());
   }
 
   @Test
   public void findUserByUserLogin() {
     User user = userDao.findUserByLogin("ivanov");
-    assertEquals("Ivanov", user.getLastName());
-    assertEquals(BigInteger.valueOf(1), user.getUserId());
+    assertEquals("User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}", user.toString());
   }
 
   @Test
   public void findUserByLastNameAndFirstName() {
     Collection result = userDao.findUserByLastNameAndFirstName("Ivanov", "Ivan");
+    assertEquals("[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]", result.toString());
   }
 
   @Test
   public void insertUser() {
     MapperDateConverter converter = new MapperDateConverter();
-    Date dateOfBirth = converter.convertStringToDate("11.11.86");
-    Date hireDate = converter.convertStringToDate("12.12.10");
+    Date dateOfBirth = converter.convertStringToDate("11.11.1986");
+    Date hireDate = converter.convertStringToDate("12.12.2010");
 
     User user = new User.UserBuilder()
         .lastName("Last")
@@ -103,22 +106,26 @@ public class UsersDaoTest {
 
   @Test
   public void findWorkPeriodsByUserId() {
-    Collection<UserDAO.WorkPeriod> workPeriodList = userDao
+    Collection<UserDAO.WorkPeriod> result = userDao
         .findWorkPeriodsByUserId(BigInteger.valueOf(2));
+    assertEquals("[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]", result.toString());
   }
 
   @Test
   public void findWorkPeriodsByProjectId() {
-    Collection<UserDAO.WorkPeriod> workPeriodList = userDao
+    Collection<UserDAO.WorkPeriod> result = userDao
         .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
+    assertEquals("[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING},"
+        + " WorkPeriod{workPeriodId=17, userId=3, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]", result.toString());
   }
 
 
   @Test
   public void findWorkPeriodByUserIdAndProjectId() {
-    Collection<UserDAO.WorkPeriod> workPeriodList = userDao
+    Collection<UserDAO.WorkPeriod> result = userDao
         .findWorkPeriodByUserIdAndProjectId(BigInteger.valueOf(2),
             BigInteger.valueOf(4));
+    assertEquals("[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]", result.toString());
   }
 
   @Test
@@ -132,7 +139,7 @@ public class UsersDaoTest {
     UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
     workPeriod.setUserId(BigInteger.valueOf(2));
     workPeriod.setProjectId(BigInteger.valueOf(4));
-    workPeriod.setEndWorkDate(converter.convertStringToDate("11.11.86"));
+    workPeriod.setEndWorkDate(converter.convertStringToDate("11.11.1986"));
     userDao.updateWorkingPeriodEndDateByUserId(workPeriod);
   }
 
@@ -157,8 +164,8 @@ public class UsersDaoTest {
   public void createWorkPeriod() {
     WorkPeriod workPeriod = new WorkPeriod();
     MapperDateConverter converter = new MapperDateConverter();
-    Date startDate = converter.convertStringToDate("11.11.13");
-    Date endDate = converter.convertStringToDate("11.12.13");
+    Date startDate = converter.convertStringToDate("11.11.2013");
+    Date endDate = converter.convertStringToDate("11.12.2013");
     workPeriod.setStartWorkDate(startDate);
     workPeriod.setEndWorkDate(endDate);
     workPeriod.setWorkPeriodStatus(WorkPeriodStatus.WORKING);

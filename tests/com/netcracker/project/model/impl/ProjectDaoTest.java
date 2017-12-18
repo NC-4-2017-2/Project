@@ -163,8 +163,8 @@ public class ProjectDaoTest {
   @Test
   public void updateEndDateTest() throws InvocationTargetException {
     MapperDateConverter mdc = new MapperDateConverter();
-    Date defEndDate = mdc.convertStringToDate("12.12.15");
-    Date newEndDate = mdc.convertStringToDate("20.11.10");
+    Date defEndDate = mdc.convertStringToDate("12.12.2015");
+    Date newEndDate = mdc.convertStringToDate("20.11.2010");
 
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
     assertThat(project.getEndDate(), is(defEndDate));
@@ -194,8 +194,8 @@ public class ProjectDaoTest {
   @Test
   public void updateSprintEndDate() {
     MapperDateConverter mdc = new MapperDateConverter();
-    Date defEndDate = mdc.convertStringToDate("25.12.12");
-    Date newEndDate = mdc.convertStringToDate("05.01.13");
+    Date defEndDate = mdc.convertStringToDate("25.12.2012");
+    Date newEndDate = mdc.convertStringToDate("05.01.2013");
 
     Collection<Sprint> sprints = projectDAO
         .getAllSprints(BigInteger.valueOf(4));
@@ -212,7 +212,7 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void updateprintStatus() {
+  public void updateSprintStatus() {
 
   }
 
@@ -235,8 +235,8 @@ public class ProjectDaoTest {
 
   private Project buildTestProject() {
     MapperDateConverter mdc = new MapperDateConverter();
-    Date startDate = mdc.convertStringToDate("12.12.12");
-    Date endDate = mdc.convertStringToDate("12.12.15");
+    Date startDate = mdc.convertStringToDate("12.12.2012");
+    Date endDate = mdc.convertStringToDate("12.12.2015");
 
     Project project = new ProjectBuilder()
         .projectId(BigInteger.valueOf(4))
@@ -253,9 +253,9 @@ public class ProjectDaoTest {
 
   private Sprint buildTestSprint() {
     MapperDateConverter mdc = new MapperDateConverter();
-    Date startDate = mdc.convertStringToDate("14.12.12");
-    Date endDate = mdc.convertStringToDate("25.12.12");
-    Date plannedEndDate = mdc.convertStringToDate("26.12.12");
+    Date startDate = mdc.convertStringToDate("14.12.2012");
+    Date endDate = mdc.convertStringToDate("25.12.2012");
+    Date plannedEndDate = mdc.convertStringToDate("26.12.2012");
 
     return new SprintBuilder()
         .sprintId(BigInteger.valueOf(15))

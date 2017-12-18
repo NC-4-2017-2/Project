@@ -7,20 +7,11 @@ import org.springframework.jdbc.core.RowMapper;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 public class BusinessTripMapper implements RowMapper<BusinessTrip> {
 
-  private MapperDateConverter converter = new MapperDateConverter();
-
   @Override
   public BusinessTrip mapRow(ResultSet resultSet, int i) throws SQLException {
-    Date startDate = converter
-        .convertStringToDate(
-            resultSet.getString(EnumMapper.START_DATE.getFullName()));
-    Date endDate = converter.convertStringToDate(
-        resultSet.getString(EnumMapper.END_DATE.getFullName()));
-
     return new BusinessTrip.BusinessTripBuilder()
         .businessTripId(new BigInteger(
             resultSet.getString(EnumMapper.BUSINESS_TRIP_ID.getFullName())))
@@ -33,8 +24,8 @@ public class BusinessTripMapper implements RowMapper<BusinessTrip> {
         .pmId(
             new BigInteger(resultSet.getString(EnumMapper.PM_ID.getFullName())))
         .country(resultSet.getString(EnumMapper.COUNTRY.getFullName()))
-        .startDate(startDate)
-        .endDate(endDate)
+        .startDate(resultSet.getDate(EnumMapper.START_DATE.getFullName()))
+        .endDate(resultSet.getDate(EnumMapper.END_DATE.getFullName()))
         .status(Status
             .valueOf(resultSet.getString(EnumMapper.STATUS.getFullName())))
         .build();

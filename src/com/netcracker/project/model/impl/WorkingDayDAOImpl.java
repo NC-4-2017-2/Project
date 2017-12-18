@@ -53,10 +53,7 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
       Date endDate) {
     logger.info("Entering findHoursPerPeriod(projectId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
 
-    String startDateString = converter.convertDateToString(startDate);
-    String endDateString = converter.convertDateToString(endDate);
-
     return template.query(FIND_HOURS_PER_PERIOD, new Object[]{userId,
-        startDateString, endDateString}, new WorkingDayMapper());
+        startDate, endDate}, new WorkingDayMapper());
   }
 }

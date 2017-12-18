@@ -4,6 +4,7 @@ import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.model.impl.mappers.VacationMapper;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 import javax.sql.DataSource;
 import com.netcracker.project.model.VacationDAO;
 import com.netcracker.project.model.entity.Status;
@@ -31,8 +32,8 @@ public class VacationDAOImpl implements VacationDAO {
         "VACATION " + vacation.getVacationId(),
         vacation.getUserId(),
         vacation.getProjectId(),
-        converter.convertDateToString(vacation.getStartDate()),
-        converter.convertDateToString(vacation.getEndDate()),
+        vacation.getStartDate(),
+        vacation.getEndDate(),
         vacation.getPmStatus(),
         vacation.getLmStatus(),
         vacation.getPmId(),
@@ -46,10 +47,8 @@ public class VacationDAOImpl implements VacationDAO {
     logger.info(
         "Entering updateVacation(id=" + id + "," + " vacation=" + vacation
             + ")");
-    updateStartDate(converter.convertDateToString(vacation.getStartDate()),
-        vacation.getVacationId());
-    updateEndDate(converter.convertDateToString(vacation.getEndDate()),
-        vacation.getVacationId());
+    updateStartDate(vacation.getStartDate(), vacation.getVacationId());
+    updateEndDate(vacation.getEndDate(), vacation.getVacationId());
     updatePmStatus(vacation.getPmStatus(), vacation.getVacationId());
     updateLmStatus(vacation.getLmStatus(), vacation.getVacationId());
   }
@@ -88,14 +87,14 @@ public class VacationDAOImpl implements VacationDAO {
         new Object[]{id, status}, new VacationMapper());
   }
 
-  private void updateStartDate(String startDate, BigInteger vacationId) {
+  private void updateStartDate(Date startDate, BigInteger vacationId) {
     logger.info(
         "Entering updateStartDate(startDate=" + startDate + "," + " vacationId="
             + vacationId + ")");
     template.update(UPDATE_START_DATE, startDate, vacationId);
   }
 
-  private void updateEndDate(String endDate, BigInteger vacationId) {
+  private void updateEndDate(Date endDate, BigInteger vacationId) {
     logger.info(
         "Entering updateEndDate(endDate=" + endDate + "," + " vacationId="
             + vacationId + ")");

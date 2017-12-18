@@ -38,8 +38,8 @@ public class ProjectDAOImpl implements ProjectDAO {
     MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
         project.getName(),
-        mdc.convertDateToString(project.getStartDate()),
-        mdc.convertDateToString(project.getEndDate()),
+        project.getStartDate(),
+        project.getEndDate(),
         project.getProjectStatus().getId(),
         project.getProjectManagerId()});
 
@@ -184,9 +184,9 @@ public class ProjectDAOImpl implements ProjectDAO {
     template.update(CREATE_SPRINT,
         sprint.getSprintId(),
         sprint.getName(),
-        mdc.convertDateToString(sprint.getStartDate()),
-        mdc.convertDateToString(sprint.getPlannedEndDate()),
-        mdc.convertDateToString(sprint.getPlannedEndDate()),
+        sprint.getStartDate(),
+        sprint.getPlannedEndDate(),
+        sprint.getPlannedEndDate(),
         OCStatus.OPENED.getId(),
         projectId
     );

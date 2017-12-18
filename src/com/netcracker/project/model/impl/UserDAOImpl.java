@@ -35,8 +35,8 @@ public class UserDAOImpl implements UserDAO {
         user.getLastName(),
         user.getFirstName(),
         user.getEmail(),
-        converter.convertDateToString(user.getDateOfBirth()),
-        converter.convertDateToString(user.getHireDate()),
+        user.getDateOfBirth(),
+        user.getHireDate(),
         user.getPhoneNumber(),
         user.getJobTitle().getId(),
         user.getProjectStatus().getId(),
@@ -156,8 +156,8 @@ public class UserDAOImpl implements UserDAO {
     logger.info("Entering createWorkPeriod(workPeriod=" + workPeriod + ")");
     this.template.update(CREATE_WORK_PERIOD, new Object[]{
         "WorkPeriod" + workPeriod.getWorkPeriodId(),
-        converter.convertDateToString(workPeriod.getStartWorkDate()),
-        converter.convertDateToString(workPeriod.getEndWorkDate()),
+        workPeriod.getStartWorkDate(),
+        workPeriod.getEndWorkDate(),
         workPeriod.getWorkPeriodStatus().getId(),
         workPeriod.getUserId(),
         workPeriod.getProjectId()

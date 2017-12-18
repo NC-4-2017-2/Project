@@ -47,7 +47,7 @@ public class TaskDaoTest {
   @Test
   public void test1createTask(){
     MapperDateConverter mdc = new MapperDateConverter();
-    Date date = mdc.convertStringToDate("01.12.17");
+    Date date = mdc.convertStringToDate("01.12.2017");
     task = new TaskBuilder()
         .taskId(BigInteger.valueOf(300))
         .name("ERP-12")
@@ -59,7 +59,7 @@ public class TaskDaoTest {
         .status(TaskStatus.OPENED)
         .description("Good")
         .reopenCounter(1)
-        .comments("hard but ineteresting")
+        .comments("hard but interesting")
         .authorId(BigInteger.valueOf(1))
         .userId(BigInteger.valueOf(1))
         .projectId(BigInteger.valueOf(5))
@@ -85,7 +85,7 @@ public class TaskDaoTest {
         .status(TaskStatus.OPENED)
         .description("Good")
         .reopenCounter(1)
-        .comments("hard but ineteresting")
+        .comments("hard but interesting")
         .authorId(BigInteger.valueOf(1))
         .userId(BigInteger.valueOf(1))
         .projectId(BigInteger.valueOf(5))
@@ -112,10 +112,10 @@ public class TaskDaoTest {
 
   @Test
   public void test5findStatusByUserIdAndDate(){
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
     Date date = null;
     try {
-      date = dateFormat.parse("01.12.17");
+      date = dateFormat.parse("01.12.2017");
     } catch (ParseException e) {
       e.printStackTrace();
     }

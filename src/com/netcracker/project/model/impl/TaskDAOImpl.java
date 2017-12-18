@@ -163,17 +163,24 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByProjectId(BigInteger projectId) {
-    logger.info("Entering findTaskByProjectId(id=" + projectId + ")");
-    return template.query(FIND_TASK_BY_PROJECT_ID, new Object[]{projectId},
+  public Collection<Task> findTaskByProjectIdAndStatus(BigInteger projectId, BigInteger status) {
+    logger.info("Entering findTaskByProjectIdAndStatus(id=" + projectId + "status" + status + ")");
+    return template.query(FIND_TASK_BY_PROJECT_ID_AND_STATUS, new Object[]{projectId, status},
         new TaskMapper());
   }
 
   @Override
-  public Collection<Task> findTaskByUserId(BigInteger userId) {
-    logger.info("Entering findTaskByUserId(id=" + userId + ")");
-    return template
-        .query(FIND_TASK_BY_USER_ID, new Object[]{userId}, new TaskMapper());
+  public Collection<Task> findTaskByProjectIdAndDate(Date date, BigInteger projectId) {
+    logger.info("Entering findTaskByProjectIdAndDate(date=" + date + "projectId" + projectId + ")");
+    return template.query(FIND_TASK_BY_PROJECT_ID_AND_DATE, new Object[]{date, projectId},
+        new TaskMapper());
+  }
+
+  @Override
+  public Collection<Task> findTaskByProjectIdAndPriority(Integer taskPriority, BigInteger projectId) {
+    logger.info("Entering findTaskByProjectIdAndPriority(taskPriority=" + taskPriority + "projectId" + projectId + ")");
+    return template.query(FIND_TASK_BY_PROJECT_ID_AND_PRIORITY, new Object[]{taskPriority, projectId},
+        new TaskMapper());
   }
 
   @Override
@@ -187,28 +194,27 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByPriorityAndUserId(Integer taskPriority,
+  public Collection<Task> findTaskByUserIdAndPriority(Integer taskPriority,
       BigInteger userId) {
     logger
         .info("Entering findTaskByPriority(userId=" + userId + ", " + "taskPriority="
             + taskPriority + ")");
-    return template.query(FIND_TASK_BY_PRIORITY_AND_USER_ID, new Object[]{taskPriority, userId},
+    return template.query(FIND_TASK_BY_USER_ID_AND_PRIORITY, new Object[]{taskPriority, userId},
         new TaskMapper());
   }
 
 
   @Override
-  public Collection<Task> findTaskByStatusAndUserId(BigInteger id,
+  public Collection<Task> findTaskByUserIdAndStatus(BigInteger id,
       Integer taskStatus) {
     logger.info("Entering findTaskByStatusAndUserId(id=" + id + ", " + "status="
         + taskStatus + ")");
     return template
-        .query(FIND_TASK_BY_STATUS_AND_USER_ID, new Object[]{id, taskStatus},
+        .query(FIND_TASK_BY_USER_ID_AND_STATUS, new Object[]{id, taskStatus},
             new TaskMapper());
   }
 
   @Override
-  @Transactional
   public void updateStatus(Integer taskStatus, BigInteger taskId) {
     logger.info(
         "Entering updateStatus(status=" + taskStatus + ")" + "Entering taskId="

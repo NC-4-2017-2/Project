@@ -55,6 +55,7 @@ project = ${task.projectId}<br>
 
         <br>
     </c:forEach>
-</form>
+
+
 </body>
 </html>

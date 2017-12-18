@@ -97,9 +97,9 @@ public class TaskController {
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
-  public String editTaskWithGetParams(@PathVariable("id") Integer id, Model model) {
+  public String editTaskWithGetParams(@PathVariable("id") Integer id, Integer status, Model model) {
     logger.info("editTaskWithGetParams method. Task id" + id);
-    Collection<Task> taskCollection = taskDAO.findTaskByProjectId(BigInteger.valueOf(id));
+    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndStatus(BigInteger.valueOf(id), BigInteger.valueOf(status));
 
     TaskForm taskForm = new TaskForm();
     List<TaskData> tasks = convertService.convertTaskToTaskForm(taskCollection);
@@ -112,18 +112,14 @@ public class TaskController {
   }
 
   @RequestMapping(value = "/view={id}", method = RequestMethod.GET)
-  public String findTask(@PathVariable("id") Integer id, Model model) {
+  public String findTask(@PathVariable("id") Integer id, Integer status, Model model) {
 
     logger.info("findTask method. Task id" + id);
 
-    Collection<Task> taskCollection = taskDAO
-        .findTaskByProjectId(BigInteger.valueOf(id));
+    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndStatus(BigInteger.valueOf(id), BigInteger.valueOf(status));
 
-    TaskForm taskForm = new TaskForm();
-    List<TaskData> tasks = convertService.convertTaskToTaskForm(taskCollection);
-    taskForm.setTasks(tasks);
 
-    model.addAttribute("modelTask", taskForm);
+    model.addAttribute("modelTask", taskCollection);
 
     return "task/show_task";
   }

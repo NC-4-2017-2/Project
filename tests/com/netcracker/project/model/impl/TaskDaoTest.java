@@ -72,7 +72,7 @@ public class TaskDaoTest {
   public void test2updateTask(){
 
     MapperDateConverter mdc = new MapperDateConverter();
-    Date date = mdc.convertStringToDate("15.11.11");
+    Date date = mdc.convertStringToDate("01.12.2017");
 
     Task taskUpdates = new TaskBuilder()
         .taskId(BigInteger.valueOf(300))
@@ -94,7 +94,7 @@ public class TaskDaoTest {
     taskDao.updateTask(taskUpdates);
 
 
-    ArrayList<Task> tasks = (ArrayList<Task>) taskDao.findTaskByProjectId(BigInteger.valueOf(300));
+    ArrayList<Task> tasks = (ArrayList<Task>) taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(300), BigInteger.valueOf(0));
     tasks.add(taskUpdates);
 
     assertEquals("ERP-13", tasks.get(0).getName());
@@ -106,8 +106,8 @@ public class TaskDaoTest {
   }
 
   @Test
-  public void test4findTaskByProjectId(){
-    Collection<Task> tasks = taskDao.findTaskByProjectId(BigInteger.valueOf(4));
+  public void findTaskByProjectIdAndStatus(){
+    Collection<Task> tasks = taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(4), BigInteger.valueOf(0));
   }
 
   @Test
@@ -126,19 +126,31 @@ public class TaskDaoTest {
 
 
   @Test
-  public void test6findTaskByUserId(){
-    Collection<Task> task = taskDao.findTaskByUserId(BigInteger.valueOf(1));
+  public void test7findTaskByUserIdAndPriority(){
+    Collection<Task> task =  taskDao.findTaskByUserIdAndPriority(TaskPriority.LOW.getId(),BigInteger.valueOf(1));
   }
 
   @Test
-  public void test7findTaskByPriority(){
-    Collection<Task> task =  taskDao.findTaskByPriorityAndUserId(TaskPriority.LOW.getId(),BigInteger.valueOf(1));
-
+  public void test8findTaskByUserIdAndStatus(){
+    Collection<Task> task = taskDao.findTaskByUserIdAndStatus(BigInteger.valueOf(1), TaskStatus.OPENED.getId());
   }
 
   @Test
-  public void test8findTaskByStatusAndUserId(){
-    Collection<Task> task = taskDao.findTaskByStatusAndUserId(BigInteger.valueOf(1), TaskStatus.OPENED.getId());
+  public void findTaskByProjectIdAndDate(){
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
+    Date date = null;
+    try {
+      date = dateFormat.parse("01.12.2017");
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
+    Collection<Task> task = taskDao.findTaskByProjectIdAndDate(date, BigInteger.valueOf(1));
+  }
+
+  @Test
+  public void test7findTaskByProjectIdAndPriority(){
+    Collection<Task> task =  taskDao.findTaskByProjectIdAndPriority(TaskPriority.LOW.getId(),BigInteger.valueOf(4));
   }
 
 

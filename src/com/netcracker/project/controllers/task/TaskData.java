@@ -5,48 +5,45 @@ import com.netcracker.project.model.TaskDAO.TaskPriority;
 import com.netcracker.project.model.TaskDAO.TaskStatus;
 import com.netcracker.project.model.TaskDAO.TaskType;
 import java.math.BigInteger;
-import java.util.Date;
 
 public class TaskData {
   private BigInteger taskId;
   private String name;
   private TaskType taskType;
-  private Date startDate;
-  private Date plannedEndDate;
-  private Date endDate;
+  private String startDate;
+  private String plannedEndDate;
+  private String endDate;
   private TaskPriority priority;
   private TaskStatus status;
   private String description;
+  private Integer reopenCounter;
+  private String comments;
   private BigInteger authorId;
   private BigInteger userId;
-  private String comments;
-  private Integer reopenCounter;
   private BigInteger projectId;
 
 
-  public TaskData(BigInteger taskId,
-      TaskType taskType, String name, Date startDate,
-      Date plannedEndDate, Date endDate,
-      TaskPriority priority,
-      TaskStatus status, String description,
-      BigInteger authorId, BigInteger userId, String comments,
-      Integer reopenCounter, BigInteger projectId) {
+  public TaskData(BigInteger taskId, String name,
+      TaskType taskType, String startDate, String plannedEndDate,
+      String endDate, TaskPriority priority,
+      TaskStatus status, String description, Integer reopenCounter,
+      String comments, BigInteger authorId, BigInteger userId,
+      BigInteger projectId) {
     this.taskId = taskId;
-    this.taskType = taskType;
     this.name = name;
+    this.taskType = taskType;
     this.startDate = startDate;
     this.plannedEndDate = plannedEndDate;
     this.endDate = endDate;
     this.priority = priority;
     this.status = status;
     this.description = description;
+    this.reopenCounter = reopenCounter;
+    this.comments = comments;
     this.authorId = authorId;
     this.userId = userId;
-    this.comments = comments;
-    this.reopenCounter = reopenCounter;
     this.projectId = projectId;
   }
-
 
   public BigInteger getTaskId() {
     return taskId;
@@ -72,27 +69,27 @@ public class TaskData {
     this.name = name;
   }
 
-  public Date getStartDate() {
+  public String getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(String startDate) {
     this.startDate = startDate;
   }
 
-  public Date getPlannedEndDate() {
+  public String getPlannedEndDate() {
     return plannedEndDate;
   }
 
-  public void setPlannedEndDate(Date plannedEndDate) {
+  public void setPlannedEndDate(String plannedEndDate) {
     this.plannedEndDate = plannedEndDate;
   }
 
-  public Date getEndDate() {
+  public String getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(Date endDate) {
+  public void setEndDate(String endDate) {
     this.endDate = endDate;
   }
 

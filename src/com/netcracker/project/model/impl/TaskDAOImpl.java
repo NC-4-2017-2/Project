@@ -9,15 +9,19 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 public class TaskDAOImpl implements TaskDAO {
 
   private static final Logger logger = Logger.getLogger(TaskDAOImpl.class);
   private JdbcTemplate template;
   private MapperDateConverter mapperDateConverter = new MapperDateConverter();
 
+  @Autowired
   public void setDataSource(DataSource dataSource) {
     template = new JdbcTemplate(dataSource);
   }

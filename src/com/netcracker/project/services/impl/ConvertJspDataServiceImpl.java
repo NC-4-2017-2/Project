@@ -1,5 +1,7 @@
 package com.netcracker.project.services.impl;
 
+import com.netcracker.project.controllers.task.TaskData;
+import com.netcracker.project.model.entity.Task;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,4 +83,21 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
 
     return workPeriods;
   }
+
+  @Override
+  public List<TaskData> convertTaskToTaskForm(Collection<Task> taskCollection) {
+    List<TaskData> taskData = new ArrayList<>();
+
+    taskCollection.forEach(t -> taskData.add(new TaskData(t.getTaskId(), t.getName(),
+        t.getTaskType(),
+        converter.convertDateToString(t.getStartDate()),
+        converter.convertDateToString(t.getEndDate()),
+        converter.convertDateToString(t.getPlannedEndDate()),
+        t.getPriority(), t.getStatus(),
+        t.getDescription(), t.getReopenCounter(),
+        t.getComments(), t.getAuthorId(),
+        t.getUserId(), t.getProjectId())));
+    return taskData;
+  }
+
 }

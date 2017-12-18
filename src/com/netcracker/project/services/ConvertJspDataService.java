@@ -1,5 +1,7 @@
 package com.netcracker.project.services;
 
+import com.netcracker.project.controllers.task.TaskData;
+import com.netcracker.project.model.entity.Task;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
@@ -17,5 +19,7 @@ public interface ConvertJspDataService {
   List<SprintFormData> convertSprintToSprintForm(Collection<Sprint> sprints);
 
   List<WorkPeriodFormData> convertWorkPeriodToWPForm(Collection<WorkPeriod> workPeriodCollection);
+
+  List<TaskData> convertTaskToTaskForm(Collection<Task> taskCollection);
 
 }

@@ -23,17 +23,17 @@ project = ${task.projectId}<br>
 
 
 <form modelAttribute="modelTask" >
-    <c:forEach items="${modelTask.tasks}" var="tasks" varStatus="status">
+    <c:forEach items="${modelTask.tasks}" var="task" varStatus="status">
         Tasks ${status.index} :<br>
-        <input type="text" name="tasks[${status.index}].id" value="${tasks.id}" placeholder="Task id"></td><br>
-        <input type="text" name="tasks[${status.index}].name" value="${tasks.name}" placeholder="Task name"></td><br>
+        <input type="text" name="tasks[${status.index}].taskId" value="${task.taskId}" placeholder="Task id"></td><br>
+        <input type="text" name="tasks[${status.index}].name" value="${task.name}" placeholder="Task name"></td><br>
         <select name="tasks[${status.index}].taskType" >
             <option value="REQUEST_TASK">REQUEST_TASK</option>
             <option value="PROJECT_TASK">PROJECT_TASK</option>
         </select><br>
-        <input type="text" name="tasks[${status.index}].startDate" value="${tasks.startDate}" placeholder="Start date"></td><br>
-        <input type="text" name="tasks[${status.index}].endDate" value="${tasks.endDate}" placeholder="End date"></td><br>
-        <input type="text" name="tasks[${status.index}].plannedEndDate" value="${tasks.plannedEndDate}" placeholder="Planned end date"></td><br>
+        <input type="text" name="tasks[${status.index}].startDate" value="${task.startDate}" placeholder="Start date"></td><br>
+        <input type="text" name="tasks[${status.index}].endDate" value="${task.endDate}" placeholder="End date"></td><br>
+        <input type="text" name="tasks[${status.index}].plannedEndDate" value="${task.plannedEndDate}" placeholder="Planned end date"></td><br>
         <select name="tasks[${status.index}].priority" >
             <option value="CRITICAL">CRITICAL</option>
             <option value="HIGH">HIGH</option>
@@ -46,12 +46,12 @@ project = ${task.projectId}<br>
             <option value="REOPENED">REOPENED</option>
             <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
         </select><br>
-        <input type="text" name="tasks[${status.index}].description" value="${tasks.description}" placeholder="Description"></td><br>
-        <input type="text" name="tasks[${status.index}].reopenCounter" value="${tasks.reopenCounter}" placeholder="Reopen counter"></td><br>
-        <input type="text" name="tasks[${status.index}].comments" value="${tasks.comments}" placeholder="Comments"></td><br>
-        <input type="text" name="tasks[${status.index}].authorId" value="${tasks.authorId}" placeholder="Author id"></td><br>
-        <input type="text" name="tasks[${status.index}].userId" value="${tasks.userId}" placeholder="User Id"></td><br>
-        <input type="text" name="tasks[${status.index}].projectId" value="${tasks.projectID}" placeholder="Project ID"></td><br>
+        <input type="text" name="tasks[${status.index}].description" value="${task.description}" placeholder="Description"></td><br>
+        <input type="text" name="tasks[${status.index}].reopenCounter" value="${task.reopenCounter}" placeholder="Reopen counter"></td><br>
+        <input type="text" name="tasks[${status.index}].comments" value="${task.comments}" placeholder="Comments"></td><br>
+        <input type="text" name="tasks[${status.index}].authorId" value="${task.authorId}" placeholder="Author id"></td><br>
+        <input type="text" name="tasks[${status.index}].userId" value="${task.userId}" placeholder="User Id"></td><br>
+        <input type="text" name="tasks[${status.index}].projectId" value="${task.projectID}" placeholder="Project ID"></td><br>
 
         <br>
     </c:forEach>

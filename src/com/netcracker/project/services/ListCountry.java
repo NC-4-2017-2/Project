@@ -3,7 +3,9 @@ package com.netcracker.project.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ListCountry {
 
   String[] countries = Locale.getISOCountries();

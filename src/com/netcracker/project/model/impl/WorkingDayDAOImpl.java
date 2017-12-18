@@ -27,13 +27,12 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   @Override
   public void addHoursPerDay(WorkingDay workingDay) {
     logger.info("Entering addHoursPerDay(workingDay=" + workingDay + ")");
-    String date = converter.convertDateToString(workingDay.getDate());
 
     template.update(ADD_HOURS_PER_DAY, new Object[]{
         workingDay.getWorkingDayId(),
         "WORKDAY" + workingDay.getWorkingDayId(),
         workingDay.getWorkingDayId(),
-        date,
+        workingDay.getDate(),
         workingDay.getWorkingDayId(),
         workingDay.getWeekNumber(),
         workingDay.getWorkingDayId(),

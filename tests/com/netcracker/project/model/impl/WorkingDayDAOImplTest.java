@@ -55,8 +55,8 @@ public class WorkingDayDAOImplTest {
 
   @Test
   public void test1CreateWorkingDay() {
-    Date date1 = converter.convertStringToDate("09.09.91");
-    Date date2 = converter.convertStringToDate("15.09.91");
+    Date date1 = converter.convertStringToDate("09.09.1991");
+    Date date2 = converter.convertStringToDate("15.09.1991");
 
     workingDayTest1 = new WorkingDay.WorkingDayBuilder()
         .workingDayId(BigInteger.valueOf(44))
@@ -84,21 +84,21 @@ public class WorkingDayDAOImplTest {
 
   @Test
   public void test2findHoursPerPeriod() {
-    Date startDate = converter.convertStringToDate("09.05.91");
-    Date endDate = converter.convertStringToDate("17.09.91");
+    Date startDate = converter.convertStringToDate("09.05.1991");
+    Date endDate = converter.convertStringToDate("17.09.1991");
 
     Collection<WorkingDay> hoursPerPeriod = workingDay
         .findHoursPerPeriod(BigInteger.valueOf(1), startDate, endDate);
-    Comparator<WorkingDay> comparator = (o1, o2) -> o1.getWorkingDayId().compareTo(o2.getWorkingDayId());
+    Comparator<WorkingDay> comparator = (o1, o2) -> o1.getWorkingDayId()
+        .compareTo(o2.getWorkingDayId());
     List<WorkingDay> workingDays = new ArrayList<>(hoursPerPeriod);
     Collections.sort(workingDays, comparator);
 
-    assertEquals("[WorkingDay{workingDayId=44, userId=1, "
-        + "date=Mon Sep 09 00:00:00 EEST 1991, weekNumber=35, "
-        + "workingHours=10.0, status=DISAPPROVED, pmId=3}, "
-        + "WorkingDay{workingDayId=45, userId=1, "
-        + "date=Sun Sep 15 00:00:00 EEST 1991, weekNumber=35, "
-        + "workingHours=10.0, status=DISAPPROVED, pmId=3}]",
+    assertEquals("[WorkingDay{workingDayId=44, "
+            + "userId=1, date=1991-09-09, weekNumber=35, workingHours=10.0, "
+            + "status=DISAPPROVED, pmId=3}, WorkingDay{workingDayId=45, userId=1, "
+            + "date=1991-09-15, weekNumber=35, workingHours=10.0, status=DISAPPROVED, "
+            + "pmId=3}]",
         workingDays.toString());
   }
 

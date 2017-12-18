@@ -42,9 +42,10 @@ public class VacationDAOImplTest {
     List<Vacation> vacations = new ArrayList<>(vacationByUserIdAndPmStatus);
     Collections.sort(vacations, vacationComparator);
 
-    assertEquals("[Vacation{vacationId=10, userId=2, projectId=4, "
-        + "startDate=Mon Dec 17 00:00:00 EET 2012, endDate=Thu Dec 27 00:00:00 EET 2012, "
-        + "pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=3}]",
+    assertEquals(
+        "[Vacation{vacationId=10, userId=2, projectId=4,"
+            + " startDate=2012-12-17, endDate=2012-12-27, pmStatus=APPROVED, "
+            + "lmStatus=APPROVED, pmId=1, lmId=3}]",
         vacations.toString());
   }
 
@@ -60,8 +61,8 @@ public class VacationDAOImplTest {
     Collections.sort(vacations, vacationComparator);
 
     assertEquals("[Vacation{vacationId=10, userId=2, projectId=4, "
-        + "startDate=Mon Dec 17 00:00:00 EET 2012, endDate=Thu Dec 27 00:00:00 EET 2012, "
-        + "pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=3}]",
+            + "startDate=2012-12-17, endDate=2012-12-27, pmStatus=APPROVED, "
+            + "lmStatus=APPROVED, pmId=1, lmId=3}]",
         vacations.toString());
   }
 

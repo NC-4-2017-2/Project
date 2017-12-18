@@ -2,6 +2,7 @@ package com.netcracker.project.model.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import com.netcracker.project.model.ProjectDAO;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;

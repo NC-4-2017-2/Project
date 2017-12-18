@@ -2,6 +2,8 @@ package com.netcracker.project.controllers.project_form;
 
 import com.netcracker.project.model.UserDAO.WorkPeriod.WorkPeriodStatus;
 import java.math.BigInteger;
+import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class WorkPeriodFormData {
 
@@ -9,13 +11,15 @@ public class WorkPeriodFormData {
   private BigInteger workPeriodId;
   private BigInteger userId;
   private BigInteger projectId;
-  private String startWorkDate;
-  private String endWorkDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date startWorkDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date endWorkDate;
   private WorkPeriodStatus workPeriodStatus;
 
   public WorkPeriodFormData(BigInteger workPeriodId, BigInteger userId,
-      String startWorkDate,
-      String endWorkDate,
+      Date startWorkDate,
+      Date endWorkDate,
       WorkPeriodStatus workPeriodStatus) {
     this.workPeriodId = workPeriodId;
     this.userId = userId;
@@ -64,19 +68,19 @@ public class WorkPeriodFormData {
     this.projectId = projectId;
   }
 
-  public String getStartWorkDate() {
+  public Date getStartWorkDate() {
     return startWorkDate;
   }
 
-  public void setStartWorkDate(String startWorkDate) {
+  public void setStartWorkDate(Date startWorkDate) {
     this.startWorkDate = startWorkDate;
   }
 
-  public String getEndWorkDate() {
+  public Date getEndWorkDate() {
     return endWorkDate;
   }
 
-  public void setEndWorkDate(String endWorkDate) {
+  public void setEndWorkDate(Date endWorkDate) {
     this.endWorkDate = endWorkDate;
   }
 

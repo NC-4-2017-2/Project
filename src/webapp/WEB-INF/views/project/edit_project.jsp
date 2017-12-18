@@ -33,12 +33,12 @@
             </tr>
             <tr>
                 <td>StartDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="startDate" size="70" readonly="readonly"
+                <td><input type="date" name="startDate" size="70" readonly="readonly"
                            value=${startDate}></td>
             </tr>
             <tr>
                 <td>EndDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="endDate" size="70"
+                <td><input type="date" name="endDate" size="70"
                            value=${endDate}></td>
             </tr>
             <tr>
@@ -61,9 +61,8 @@
                 <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
                     <input type="hidden" name="sprints[${status.index}].id" value="${sprint.id}"><br>
                     Sprint ${status.index} :<br>
-                    Name: <input typ
-                                 e="text" name="sprints[${status.index}].name" value="${sprint.name}" readonly="readonly"><br>
-                    Planned end date: <input type="text" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}"></td><br>
+                    Name: <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" readonly="readonly"><br>
+                    Planned end date: <input type="date" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}"></td><br>
                     <select name="sprints[${status.index}].sprintStatus" >
                         <option value="OPENED">OPENED</option>
                         <option value="CLOSED">CLOSED</option>
@@ -78,8 +77,8 @@
                         <input type="hidden" name="workers[${status.index}].workPeriodId" value="${worker.workPeriodId}"><br>
                         Worker ${status.index} :<br>
                         User id:    <input type="text" name="workers[${status.index}].userId" value="${worker.userId}" placeholder="User id"  readonly="readonly"><br>
-                        Start date: <input type="text" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date" readonly="readonly"><br>
-                        End date:   <input type="text" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"><br>
+                        Start date: <input type="date" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date" readonly="readonly"><br>
+                        End date:   <input type="date" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"><br>
                         <select name="workers[${status.index}].workPeriodStatus" >
                             <option value="WORKING">WORKING</option>
                             <option value="FIRED">FIRED</option>

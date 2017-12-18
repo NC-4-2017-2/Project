@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import com.netcracker.project.model.ProjectDAO.OCStatus;
 import com.netcracker.project.model.entity.Sprint;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.jdbc.core.RowMapper;
 
 public class SprintMapper implements RowMapper<Sprint> {
@@ -18,15 +19,9 @@ public class SprintMapper implements RowMapper<Sprint> {
     Date endDate;
     Date plannedEndDate;
 
-    converter = new MapperDateConverter();
-
-    startDate = converter
-        .convertStringToDate(rs.getString(EnumMapper.START_DATE.getFullName()));
-    endDate = converter
-        .convertStringToDate(rs.getString(EnumMapper.END_DATE.getFullName()));
-    plannedEndDate = converter
-        .convertStringToDate(
-            rs.getString(EnumMapper.PLANNED_END_DATE.getFullName()));
+    startDate = rs.getDate(EnumMapper.START_DATE.getFullName());
+    endDate = rs.getDate(EnumMapper.END_DATE.getFullName());
+    plannedEndDate = rs.getDate(EnumMapper.PLANNED_END_DATE.getFullName());
 
     return new Sprint.SprintBuilder()
         .sprintId(

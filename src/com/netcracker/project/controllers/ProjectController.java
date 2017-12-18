@@ -16,11 +16,11 @@ import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,27 +33,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/project")
 public class ProjectController {
 
-  private static final Logger logger = Logger
-      .getLogger(com.netcracker.project.controllers.ProjectController.class);
-  private ApplicationContext context =
-      new ClassPathXmlApplicationContext("Spring-Module.xml");
-  //private ProjectDAO projectDAO = (ProjectDAO) context.getBean("projectDAO");
+  private static final Logger logger = Logger.getLogger(ProjectController.class);
   @Autowired
   private ProjectDAO projectDAO;
-  //private UserDAO userDAO = (UserDAO) context.getBean("userDAO");
   @Autowired
   private UserDAO userDAO;
 
-  private MapperDateConverter converter = new MapperDateConverter();
   private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
-
 
   @RequestMapping(value = "/create_project", method = RequestMethod.POST)
   public String createProject(
       @RequestParam("projectId") Integer id,
       @RequestParam("name") String name,
-      @RequestParam("startDate") String startDate,
-      @RequestParam("endDate") String endDate,
+      @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") Integer projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
@@ -66,8 +59,8 @@ public class ProjectController {
     Project project = new Project.ProjectBuilder()
         .projectId(BigInteger.valueOf(id))
         .name(name)
-        .startDate(converter.convertStringToDate(startDate))
-        .endDate(converter.convertStringToDate(endDate))
+        .startDate(startDate)
+        .endDate(endDate)
         .build();
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     project.setProjectStatus(projectStatus);
@@ -115,7 +108,7 @@ public class ProjectController {
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
   public String editProjectPost(
       @RequestParam("projectId") BigInteger projectId,
-      @RequestParam("endDate") String endDate,
+      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") BigInteger projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
@@ -131,21 +124,20 @@ public class ProjectController {
     List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
 
     projectDAO
-        .updateEndDate(projectId, converter.convertStringToDate(endDate));
+        .updateEndDate(projectId, endDate);
     projectDAO.updateStatus(projectId, projectStatus);
     projectDAO.updatePM(projectId, projectManagerId);
 
     sprints.forEach(sprintData -> {
       projectDAO.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
-      projectDAO.updateSprintPlannedEndDate(sprintData.getId(),
-          converter.convertStringToDate(sprintData.getPlannedEndDate()));
+      projectDAO.updateSprintPlannedEndDate(sprintData.getId(), sprintData.getPlannedEndDate());
     });
 
     workings.forEach(wp -> {
       WorkPeriod workPeriod = new WorkPeriod();
       workPeriod.setProjectId(wp.getProjectId());
       workPeriod.setUserId(wp.getUserId());
-      workPeriod.setEndWorkDate(converter.convertStringToDate(wp.getEndWorkDate()));
+      workPeriod.setEndWorkDate(wp.getEndWorkDate());
       workPeriod.setProjectId(projectId);
       workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
       userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
@@ -161,10 +153,8 @@ public class ProjectController {
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(id));
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
-    model.addAttribute("startDate",
-        converter.convertDateToString(project.getStartDate()));
-    model
-        .addAttribute("endDate", converter.convertDateToString(project.getEndDate()));
+    model.addAttribute("startDate", project.getStartDate());
+    model.addAttribute("endDate", project.getEndDate());
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
     model.addAttribute("pmId", project.getProjectManagerId());

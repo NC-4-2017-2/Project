@@ -3,24 +3,28 @@ package com.netcracker.project.controllers.project_form;
 
 import com.netcracker.project.model.ProjectDAO.OCStatus;
 import java.math.BigInteger;
+import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class SprintFormData {
 
   private BigInteger id;
   private String name;
-  private String startDate;
-  private String plannedEndDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date startDate;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private Date plannedEndDate;
   private OCStatus sprintStatus;
 
   public SprintFormData(String name,
-      String startDate, String plannedEndDate) {
+      Date startDate, Date plannedEndDate) {
     this.name = name;
     this.startDate = startDate;
     this.plannedEndDate = plannedEndDate;
   }
 
   public SprintFormData(BigInteger id, String name,
-      OCStatus sprintStatus, String plannedEndDate) {
+      OCStatus sprintStatus, Date plannedEndDate) {
     this.plannedEndDate = plannedEndDate;
     this.id = id;
     this.name = name;
@@ -55,19 +59,19 @@ public class SprintFormData {
     this.name = name;
   }
 
-  public String getStartDate() {
+  public Date getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(String startDate) {
+  public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
 
-  public String getPlannedEndDate() {
+  public Date getPlannedEndDate() {
     return plannedEndDate;
   }
 
-  public void setPlannedEndDate(String plannedEndDate) {
+  public void setPlannedEndDate(Date plannedEndDate) {
     this.plannedEndDate = plannedEndDate;
   }
 }

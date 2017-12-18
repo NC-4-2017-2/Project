@@ -8,9 +8,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import com.netcracker.project.AssertUtils;
-import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.ProjectDAO;
+import com.netcracker.project.model.ProjectDAO.OCStatus;
+import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.Project.ProjectBuilder;
+import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -18,12 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
-import com.netcracker.project.model.ProjectDAO;
-import com.netcracker.project.model.ProjectDAO.OCStatus;
-import com.netcracker.project.model.entity.Project;
-import com.netcracker.project.model.entity.Project.ProjectBuilder;
-import com.netcracker.project.model.entity.Sprint;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:Spring-Module.xml"})
 public class ProjectDaoTest {
+
   @Autowired
   private ProjectDAO projectDAO;
   @Autowired
@@ -162,9 +163,16 @@ public class ProjectDaoTest {
 
   @Test
   public void updateEndDateTest() throws InvocationTargetException {
-    MapperDateConverter mdc = new MapperDateConverter();
-    Date defEndDate = mdc.convertStringToDate("12.12.2015");
-    Date newEndDate = mdc.convertStringToDate("20.11.2010");
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    Date defEndDate = null;
+    Date newEndDate = null;
+
+    try {
+      defEndDate = format.parse("2015-12-12");
+      newEndDate = format.parse("2010-11-20");
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
 
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
     assertThat(project.getEndDate(), is(defEndDate));

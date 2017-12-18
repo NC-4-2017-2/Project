@@ -26,11 +26,11 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
     sprints.forEach(s -> {
       Sprint sprint = new SprintBuilder()
           .name(s.getName())
-          .startDate(converter.convertStringToDate(s.getStartDate()))
+          .startDate(s.getStartDate())
           .plannedEndDate(
-              converter.convertStringToDate(s.getPlannedEndDate()))
+              s.getPlannedEndDate())
           .endDate(
-              converter.convertStringToDate(s.getPlannedEndDate()))
+              s.getPlannedEndDate())
           .build();
       resultSprint.add(sprint);
     });
@@ -47,8 +47,8 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
       WorkPeriod workPeriod = new WorkPeriod();
       workPeriod.setWorkPeriodId(wp.getWorkPeriodId());
       workPeriod
-          .setStartWorkDate(converter.convertStringToDate(wp.getStartWorkDate()));
-      workPeriod.setEndWorkDate(converter.convertStringToDate(wp.getEndWorkDate()));
+          .setStartWorkDate(wp.getStartWorkDate());
+      workPeriod.setEndWorkDate(wp.getEndWorkDate());
       workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
       workPeriod.setProjectId(projectId);
       workPeriod.setUserId(wp.getUserId());
@@ -65,7 +65,7 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
         sprint.getSprintId(),
         sprint.getName(),
         sprint.getStatus(),
-        converter.convertDateToString(sprint.getPlannedEndDate()))));
+        sprint.getPlannedEndDate())));
 
     return sprintForms;
   }
@@ -77,8 +77,8 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
 
     workPeriodCollection.forEach(work -> workPeriods
         .add(new WorkPeriodFormData(work.getWorkPeriodId(), work.getUserId(),
-            converter.convertDateToString(work.getStartWorkDate()),
-            converter.convertDateToString(work.getEndWorkDate()),
+           work.getStartWorkDate(),
+            work.getEndWorkDate(),
             work.getWorkPeriodStatus())));
 
     return workPeriods;

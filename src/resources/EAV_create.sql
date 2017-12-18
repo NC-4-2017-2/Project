@@ -4,6 +4,7 @@ begin
   when others then null;
 end;
 /
+
 CREATE TABLE OBJTYPE
 (
   OBJECT_TYPE_ID NUMBER(20) NOT NULL ENABLE,

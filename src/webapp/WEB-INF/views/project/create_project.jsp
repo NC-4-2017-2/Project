@@ -34,12 +34,12 @@
             </tr>
             <tr>
                 <td>StartDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="startDate" size="70"
+                <td><input type="date" name="startDate" size="70"
                            value=${startDate}></td>
             </tr>
             <tr>
                 <td>EndDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="endDate" size="70"
+                <td><input type="date" name="endDate" size="70"
                            value=${endDate}></td>
             </tr>
             <tr>
@@ -61,8 +61,8 @@
                     <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
                         Sprint ${status.index} :<br>
                         <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" placeholder="Name"></td><br>
-                        <input type="text" name="sprints[${status.index}].startDate" value="${sprint.startDate}" placeholder="Start Date"><br>
-                        <input type="text" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}" placeholder="End date"><br>
+                        <input type="date" name="sprints[${status.index}].startDate" value="${sprint.startDate}" placeholder="Start Date"><br>
+                        <input type="date" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}" placeholder="End date"><br>
                         <br>
                     </c:forEach>
             </tr>
@@ -73,8 +73,8 @@
                         Worker ${status.index} :<br>
                         Id:         <input type="text" name="workers[${status.index}].workPeriodId" value="${worker.workPeriodId}"></td><br>
                         Worker id:  <input type="text" name="workers[${status.index}].userId" value="${worker.userId}" placeholder="Id"></td><br>
-                        Start date: <input type="text" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date"></td><br>
-                        End date:   <input type="text" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"></td><br>
+                        Start date: <input type="date" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date"></td><br>
+                        End date:   <input type="date" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"></td><br>
                         <select name="workers[${status.index}].workPeriodStatus" >
                             <option value="WORKING">WORKING</option>
                             <option value="FIRED">FIRED</option>

@@ -11,6 +11,7 @@ import com.netcracker.project.model.impl.mappers.VacationStatisticMapper;
 import com.netcracker.project.model.impl.mappers.WorkPeriodStatisticMapper;
 import com.netcracker.project.model.impl.mappers.WorkingHoursStatisticMapper;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
+import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -41,21 +42,21 @@ public class StatisticDAOImpl implements StatisticDAO {
 
   @Override
   public UserTaskStatistic findProjectTaskStatisticCountByProjectIdAndPeriod(
-      BigInteger projectId, String startDate, String endDate) {
+      BigInteger projectId, Date startDate, Date endDate) {
     logger.info(
         "Entering findUserTaskCountByProjectIdAndPeriod( "
             + "projectId : " + projectId + ", "
             + "startDate : " + startDate + ", "
             + "endDate : " + endDate + ")");
     return template
-            .queryForObject(FIND_USER_TASK_COUNT_BY_PROJECT_ID_AND_PERIOD, new Object[]{projectId, startDate, endDate},
+            .queryForObject(FIND_PROJECT_TASK_COUNT_BY_PROJECT_ID_AND_PERIOD, new Object[]{projectId, startDate, endDate},
                     new UserTaskStatisticMapper());
   }
 
 
   @Override
   public UserTaskStatistic findUserTaskCountByUserIdAndPeriod(BigInteger userId,
-      String startDate, String endDate) {
+      Date startDate, Date endDate) {
     logger.info(
         "Entering findUserTaskCountByUserIdAndPeriod("
             + "userId : " + userId + ", "
@@ -66,7 +67,7 @@ public class StatisticDAOImpl implements StatisticDAO {
 
   @Override
   public List<WorkingHoursStatistic> findUserWorkingHoursByUserIdAndPeriod(
-      BigInteger userId, String startDate, String endDate) {
+      BigInteger userId, Date startDate, Date endDate) {
     logger.info(
         "Entering findUserWorkingHoursByUserIdAndPeriod("
             + "userId : " + userId + ", "
@@ -85,7 +86,7 @@ public class StatisticDAOImpl implements StatisticDAO {
 
   @Override
   public List<VacationStatistic> findVacationsByProjectIdAndPeriod(BigInteger projectId,
-      String startDate, String endDate) {
+      Date startDate, Date endDate) {
     logger.info(
         "Entering findVacationsByProjectIdAndPeriod("
             + "projectId : " + projectId + ", "

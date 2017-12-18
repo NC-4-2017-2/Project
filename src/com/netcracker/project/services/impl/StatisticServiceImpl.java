@@ -6,6 +6,7 @@ import com.netcracker.project.model.entity.UserTaskStatistic;
 import com.netcracker.project.model.entity.VacationStatistic;
 import com.netcracker.project.model.entity.WorkPeriodStatistic;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
@@ -35,7 +36,7 @@ public class StatisticServiceImpl implements StatisticService {
 
   @Override
   public UserTaskStatistic getTaskCountByProjectIdPieChart(
-      BigInteger projectId, String startDate, String endDate) {
+      BigInteger projectId, Date startDate, Date endDate) {
     logger.info(
         "getTaskCountByProjectIdPieChart() method. projectId = " + projectId
             + " startDate : " + startDate + " endDate : " + endDate);
@@ -46,7 +47,7 @@ public class StatisticServiceImpl implements StatisticService {
 
   @Override
   public UserTaskStatistic getTaskCountByUserIdPieChart(BigInteger userId,
-      String startDate, String endDate) {
+      Date startDate, Date endDate) {
     logger.info(
         "getTaskCountByUserIdPieChart() method. userId = " + userId
             + " startDate : " + startDate + " endDate : " + endDate);
@@ -56,7 +57,7 @@ public class StatisticServiceImpl implements StatisticService {
 
   @Override
   public List<WorkingHoursStatistic> getWorkingHoursByUserId(BigInteger userId,
-      String startDate, String endDate) {
+      Date startDate, Date endDate) {
     logger.info(
         "getWorkingHoursByUserId() method. userId = " + userId
             + " startDate : " + startDate + " endDate : " + endDate);
@@ -73,7 +74,7 @@ public class StatisticServiceImpl implements StatisticService {
 
   @Override
   public List<VacationStatistic> getVacationsByProjectId(BigInteger projectId,
-      String startDate, String endDate) {
+      Date startDate, Date endDate) {
     logger.info(
         "getVacationsByProjectId() method. projectId = " + projectId
             + " startDate : " + startDate + " endDate : " + endDate);

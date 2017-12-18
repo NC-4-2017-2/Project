@@ -4,8 +4,10 @@ import com.netcracker.project.model.entity.SprintStatistic;
 import com.netcracker.project.model.entity.UserTaskStatistic;
 import com.netcracker.project.model.entity.VacationStatistic;
 import com.netcracker.project.model.entity.WorkPeriodStatistic;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
 import com.netcracker.project.services.StatisticService;
@@ -24,6 +26,7 @@ public class StatisticController {
   @Autowired
   private StatisticService statisticService;
   private static final Logger logger = Logger.getLogger(StatisticService.class);
+  private MapperDateConverter converter = new MapperDateConverter();
 
   @RequestMapping(value = "/view_sprint={id}", method = RequestMethod.GET)
   public String projectSprintStatLineChart(@PathVariable("id") BigInteger id,
@@ -52,8 +55,10 @@ public class StatisticController {
   public String taskCountByProjectIdPieChart(@PathVariable("id") BigInteger id,
       Model model) {
     logger.info("taskCountByProjectIdPieChart() method. id = " + id);
+    Date startDate = converter.convertStringToDate("10.12.2012");
+    Date endDate = converter.convertStringToDate("13.12.2012");
     UserTaskStatistic projectTasks = statisticService
-        .getTaskCountByProjectIdPieChart(id, "10.12.12", "13.12.12");
+        .getTaskCountByProjectIdPieChart(id, startDate, endDate);
     model.addAttribute("critical", projectTasks.getCritical());
     model.addAttribute("high", projectTasks.getHigh());
     model.addAttribute("normal", projectTasks.getNormal());
@@ -65,8 +70,10 @@ public class StatisticController {
   public String taskCountByUserIdPieChart(@PathVariable("id") BigInteger id,
       Model model) {
     logger.info("taskCountByUserIdPieChart() method. id = " + id);
+    Date startDate = converter.convertStringToDate("10.12.2012");
+    Date endDate = converter.convertStringToDate("13.12.2012");
     UserTaskStatistic userTasks = statisticService
-        .getTaskCountByUserIdPieChart(id, "10.12.12", "13.12.12");
+        .getTaskCountByUserIdPieChart(id, startDate, endDate);
     model.addAttribute("critical", userTasks.getCritical());
     model.addAttribute("high", userTasks.getHigh());
     model.addAttribute("normal", userTasks.getNormal());
@@ -78,8 +85,10 @@ public class StatisticController {
   public String workingHoursByUserId(@PathVariable("id") BigInteger id,
       Model model) {
     logger.info("workingHoursByUserId() method. id = " + id);
+    Date startDate = converter.convertStringToDate("10.12.2012");
+    Date endDate = converter.convertStringToDate("15.12.2012");
     List<WorkingHoursStatistic> workingHoursStatisticList = statisticService
-        .getWorkingHoursByUserId(id, "10.12.12", "15.12.12");
+        .getWorkingHoursByUserId(id, startDate, endDate);
     model.addAttribute("workingHoursStatisticList", workingHoursStatisticList);
     return "statistic/show_user_hours_stat";
   }
@@ -100,8 +109,10 @@ public class StatisticController {
   public String vacationsByProjectIdAndPeriod(@PathVariable("id") BigInteger id,
       Model model) {
     logger.info("vacationsByProjectIdAndPeriod() method. id = " + id);
+    Date startDate = converter.convertStringToDate("11.12.2012");
+    Date endDate = converter.convertStringToDate("30.12.2012");
     List<VacationStatistic>  vacationsByProjectId = statisticService
-        .getVacationsByProjectId(id, "11.12.12", "30.12.12");
+        .getVacationsByProjectId(id, startDate, endDate);
 
     model.addAttribute("vacationsList", vacationsByProjectId);
     return "statistic/show_workers_vacations";

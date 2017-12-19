@@ -127,9 +127,9 @@ public interface ProjectDAO {
       + "  PROJECT_ID.OBJECT_ID, "
       + "  SPRINT_ID.OBJECT_ID    AS " + EnumMapper.SPRINT_ID + ", "
       + "  SPRINT_NAME.VALUE      AS " + EnumMapper.NAME + ", "
-      + "  START_DATE.DATE_VALUE       AS " + EnumMapper.START_DATE + ", "
-      + "  END_DATE.DATE_VALUE         AS " + EnumMapper.END_DATE + ", "
-      + "  PLANNED_END_DATE.DATE_VALUE AS " + EnumMapper.PLANNED_END_DATE + ", "
+      + "  to_char(START_DATE.DATE_VALUE, 'yyyy-MM-dd')        AS " + EnumMapper.START_DATE + ", "
+      + "  to_char(END_DATE.DATE_VALUE, 'yyyy-MM-dd')         AS " + EnumMapper.END_DATE + ", "
+      + "  to_char(PLANNED_END_DATE.DATE_VALUE, 'yyyy-MM-dd')  AS " + EnumMapper.PLANNED_END_DATE + ", "
       + "  STATUS_VALUE.VALUE     AS " + EnumMapper.STATUS + " "
       + "FROM OBJECTS PROJECT_ID, OBJECTS SPRINT_ID, "
       + "  ATTRIBUTES SPRINT_NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, "
@@ -210,7 +210,7 @@ public interface ProjectDAO {
           + "AND REFERENCE = ?";
 
   String UPDATE_END_DATE =
-      "UPDATE ATTRIBUTES SET DATE_VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 16 AND OBJECT_ID = ?";
+      "UPDATE ATTRIBUTES SET DATE_VALUE = ? WHERE ATTR_ID = 16 AND OBJECT_ID = ?";
 
   String UPDATE_STATUS =
       "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? "
@@ -233,10 +233,10 @@ public interface ProjectDAO {
           + "WHERE ATTR_ID = 18 AND OBJECT_ID = ?";
 
   String UPDATE_SPRINT_END_DATE =
-      "UPDATE ATTRIBUTES SET DATE_VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 57 AND OBJECT_ID = ?";
+      "UPDATE ATTRIBUTES SET DATE_VALUE = ? WHERE ATTR_ID = 57 AND OBJECT_ID = ?";
 
   String UPDATE_SPRINT_PLANNED_END_DATE =
-      "UPDATE ATTRIBUTES SET DATE_VALUE = to_char(?, 'dd.mm.yy') WHERE ATTR_ID = 58 AND OBJECT_ID = ?";
+      "UPDATE ATTRIBUTES SET DATE_VALUE = ? WHERE ATTR_ID = 58 AND OBJECT_ID = ?";
 
   String UPDATE_SPRINT_STATUS = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? "
       + "WHERE ATTR_ID = 59 AND OBJECT_ID = ? ";

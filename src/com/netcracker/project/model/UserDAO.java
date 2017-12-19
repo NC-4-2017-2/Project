@@ -1,12 +1,10 @@
 package com.netcracker.project.model;
 
+import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.entity.WorkPeriod;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Date;
-
-import com.netcracker.project.model.entity.User;
-import org.springframework.stereotype.Component;
 
 public interface UserDAO {
 
@@ -38,9 +36,9 @@ public interface UserDAO {
 
     void createWorkPeriod(WorkPeriod workPeriod);
 
-    void updateWorkingPeriodEndDateByUserId(UserDAO.WorkPeriod workPeriod);
+    void updateWorkingPeriodEndDateByUserId(WorkPeriod workPeriod);
 
-    void updateWorkingPeriodStatusByUserId(UserDAO.WorkPeriod workPeriod);
+    void updateWorkingPeriodStatusByUserId(WorkPeriod workPeriod);
 
     enum JobTitle {
         PROJECT_MANAGER(0), LINE_MANAGER(1), SOFTWARE_ENGINEER(2);
@@ -95,101 +93,6 @@ public interface UserDAO {
 
         public int getId() {
             return id;
-        }
-    }
-
-    class WorkPeriod {
-
-        BigInteger workPeriodId, userId, projectId;
-        Date startWorkDate, endWorkDate;
-        WorkPeriodStatus workPeriodStatus;
-
-        public WorkPeriod() {
-
-        }
-
-        public WorkPeriod(BigInteger workPeriodId, BigInteger userId, BigInteger projectId,
-                          Date startWorkDate, Date endWorkDate, WorkPeriodStatus workPeriodStatus) {
-            this.workPeriodId = workPeriodId;
-            this.userId = userId;
-            this.projectId = projectId;
-            this.startWorkDate = startWorkDate;
-            this.endWorkDate = endWorkDate;
-            this.workPeriodStatus = workPeriodStatus;
-        }
-
-        public BigInteger getWorkPeriodId() {
-            return workPeriodId;
-        }
-
-        public void setWorkPeriodId(BigInteger workPeriodId) {
-            this.workPeriodId = workPeriodId;
-        }
-
-        public BigInteger getUserId() {
-            return userId;
-        }
-
-        public void setUserId(BigInteger userId) {
-            this.userId = userId;
-        }
-
-        public BigInteger getProjectId() {
-            return projectId;
-        }
-
-        public void setProjectId(BigInteger projectId) {
-            this.projectId = projectId;
-        }
-
-        public Date getStartWorkDate() {
-            return startWorkDate;
-        }
-
-        public void setStartWorkDate(Date startWorkDate) {
-            this.startWorkDate = startWorkDate;
-        }
-
-        public Date getEndWorkDate() {
-            return endWorkDate;
-        }
-
-        public void setEndWorkDate(Date endWorkDate) {
-            this.endWorkDate = endWorkDate;
-        }
-
-        public WorkPeriodStatus getWorkPeriodStatus() {
-            return workPeriodStatus;
-        }
-
-        public void setWorkPeriodStatus(WorkPeriodStatus workPeriodStatus) {
-            this.workPeriodStatus = workPeriodStatus;
-        }
-
-        public enum WorkPeriodStatus {
-            WORKING(0), FIRED(1);
-
-            private int id;
-
-            WorkPeriodStatus(int id) {
-                this.id = id;
-            }
-
-            public int getId() {
-                return id;
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "WorkPeriod{" +
-                "workPeriodId=" + workPeriodId +
-                ", userId=" + userId +
-                ", projectId=" + projectId +
-                ", startWorkDate=" + startWorkDate +
-                ", endWorkDate=" + endWorkDate +
-                ", workPeriodStatus=" + workPeriodStatus +
-                '}';
         }
     }
 
@@ -415,7 +318,7 @@ public interface UserDAO {
             "WORK_PERIOD.OBJECT_ID = PROJECT_WP_REF.OBJECT_ID";
 
     String UPDATE_WORKING_PERIOD_END_DATE = "UPDATE ATTRIBUTES " +
-            "SET ATTRIBUTES.DATE_VALUE = ? " +
+            "SET ATTRIBUTES.DATE_VALUE = to_date(?, 'yyyy-MM-dd') " +
             "WHERE ATTRIBUTES.ATTR_ID = 62 AND " +
             "ATTRIBUTES.OBJECT_ID = " +
             "(SELECT WORKING_PERIOD_ID.OBJECT_ID " +
@@ -435,8 +338,11 @@ public interface UserDAO {
             "PROJECT_ID.OBJECT_ID = ? AND " +
             "USER_WP_REF.OBJECT_ID = PROJECT_WP_REF.OBJECT_ID)";
 
-    String FIND_WORKING_PERIOD_BY_PROJECT_ID_AND_STATUS = "SELECT WORK_PERIOD.OBJECT_ID AS WORK_PERIOD_ID, USER_ID.OBJECT_ID AS USER_ID, PROJECT_ID.OBJECT_ID AS PROJECT_ID, " +
-        "START_DATE_ATTR.DATE_VALUE AS START_DATE, END_DATE_ATTR.DATE_VALUE AS END_DATE, STATUS_ATTR_VALUE.VALUE AS STATUS " +
+    String FIND_WORKING_PERIOD_BY_PROJECT_ID_AND_STATUS = "SELECT WORK_PERIOD.OBJECT_ID AS WORK_PERIOD_ID, " +
+        "USER_ID.OBJECT_ID AS USER_ID, PROJECT_ID.OBJECT_ID AS PROJECT_ID, " +
+        "to_char(START_DATE_ATTR.DATE_VALUE, 'yyyy-MM-dd') AS START_DATE," +
+        " to_char(END_DATE_ATTR.DATE_VALUE, 'yyyy-MM-dd') AS END_DATE," +
+        " STATUS_ATTR_VALUE.VALUE AS STATUS " +
         "FROM OBJECTS USER_ID, OBJECTS PROJECT_ID, OBJECTS WORK_PERIOD, " +
         "OBJREFERENCE USER_WP_REF, OBJREFERENCE PROJECT_WP_REF, " +
         "ATTRIBUTES START_DATE_ATTR, ATTRIBUTES END_DATE_ATTR, ATTRIBUTES STATUS_ATTR, " +

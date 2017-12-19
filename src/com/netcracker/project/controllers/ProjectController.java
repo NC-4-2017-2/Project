@@ -7,9 +7,9 @@ import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.ProjectDAO.OCStatus;
 import com.netcracker.project.model.UserDAO;
-import com.netcracker.project.model.UserDAO.WorkPeriod;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ConvertJspDataService;
 import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
@@ -40,13 +40,14 @@ public class ProjectController {
   private UserDAO userDAO;
 
   private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
+  private MapperDateConverter converter = new MapperDateConverter();
 
   @RequestMapping(value = "/create_project", method = RequestMethod.POST)
   public String createProject(
       @RequestParam("projectId") Integer id,
       @RequestParam("name") String name,
-      @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+      @RequestParam("startDate") Date  startDate,
+      @RequestParam("endDate") Date  endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") Integer projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
@@ -108,11 +109,11 @@ public class ProjectController {
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
   public String editProjectPost(
       @RequestParam("projectId") BigInteger projectId,
-      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+      @RequestParam("endDate") String endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") BigInteger projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
-      @ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm,
+      //@ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm,
       Model model) {
     logger.info("editProjectPost() method. Project id" + projectId
         + "endDate: " + endDate
@@ -121,28 +122,28 @@ public class ProjectController {
         + "sprintsForm: " + sprintsForm);
 
     List<SprintFormData> sprints = sprintsForm.getSprints();
-    List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
+    //List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
 
     projectDAO
-        .updateEndDate(projectId, endDate);
+        .updateEndDate(projectId, converter.convertStringToDateFromJSP(endDate));
     projectDAO.updateStatus(projectId, projectStatus);
     projectDAO.updatePM(projectId, projectManagerId);
 
     sprints.forEach(sprintData -> {
       projectDAO.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
-      projectDAO.updateSprintPlannedEndDate(sprintData.getId(), sprintData.getPlannedEndDate());
+      projectDAO.updateSprintPlannedEndDate(sprintData.getId(), converter.convertStringToDateFromJSP(sprintData.getPlannedEndDate()));
     });
 
-    workings.forEach(wp -> {
-      WorkPeriod workPeriod = new WorkPeriod();
-      workPeriod.setProjectId(wp.getProjectId());
-      workPeriod.setUserId(wp.getUserId());
-      workPeriod.setEndWorkDate(wp.getEndWorkDate());
-      workPeriod.setProjectId(projectId);
-      workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
-      userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
-      userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
-    });
+//    workings.forEach(wp -> {
+//      WorkPeriod workPeriod = new WorkPeriod();
+//      workPeriod.setProjectId(wp.getProjectId());
+//      workPeriod.setUserId(wp.getUserId());
+//      workPeriod.setEndWorkDate(wp.getEndWorkDate());
+//      workPeriod.setProjectId(projectId);
+//      workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
+//      userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
+//      userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
+//    });
 
     return "response_status/success";
   }
@@ -159,7 +160,7 @@ public class ProjectController {
     model.addAttribute("pmId", project.getProjectManagerId());
     model.addAttribute("pmId", project.getProjectManagerId());
 
-    Collection<Sprint> sprintCollection = project.getSprints();
+      Collection<Sprint> sprintCollection = project.getSprints();
 
     Collection<WorkPeriod> workPeriodCollection = userDAO
         .findWorkPeriodByProjectIdAndStatus(project.getProjectId(),
@@ -185,16 +186,15 @@ public class ProjectController {
   public String findProjectByProjectId(Model model,
       @PathVariable("id") Integer id) {
     logger.info("findProjectByProjectId() method. Id: " + id);
-    MapperDateConverter mdc = new MapperDateConverter();
     Project project = projectDAO
         .findProjectByProjectId(BigInteger.valueOf(id));
 
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("projectName", project.getName());
     model.addAttribute("startDate",
-        mdc.convertDateToString(project.getStartDate()));
+        project.getStartDate());
     model
-        .addAttribute("endDate", mdc.convertDateToString(project.getEndDate()));
+        .addAttribute("endDate", project.getEndDate());
     model.addAttribute("status", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
     return "project/show_project";

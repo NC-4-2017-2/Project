@@ -44,6 +44,7 @@ public class ProjectDaoTest {
 
   private static final String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
+  private MapperDateConverter converter = new MapperDateConverter();
 
   @Before
   public void setUp() {
@@ -71,12 +72,12 @@ public class ProjectDaoTest {
 
   @Test
   public void findProjectByDateTest() {
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yy");
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Project expProject = buildTestProject();
 
     Date d = null;
     try {
-      d = sdf.parse("12.12.12");
+      d = format.parse("12.12.12");
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -93,11 +94,11 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void createProjectTest() throws InvocationTargetException {
+  public void createProjectTest() throws InvocationTargetException, ParseException {
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    MapperDateConverter mp = new MapperDateConverter();
-    Date start = mp.convertStringToDate("13.11.14");
-    Date end = mp.convertStringToDate("13.11.20");
+    Date start = format.parse("2014-11-13");
+    Date end = format.parse("2020-11-13");
     Project project = new Project.ProjectBuilder()
         .projectId(BigInteger.valueOf(200))
         .name("Test")
@@ -120,11 +121,11 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void createSprintTest() {
-    MapperDateConverter mp = new MapperDateConverter();
-    Date start = mp.convertStringToDate("13.11.14");
-    Date plannedEnd = mp.convertStringToDate("10.12.14");
-    Date end = mp.convertStringToDate("13.12.14");
+  public void createSprintTest() throws ParseException {
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    Date start = format.parse("2014-11-13");
+    Date plannedEnd = format.parse("2014-12-10");
+    Date end = format.parse("2014-12-13");
 
     Sprint sprint = new SprintBuilder()
         .sprintId(BigInteger.valueOf(59))
@@ -190,6 +191,8 @@ public class ProjectDaoTest {
     projectDAO.updateStatus(BigInteger.valueOf(4), CLOSED);
     Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(4));
     assertThat(project.getProjectStatus(), is(CLOSED));
+    projectDAO.updateStatus(BigInteger.valueOf(4), OPENED);
+
   }
 
   @Test
@@ -201,9 +204,8 @@ public class ProjectDaoTest {
 
   @Test
   public void updateSprintEndDate() {
-    MapperDateConverter mdc = new MapperDateConverter();
-    Date defEndDate = mdc.convertStringToDate("25.12.2012");
-    Date newEndDate = mdc.convertStringToDate("05.01.2013");
+    Date defEndDate = converter.convertStringToDate("25.12.2012");
+    Date newEndDate = converter.convertStringToDate("05.01.2013");
 
     Collection<Sprint> sprints = projectDAO
         .getAllSprints(BigInteger.valueOf(4));
@@ -242,9 +244,8 @@ public class ProjectDaoTest {
   }
 
   private Project buildTestProject() {
-    MapperDateConverter mdc = new MapperDateConverter();
-    Date startDate = mdc.convertStringToDate("12.12.2012");
-    Date endDate = mdc.convertStringToDate("12.12.2015");
+    Date startDate = converter.convertStringToDate("12.12.2012");
+    Date endDate = converter.convertStringToDate("12.12.2015");
 
     Project project = new ProjectBuilder()
         .projectId(BigInteger.valueOf(4))
@@ -253,7 +254,7 @@ public class ProjectDaoTest {
         .endDate(endDate)
         .build();
 
-    project.setProjectStatus(CLOSED);
+    project.setProjectStatus(OPENED);
     project.setProjectManagerId(BigInteger.valueOf(1));
 
     return project;

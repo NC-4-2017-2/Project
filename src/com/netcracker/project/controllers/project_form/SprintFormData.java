@@ -2,6 +2,7 @@ package com.netcracker.project.controllers.project_form;
 
 
 import com.netcracker.project.model.ProjectDAO.OCStatus;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.math.BigInteger;
 import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,22 +11,21 @@ public class SprintFormData {
 
   private BigInteger id;
   private String name;
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date startDate;
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date plannedEndDate;
+  private String startDate;
+  private String plannedEndDate;
   private OCStatus sprintStatus;
+  private MapperDateConverter converter = new MapperDateConverter();
 
   public SprintFormData(String name,
       Date startDate, Date plannedEndDate) {
     this.name = name;
-    this.startDate = startDate;
-    this.plannedEndDate = plannedEndDate;
+    this.startDate = converter.convertDateToString(startDate);
+    this.plannedEndDate = converter.convertDateToString(plannedEndDate);
   }
 
   public SprintFormData(BigInteger id, String name,
       OCStatus sprintStatus, Date plannedEndDate) {
-    this.plannedEndDate = plannedEndDate;
+    this.plannedEndDate = converter.convertDateToString(plannedEndDate);
     this.id = id;
     this.name = name;
     this.sprintStatus = sprintStatus;
@@ -59,19 +59,19 @@ public class SprintFormData {
     this.name = name;
   }
 
-  public Date getStartDate() {
+  public String getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(String startDate) {
     this.startDate = startDate;
   }
 
-  public Date getPlannedEndDate() {
+  public String getPlannedEndDate() {
     return plannedEndDate;
   }
 
-  public void setPlannedEndDate(Date plannedEndDate) {
+  public void setPlannedEndDate(String plannedEndDate) {
     this.plannedEndDate = plannedEndDate;
   }
 }

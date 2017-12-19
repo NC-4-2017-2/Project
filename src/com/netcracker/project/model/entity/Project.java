@@ -1,9 +1,6 @@
 package com.netcracker.project.model.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.netcracker.project.model.ProjectDAO.OCStatus;
-import com.netcracker.project.model.UserDAO.WorkPeriod;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;

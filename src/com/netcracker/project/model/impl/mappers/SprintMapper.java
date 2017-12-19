@@ -11,25 +11,25 @@ import org.springframework.jdbc.core.RowMapper;
 
 public class SprintMapper implements RowMapper<Sprint> {
 
-  private MapperDateConverter converter;
+  private MapperDateConverter converter = new MapperDateConverter();
 
   @Override
   public Sprint mapRow(ResultSet rs, int i) throws SQLException {
-    Date startDate;
-    Date endDate;
-    Date plannedEndDate;
+    String startDate;
+    String endDate;
+    String plannedEndDate;
 
-    startDate = rs.getDate(EnumMapper.START_DATE.getFullName());
-    endDate = rs.getDate(EnumMapper.END_DATE.getFullName());
-    plannedEndDate = rs.getDate(EnumMapper.PLANNED_END_DATE.getFullName());
+    startDate = rs.getString(EnumMapper.START_DATE.getFullName());
+    endDate = rs.getString(EnumMapper.END_DATE.getFullName());
+    plannedEndDate = rs.getString(EnumMapper.PLANNED_END_DATE.getFullName());
 
     return new Sprint.SprintBuilder()
         .sprintId(
             new BigInteger(rs.getString(EnumMapper.SPRINT_ID.getFullName())))
         .name(rs.getString(EnumMapper.NAME.getFullName()))
-        .startDate(startDate)
-        .plannedEndDate(plannedEndDate)
-        .endDate(endDate)
+        .startDate(converter.convertStringToDateFromJSP(startDate))
+        .plannedEndDate(converter.convertStringToDateFromJSP(plannedEndDate))
+        .endDate(converter.convertStringToDateFromJSP(endDate))
         .status(OCStatus.valueOf(rs.getString(EnumMapper.STATUS.getFullName())))
         .build();
   }

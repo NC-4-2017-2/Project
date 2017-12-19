@@ -2,6 +2,7 @@ package com.netcracker.project.model.impl;
 
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.model.impl.mappers.UserMapper;
 import com.netcracker.project.model.impl.mappers.WorkPeriodMapper;
@@ -133,17 +134,16 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void updateWorkingPeriodEndDateByUserId(UserDAO.WorkPeriod workPeriod) {
+  public void updateWorkingPeriodEndDateByUserId(WorkPeriod workPeriod) {
     logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + ","
         + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod
         + ")");
-    template.update(UPDATE_WORKING_PERIOD_END_DATE,
-        converter.convertDateToString(workPeriod.getEndWorkDate()), workPeriod.getUserId(),
+    template.update(UPDATE_WORKING_PERIOD_END_DATE,workPeriod.getEndWorkDate(), workPeriod.getUserId(),
         workPeriod.getProjectId());
   }
 
   @Override
-  public void updateWorkingPeriodStatusByUserId(UserDAO.WorkPeriod workPeriod) {
+  public void updateWorkingPeriodStatusByUserId(WorkPeriod workPeriod) {
     logger.info("Entering updateWorkingPeriodStatusByUserId(userId=" + workPeriod.getUserId() + ","
         + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod
         + ")");
@@ -152,7 +152,7 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void createWorkPeriod(UserDAO.WorkPeriod workPeriod) {
+  public void createWorkPeriod(WorkPeriod workPeriod) {
     logger.info("Entering createWorkPeriod(workPeriod=" + workPeriod + ")");
     this.template.update(CREATE_WORK_PERIOD, new Object[]{
         "WorkPeriod" + workPeriod.getWorkPeriodId(),

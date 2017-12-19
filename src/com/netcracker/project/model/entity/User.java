@@ -4,7 +4,6 @@ import com.netcracker.project.model.UserDAO.JobTitle;
 import com.netcracker.project.model.UserDAO.ProjectStatus;
 import com.netcracker.project.model.UserDAO.UserRole;
 import com.netcracker.project.model.UserDAO.UserStatus;
-import com.netcracker.project.model.UserDAO.WorkPeriod;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;

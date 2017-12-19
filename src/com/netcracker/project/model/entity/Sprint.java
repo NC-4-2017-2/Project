@@ -32,17 +32,14 @@ public class Sprint {
     return name;
   }
 
-  @JsonSerialize(using = MapperDateConverter.class)
   public Date getStartDate() {
     return startDate;
   }
 
-  @JsonSerialize(using = MapperDateConverter.class)
   public Date getEndDate() {
     return endDate;
   }
 
-  @JsonSerialize(using = MapperDateConverter.class)
   public Date getPlannedEndDate() {
     return plannedEndDate;
   }

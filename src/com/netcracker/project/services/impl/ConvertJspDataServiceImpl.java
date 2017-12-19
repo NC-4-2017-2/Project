@@ -1,20 +1,21 @@
 package com.netcracker.project.services.impl;
 
+import com.netcracker.project.controllers.project_form.SprintFormData;
+import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
 import com.netcracker.project.controllers.task.TaskData;
+import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import com.netcracker.project.model.entity.Task;
+import com.netcracker.project.model.entity.WorkPeriod;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.ConvertJspDataService;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import com.netcracker.project.controllers.project_form.SprintFormData;
-import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
-import com.netcracker.project.model.UserDAO.WorkPeriod;
-import com.netcracker.project.model.entity.Sprint;
-import com.netcracker.project.model.entity.Sprint.SprintBuilder;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
-import com.netcracker.project.services.ConvertJspDataService;
 
 public class ConvertJspDataServiceImpl implements ConvertJspDataService {
+
   MapperDateConverter converter = new MapperDateConverter();
 
   @Override
@@ -26,11 +27,9 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
     sprints.forEach(s -> {
       Sprint sprint = new SprintBuilder()
           .name(s.getName())
-          .startDate(s.getStartDate())
-          .plannedEndDate(
-              s.getPlannedEndDate())
-          .endDate(
-              s.getPlannedEndDate())
+          .startDate(converter.convertStringToDateFromJSP(s.getStartDate()))
+          .plannedEndDate(converter.convertStringToDateFromJSP(s.getPlannedEndDate()))
+          .endDate(converter.convertStringToDateFromJSP(s.getPlannedEndDate()))
           .build();
       resultSprint.add(sprint);
     });
@@ -44,18 +43,19 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
     Collection<WorkPeriod> resultPeriod = new ArrayList<>();
 
     workers.forEach(wp -> {
-      WorkPeriod workPeriod = new WorkPeriod();
-      workPeriod.setWorkPeriodId(wp.getWorkPeriodId());
-      workPeriod
-          .setStartWorkDate(wp.getStartWorkDate());
-      workPeriod.setEndWorkDate(wp.getEndWorkDate());
-      workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
-      workPeriod.setProjectId(projectId);
-      workPeriod.setUserId(wp.getUserId());
+      WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
+          .workPeriodId(wp.getWorkPeriodId())
+          .startWorkDate(converter.convertStringToDateFromJSP(wp.getStartWorkDate()))
+          .endWorkDate(converter.convertStringToDateFromJSP(wp.getEndWorkDate()))
+          .workPeriodStatus(wp.getWorkPeriodStatus())
+          .projectId(wp.getProjectId())
+          .userId(wp.getUserId())
+          .build();
       resultPeriod.add(workPeriod);
     });
 
-    return resultPeriod;  }
+    return resultPeriod;
+  }
 
   @Override
   public List<SprintFormData> convertSprintToSprintForm(Collection<Sprint> sprints) {
@@ -77,8 +77,8 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
 
     workPeriodCollection.forEach(work -> workPeriods
         .add(new WorkPeriodFormData(work.getWorkPeriodId(), work.getUserId(),
-           work.getStartWorkDate(),
-            work.getEndWorkDate(),
+            converter.convertDateToString(work.getStartWorkDate()),
+            converter.convertDateToString(work.getEndWorkDate()),
             work.getWorkPeriodStatus())));
 
     return workPeriods;

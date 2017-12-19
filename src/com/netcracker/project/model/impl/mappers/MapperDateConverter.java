@@ -31,8 +31,8 @@ public class MapperDateConverter extends JsonSerializer<Date> {
     return date;
   }
   public String convertDateToString(Date startDate) {
-    String pattern = "yyyy-MM-dd";
-    String patternWriteFormat = "dd.MM.yyyy";
+    String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
+    String patternWriteFormat = "yyyy-MM-dd";
     String dateStr = startDate.toString();
     DateFormat readFormat = new SimpleDateFormat(pattern, Locale.US);
     DateFormat writeFormat = new SimpleDateFormat(patternWriteFormat);
@@ -51,7 +51,7 @@ public class MapperDateConverter extends JsonSerializer<Date> {
   @Override
   public void serialize(Date date, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider)
-      throws IOException, JsonProcessingException {
+      throws IOException {
     String formattedDate = dateFormat.format(date);
     jsonGenerator.writeString(formattedDate);
   }

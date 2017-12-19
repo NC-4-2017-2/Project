@@ -2,21 +2,20 @@ package com.netcracker.project.model.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import com.netcracker.project.model.ProjectDAO;
-import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
-import javax.sql.DataSource;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.UserDAO.JobTitle;
 import com.netcracker.project.model.UserDAO.ProjectStatus;
 import com.netcracker.project.model.UserDAO.UserRole;
 import com.netcracker.project.model.UserDAO.UserStatus;
-import com.netcracker.project.model.UserDAO.WorkPeriod;
-import com.netcracker.project.model.UserDAO.WorkPeriod.WorkPeriodStatus;
 import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.entity.WorkPeriod;
+import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Locale;
+import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,22 +47,28 @@ public class UsersDaoTest {
   public void findUserByUserId() {
     User user = userDao.findUserByUserId(BigInteger.valueOf(1));
     assertEquals(BigInteger.valueOf(1), user.getUserId());
-    assertEquals("User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
-        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}", user.toString());
+    assertEquals(
+        "User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}",
+        user.toString());
   }
 
   @Test
   public void findUserByUserLogin() {
     User user = userDao.findUserByLogin("ivanov");
-    assertEquals("User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
-        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}", user.toString());
+    assertEquals(
+        "User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}",
+        user.toString());
   }
 
   @Test
   public void findUserByLastNameAndFirstName() {
     Collection result = userDao.findUserByLastNameAndFirstName("Ivanov", "Ivan");
-    assertEquals("[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
-        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]", result.toString());
+    assertEquals(
+        "[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
+        result.toString());
   }
 
   @Test
@@ -107,26 +112,32 @@ public class UsersDaoTest {
 
   @Test
   public void findWorkPeriodsByUserId() {
-    Collection<UserDAO.WorkPeriod> result = userDao
+    Collection<WorkPeriod> result = userDao
         .findWorkPeriodsByUserId(BigInteger.valueOf(2));
-    assertEquals("[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]", result.toString());
+    assertEquals(
+        "[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]",
+        result.toString());
   }
 
   @Test
   public void findWorkPeriodsByProjectId() {
-    Collection<UserDAO.WorkPeriod> result = userDao
+    Collection<WorkPeriod> result = userDao
         .findWorkPeriodsByProjectId(BigInteger.valueOf(4));
-    assertEquals("[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING},"
-        + " WorkPeriod{workPeriodId=17, userId=3, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]", result.toString());
+    assertEquals(
+        "[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING},"
+            + " WorkPeriod{workPeriodId=17, userId=3, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]",
+        result.toString());
   }
 
 
   @Test
   public void findWorkPeriodByUserIdAndProjectId() {
-    Collection<UserDAO.WorkPeriod> result = userDao
+    Collection<WorkPeriod> result = userDao
         .findWorkPeriodByUserIdAndProjectId(BigInteger.valueOf(2),
             BigInteger.valueOf(4));
-    assertEquals("[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]", result.toString());
+    assertEquals(
+        "[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]",
+        result.toString());
   }
 
   @Test
@@ -137,19 +148,21 @@ public class UsersDaoTest {
   @Test
   public void updateWorkingPeriodEndDateByUserId() {
     MapperDateConverter converter = new MapperDateConverter();
-    UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
-    workPeriod.setUserId(BigInteger.valueOf(2));
-    workPeriod.setProjectId(BigInteger.valueOf(4));
-    workPeriod.setEndWorkDate(converter.convertStringToDate("11.11.1986"));
+    WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
+        .userId(BigInteger.valueOf(2))
+        .projectId(BigInteger.valueOf(4))
+        .endWorkDate(converter.convertStringToDateFromJSP("11.11.1986"))
+        .build();
     userDao.updateWorkingPeriodEndDateByUserId(workPeriod);
   }
 
   @Test
   public void updateWorkingPeriodStatusByUserId() {
-    UserDAO.WorkPeriod workPeriod = new UserDAO.WorkPeriod();
-    workPeriod.setUserId(BigInteger.valueOf(2));
-    workPeriod.setProjectId(BigInteger.valueOf(4));
-    workPeriod.setWorkPeriodStatus(WorkPeriodStatus.FIRED);
+    WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
+        .userId(BigInteger.valueOf(2))
+        .projectId(BigInteger.valueOf(4))
+        .workPeriodStatus(WorkPeriodStatus.FIRED)
+        .build();
     userDao.updateWorkingPeriodStatusByUserId(workPeriod);
   }
 
@@ -163,15 +176,17 @@ public class UsersDaoTest {
 
   @Test
   public void createWorkPeriod() {
-    WorkPeriod workPeriod = new WorkPeriod();
     MapperDateConverter converter = new MapperDateConverter();
-    Date startDate = converter.convertStringToDate("11.11.2013");
-    Date endDate = converter.convertStringToDate("11.12.2013");
-    workPeriod.setStartWorkDate(startDate);
-    workPeriod.setEndWorkDate(endDate);
-    workPeriod.setWorkPeriodStatus(WorkPeriodStatus.WORKING);
-    workPeriod.setUserId(BigInteger.valueOf(2));
-    workPeriod.setProjectId(BigInteger.valueOf(4));
+    String startDate = "11.11.2013";
+    String endDate = "11.12.2013";
+
+    WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
+        .startWorkDate(converter.convertStringToDateFromJSP(startDate))
+        .endWorkDate(converter.convertStringToDateFromJSP(endDate))
+        .workPeriodStatus(WorkPeriodStatus.WORKING)
+        .userId(BigInteger.valueOf(2))
+        .projectId(BigInteger.valueOf(4))
+        .build();
     userDao.createWorkPeriod(workPeriod);
   }
 

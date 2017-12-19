@@ -85,6 +85,21 @@ public class BusinessTripDAOImplTest {
   }
 
   @Test
+  public void findTripByPMIdAndStatus() {
+    Collection<BusinessTrip> result = businessTrip
+        .findTripByPMIdAndStatus(BigInteger.valueOf(1), Status.APPROVED.getId());
+
+    assertEquals(2, result.size());
+    for (BusinessTrip trip : result) {
+      if (Objects
+          .equals(trip.getBusinessTripId(), BigInteger.valueOf(60))) {
+        AssertUtils
+            .assertBusinessTrip(getBusinessTripForUpdate(), trip);
+      }
+    }
+  }
+
+  @Test
   public void test4DeleteFromTable() {
     BigInteger id = BigInteger.valueOf(60);
 

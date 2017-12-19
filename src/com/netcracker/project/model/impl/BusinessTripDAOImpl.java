@@ -67,6 +67,14 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
         new BusinessTripMapper());
   }
 
+  @Override
+  public Collection<BusinessTrip> findTripByPMIdAndStatus(BigInteger pmId,
+      Integer status) {
+    return template.query(FIND_BUSINESS_TRIP_BY_PM_ID_AND_STATUS, new Object[]{pmId, status},
+        new BusinessTripMapper());
+  }
+
+
   private void updateCountry(String country, BigInteger businessTripId) {
     logger.info(
         "Entering updateCountry(country=" + country + "," + " businessTripId="

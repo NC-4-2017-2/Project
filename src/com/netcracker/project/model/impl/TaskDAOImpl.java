@@ -163,7 +163,15 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByProjectIdAndStatus(BigInteger projectId, BigInteger status) {
+  public Collection<Task> findTaskByProjectIdAndTaskId(BigInteger projectId, BigInteger taskId) {
+    logger.info("Entering findTaskByProjectIdAndStatus(projectId=" + projectId + "taskId=" + taskId + ")");
+    return template.query(FIND_TASK_BY_PROJECT_ID_AND_TASK_ID, new Object[]{projectId, taskId},
+        new TaskMapper());
+  }
+
+
+  @Override
+  public Collection<Task> findTaskByProjectIdAndStatus(BigInteger projectId, Integer status) {
     logger.info("Entering findTaskByProjectIdAndStatus(id=" + projectId + "status" + status + ")");
     return template.query(FIND_TASK_BY_PROJECT_ID_AND_STATUS, new Object[]{projectId, status},
         new TaskMapper());

@@ -1,12 +1,16 @@
 package com.netcracker.project.model.impl;
 
 import static org.junit.Assert.assertEquals;
+
+import com.netcracker.project.AssertUtils;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
 import com.netcracker.project.model.TaskDAO;
@@ -94,10 +98,33 @@ public class TaskDaoTest {
     taskDao.updateTask(taskUpdates);
 
 
-    ArrayList<Task> tasks = (ArrayList<Task>) taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(300), BigInteger.valueOf(0));
+    ArrayList<Task> tasks = (ArrayList<Task>) taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(300), TaskStatus.OPENED.getId());
     tasks.add(taskUpdates);
 
     assertEquals("ERP-13", tasks.get(0).getName());
+  }
+
+  private Task buildTask(){
+    MapperDateConverter mdc = new MapperDateConverter();
+    Date date = mdc.convertStringToDate("01.12.2017");
+    task = new TaskBuilder()
+        .taskId(BigInteger.valueOf(6))
+        .name("ERP-20")
+        .taskType(TaskType.PROJECT_TASK)
+        .startDate(date)
+        .endDate(date)
+        .plannedEndDate(date)
+        .priority(TaskPriority.CRITICAL)
+        .status(TaskStatus.READY_FOR_TESTING)
+        .description("Good")
+        .reopenCounter(1)
+        .comments("hard but interesting")
+        .authorId(BigInteger.valueOf(1))
+        .userId(BigInteger.valueOf(1))
+        .projectId(BigInteger.valueOf(4))
+        .build();
+
+    return task;
   }
 
   @Test
@@ -107,7 +134,7 @@ public class TaskDaoTest {
 
   @Test
   public void findTaskByProjectIdAndStatus(){
-    Collection<Task> tasks = taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(4), BigInteger.valueOf(0));
+    Collection<Task> tasks = taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(300), TaskStatus.CLOSED.getId());
   }
 
   @Test
@@ -124,10 +151,14 @@ public class TaskDaoTest {
 
   }
 
+  @Test
+  public void findTaskByProjectIdAndTaskId(){
+    List<Task> task = (List<Task>) taskDao.findTaskByProjectIdAndTaskId(BigInteger.valueOf(5),BigInteger.valueOf(300));
+  }
 
   @Test
   public void test7findTaskByUserIdAndPriority(){
-    Collection<Task> task =  taskDao.findTaskByUserIdAndPriority(TaskPriority.LOW.getId(),BigInteger.valueOf(1));
+    List<Task> task = (List<Task>) taskDao.findTaskByUserIdAndPriority(TaskPriority.LOW.getId(),BigInteger.valueOf(300));
   }
 
   @Test

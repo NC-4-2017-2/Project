@@ -4,10 +4,10 @@ import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Status;
 import com.netcracker.project.model.impl.mappers.BusinessTripMapper;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.util.Date;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigInteger;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@ImportResource("classpath:Spring-BusinessTrip.xml")
 public class BusinessTripDAOImpl implements BusinessTripDAO {
 
   private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
   private JdbcTemplate template;
-  private MapperDateConverter converter = new MapperDateConverter();
 
   public void setDataSource(DataSource dataSource) {
     template = new JdbcTemplate(dataSource);
@@ -31,7 +31,7 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   public void createTrip(BusinessTrip trip) {
     logger.info("Entering createTrip(trip=" + trip + ")");
     template.update(CREATE_TRIP, new Object[]{
-        "BUSINESS_TRIP " + trip.getBusinessTripId(),
+        "BUSINESS_TRIP " + trip.getProjectId(),
         trip.getCountry(),
         trip.getStartDate(),
         trip.getEndDate(),

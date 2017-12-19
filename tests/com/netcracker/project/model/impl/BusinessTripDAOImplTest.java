@@ -62,7 +62,7 @@ public class BusinessTripDAOImplTest {
     assertEquals(1, tripByUserId.size());
 
     for (BusinessTrip result : tripByUserId) {
-      if (Objects.equals(result.getBusinessTripId(), BigInteger.valueOf(56))) {
+      if (Objects.equals(result.getBusinessTripId(), BigInteger.valueOf(60))) {
 
         AssertUtils.assertBusinessTrip(getBusinessTripForUpdate(), result);
       }
@@ -77,7 +77,7 @@ public class BusinessTripDAOImplTest {
     assertEquals(3, tripByProjectId.size());
     for (BusinessTrip trip : tripByProjectId) {
       if (Objects
-          .equals(trip.getBusinessTripId(), BigInteger.valueOf(56))) {
+          .equals(trip.getBusinessTripId(), BigInteger.valueOf(60))) {
         AssertUtils
             .assertBusinessTrip(getBusinessTripForUpdate(), trip);
       }
@@ -86,7 +86,7 @@ public class BusinessTripDAOImplTest {
 
   @Test
   public void test4DeleteFromTable() {
-    BigInteger id = BigInteger.valueOf(56);
+    BigInteger id = BigInteger.valueOf(60);
 
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id});
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});
@@ -99,7 +99,7 @@ public class BusinessTripDAOImplTest {
     Date endDate = converter.convertStringToDate("25.12.12");
 
     return new BusinessTrip.BusinessTripBuilder()
-        .businessTripId(BigInteger.valueOf(56))
+        .businessTripId(BigInteger.valueOf(60))
         .country("SLOVAKIA")
         .startDate(startDate)
         .endDate(endDate)
@@ -117,7 +117,7 @@ public class BusinessTripDAOImplTest {
     Date endDate = converter.convertStringToDate("12.12.12");
 
     BusinessTrip businessTripTest = new BusinessTrip.BusinessTripBuilder()
-        .businessTripId(BigInteger.valueOf(56))
+        .businessTripId(BigInteger.valueOf(60))
         .country("MOLDOVA")
         .startDate(startDate)
         .endDate(endDate)

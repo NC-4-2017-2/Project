@@ -1,8 +1,8 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
-import com.netcracker.project.model.UserDAO.JobTitle;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Status;
@@ -12,8 +12,10 @@ import com.netcracker.project.services.ListCountry;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,11 @@ public class BusinessTripController {
   private ProjectDAO projectDAO;
   @Autowired
   private UserDAO userDAO;
+  @Autowired
+  private BusinessTripDAO businessTripDAO;
+  @Autowired
+  private ListCountry countries;
+
 
   @RequestMapping(value = "/findBusinessTripProject", method = RequestMethod.GET)
   public String findBusinessTripProject(Model model) {
@@ -36,6 +43,7 @@ public class BusinessTripController {
     return "businessTrip/findBusinessTripProject";
   }
 
+
   @RequestMapping(value = "createBusinessTrip", params = {
       "projectName"}, method = RequestMethod.GET)
   public String createBusinessTripGet(Model model,
@@ -43,87 +51,109 @@ public class BusinessTripController {
       Principal principal) {
 
     Project project = projectDAO.findProjectByName(projectName);
-    ListCountry countries = new ListCountry();
     String authorLogin = principal.getName();
     User author = userDAO.findUserByLogin(authorLogin);
-    BigInteger pmId = null;
-    String lastName = null;
-    String firstName = null;
-    if (author.getJobTitle() == JobTitle.PROJECT_MANAGER) {
-      pmId = author.getUserId();
-      lastName = author.getLastName();
-      firstName = author.getFirstName();
+
+    if (project.getProjectManagerId().equals(author.getUserId())) {
+      model.addAttribute("projectId", project.getProjectId());
+      model.addAttribute("pmId", author.getUserId());
+      model.addAttribute("countriesList", countries.getCountriesNames());
+      return "businessTrip/createTripWithoutPm";
+    } else {
+      model.addAttribute("projectId", project.getProjectId());
+      model.addAttribute("authorId", author.getUserId());
+      model.addAttribute("countriesList", countries.getCountriesNames());
+      return "businessTrip/createTripWithPm";
     }
-    model.addAttribute("pmId", pmId);
-    model.addAttribute("lastNamePm", lastName);
-    model.addAttribute("firstNamePm", firstName);
-    model.addAttribute("projectId", project.getProjectId());
-    model.addAttribute("countriesList", countries.getCountriesNames());
-    return "businessTrip/createBusinessTrip";
   }
 
-  @RequestMapping(value = "createBusinessTripPost", method = RequestMethod.POST)
-  public String createBusinessTripPost(Model model,
-      @RequestParam(value = "projectId") BigInteger projectId,
-      @RequestParam(value = "pmId") BigInteger pmId,
-      @RequestParam(value = "country") String country,
-      @RequestParam(value = "startDate") String startDate,
-      @RequestParam(value = "endDate") String endDate,
-      @RequestParam(value = "firstName") String firstName,
-      @RequestParam(value = "firstNamePm") String firstNamePm,
-      @RequestParam(value = "lastNamePm") String lastNamePm,
+  @RequestMapping(value = "createBusinessTripPostWithPm", method = RequestMethod.POST)
+  public String createBusinessTripPostWithPm(
+      @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
       @RequestParam(value = "lastName") String lastName,
-      Principal principal) {
-    BigInteger pmIds = null;
-    BigInteger userId = null;
-    Status status = null;
+      @RequestParam(value = "firstName") String firstName,
+      @RequestParam(value = "authorId") BigInteger authorId,
+      @RequestParam(value = "country") String country,
+      @RequestParam(value = "projectId") BigInteger projectId
+  ) {
+    BigInteger userForTripId;
 
-    MapperDateConverter converter = new MapperDateConverter();
-    String authorLogin = principal.getName();
-    User author = userDAO.findUserByLogin(authorLogin);
-    Collection<User> users = userDAO
+    Collection<User> userForTrip = userDAO
         .findUserByLastNameAndFirstName(lastName, firstName);
-    if (users.size() > 1) {
-      model.addAttribute("usersList", users);
-      return "businessTrip/findUserId";
-    } else {
-      Iterator<User> iterator = users.iterator();
-      while (iterator.hasNext()) {
-        User user = iterator.next();
-        userId = user.getUserId();
-      }
+    String userValidation = getUserValidation(userForTrip);
+    if (userValidation != null) {
+      return userValidation;
     }
+    userForTripId = getUserId(userForTrip);
 
-    if (pmId == null) {
-      Collection<User> userByLastNameAndFirstName = userDAO
-          .findUserByLastNameAndFirstName(lastNamePm, firstNamePm);
-      Iterator<User> iterator = userByLastNameAndFirstName.iterator();
-      if (userByLastNameAndFirstName.size() == 1) {
-        while (iterator.hasNext()) {
-          User user = iterator.next();
-          pmIds = user.getUserId();
-        }
-      }
-    } else {
-      pmIds = pmId;
-    }
-
-    if (author.getUserId().equals(pmIds)) {
-      status = Status.APPROVED;
-    } else {
-      status = Status.DISAPPROVED;
-    }
+    Project project = projectDAO.findProjectByProjectId(projectId);
 
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
-        .authorId(author.getUserId())
+        .authorId(authorId)
         .projectId(projectId)
-        .userId(userId)
-        .pmId(pmIds)
+        .userId(userForTripId)
+        .pmId(project.getProjectManagerId())
         .country(country)
-        .startDate(converter.convertStringToDateFromJSP(startDate))
-        .endDate(converter.convertStringToDateFromJSP(endDate))
-        .status(status)
+        .startDate(startDate)
+        .endDate(endDate)
+        .status(Status.DISAPPROVED)
         .build();
+
+    businessTripDAO.createTrip(trip);
     return "response_status/success";
+  }
+
+  @RequestMapping(value = "createBusinessTripPostWithoutPm", method = RequestMethod.POST)
+  public String createBusinessTripPostWithoutPm(
+      @RequestParam(value = "projectId") BigInteger projectId,
+      @RequestParam(value = "pmId") BigInteger pmId,
+      @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+      @RequestParam(value = "lastName") String lastName,
+      @RequestParam(value = "firstName") String firstName,
+      @RequestParam(value = "country") String country
+  ) {
+    BigInteger userForTripId;
+    Collection<User> userForTrip = userDAO
+        .findUserByLastNameAndFirstName(lastName, firstName);
+    String result = getUserValidation(userForTrip);
+    if (result != null) {
+      return result;
+    }
+    userForTripId = getUserId(userForTrip);
+
+    BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
+        .projectId(projectId)
+        .userId(userForTripId)
+        .authorId(pmId)
+        .pmId(pmId)
+        .country(country)
+        .startDate(startDate)
+        .endDate(endDate)
+        .status(Status.APPROVED)
+        .build();
+
+    businessTripDAO.createTrip(trip);
+    return "response_status/success";
+  }
+
+  private String getUserValidation(Collection<User> userForTrip) {
+    if (userForTrip.size() > 1) {
+      return "businessTrip/selectUserForTrip";
+    } else if (userForTrip.isEmpty()) {
+      return "response_status/unsuccess";
+    }
+    return null;
+  }
+
+  private BigInteger getUserId(Collection<User> user) {
+    BigInteger userId = null;
+    Iterator<User> iterator = user.iterator();
+    while (iterator.hasNext()) {
+      User userProfile = iterator.next();
+      userId = userProfile.getUserId();
+    }
+    return userId;
   }
 }

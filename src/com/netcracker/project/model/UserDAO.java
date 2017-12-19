@@ -318,7 +318,7 @@ public interface UserDAO {
             "WORK_PERIOD.OBJECT_ID = PROJECT_WP_REF.OBJECT_ID";
 
     String UPDATE_WORKING_PERIOD_END_DATE = "UPDATE ATTRIBUTES " +
-            "SET ATTRIBUTES.DATE_VALUE = to_date(?, 'yyyy-MM-dd') " +
+            "SET ATTRIBUTES.DATE_VALUE = ? " +
             "WHERE ATTRIBUTES.ATTR_ID = 62 AND " +
             "ATTRIBUTES.OBJECT_ID = " +
             "(SELECT WORKING_PERIOD_ID.OBJECT_ID " +

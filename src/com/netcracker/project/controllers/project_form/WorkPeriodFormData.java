@@ -2,8 +2,6 @@ package com.netcracker.project.controllers.project_form;
 
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
 import java.math.BigInteger;
-import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class WorkPeriodFormData {
 

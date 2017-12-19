@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,8 +45,8 @@ public class ProjectController {
   public String createProject(
       @RequestParam("projectId") Integer id,
       @RequestParam("name") String name,
-      @RequestParam("startDate") Date  startDate,
-      @RequestParam("endDate") Date  endDate,
+      @RequestParam("startDate") Date startDate,
+      @RequestParam("endDate") Date endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") Integer projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
@@ -113,7 +112,7 @@ public class ProjectController {
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") BigInteger projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
-      //@ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm,
+      @ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm,
       Model model) {
     logger.info("editProjectPost() method. Project id" + projectId
         + "endDate: " + endDate
@@ -122,7 +121,7 @@ public class ProjectController {
         + "sprintsForm: " + sprintsForm);
 
     List<SprintFormData> sprints = sprintsForm.getSprints();
-    //List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
+    List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
 
     projectDAO
         .updateEndDate(projectId, converter.convertStringToDateFromJSP(endDate));
@@ -131,19 +130,22 @@ public class ProjectController {
 
     sprints.forEach(sprintData -> {
       projectDAO.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
-      projectDAO.updateSprintPlannedEndDate(sprintData.getId(), converter.convertStringToDateFromJSP(sprintData.getPlannedEndDate()));
+      projectDAO.updateSprintPlannedEndDate(sprintData.getId(),
+          converter.convertStringToDateFromJSP(sprintData.getPlannedEndDate()));
     });
 
-//    workings.forEach(wp -> {
-//      WorkPeriod workPeriod = new WorkPeriod();
-//      workPeriod.setProjectId(wp.getProjectId());
-//      workPeriod.setUserId(wp.getUserId());
-//      workPeriod.setEndWorkDate(wp.getEndWorkDate());
-//      workPeriod.setProjectId(projectId);
-//      workPeriod.setWorkPeriodStatus(wp.getWorkPeriodStatus());
-//      userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
-//      userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
-//    });
+    workings.forEach(wp -> {
+      WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
+          .projectId(wp.getProjectId())
+          .userId(wp.getUserId())
+          .startWorkDate(converter.convertStringToDateFromJSP(wp.getStartWorkDate()))
+          .endWorkDate(converter.convertStringToDateFromJSP(wp.getEndWorkDate()))
+          .projectId(projectId)
+          .workPeriodStatus(wp.getWorkPeriodStatus())
+          .build();
+      userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
+      userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
+    });
 
     return "response_status/success";
   }
@@ -160,7 +162,7 @@ public class ProjectController {
     model.addAttribute("pmId", project.getProjectManagerId());
     model.addAttribute("pmId", project.getProjectManagerId());
 
-      Collection<Sprint> sprintCollection = project.getSprints();
+    Collection<Sprint> sprintCollection = project.getSprints();
 
     Collection<WorkPeriod> workPeriodCollection = userDAO
         .findWorkPeriodByProjectIdAndStatus(project.getProjectId(),

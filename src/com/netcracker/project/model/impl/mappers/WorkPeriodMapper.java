@@ -1,6 +1,5 @@
 package com.netcracker.project.model.impl.mappers;
 
-import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
 import java.math.BigInteger;

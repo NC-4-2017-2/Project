@@ -10,6 +10,8 @@ public interface BusinessTripDAO {
 
   void updateTrip(BusinessTrip trip);
 
+  BusinessTrip findBusinessTripById(BigInteger id);
+
   Collection<BusinessTrip> findTripByUserId(BigInteger id);
 
   Collection<BusinessTrip> findTripByProjectId(BigInteger id);
@@ -39,8 +41,8 @@ public interface BusinessTripDAO {
           "USER_ID_REF.REFERENCE AS USER_ID, " +
           "AUTHOR_ID_REF.REFERENCE AS AUTHOR_ID, " +
           "PM_ID_REF.REFERENCE AS PM_ID, COUNTRY.VALUE AS COUNTRY, " +
-          "START_DATE.VALUE AS START_DATE, " +
-          "END_DATE.VALUE AS END_DATE, STATUS_VALUE.VALUE AS STATUS " +
+          "START_DATE.DATE_VALUE AS START_DATE, " +
+          "END_DATE.DATE_VALUE AS END_DATE, STATUS_VALUE.VALUE AS STATUS " +
           "FROM OBJTYPE TRIP_TYPE, OBJECTS TRIP, " +
           "OBJREFERENCE PROJECT_ID_REF, OBJREFERENCE USER_ID_REF, " +
           "OBJREFERENCE AUTHOR_ID_REF, OBJREFERENCE PM_ID_REF, " +

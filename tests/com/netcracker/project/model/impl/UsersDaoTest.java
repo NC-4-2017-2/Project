@@ -129,7 +129,6 @@ public class UsersDaoTest {
         result.toString());
   }
 
-
   @Test
   public void findWorkPeriodByUserIdAndProjectId() {
     Collection<WorkPeriod> result = userDao
@@ -138,6 +137,16 @@ public class UsersDaoTest {
     assertEquals(
         "[WorkPeriod{workPeriodId=16, userId=2, projectId=4, startWorkDate=2012-12-14, endWorkDate=2012-12-25, workPeriodStatus=WORKING}]",
         result.toString());
+  }
+
+  @Test
+  public void findUserByProjectId() {
+    Collection<User> userCollection = userDao.findUserByProjectId(BigInteger.valueOf(4));
+    assertEquals("[User{userId=2, firstName='Petr', lastName='Petrov', email='petrov@gmail.com', dateOfBirth=1992-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979796', photo='null', jobTitle=LINE_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+        + " User{userId=3, firstName='Admin', lastName='Adminov', email='admin@gmail.com', dateOfBirth=1991-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979795', photo='null', jobTitle=SOFTWARE_ENGINEER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
+        userCollection.toString());
   }
 
   @Test

@@ -100,6 +100,13 @@ public class BusinessTripDAOImplTest {
   }
 
   @Test
+  public void findBusinessTripById() {
+    BusinessTrip result = businessTrip.findBusinessTripById(BigInteger.valueOf(8));
+    assertEquals("BusinessTrip{businessTripId=8, projectId=4, userId=2, authorId=2, pmId=1, country='USA', startDate=2012-12-13, endDate=2013-02-13, status=APPROVED}",
+        result.toString());
+  }
+
+  @Test
   public void test4DeleteFromTable() {
     BigInteger id = BigInteger.valueOf(60);
 

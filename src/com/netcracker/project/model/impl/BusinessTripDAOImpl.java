@@ -54,6 +54,12 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   }
 
   @Override
+  public BusinessTrip findBusinessTripById(BigInteger id) {
+    logger.info("Entering findBusinessTripById(id=" + id + ")");
+    return template.queryForObject(FIND_TRIP_BY_TRIP_ID, new Object[]{id}, new BusinessTripMapper());
+  }
+
+  @Override
   public Collection<BusinessTrip> findTripByUserId(BigInteger id) {
     logger.info("Entering findTripByUserId(id=" + id + ")");
     return template.query(FIND_TRIP_BY_USER_ID, new Object[]{id},

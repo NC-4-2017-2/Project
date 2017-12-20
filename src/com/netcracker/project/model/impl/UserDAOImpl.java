@@ -70,6 +70,11 @@ public class UserDAOImpl implements UserDAO {
             new UserMapper());
   }
 
+  @Override
+  public Collection<User> findUserByProjectId(BigInteger projectId) {
+    logger.info("Entering findUserByProjectId(" + projectId + ")");
+    return template.query(FIND_USER_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+  }
 
   @Override
   public void updatePhoneNumber(BigInteger id, String phoneNumber) {

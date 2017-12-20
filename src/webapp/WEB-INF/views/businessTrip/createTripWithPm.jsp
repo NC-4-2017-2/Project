@@ -11,7 +11,7 @@
     <input type="hidden" name="authorId" value="${authorId}"/>
     Choose country :
     <select name="country">
-        <c:forEach items="${countriesList}" var="country">
+        <c:forEach items="${countryList}" var="country">
             <option value="${country}">${country}</option>
         </c:forEach>
     </select><br>

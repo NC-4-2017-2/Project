@@ -1,12 +1,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<%@page import="com.netcracker.project.controllers.project_form.OCStatus" %>
 
 <html>
 <head>
     <style type="text/css">
-        div.project{
+        div.project {
             align: center;
             text-align: center;
         }
@@ -45,7 +46,7 @@
             <tr>
                 <td>Status:</td>
                 <td>
-                    <select name="projectStatus" >
+                    <select name="projectStatus">
                         <option value="OPENED">OPENED</option>
                         <option value="CLOSED">CLOSED</option>
                     </select>
@@ -58,24 +59,32 @@
             <tr>
                 <td>Sprints</td>
                 <form:form modelAttribute="modelSprint" method="post">
-                    <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
-                        Sprint ${status.index} :<br>
-                        <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" placeholder="Name"></td><br>
-                        <input type="date" name="sprints[${status.index}].startDate" value="${sprint.startDate}" placeholder="Start Date"><br>
-                        <input type="date" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}" placeholder="End date"><br>
-                        <br>
-                    </c:forEach>
+                <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
+                    Sprint ${status.index} :<br>
+                    <input type="text" name="sprints[${status.index}].name" value="${sprint.name}"
+                           placeholder="Name"></td><br>
+                    <input type="date" name="sprints[${status.index}].startDate"
+                           value="${sprint.startDate}" placeholder="Start Date"><br>
+                    <input type="date" name="sprints[${status.index}].plannedEndDate"
+                           value="${sprint.plannedEndDate}" placeholder="End date"><br>
+                    <br>
+                </c:forEach>
             </tr>
             <tr>
                 <td>Workers:</td>
-                <form modelAttribute="modelWork" >
+                <form modelAttribute="modelWork">
                     <c:forEach items="${modelWork.workers}" var="worker" varStatus="status">
                         Worker ${status.index} :<br>
-                        Id:         <input type="text" name="workers[${status.index}].workPeriodId" value="${worker.workPeriodId}"></td><br>
-                        Worker id:  <input type="text" name="workers[${status.index}].userId" value="${worker.userId}" placeholder="Id"></td><br>
-                        Start date: <input type="date" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date"></td><br>
-                        End date:   <input type="date" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"></td><br>
-                        <select name="workers[${status.index}].workPeriodStatus" >
+                        Id: <input type="text" name="workers[${status.index}].workPeriodId"
+                                   value="${worker.workPeriodId}"></td><br>
+                        Worker id: <input type="text" name="workers[${status.index}].userId"
+                                          value="${worker.userId}" placeholder="Id"></td><br>
+                        Start date: <input type="date" name="workers[${status.index}].startWorkDate"
+                                           value="${worker.startWorkDate}"
+                                           placeholder="Start Work Date"></td><br>
+                        End date: <input type="date" name="workers[${status.index}].endWorkDate"
+                                         value="${worker.endWorkDate}" placeholder="End Work Date"></td><br>
+                        <select name="workers[${status.index}].workPeriodStatus">
                             <option value="WORKING">WORKING</option>
                             <option value="FIRED">FIRED</option>
                         </select><br>

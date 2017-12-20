@@ -75,14 +75,14 @@ public class ProjectDaoTest {
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Project expProject = buildTestProject();
 
-    Date d = null;
+    Date date = null;
     try {
-      d = format.parse("12.12.12");
+      date = format.parse("2012-12-12");
     } catch (ParseException e) {
       e.printStackTrace();
     }
 
-    List<Project> projects = projectDAO.findProjectByDate(d);
+    List<Project> projects = projectDAO.findProjectByDate(date);
 
     if (projects.size() == 1) {
       AssertUtils.assertProject(expProject, projects.get(0));

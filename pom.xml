@@ -11,6 +11,7 @@
 
 
     <properties>
+        <sprint-test.version>4.3.12.RELEASE</sprint-test.version>
         <spring.version>4.3.2.RELEASE</spring.version>
         <spring-security.version>4.2.0.RELEASE</spring-security.version>
         <log4j.version>1.2.17</log4j.version>
@@ -112,13 +113,8 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <version>${sprint-test.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.3.12.RELEASE</version>
         </dependency>
     </dependencies>
 

@@ -1,12 +1,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
 <html>
 <head>
     <style type="text/css">
-        div.project{
+        div.project {
             align: center;
             text-align: center;
         }
@@ -43,10 +43,21 @@
             </tr>
             <tr>
                 <td>Status:</td>
-                <td> <select name="projectStatus" >
-                    <option value="OPENED">OPENED</option>
-                        <option value="CLOSED">CLOSED</option>
-                </select></td>
+                <td><c:set var="statusP" value="${projectStatus}"></c:set>
+                    <c:if test="${statusP eq 'OPENED'}">
+                        <select name="projectStatus">
+                            <option selected="selected" value="OPENED">OPENED</option>
+                            <option value="CLOSED">CLOSED</option>
+                        </select><br>
+                    </c:if>
+                    <c:if test="${statusP eq 'CLOSED'}">
+                        <select name="projectStatus">
+                            <option selected="selected" value="CLOSED">CLOSED</option>
+                            <option value="OPENED">OPENED</option>
+                        </select><br>
+                    </c:if>
+                </td>
+                <br>
             </tr>
             <tr>
                 <td>Project Manager:</td>
@@ -59,30 +70,59 @@
                 <%--@elvariable id="modelSprint" type="com.netcracker.project.controllers.ProjectController"--%>
                 <form:form modelAttribute="modelSprint" method="post">
                 <c:forEach items="${modelSprint.sprints}" var="sprint" varStatus="status">
-                    <input type="hidden" name="sprints[${status.index}].id" value="${sprint.id}"><br>
+                    <input type="hidden" name="sprints[${status.index}].id"
+                           value="${sprint.id}"><br>
                     Sprint ${status.index} :<br>
-                    Name: <input type="text" name="sprints[${status.index}].name" value="${sprint.name}" readonly="readonly"><br>
-                    Planned end date: <input type="date" name="sprints[${status.index}].plannedEndDate" value="${sprint.plannedEndDate}"></td><br>
-                    <select name="sprints[${status.index}].sprintStatus" >
-                        <option value="OPENED">OPENED</option>
+                    Name: <input type="text" name="sprints[${status.index}].name"
+                                 value="${sprint.name}" readonly="readonly"><br>
+                    Planned end date: <input type="date"
+                                             name="sprints[${status.index}].plannedEndDate"
+                                             value="${sprint.plannedEndDate}"></td><br>
+                    <c:set var="status2" value="${sprint.sprintStatus}"></c:set>
+                    <c:if test="${status2 eq 'OPENED'}">
+                        Status: <select name="sprints[${status.index}].sprintStatus">
+                        <option selected="selected" value="OPENED">OPENED</option>
                         <option value="CLOSED">CLOSED</option>
                     </select><br>
+                    </c:if>
+                    <c:if test="${status2 eq 'CLOSED'}">
+                        Status: <select name="sprints[${status.index}].sprintStatus">
+                        <option selected="selected" value="CLOSED">CLOSED</option>
+                        <option value="OPENED">OPENED</option>
+                    </select><br>
+                    </c:if>
                     <br>
                 </c:forEach>
             </tr>
             <tr>
                 <td>Workers:</td>
-                <form modelAttribute="modelWork" >
+                <form modelAttribute="modelWork">
                     <c:forEach items="${modelWork.workers}" var="worker" varStatus="status">
-                        <input type="hidden" name="workers[${status.index}].workPeriodId" value="${worker.workPeriodId}"><br>
+                        <input type="hidden" name="workers[${status.index}].workPeriodId"
+                               value="${worker.workPeriodId}"><br>
                         Worker ${status.index} :<br>
-                        User id:    <input type="text" name="workers[${status.index}].userId" value="${worker.userId}" placeholder="User id"  readonly="readonly"><br>
-                        Start date: <input type="date" name="workers[${status.index}].startWorkDate" value="${worker.startWorkDate}" placeholder="Start Work Date" readonly="readonly"><br>
-                        End date:   <input type="date" name="workers[${status.index}].endWorkDate" value="${worker.endWorkDate}" placeholder="End Work Date"><br>
-                        <select name="workers[${status.index}].workPeriodStatus" >
-                            <option value="WORKING">WORKING</option>
+                        User id: <input type="text" name="workers[${status.index}].userId"
+                                        value="${worker.userId}" placeholder="User id"
+                                        readonly="readonly"><br>
+                        Start date: <input type="date" name="workers[${status.index}].startWorkDate"
+                                           value="${worker.startWorkDate}"
+                                           placeholder="Start Work Date" readonly="readonly"><br>
+                        End date: <input type="date" name="workers[${status.index}].endWorkDate"
+                                         value="${worker.endWorkDate}"
+                                         placeholder="End Work Date"><br>
+                        <c:set var="statusWP" value="${worker.workPeriodStatus}"></c:set>
+                        <c:if test="${statusWP eq 'WORKING'}">
+                            Status: <select name="workers[${status.index}].workPeriodStatus">
+                            <option selected="selected" value="WORKING">WORKING</option>
                             <option value="FIRED">FIRED</option>
                         </select><br>
+                        </c:if>
+                        <c:if test="${statusWP eq 'FIRED'}">
+                            Status: <select name="workers[${status.index}].workPeriodStatus">
+                            <option selected="selected" value="WORKING">WORKING</option>
+                            <option value="FIRED">FIRED</option>
+                        </select><br>
+                        </c:if>
                         <br>
                     </c:forEach>
                 </form>

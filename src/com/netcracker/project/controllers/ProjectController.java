@@ -16,7 +16,6 @@ import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +44,8 @@ public class ProjectController {
   public String createProject(
       @RequestParam("projectId") Integer id,
       @RequestParam("name") String name,
-      @RequestParam("startDate") Date startDate,
-      @RequestParam("endDate") Date endDate,
+      @RequestParam("startDate") String startDate,
+      @RequestParam("endDate") String endDate,
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") Integer projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
@@ -59,8 +58,8 @@ public class ProjectController {
     Project project = new Project.ProjectBuilder()
         .projectId(BigInteger.valueOf(id))
         .name(name)
-        .startDate(startDate)
-        .endDate(endDate)
+        .startDate(converter.convertStringToDateFromJSP(startDate))
+        .endDate(converter.convertStringToDateFromJSP(endDate))
         .build();
     project.setProjectManagerId(BigInteger.valueOf(projectManagerId));
     project.setProjectStatus(projectStatus);
@@ -120,32 +119,36 @@ public class ProjectController {
         + "projectManagerId: " + projectManagerId
         + "sprintsForm: " + sprintsForm);
 
-    List<SprintFormData> sprints = sprintsForm.getSprints();
-    List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
-
     projectDAO
         .updateEndDate(projectId, converter.convertStringToDateFromJSP(endDate));
     projectDAO.updateStatus(projectId, projectStatus);
     projectDAO.updatePM(projectId, projectManagerId);
 
-    sprints.forEach(sprintData -> {
-      projectDAO.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
-      projectDAO.updateSprintPlannedEndDate(sprintData.getId(),
-          converter.convertStringToDateFromJSP(sprintData.getPlannedEndDate()));
-    });
+    if (sprintsForm.getSprints() != null) {
+      List<SprintFormData> sprints = sprintsForm.getSprints();
+      sprints.forEach(sprintData -> {
+        projectDAO.updateSprintStatus(sprintData.getId(), sprintData.getSprintStatus());
+        projectDAO.updateSprintPlannedEndDate(sprintData.getId(),
+            converter.convertStringToDateFromJSP(sprintData.getPlannedEndDate()));
+      });
+    }
 
-    workings.forEach(wp -> {
-      WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
-          .projectId(wp.getProjectId())
-          .userId(wp.getUserId())
-          .startWorkDate(converter.convertStringToDateFromJSP(wp.getStartWorkDate()))
-          .endWorkDate(converter.convertStringToDateFromJSP(wp.getEndWorkDate()))
-          .projectId(projectId)
-          .workPeriodStatus(wp.getWorkPeriodStatus())
-          .build();
-      userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
-      userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
-    });
+    if (workPeriodForm.getWorkers() != null) {
+      List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
+
+      workings.forEach(wp -> {
+        WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
+            .projectId(wp.getProjectId())
+            .userId(wp.getUserId())
+            .startWorkDate(converter.convertStringToDateFromJSP(wp.getStartWorkDate()))
+            .endWorkDate(converter.convertStringToDateFromJSP(wp.getEndWorkDate()))
+            .projectId(projectId)
+            .workPeriodStatus(wp.getWorkPeriodStatus())
+            .build();
+        userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
+        userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
+      });
+    }
 
     return "response_status/success";
   }
@@ -158,7 +161,7 @@ public class ProjectController {
     model.addAttribute("projectName", project.getName());
     model.addAttribute("startDate", project.getStartDate());
     model.addAttribute("endDate", project.getEndDate());
-    model.addAttribute("status", project.getProjectStatus());
+    model.addAttribute("projectStatus", project.getProjectStatus());
     model.addAttribute("pmId", project.getProjectManagerId());
     model.addAttribute("pmId", project.getProjectManagerId());
 

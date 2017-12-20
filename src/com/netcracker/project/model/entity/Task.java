@@ -50,12 +50,12 @@ public class Task {
     return taskId;
   }
 
-  public TaskDAO.TaskType getTaskType() {
-    return taskType;
-  }
-
   public String getName() {
     return name;
+  }
+
+  public TaskDAO.TaskType getTaskType() {
+    return taskType;
   }
 
   public Date getStartDate() {
@@ -64,6 +64,10 @@ public class Task {
 
   public Date getEndDate() {
     return endDate;
+  }
+
+  public Date getPlannedEndDate() {
+    return plannedEndDate;
   }
 
   public TaskDAO.TaskPriority getPriority() {
@@ -78,6 +82,14 @@ public class Task {
     return description;
   }
 
+  public Integer getReopenCounter() {
+    return reopenCounter;
+  }
+
+  public String getComments() {
+    return comments;
+  }
+
   public BigInteger getAuthorId() {
     return authorId;
   }
@@ -86,21 +98,10 @@ public class Task {
     return userId;
   }
 
-  public String getComments() {
-    return comments;
-  }
-
-  public Integer getReopenCounter() {
-    return reopenCounter;
-  }
-
   public BigInteger getProjectId() {
     return projectId;
   }
 
-  public Date getPlannedEndDate() {
-    return plannedEndDate;
-  }
 
   public void setTaskType(TaskType taskType) {
     this.taskType = taskType;
@@ -126,10 +127,10 @@ public class Task {
     private TaskDAO.TaskPriority priority;
     private TaskDAO.TaskStatus status;
     private String description;
+    private Integer reopenCounter;
+    private String comments;
     private BigInteger authorId;
     private BigInteger userId;
-    private String comments;
-    private Integer reopenCounter;
     private BigInteger projectId;
 
     public TaskBuilder() {
@@ -181,6 +182,16 @@ public class Task {
       return this;
     }
 
+    public TaskBuilder reopenCounter(Integer reopenCounter) {
+      this.reopenCounter = reopenCounter;
+      return this;
+    }
+
+    public TaskBuilder comments(String comments) {
+      this.comments = comments;
+      return this;
+    }
+
     public TaskBuilder authorId(BigInteger authorId) {
       this.authorId = authorId;
       return this;
@@ -191,10 +202,12 @@ public class Task {
       return this;
     }
 
-    public TaskBuilder comments(String comments) {
-      this.comments = comments;
+
+    public TaskBuilder projectId(BigInteger projectId) {
+      this.projectId = projectId;
       return this;
     }
+
 
     public BigInteger getAuthorId() {
       return authorId;
@@ -218,16 +231,6 @@ public class Task {
 
     public void setProjectId(BigInteger projectId) {
       this.projectId = projectId;
-    }
-
-    public TaskBuilder reopenCounter(Integer reopenCounter) {
-      this.reopenCounter = reopenCounter;
-      return this;
-    }
-
-    public TaskBuilder projectId(BigInteger projectId) {
-      this.projectId = projectId;
-      return this;
     }
 
     public Task build() {

@@ -181,7 +181,7 @@ public class TaskDaoTest {
 
   @Test
   public void test7findTaskByProjectIdAndPriority(){
-    Collection<Task> task =  taskDao.findTaskByProjectIdAndPriority(TaskPriority.LOW.getId(),BigInteger.valueOf(4));
+    Collection<Task> task =  taskDao.findTaskByProjectIdAndPriority(BigInteger.valueOf(4), TaskPriority.LOW.getId());
   }
 
 

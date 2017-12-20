@@ -19,7 +19,6 @@ public class TaskDAOImpl implements TaskDAO {
 
   private static final Logger logger = Logger.getLogger(TaskDAOImpl.class);
   private JdbcTemplate template;
-  private MapperDateConverter mapperDateConverter = new MapperDateConverter();
 
   @Autowired
   public void setDataSource(DataSource dataSource) {
@@ -126,8 +125,7 @@ public class TaskDAOImpl implements TaskDAO {
     template.update(UPDATE_TASK_BY_DESCRIPTION, description, taskId);
   }
 
-  private void updateTaskByReopenCounter(Integer reopenCounter,
-      BigInteger taskId) {
+  private void updateTaskByReopenCounter(Integer reopenCounter, BigInteger taskId) {
     logger.info(
         "Entering updateReopenCounter(reopenCounter=" + reopenCounter + ","
             + " taskId=" + taskId + ")");
@@ -185,9 +183,9 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByProjectIdAndPriority(Integer taskPriority, BigInteger projectId) {
-    logger.info("Entering findTaskByProjectIdAndPriority(taskPriority=" + taskPriority + "projectId" + projectId + ")");
-    return template.query(FIND_TASK_BY_PROJECT_ID_AND_PRIORITY, new Object[]{taskPriority, projectId},
+  public Collection<Task> findTaskByProjectIdAndPriority(BigInteger projectId, Integer taskPriority) {
+    logger.info("Entering findTaskByProjectIdAndPriority(projectId=" + projectId + "taskPriority" + taskPriority + ")");
+    return template.query(FIND_TASK_BY_PROJECT_ID_AND_PRIORITY, new Object[]{projectId, taskPriority},
         new TaskMapper());
   }
 

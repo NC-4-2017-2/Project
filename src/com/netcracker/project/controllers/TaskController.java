@@ -6,6 +6,7 @@ import com.netcracker.project.model.TaskDAO;
 import com.netcracker.project.model.TaskDAO.TaskPriority;
 import com.netcracker.project.model.TaskDAO.TaskStatus;
 import com.netcracker.project.model.TaskDAO.TaskType;
+import com.netcracker.project.model.entity.Status;
 import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ConvertJspDataService;
@@ -13,6 +14,7 @@ import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -85,40 +87,32 @@ public class TaskController {
     return "task/create";
   }
 
-  @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/edit={projectId}/taskId={taskId}", method = RequestMethod.POST)
   public String editTask(@RequestParam("updatingTask") Task updatingTask,
-                         @ModelAttribute("modelTask")  TaskForm taskForm, Model model) {
+      @ModelAttribute("modelTask")  TaskForm taskForm, Model model) {
 
     logger.info("editTask method. Task id" + updatingTask);
-    model.addAttribute("modelTask", taskForm);
+   // model.addAttribute("modelTask", taskForm);
 
     taskDAO.updateTask(updatingTask);
     return "task/show_task";
   }
 
-  @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
-  public String editTaskWithGetParams(@PathVariable("id") Integer id, Integer status, Model model) {
-    logger.info("editTaskWithGetParams method. Task id" + id);
-    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndStatus(BigInteger.valueOf(id), BigInteger.valueOf(status));
+  @RequestMapping(value = "/edit={projectId}/taskId={taskId}", method = RequestMethod.GET)
+  public String editTaskWithGetParams(@PathVariable("projectId") BigInteger projectId, @PathVariable("taskId") BigInteger taskId, Model model) {
+    logger.info("editTaskWithGetParams method. projectId" + projectId + "taskId" + taskId);
+    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndTaskId(projectId, taskId);
 
-    TaskForm taskForm = new TaskForm();
-    List<TaskData> tasks = convertService.convertTaskToTaskForm(taskCollection);
-    taskForm.setTasks(tasks);
-
-    model.addAttribute("modelTask", taskForm);
-
+    model.addAttribute("modelTask", taskCollection);
     return "task/edit";
 
   }
 
-  @RequestMapping(value = "/view={id}", method = RequestMethod.GET)
-  public String findTask(@PathVariable("id") Integer id, Integer status, Model model) {
+  @RequestMapping(value = "/view={projectId}/taskId={taskId}", method = RequestMethod.GET)
+  public String findTaskByProjectIdAndTask(@PathVariable("projectId") BigInteger projectId, @PathVariable("taskId") BigInteger taskId, Model model) {
 
-    logger.info("findTask method. Task id" + id);
-
-    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndStatus(BigInteger.valueOf(id), BigInteger.valueOf(status));
-
-
+    logger.info("findTask method. projectId " + projectId + "taskId" + taskId);
+    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndTaskId(projectId, taskId);
     model.addAttribute("modelTask", taskCollection);
 
     return "task/show_task";

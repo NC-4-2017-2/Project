@@ -17,8 +17,12 @@
     </select><br>
     Choose start date : <input type="date" name="startDate"><br>
     Choose end date : <input type="date" name="endDate"><br>
-    Type user last name :<input type="text" name="lastName"><br>
-    Type user first name :<input type="text" name="firstName"><br>
+    Choose user :
+    <select name="user">
+        <c:forEach items="${usersList}" var="user">
+            <option value="${user.userId}">${user.lastName} ${user.firstName} ${user.dateOfBirth}</option>
+        </c:forEach>
+    </select><br>
     <input type="submit" value="Next">
 </form>
 </body>

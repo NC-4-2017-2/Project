@@ -8,7 +8,7 @@
 </head>
 <body>
 <div align="center">
-    <form action="/task/edit={id}" method="post"
+    <form action="/task/edit={projectId}/taskId={taskId}" method="post"
           commandName=taskForm">
         <table border="0">
             <form modelAttribute="modelTask" >
@@ -35,19 +35,19 @@
                 </select></td >
             </tr>
             <tr>
-                <td>StartDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="startDate" size="20"
+                <td>StartDate:</td>
+                <td><input type="date" name="startDate" size="20"
                            value=${task.getStartDate()}></td>
             </tr>
             <tr>
-                <td>EndDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="endDate" size="20"
+                <td>EndDate:</td>
+                <td><input type="date" name="endDate" size="20"
                            value=${task.getEndDate()}></td>
             </tr>
             <tr>
             <tr>
-                <td>PlannedEndDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="plannedEndDate" size="20"
+                <td>PlannedEndDate:</td>
+                <td><input type="date" name="plannedEndDate" size="20"
                            value=${task.getPlannedEndDate()}></td>
             </tr>
             <tr>

@@ -19,6 +19,9 @@
        Description: <td>${task.getDescription()}</td><br>
        Reopen counter: <td>${task.getReopenCounter()}</td><br>
        Comments: <td>${task.getComments()}</td><br>
+       Author id: <td>${task.getAuthorId()}</td><br>
+       User id: <td>${task.getUserId()}</td><br>
+       Project id: <td>${task.getProjectId()}</td><br>
     </tr>
 </c:forEach>
 </tbody>

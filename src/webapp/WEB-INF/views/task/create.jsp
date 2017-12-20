@@ -30,19 +30,19 @@
                 </select></td >
             </tr>
             <tr>
-                <td>StartDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="startDate" size="20"
+                <td>StartDate:</td>
+                <td><input type="date" name="startDate" size="20"
                            value=${startDate}></td>
             </tr>
             <tr>
-                <td>EndDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="endDate" size="20"
+                <td>EndDate:</td>
+                <td><input type="date" name="endDate" size="20"
                            value=${endDate}></td>
             </tr>
             <tr>
             <tr>
-                <td>PlannedEndDate (mm/dd/yyyy):</td>
-                <td><input type="text" name="plannedEndDate" size="20"
+                <td>PlannedEndDate:</td>
+                <td><input type="date" name="plannedEndDate" size="20"
                            value=${plannedEndDate}></td>
             </tr>
             <tr>

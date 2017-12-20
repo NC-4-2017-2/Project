@@ -13,12 +13,14 @@ import com.netcracker.project.services.ConvertJspDataService;
 import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.function.BiConsumer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,7 +36,7 @@ public class TaskController {
       new ClassPathXmlApplicationContext("Spring-Module.xml");
 
   private static Logger logger = Logger.getLogger(com.netcracker.project.controllers.TaskController.class);
-  private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
+
 
   @Autowired
   private TaskDAO taskDAO;
@@ -44,9 +46,9 @@ public class TaskController {
       @RequestParam("taskId") Integer id,
       @RequestParam("name") String name,
       @RequestParam("taskType") TaskType type,
-      @RequestParam("startDate") String startDate,
-      @RequestParam("endDate") String endDate,
-      @RequestParam("plannedEndDate") String plannedEndDate,
+      @RequestParam("startDate")@DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+      @RequestParam("plannedEndDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date plannedEndDate,
       @RequestParam("priority") TaskPriority priority,
       @RequestParam("status") TaskStatus status,
       @RequestParam("description") String description,
@@ -56,15 +58,15 @@ public class TaskController {
       @RequestParam("userId") Integer userId,
       @RequestParam("projectId") Integer projectId
   ) {
-    MapperDateConverter mdc = new MapperDateConverter();
+
     logger.info("begin work with process creation:");
     Task createTask = new Task.TaskBuilder()
         .taskId(BigInteger.valueOf(id))
         .name(name)
         .taskType(type)
-        .startDate(mdc.convertStringToDate(startDate))
-        .endDate(mdc.convertStringToDate(endDate))
-        .plannedEndDate(mdc.convertStringToDate(plannedEndDate))
+        .startDate(startDate)
+        .endDate(endDate)
+        .plannedEndDate(plannedEndDate)
         .priority(priority)
         .status(status)
         .description(description)
@@ -88,14 +90,42 @@ public class TaskController {
   }
 
   @RequestMapping(value = "/edit={projectId}/taskId={taskId}", method = RequestMethod.POST)
-  public String editTask(@RequestParam("updatingTask") Task updatingTask,
-      @ModelAttribute("modelTask")  TaskForm taskForm, Model model) {
-
-    logger.info("editTask method. Task id" + updatingTask);
-   // model.addAttribute("modelTask", taskForm);
+  public String editTask(
+      @RequestParam("taskId") Integer id,
+      @RequestParam("name") String name,
+      @RequestParam("taskType") TaskType type,
+      @RequestParam("startDate")@DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+      @RequestParam("plannedEndDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date plannedEndDate,
+      @RequestParam("priority") TaskPriority priority,
+      @RequestParam("status") TaskStatus status,
+      @RequestParam("description") String description,
+      @RequestParam("reopenCounter") Integer reopenCounter,
+      @RequestParam("comments") String comments,
+      @RequestParam("authorId") Integer authorId,
+      @RequestParam("userId") Integer userId,
+      @RequestParam("projectId") Integer projectId
+  ) {
+    logger.info("begin work updating with process:");
+    Task updatingTask = new Task.TaskBuilder()
+        .taskId(BigInteger.valueOf(id))
+        .name(name)
+        .taskType(type)
+        .startDate(startDate)
+        .endDate(endDate)
+        .plannedEndDate(plannedEndDate)
+        .priority(priority)
+        .status(status)
+        .description(description)
+        .reopenCounter(reopenCounter)
+        .comments(comments)
+        .authorId(BigInteger.valueOf(authorId))
+        .userId(BigInteger.valueOf(userId))
+        .projectId(BigInteger.valueOf(projectId))
+        .build();
 
     taskDAO.updateTask(updatingTask);
-    return "task/show_task";
+    return "response_status/success";
   }
 
   @RequestMapping(value = "/edit={projectId}/taskId={taskId}", method = RequestMethod.GET)
@@ -109,10 +139,22 @@ public class TaskController {
   }
 
   @RequestMapping(value = "/view={projectId}/taskId={taskId}", method = RequestMethod.GET)
-  public String findTaskByProjectIdAndTask(@PathVariable("projectId") BigInteger projectId, @PathVariable("taskId") BigInteger taskId, Model model) {
+  public String findTaskByProjectIdAndTask(@PathVariable("projectId") BigInteger projectId,
+                                           @PathVariable("taskId") BigInteger taskId, Model model) {
 
     logger.info("findTask method. projectId " + projectId + "taskId" + taskId);
     Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndTaskId(projectId, taskId);
+    model.addAttribute("modelTask", taskCollection);
+
+    return "task/show_task";
+  }
+
+  @RequestMapping(value = "/view={projectId}/priority={priority}", method = RequestMethod.GET)
+  public String findTaskByProjectIdAndPriority(@PathVariable("projectId") BigInteger projectId,
+                                               @PathVariable("priority") TaskPriority priority, Model model) {
+
+    logger.info("findTask method. projectId " + projectId + "priority" + priority);
+    Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndPriority(projectId, priority.getId());
     model.addAttribute("modelTask", taskCollection);
 
     return "task/show_task";

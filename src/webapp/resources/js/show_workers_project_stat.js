@@ -1,15 +1,14 @@
-function init(critical, high, normal, low) {
-
+function init(working, fired) {
   var options = {
     chart: {
       renderTo: 'container',
       type: 'pie'
     },
     title: {
-      text: 'Project Task Priority Statistic'
+      text: 'Project Workers Statistic'
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.y} tasks</b>'
+      pointFormat: '{series.name}: <b>{point.y} peoples</b>'
     },
     plotOptions: {
       pie: {
@@ -26,24 +25,19 @@ function init(critical, high, normal, low) {
       }
     },
     series: [{
-      name: 'Tasks',
+      name: 'Percentage',
       colorByPoint: true,
       data: [{
-          name: 'Critical',
-          y: (critical == 0) ? null : critical
-        }, {
-          name: 'High',
-          y: (high == 0) ? null : high,
-          sliced: true,
-          selected: true
-        }, {
-          name: 'Normal',
-          y: (normal == 0) ? null : normal
-        }, {
-          name: 'Low',
-          y: (low == 0) ? null : low
-        }]
+        name: 'Working',
+        y:(working == 0) ? null : working
+      }, {
+        name: 'Worked',
+        y: (fired == 0) ? null : fired,
+        sliced: true,
+        selected: true
+      }]
     }]
   };
   var chart = new Highcharts.Chart(options);
+
 }

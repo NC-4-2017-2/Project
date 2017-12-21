@@ -1,5 +1,6 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.BusinessTripValidator;
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
@@ -13,10 +14,12 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -132,13 +135,22 @@ public class BusinessTripController {
     return "businessTrip/updateBusinessTrip";
   }
 
+  @Validated
   @RequestMapping(value = "businessTripToUpdate/{id}", method = RequestMethod.POST)
-  public String updateBusinessTrip(
+  public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") BigInteger id,
       @RequestParam(value = "country") String country,
       @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
       @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
       @RequestParam(value = "status") String status) {
+    Map<String, String> errorMap = new BusinessTripValidator()
+        .validateUpdate(country, startDate, endDate, status);
+
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/updateBusinessTrip";
+    }
+
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
         .businessTripId(id)
         .country(country)

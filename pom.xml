@@ -19,7 +19,7 @@
         <junit.version>4.12</junit.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <jstl.version>1.2</jstl.version>
-        <jackson.version>   2.5.4</jackson.version>
+        <jackson.version>2.5.4</jackson.version>
         <javax.version>3.1.0</javax.version>
         <springmailer.version>4.2.5.RELEASE</springmailer.version>
         <javamail.version>1.4</javamail.version>
@@ -33,12 +33,6 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>${javamail.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
@@ -48,6 +42,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${javamail.version}</version>
         </dependency>
 
         <dependency>
@@ -116,6 +116,7 @@
             <version>${sprint-test.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>

@@ -29,7 +29,7 @@ public class TaskMapper implements RowMapper<Task> {
         .reopenCounter(resultSet.getInt(EnumMapper.TASK_REOPEN_COUNTER.getFullName()))
         .comments(resultSet.getString(EnumMapper.TASK_COMMENT.getFullName()))
         .authorId(new BigInteger(resultSet.getString(EnumMapper.AUTHOR_ID.getFullName())))
-       // .userId(new BigInteger(resultSet.getString(EnumMapper.USER_ID.getFullName())))
+        .userId(new BigInteger(resultSet.getString(EnumMapper.USER_ID.getFullName())))
         .projectId(new BigInteger(resultSet.getString(EnumMapper.PROJECT_ID.getFullName())))
         .build();
   }

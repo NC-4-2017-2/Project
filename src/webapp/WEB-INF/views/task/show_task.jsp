@@ -5,7 +5,7 @@
 <head>
     <title>Your task</title>
 </head>
-<tbody>
+<br>
 <c:forEach var="task" items="${modelTask}">
     <tr>
        Task id: <td>${task.getTaskId()}</td><br>
@@ -22,6 +22,7 @@
        Author id: <td>${task.getAuthorId()}</td><br>
        User id: <td>${task.getUserId()}</td><br>
        Project id: <td>${task.getProjectId()}</td><br>
+      </br>
     </tr>
 </c:forEach>
 </tbody>

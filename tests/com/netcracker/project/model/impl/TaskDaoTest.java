@@ -147,7 +147,7 @@ public class TaskDaoTest {
       e.printStackTrace();
     }
 
-    Collection<Task> task = taskDao.findTaskByUserIdAndDate(date, BigInteger.valueOf(1));
+    Collection<Task> task = taskDao.findTaskByUserIdAndDate(BigInteger.valueOf(1), date);
 
   }
 
@@ -158,7 +158,7 @@ public class TaskDaoTest {
 
   @Test
   public void test7findTaskByUserIdAndPriority(){
-    List<Task> task = (List<Task>) taskDao.findTaskByUserIdAndPriority(TaskPriority.LOW.getId(),BigInteger.valueOf(300));
+    List<Task> task = (List<Task>) taskDao.findTaskByUserIdAndPriority(BigInteger.valueOf(300), TaskPriority.LOW.getId());
   }
 
   @Test
@@ -176,7 +176,7 @@ public class TaskDaoTest {
       e.printStackTrace();
     }
 
-    Collection<Task> task = taskDao.findTaskByProjectIdAndDate(date, BigInteger.valueOf(1));
+    Collection<Task> task = taskDao.findTaskByProjectIdAndDate(BigInteger.valueOf(4), date);
   }
 
   @Test

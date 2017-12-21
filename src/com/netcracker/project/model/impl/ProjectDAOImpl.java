@@ -35,7 +35,6 @@ public class ProjectDAOImpl implements ProjectDAO {
   @Override
   public void createProject(Project project) {
     logger.info("Entering createProject(project_form=" + project + ")");
-    MapperDateConverter mdc = new MapperDateConverter();
     template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
         project.getName(),
         project.getStartDate(),
@@ -44,7 +43,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         project.getProjectManagerId()});
 
   }
-
 
   @Override
   public Project findProjectByProjectId(BigInteger id) {
@@ -121,6 +119,18 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
 
     return projects;
+  }
+
+  @Override
+  public BigInteger findProjectIdByUserLogin(String userLogin) {
+    logger.info("Entering findProjectIdByUserLogin(startDate=" + userLogin + ")");
+    return template.queryForObject(FIND_PROJECT_ID_BY_USER_LOGIN, new Object[]{userLogin}, BigInteger.class);
+  }
+
+  @Override
+  public BigInteger findProjectIdByPMLogin(String pmLogin) {
+    logger.info("Entering findProjectIdByPMLogin(startDate=" + pmLogin + ")");
+    return template.queryForObject(FIND_PROJECT_ID_BY_PM_LOGIN, new Object[]{pmLogin}, BigInteger.class);
   }
 
   @Override

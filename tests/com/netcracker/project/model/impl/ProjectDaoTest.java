@@ -275,6 +275,19 @@ public class ProjectDaoTest {
         .status(CLOSED)
         .build();
   }
+
+  @Test
+  public void findProjectIdByUserLogin() {
+    BigInteger result = projectDAO.findProjectIdByUserLogin("petrov");
+    assertEquals(BigInteger.valueOf(4), result);
+  }
+
+  @Test
+  public void findProjectIdByPMLogin() {
+    BigInteger result = projectDAO.findProjectIdByPMLogin("ivanov");
+    assertEquals(BigInteger.valueOf(4), result);
+
+  }
 }
 
 

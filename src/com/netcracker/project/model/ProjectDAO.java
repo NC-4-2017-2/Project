@@ -44,6 +44,10 @@ public interface ProjectDAO {
 
   void updateSprintPlannedEndDate(BigInteger sprintId, Date endDate);
 
+  BigInteger findProjectIdByUserLogin(String userLogin);
+
+  BigInteger findProjectIdByPMLogin(String pmLogin);
+
     enum OCStatus {
     OPENED(0), CLOSED(1);
 
@@ -240,4 +244,26 @@ public interface ProjectDAO {
 
   String UPDATE_SPRINT_STATUS = "UPDATE ATTRIBUTES SET LIST_VALUE_ID = ? "
       + "WHERE ATTR_ID = 59 AND OBJECT_ID = ? ";
+
+  String FIND_PROJECT_ID_BY_USER_LOGIN = "SELECT PROJECT_ID.OBJECT_ID "
+      + "FROM OBJECTS PROJECT_ID, OBJECTS USER_ID, "
+      + "ATTRIBUTES USER_LOGIN, "
+      + "OBJREFERENCE PROJECT_USER_REF "
+      + "WHERE USER_LOGIN.ATTR_ID = 10 AND "
+      + "USER_LOGIN.VALUE = ? AND "
+      + "USER_ID.OBJECT_ID = USER_LOGIN.OBJECT_ID AND "
+      + "PROJECT_USER_REF.ATTR_ID = 19 AND "
+      + "PROJECT_USER_REF.REFERENCE = USER_ID.OBJECT_ID AND "
+      + "PROJECT_ID.OBJECT_ID = PROJECT_USER_REF.OBJECT_ID";
+
+  String FIND_PROJECT_ID_BY_PM_LOGIN = "SELECT PROJECT_ID.OBJECT_ID "
+      + "FROM OBJECTS PROJECT_ID, OBJECTS USER_ID, "
+      + "ATTRIBUTES USER_LOGIN, "
+      + "OBJREFERENCE PROJECT_PM_REF "
+      + "WHERE USER_LOGIN.ATTR_ID = 10 AND "
+      + "USER_LOGIN.VALUE = ? AND "
+      + "USER_ID.OBJECT_ID = USER_LOGIN.OBJECT_ID AND "
+      + "PROJECT_PM_REF.ATTR_ID = 18 AND "
+      + "PROJECT_PM_REF.REFERENCE = USER_ID.OBJECT_ID AND "
+      + "PROJECT_ID.OBJECT_ID = PROJECT_PM_REF.OBJECT_ID";
 }

@@ -151,4 +151,11 @@ public class BusinessTripDAOImplTest {
         .build();
     return businessTripTest;
   }
+
+  @Test
+  public void findTripByUserIdAndStatus() {
+    Collection<BusinessTrip> result = businessTrip.findTripByUserIdAndStatus(BigInteger.valueOf(2), Status.APPROVED.getId());
+    assertEquals("[BusinessTrip{businessTripId=8, projectId=4, userId=2, authorId=2, pmId=1,"
+        + " country='USA', startDate=2012-12-13, endDate=2013-02-13, status=APPROVED}]", result.toString());
+  }
 }

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import javax.sql.DataSource;
 import com.netcracker.project.model.VacationDAO;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.Vacation;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;

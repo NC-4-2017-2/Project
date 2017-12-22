@@ -1,6 +1,6 @@
 package com.netcracker.project.model.entity;
 
-import com.netcracker.project.model.ProjectDAO.OCStatus;
+import com.netcracker.project.model.enums.OCStatus;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;

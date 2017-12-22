@@ -1,7 +1,7 @@
 package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.model.entity.BusinessTrip;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigInteger;

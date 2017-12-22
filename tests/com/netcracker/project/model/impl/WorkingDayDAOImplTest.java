@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
 import com.netcracker.project.model.WorkingDayDAO;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.WorkingDay;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;

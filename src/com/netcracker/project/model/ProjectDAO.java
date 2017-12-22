@@ -1,14 +1,13 @@
 package com.netcracker.project.model;
 
-import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.enums.OCStatus;
 import com.netcracker.project.model.impl.mappers.EnumMapper;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import com.netcracker.project.model.entity.Project;
-import com.netcracker.project.model.entity.Sprint;
-import org.springframework.stereotype.Component;
 
 public interface ProjectDAO {
 
@@ -47,23 +46,6 @@ public interface ProjectDAO {
   BigInteger findProjectIdByUserLogin(String userLogin);
 
   BigInteger findProjectIdByPMLogin(String pmLogin);
-
-    enum OCStatus {
-    OPENED(0), CLOSED(1);
-
-    private int id;
-
-    OCStatus() {
-    }
-
-    OCStatus(int id) {
-      this.id = id;
-    }
-
-    public int getId() {
-      return id;
-    }
-  }
 
   String CREATE_PROJECT =
       "INSERT ALL "
@@ -133,7 +115,8 @@ public interface ProjectDAO {
       + "  SPRINT_NAME.VALUE      AS " + EnumMapper.NAME + ", "
       + "  to_char(START_DATE.DATE_VALUE, 'yyyy-MM-dd')        AS " + EnumMapper.START_DATE + ", "
       + "  to_char(END_DATE.DATE_VALUE, 'yyyy-MM-dd')         AS " + EnumMapper.END_DATE + ", "
-      + "  to_char(PLANNED_END_DATE.DATE_VALUE, 'yyyy-MM-dd')  AS " + EnumMapper.PLANNED_END_DATE + ", "
+      + "  to_char(PLANNED_END_DATE.DATE_VALUE, 'yyyy-MM-dd')  AS " + EnumMapper.PLANNED_END_DATE
+      + ", "
       + "  STATUS_VALUE.VALUE     AS " + EnumMapper.STATUS + " "
       + "FROM OBJECTS PROJECT_ID, OBJECTS SPRINT_ID, "
       + "  ATTRIBUTES SPRINT_NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, "

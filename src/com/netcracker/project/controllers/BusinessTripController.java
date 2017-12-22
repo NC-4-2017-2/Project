@@ -6,7 +6,7 @@ import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Project;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.services.ListCountry;
 import java.math.BigInteger;

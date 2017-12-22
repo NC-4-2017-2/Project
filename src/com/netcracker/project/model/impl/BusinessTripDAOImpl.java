@@ -2,7 +2,7 @@ package com.netcracker.project.model.impl;
 
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.impl.mappers.BusinessTripMapper;
 import java.util.Date;
 import javax.sql.DataSource;

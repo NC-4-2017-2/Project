@@ -1,11 +1,10 @@
 package com.netcracker.project.model.impl.mappers;
 
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.WorkingDay;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import org.springframework.jdbc.core.RowMapper;
 
 public class WorkingDayMapper implements RowMapper<WorkingDay> {

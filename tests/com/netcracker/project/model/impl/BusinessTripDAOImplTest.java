@@ -11,7 +11,7 @@ import java.util.Objects;
 import javax.sql.DataSource;
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import org.junit.Before;
 import org.junit.FixMethodOrder;

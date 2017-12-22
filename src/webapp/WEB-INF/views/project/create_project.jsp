@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%@page import="com.netcracker.project.controllers.project_form.OCStatus" %>
+<%@page import="com.netcracker.project.model.enums.OCStatus" %>
 
 <html>
 <head>

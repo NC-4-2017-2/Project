@@ -3,7 +3,7 @@ package com.netcracker.project.model.impl.mappers;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.Vacation;
 import org.springframework.jdbc.core.RowMapper;
 

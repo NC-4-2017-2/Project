@@ -1,4 +1,4 @@
-package com.netcracker.project.model.entity;
+package com.netcracker.project.model.enums;
 
 public enum Status {
   APPROVED(0), DISAPPROVED(1), WAITING_FOR_APPROVAL(3);

@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import com.netcracker.project.model.VacationDAO;
-import com.netcracker.project.model.entity.Status;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.Vacation;
 import org.junit.Before;
 import org.junit.Test;

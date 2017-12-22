@@ -1,5 +1,6 @@
 package com.netcracker.project.model.entity;
 
+import com.netcracker.project.model.enums.Status;
 import java.math.BigInteger;
 import java.util.Date;
 

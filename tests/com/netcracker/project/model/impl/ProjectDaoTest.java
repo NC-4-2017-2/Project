@@ -1,18 +1,18 @@
 package com.netcracker.project.model.impl;
 
-import static com.netcracker.project.model.ProjectDAO.OCStatus.CLOSED;
-import static com.netcracker.project.model.ProjectDAO.OCStatus.OPENED;
 import static com.netcracker.project.model.entity.Sprint.SprintBuilder;
+import static com.netcracker.project.model.enums.OCStatus.CLOSED;
+import static com.netcracker.project.model.enums.OCStatus.OPENED;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import com.netcracker.project.AssertUtils;
 import com.netcracker.project.model.ProjectDAO;
-import com.netcracker.project.model.ProjectDAO.OCStatus;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Project.ProjectBuilder;
 import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.enums.OCStatus;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
@@ -105,7 +105,7 @@ public class ProjectDaoTest {
         .startDate(start)
         .endDate(end)
         .build();
-    project.setProjectStatus(OCStatus.OPENED);
+    project.setProjectStatus(OPENED);
     project.setProjectManagerId(BigInteger.valueOf(2));
 
     projectDAO.createProject(project);
@@ -133,7 +133,7 @@ public class ProjectDaoTest {
         .startDate(start)
         .plannedEndDate(plannedEnd)
         .endDate(end)
-        .status(OCStatus.CLOSED)
+        .status(CLOSED)
         .build();
 
     projectDAO.createSprint(sprint, BigInteger.valueOf(4));

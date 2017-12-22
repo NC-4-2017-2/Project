@@ -16,6 +16,12 @@ public class BusinessTripValidator {
     return errorMap;
   }
 
+  public Map<String, String> validateCreate(String country, Date startDate, Date endDate) {
+    validateCountry(country);
+    validateStartEndDate(startDate, endDate);
+    return errorMap;
+  }
+
   private void validateCountry(String country) {
     if (country == null || country.isEmpty()) {
       errorMap.put("countryError" , "Country can't be empty");

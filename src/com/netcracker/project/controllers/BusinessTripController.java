@@ -4,14 +4,15 @@ import com.netcracker.project.controllers.validators.BusinessTripValidator;
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
+import com.netcracker.project.model.UserDAO.JobTitle;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ListCountry;
 import java.math.BigInteger;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -37,61 +38,66 @@ public class BusinessTripController {
   private BusinessTripDAO businessTripDAO;
   @Autowired
   private ListCountry countries;
+  @Autowired
+  private MapperDateConverter converter = new MapperDateConverter();
 
 
-  @RequestMapping(value = "/findBusinessTripProject", method = RequestMethod.GET)
-  public String findBusinessTripProject(Model model) {
-    Collection<String> projects = projectDAO.findAllOpenedProjects();
-    model.addAttribute("projectNamesList", projects);
-    return "businessTrip/findBusinessTripProject";
+  @RequestMapping(value = "createBusinessTrip", method = RequestMethod.GET)
+  public String createBusinessTripGet(Model model, Principal principal) {
+    String userLogin = principal.getName();
+    User user = userDAO.findUserByLogin(userLogin);
+    BigInteger projectId = null;
+
+    if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)) {
+      projectId = projectDAO
+          .findProjectIdByUserLogin(userLogin);
+    }
+    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      projectId = projectDAO
+          .findProjectIdByPMLogin(userLogin);
+    }
+    Collection<User> users = userDAO.findUserByProjectId(projectId);
+
+    Project project = projectDAO.findProjectByProjectId(projectId);
+    model.addAttribute("pmId", project.getProjectManagerId());
+    model.addAttribute("projectId", project.getProjectId());
+    model.addAttribute("countryList", countries.getCountriesNames());
+    model.addAttribute("userList", users);
+    model.addAttribute("authorId", user.getUserId());
+    return "businessTrip/createBusinessTrip";
   }
 
-  @RequestMapping(value = "createBusinessTrip", params = {
-      "projectName"}, method = RequestMethod.GET)
-  public String createBusinessTripGet(Model model,
-      @RequestParam(value = "projectName") String projectName,
-      Principal principal) {
-
-    Project project = projectDAO.findProjectByName(projectName);
-    String authorLogin = principal.getName();
-    User author = userDAO.findUserByLogin(authorLogin);
-    Collection<BigInteger> usersId = project.getUsersId();
-    Collection<User> users = new ArrayList<>();
-    for (BigInteger userId : usersId) {
-      users.add(userDAO.findUserByUserId(userId));
-    }
-
-    if (project.getProjectManagerId().equals(author.getUserId())) {
-      model.addAttribute("projectId", project.getProjectId());
-      model.addAttribute("pmId", author.getUserId());
-      model.addAttribute("countryList", countries.getCountriesNames());
-      model.addAttribute("usersList", users);
-      return "businessTrip/createTripWithoutPm";
-    } else {
-      model.addAttribute("projectId", project.getProjectId());
-      model.addAttribute("authorId", author.getUserId());
-      model.addAttribute("countryList", countries.getCountriesNames());
-      model.addAttribute("usersList", users);
-      return "businessTrip/createTripWithPm";
-    }
-  }
-
-  @RequestMapping(value = "createBusinessTripPostWithPm", method = RequestMethod.POST)
-  public String createBusinessTripPostWithPm(
+  @RequestMapping(value = "createBusinessTrip/projectId/{projectId}/pmId/{pmId}", method = RequestMethod.POST)
+  public String createBusinessTripPost(
+      @PathVariable(value = "projectId") BigInteger projectId,
+      @PathVariable(value = "pmId") BigInteger pmId,
       @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
       @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
       @RequestParam(value = "user") BigInteger userId,
       @RequestParam(value = "authorId") BigInteger authorId,
       @RequestParam(value = "country") String country,
-      @RequestParam(value = "projectId") BigInteger projectId
+      Model model
   ) {
-    Project project = projectDAO.findProjectByProjectId(projectId);
+    Collection<User> users = userDAO.findUserByProjectId(projectId);
+    Map<String, String> errorMap = new BusinessTripValidator()
+        .validateCreate(country, startDate, endDate);
+
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("projectId", projectId);
+      model.addAttribute("pmId", pmId);
+      model.addAttribute("authorId", authorId);
+      model.addAttribute("userList", users);
+      model.addAttribute("countryList", countries.getCountriesNames());
+      model.addAttribute("tripCountry", country);
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/createBusinessTrip";
+    }
 
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
         .authorId(authorId)
         .projectId(projectId)
         .userId(userId)
-        .pmId(project.getProjectManagerId())
+        .pmId(pmId)
         .country(country)
         .startDate(startDate)
         .endDate(endDate)
@@ -102,40 +108,20 @@ public class BusinessTripController {
     return "response_status/success";
   }
 
-  @RequestMapping(value = "createBusinessTripPostWithoutPm", method = RequestMethod.POST)
-  public String createBusinessTripPostWithoutPm(
-      @RequestParam(value = "projectId") BigInteger projectId,
-      @RequestParam(value = "pmId") BigInteger pmId,
-      @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-      @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-      @RequestParam(value = "user") BigInteger userId,
-      @RequestParam(value = "country") String country
-  ) {
-    BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
-        .projectId(projectId)
-        .userId(userId)
-        .authorId(pmId)
-        .pmId(pmId)
-        .country(country)
-        .startDate(startDate)
-        .endDate(endDate)
-        .status(Status.APPROVED)
-        .build();
-
-    businessTripDAO.createTrip(trip);
-    return "response_status/success";
-  }
 
   @RequestMapping(value = "businessTripToUpdate/{id}", method = RequestMethod.GET)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") BigInteger id) {
-    BusinessTrip foundBusinessTrip = businessTripDAO.findBusinessTripById(id);
+    BusinessTrip trip = businessTripDAO.findBusinessTripById(id);
     model.addAttribute("countryList", countries.getCountriesNames());
-    model.addAttribute("trip", foundBusinessTrip);
+    model.addAttribute("businessTripId", trip.getBusinessTripId());
+    model.addAttribute("startDate", trip.getStartDate());
+    model.addAttribute("endDate", trip.getEndDate());
+    model.addAttribute("status", trip.getStatus());
+    model.addAttribute("tripCountry", trip.getCountry());
     return "businessTrip/updateBusinessTrip";
   }
 
-  @Validated
   @RequestMapping(value = "businessTripToUpdate/{id}", method = RequestMethod.POST)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") BigInteger id,
@@ -147,6 +133,12 @@ public class BusinessTripController {
         .validateUpdate(country, startDate, endDate, status);
 
     if (!errorMap.isEmpty()) {
+      model.addAttribute("countryList", countries.getCountriesNames());
+      model.addAttribute("businessTripId", id);
+      model.addAttribute("startDate", converter.convertDateToString(startDate));
+      model.addAttribute("endDate", converter.convertDateToString(endDate));
+      model.addAttribute("status", status);
+      model.addAttribute("tripCountry", country);
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
@@ -161,5 +153,40 @@ public class BusinessTripController {
 
     businessTripDAO.updateTrip(trip);
     return "response_status/success";
+  }
+
+  @RequestMapping(value = "findTrip", method = RequestMethod.GET)
+  public String findTripByStatus() {
+    return "businessTrip/findTrip";
+  }
+
+  @RequestMapping(value = "findTrip", params = "status",
+      method = RequestMethod.GET)
+  public String showTripList(
+      @RequestParam(value = "status") Status status,
+      Principal principal,
+      Model model) {
+    String userLogin = principal.getName();
+    User user = userDAO.findUserByLogin(userLogin);
+    Collection<BusinessTrip> trips = null;
+    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      trips = businessTripDAO
+          .findTripByPMIdAndStatus(user.getUserId(), status.getId());
+    }
+    if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)) {
+      trips = businessTripDAO
+          .findTripByUserIdAndStatus(user.getUserId(), status.getId());
+    }
+    model.addAttribute("tripList", trips);
+    return "businessTrip/showTripsList";
+  }
+
+  @RequestMapping(value = "showTrip/{businessTripId}", method = RequestMethod.GET)
+  public String showTrip(@PathVariable(value = "businessTripId") BigInteger tripId,
+      Model model){
+    BusinessTrip trip = businessTripDAO
+        .findBusinessTripById(tripId);
+    model.addAttribute("businessTrip", trip);
+    return "businessTrip/showTrip";
   }
 }

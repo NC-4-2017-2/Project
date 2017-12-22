@@ -32,11 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/task")
 public class TaskController {
-  private ApplicationContext context =
-      new ClassPathXmlApplicationContext("Spring-Module.xml");
+
+  private ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
 
   private static Logger logger = Logger.getLogger(com.netcracker.project.controllers.TaskController.class);
-
 
   @Autowired
   private TaskDAO taskDAO;
@@ -106,7 +105,7 @@ public class TaskController {
       @RequestParam("userId") Integer userId,
       @RequestParam("projectId") Integer projectId
   ) {
-    logger.info("begin work updating with process:");
+    logger.info("begin work updating process:");
     Task updatingTask = new Task.TaskBuilder()
         .taskId(BigInteger.valueOf(id))
         .name(name)
@@ -142,7 +141,7 @@ public class TaskController {
   public String findTaskByProjectIdAndTask(@PathVariable("projectId") BigInteger projectId,
                                            @PathVariable("taskId") BigInteger taskId, Model model) {
 
-    logger.info("findTask method. projectId " + projectId + "taskId" + taskId);
+    logger.info("findTaskByProjectIdAndTask method. projectId: " + projectId + "taskId" + taskId);
     Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndTaskId(projectId, taskId);
     model.addAttribute("modelTask", taskCollection);
 
@@ -153,7 +152,7 @@ public class TaskController {
   public String findTaskByProjectIdAndPriority(@PathVariable("projectId") BigInteger projectId,
                                                @PathVariable("priority") TaskPriority priority, Model model) {
 
-    logger.info("findTask method. projectId " + projectId + "priority" + priority);
+    logger.info("findTaskByProjectIdAndPriority method. projectId:" + projectId + "priority" + priority);
     Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndPriority(projectId, priority.getId());
     model.addAttribute("modelTask", taskCollection);
 

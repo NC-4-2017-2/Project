@@ -1,4 +1,5 @@
 package com.netcracker.project.model.impl.mappers;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -15,9 +16,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MapperDateConverter extends JsonSerializer<Date> {
-  private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
+
+  private static final Logger logger = Logger
+      .getLogger(BusinessTripDAOImpl.class);
   private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
       "dd.MM.yyyy");
+
   public Date convertStringToDate(String str) {
     Date date = null;
     //String pattern = "yyyy-MM-dd";
@@ -30,6 +34,7 @@ public class MapperDateConverter extends JsonSerializer<Date> {
     }
     return date;
   }
+
   public String convertDateToString(Date startDate) {
     String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
     String patternWriteFormat = "yyyy-MM-dd";
@@ -48,6 +53,7 @@ public class MapperDateConverter extends JsonSerializer<Date> {
     }
     return formattedDate;
   }
+
   @Override
   public void serialize(Date date, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider)
@@ -55,6 +61,7 @@ public class MapperDateConverter extends JsonSerializer<Date> {
     String formattedDate = dateFormat.format(date);
     jsonGenerator.writeString(formattedDate);
   }
+
   public Date convertStringToDateFromJSP(String str) {
     Date date = null;
     String pattern = "yyyy-MM-dd";

@@ -25,19 +25,17 @@
     EndDate:<input type="date" name="endDate" value="${endDate}"
                    required><br>
 
+    Status:<select name="status" required>
     <c:if test="${status eq 'APPROVED'}">
-        Status:<select name="status" required>
         <option selected="selected" value="APPROVED">APPROVED</option>
         <option value="DISAPPROVED">DISAPPROVED</option>
-        </select><br>
     </c:if>
 
     <c:if test="${status eq 'DISAPPROVED'}">
-        Status:<select name="status" required>
         <option selected="selected" value="DISAPPROVED">DISAPPROVED</option>
         <option value="APPROVED">APPROVED</option>
-        </select><br>
     </c:if>
+    </select><br>
 
     <p><c:if test="${not empty errorMap}">
         <c:forEach items="${errorMap}" var="error">

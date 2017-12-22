@@ -14,10 +14,8 @@ import com.netcracker.project.services.ListCountry;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +36,7 @@ public class BusinessTripController {
   @Autowired
   private ListCountry countries;
   @Autowired
-  private MapperDateConverter converter = new MapperDateConverter();
+  private MapperDateConverter converter;
 
 
   @RequestMapping(value = "createBusinessTrip", method = RequestMethod.GET)
@@ -70,13 +68,13 @@ public class BusinessTripController {
   public String createBusinessTripPost(
       @PathVariable(value = "projectId") BigInteger projectId,
       @PathVariable(value = "pmId") BigInteger pmId,
-      @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-      @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+      @RequestParam(value = "startDate") String startDate,
+      @RequestParam(value = "endDate") String endDate,
       @RequestParam(value = "user") BigInteger userId,
       @RequestParam(value = "authorId") BigInteger authorId,
       @RequestParam(value = "country") String country,
-      Model model
-  ) {
+      Model model)
+  {
     Collection<User> users = userDAO.findUserByProjectId(projectId);
     Map<String, String> errorMap = new BusinessTripValidator()
         .validateCreate(country, startDate, endDate);
@@ -98,8 +96,8 @@ public class BusinessTripController {
         .userId(userId)
         .pmId(pmId)
         .country(country)
-        .startDate(startDate)
-        .endDate(endDate)
+        .startDate(converter.convertStringToDateFromJSP(startDate))
+        .endDate(converter.convertStringToDateFromJSP(endDate))
         .status(Status.DISAPPROVED)
         .build();
 
@@ -110,7 +108,8 @@ public class BusinessTripController {
 
   @RequestMapping(value = "businessTripToUpdate/{id}", method = RequestMethod.GET)
   public String updateBusinessTrip(Model model,
-      @PathVariable(value = "id") BigInteger id) {
+      @PathVariable(value = "id") BigInteger id)
+  {
     BusinessTrip trip = businessTripDAO.findBusinessTripById(id);
     model.addAttribute("countryList", countries.getCountriesNames());
     model.addAttribute("businessTripId", trip.getBusinessTripId());
@@ -125,18 +124,21 @@ public class BusinessTripController {
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") BigInteger id,
       @RequestParam(value = "country") String country,
-      @RequestParam(value = "startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-      @RequestParam(value = "endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-      @RequestParam(value = "status") String status) {
+      @RequestParam(value = "startDate") String startDate,
+      @RequestParam(value = "endDate") String endDate,
+      @RequestParam(value = "status") String status)
+  {
     Map<String, String> errorMap = new BusinessTripValidator()
         .validateUpdate(country, startDate, endDate, status);
+
+    Status correctStatus = businessTripDAO.findBusinessTripById(id).getStatus();
 
     if (!errorMap.isEmpty()) {
       model.addAttribute("countryList", countries.getCountriesNames());
       model.addAttribute("businessTripId", id);
-      model.addAttribute("startDate", converter.convertDateToString(startDate));
-      model.addAttribute("endDate", converter.convertDateToString(endDate));
-      model.addAttribute("status", status);
+      model.addAttribute("startDate", startDate);
+      model.addAttribute("endDate", endDate);
+      model.addAttribute("status", correctStatus);
       model.addAttribute("tripCountry", country);
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
@@ -145,8 +147,8 @@ public class BusinessTripController {
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
         .businessTripId(id)
         .country(country)
-        .startDate(startDate)
-        .endDate(endDate)
+        .startDate(converter.convertStringToDateFromJSP(startDate))
+        .endDate(converter.convertStringToDateFromJSP(endDate))
         .status(Status.valueOf(status))
         .build();
 
@@ -162,19 +164,26 @@ public class BusinessTripController {
   @RequestMapping(value = "findTrip", params = "status",
       method = RequestMethod.GET)
   public String showTripList(
-      @RequestParam(value = "status") Status status,
+      @RequestParam(value = "status") String status,
       Principal principal,
-      Model model) {
+      Model model)
+  {
+    Map<String, String> errorMap = new BusinessTripValidator()
+        .validateFind(status);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/findTrip";
+    }
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
     Collection<BusinessTrip> trips = null;
     if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
       trips = businessTripDAO
-          .findTripByPMIdAndStatus(user.getUserId(), status.getId());
+          .findTripByPMIdAndStatus(user.getUserId(), Status.valueOf(status).getId());
     }
     if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)) {
       trips = businessTripDAO
-          .findTripByUserIdAndStatus(user.getUserId(), status.getId());
+          .findTripByUserIdAndStatus(user.getUserId(), Status.valueOf(status).getId());
     }
     model.addAttribute("tripList", trips);
     return "businessTrip/showTripsList";
@@ -182,7 +191,8 @@ public class BusinessTripController {
 
   @RequestMapping(value = "showTrip/{businessTripId}", method = RequestMethod.GET)
   public String showTrip(@PathVariable(value = "businessTripId") BigInteger tripId,
-      Model model) {
+      Model model)
+  {
     BusinessTrip trip = businessTripDAO
         .findBusinessTripById(tripId);
     model.addAttribute("businessTrip", trip);

@@ -1,17 +1,15 @@
 package com.netcracker.project.controllers;
 
 import com.netcracker.project.model.TaskDAO;
-import com.netcracker.project.model.TaskDAO.TaskPriority;
-import com.netcracker.project.model.TaskDAO.TaskStatus;
-import com.netcracker.project.model.TaskDAO.TaskType;
+import com.netcracker.project.model.enums.TaskPriority;
+import com.netcracker.project.model.enums.TaskStatus;
+import com.netcracker.project.model.enums.TaskType;
 import com.netcracker.project.model.entity.Task;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/task")
 public class TaskController {
-
-  private ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
 
   private static Logger logger = Logger.getLogger(com.netcracker.project.controllers.TaskController.class);
 

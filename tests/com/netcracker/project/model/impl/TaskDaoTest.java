@@ -1,8 +1,9 @@
 package com.netcracker.project.model.impl;
 
 import static org.junit.Assert.assertEquals;
-
-import com.netcracker.project.AssertUtils;
+import com.netcracker.project.model.enums.TaskPriority;
+import com.netcracker.project.model.enums.TaskStatus;
+import com.netcracker.project.model.enums.TaskType;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,9 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import javax.sql.DataSource;
 import com.netcracker.project.model.TaskDAO;
-import com.netcracker.project.model.TaskDAO.TaskPriority;
-import com.netcracker.project.model.TaskDAO.TaskStatus;
-import com.netcracker.project.model.TaskDAO.TaskType;
 import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.entity.Task.TaskBuilder;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;

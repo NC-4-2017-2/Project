@@ -1,23 +1,23 @@
 package com.netcracker.project.model.entity;
 
+import com.netcracker.project.model.enums.TaskPriority;
+import com.netcracker.project.model.enums.TaskStatus;
+import com.netcracker.project.model.enums.TaskType;
 import java.math.BigInteger;
 import java.util.Date;
 
-import com.netcracker.project.model.TaskDAO;
-import com.netcracker.project.model.TaskDAO.TaskPriority;
-import com.netcracker.project.model.TaskDAO.TaskStatus;
-import com.netcracker.project.model.TaskDAO.TaskType;
+
 
 public class Task {
 
   private BigInteger taskId;
-  private TaskDAO.TaskType taskType;
+  private TaskType taskType;
   private String name;
   private Date startDate;
   private Date plannedEndDate;
   private Date endDate;
-  private TaskDAO.TaskPriority priority;
-  private TaskDAO.TaskStatus status;
+  private TaskPriority priority;
+  private TaskStatus status;
   private String description;
   private BigInteger authorId;
   private BigInteger userId;
@@ -46,6 +46,18 @@ public class Task {
 
   }
 
+  public TaskType getTaskType() {
+    return taskType;
+  }
+
+  public TaskPriority getPriority() {
+    return priority;
+  }
+
+  public TaskStatus getStatus() {
+    return status;
+  }
+
   public BigInteger getTaskId() {
     return taskId;
   }
@@ -54,9 +66,6 @@ public class Task {
     return name;
   }
 
-  public TaskDAO.TaskType getTaskType() {
-    return taskType;
-  }
 
   public Date getStartDate() {
     return startDate;
@@ -68,14 +77,6 @@ public class Task {
 
   public Date getPlannedEndDate() {
     return plannedEndDate;
-  }
-
-  public TaskDAO.TaskPriority getPriority() {
-    return priority;
-  }
-
-  public TaskDAO.TaskStatus getStatus() {
-    return status;
   }
 
   public String getDescription() {
@@ -119,13 +120,13 @@ public class Task {
   public static class TaskBuilder {
 
     private BigInteger taskId;
-    private TaskDAO.TaskType taskType;
+    private TaskType taskType;
     private String name;
     private Date startDate;
     private Date plannedEndDate;
     private Date endDate;
-    private TaskDAO.TaskPriority priority;
-    private TaskDAO.TaskStatus status;
+    private TaskPriority priority;
+    private TaskStatus status;
     private String description;
     private Integer reopenCounter;
     private String comments;

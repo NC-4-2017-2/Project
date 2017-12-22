@@ -2,7 +2,9 @@ package com.netcracker.project.model.impl;
 
 import com.netcracker.project.model.TaskDAO;
 import com.netcracker.project.model.entity.Task;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.model.enums.TaskPriority;
+import com.netcracker.project.model.enums.TaskStatus;
+import com.netcracker.project.model.enums.TaskType;
 import com.netcracker.project.model.impl.mappers.TaskMapper;
 import javax.sql.DataSource;
 import java.math.BigInteger;

@@ -16,6 +16,7 @@ import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,21 +188,37 @@ public class ProjectController {
   }
 
 
-  @RequestMapping(value = "/view={id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/findProjectByProjectId/{id}", method = RequestMethod.GET)
   public String findProjectByProjectId(Model model,
       @PathVariable("id") Integer id) {
     logger.info("findProjectByProjectId() method. Id: " + id);
+
     Project project = projectDAO
         .findProjectByProjectId(BigInteger.valueOf(id));
+    model.addAttribute("project", project);
 
-    model.addAttribute("projectId", project.getProjectId());
-    model.addAttribute("projectName", project.getName());
-    model.addAttribute("startDate",
-        project.getStartDate());
-    model
-        .addAttribute("endDate", project.getEndDate());
-    model.addAttribute("status", project.getProjectStatus());
-    model.addAttribute("pmId", project.getProjectManagerId());
+    return "project/show_project";
+  }
+
+  @RequestMapping(value = "/findProjectByName/{name}", method = RequestMethod.GET)
+  public String findProjectByName(Model model,
+      @PathVariable("name") String name) {
+    logger.info("findProjectByProjectId() method. Id: " + name);
+
+    Project project = projectDAO.findProjectByName(name);
+    model.addAttribute("project", project);
+
+    return "project/show_project";
+  }
+
+  @RequestMapping(value = "/findProjectByDate/{date}", method = RequestMethod.GET)
+  public String findProjectByDate(Model model,
+      @PathVariable("date") Date date) {
+    logger.info("findProjectByProjectId() method. Id: " + date);
+
+    Collection<Project> projects = projectDAO.findProjectByDate(date);
+    model.addAttribute("projectCollection", projects);
+
     return "project/show_project";
   }
 

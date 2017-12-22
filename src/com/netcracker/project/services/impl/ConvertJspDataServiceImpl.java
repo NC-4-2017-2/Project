@@ -2,10 +2,8 @@ package com.netcracker.project.services.impl;
 
 import com.netcracker.project.controllers.project_form.SprintFormData;
 import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
-import com.netcracker.project.controllers.task.TaskData;
 import com.netcracker.project.model.entity.Sprint;
 import com.netcracker.project.model.entity.Sprint.SprintBuilder;
-import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ConvertJspDataService;
@@ -84,20 +82,5 @@ public class ConvertJspDataServiceImpl implements ConvertJspDataService {
     return workPeriods;
   }
 
-  @Override
-  public List<TaskData> convertTaskToTaskForm(Collection<Task> taskCollection) {
-    List<TaskData> taskData = new ArrayList<>();
-
-    taskCollection.forEach(t -> taskData.add(new TaskData(t.getTaskId(), t.getName(),
-        t.getTaskType(),
-        converter.convertDateToString(t.getStartDate()),
-        converter.convertDateToString(t.getEndDate()),
-        converter.convertDateToString(t.getPlannedEndDate()),
-        t.getPriority(), t.getStatus(),
-        t.getDescription(), t.getReopenCounter(),
-        t.getComments(), t.getAuthorId(),
-        t.getUserId(), t.getProjectId())));
-    return taskData;
-  }
 
 }

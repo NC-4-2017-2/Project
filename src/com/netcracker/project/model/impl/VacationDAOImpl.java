@@ -43,9 +43,9 @@ public class VacationDAOImpl implements VacationDAO {
 
   @Override
   @Transactional
-  public void updateVacation(BigInteger id, Vacation vacation) {
+  public void updateVacation(Vacation vacation) {
     logger.info(
-        "Entering updateVacation(id=" + id + "," + " vacation=" + vacation
+        "Entering updateVacation(id=" + vacation.getVacationId() + "," + " vacation=" + vacation
             + ")");
     updateStartDate(vacation.getStartDate(), vacation.getVacationId());
     updateEndDate(vacation.getEndDate(), vacation.getVacationId());
@@ -85,6 +85,13 @@ public class VacationDAOImpl implements VacationDAO {
             + status + ")");
     return template.query(FIND_VACATION_BY_USER_ID_AND_LM_STATUS,
         new Object[]{id, status}, new VacationMapper());
+  }
+
+  @Override
+  public Vacation findVacationById(BigInteger id) {
+    logger.info(
+        "Entering findVacationById(vacationId=" + id + ")");
+    return template.queryForObject(FIND_VACATION_BY_ID, new Object[]{id}, new VacationMapper());
   }
 
   private void updateStartDate(Date startDate, BigInteger vacationId) {

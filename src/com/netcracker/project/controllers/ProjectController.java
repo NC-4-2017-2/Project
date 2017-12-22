@@ -112,8 +112,7 @@ public class ProjectController {
       @RequestParam("projectStatus") OCStatus projectStatus,
       @RequestParam("projectManagerId") BigInteger projectManagerId,
       @ModelAttribute("modelSprint") SprintsForm sprintsForm,
-      @ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm,
-      Model model) {
+      @ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm) {
     logger.info("editProjectPost() method. Project id" + projectId
         + "endDate: " + endDate
         + "projectStatus: " + projectStatus

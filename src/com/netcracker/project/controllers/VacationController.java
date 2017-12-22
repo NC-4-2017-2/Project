@@ -2,11 +2,14 @@ package com.netcracker.project.controllers;
 
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.VacationDAO;
+import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Vacation;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,11 +68,48 @@ public class VacationController {
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public String createVacationGet(Model model) {
+    logger.info("createVacationGet() method");
+
     Collection<String> projects = projectDAO.findAllOpenedProjects();
     model.addAttribute("projectNamesList", projects);
 
     return "vacation/create";
   }
+
+  @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
+  public String editVacationPost(
+      @RequestParam("vacationId") BigInteger vacationId,
+      @RequestParam("userId") BigInteger userId,
+      @RequestParam("projectName") String projectName,
+      @RequestParam("startDate") String startDate,
+      @RequestParam("endDate") String endDate,
+      @RequestParam("pmApproveStatus") Status pmApproveStatus,
+      @RequestParam("lmApproveStatus") Status lmApproveStatus) {
+    Project project = projectDAO.findProjectByName(projectName);
+//todo finished update
+    return "response_status/success";
+  }
+
+  @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
+  public String editVacationFromPMGet(@PathVariable("id") BigInteger id, Model model) {
+    logger.info("editVacationFromPMGet() method. Param: " + id);
+
+    Vacation vacation = vacationDAO.findVacationById(id);
+    Collection<String> projects = projectDAO.findAllOpenedProjects();
+    Set<String> sortedProject = new LinkedHashSet<>();
+    sortedProject.add(projectDAO.findProjectByProjectId(vacation.getProjectId()).getName());
+    sortedProject.addAll(projects);
+
+    model.addAttribute("projectNamesList", sortedProject);
+    model.addAttribute("vacationId", vacation.getVacationId());
+    model.addAttribute("userId", vacation.getUserId());
+    model.addAttribute("startDate", vacation.getStartDate());
+    model.addAttribute("endDate", vacation.getEndDate());
+    model.addAttribute("pmApproveStatus", vacation.getPmStatus());
+    model.addAttribute("lmApproveStatus", vacation.getLmStatus());
+    return "vacation/edit_vacation_pm";
+  }
+
 
   @RequestMapping(value = "/viewVacationByUserId/{userId}", method = RequestMethod.GET)
   public String findVacationByUserId(@PathVariable("userId") BigInteger userId, Model model) {

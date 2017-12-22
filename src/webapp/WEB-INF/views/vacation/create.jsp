@@ -20,9 +20,11 @@
             </td>
         </tr>
         <tr>
-            <td>ProjectId:</td>
-            <td><input type="text" name="projectId" size="70">
-            </td>
+            Project Name: <select name="projectName">
+                <c:forEach items="${projectNamesList}" var="projectName">
+                    <option value="${projectName}">${projectName}</option>
+                </c:forEach>
+            </select><br>
         </tr>
         <tr>
             <td>Start Date:</td>

@@ -7,8 +7,8 @@ import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.UserDAO.JobTitle;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Project;
-import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ListCountry;
 import java.math.BigInteger;
@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -183,7 +182,7 @@ public class BusinessTripController {
 
   @RequestMapping(value = "showTrip/{businessTripId}", method = RequestMethod.GET)
   public String showTrip(@PathVariable(value = "businessTripId") BigInteger tripId,
-      Model model){
+      Model model) {
     BusinessTrip trip = businessTripDAO
         .findBusinessTripById(tripId);
     model.addAttribute("businessTrip", trip);

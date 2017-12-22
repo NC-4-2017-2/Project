@@ -1,13 +1,14 @@
 package com.netcracker.project.services;
 
-import com.netcracker.project.model.entity.Task;
+import com.netcracker.project.controllers.project_form.SprintFormData;
+import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
+import com.netcracker.project.model.UserDAO;
+import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.Vacation;
 import com.netcracker.project.model.entity.WorkPeriod;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
-import com.netcracker.project.controllers.project_form.SprintFormData;
-import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
-import com.netcracker.project.model.entity.Sprint;
 
 public interface ConvertJspDataService {
 
@@ -18,6 +19,5 @@ public interface ConvertJspDataService {
   List<SprintFormData> convertSprintToSprintForm(Collection<Sprint> sprints);
 
   List<WorkPeriodFormData> convertWorkPeriodToWPForm(Collection<WorkPeriod> workPeriodCollection);
-
 
 }

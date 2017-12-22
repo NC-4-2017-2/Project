@@ -1,15 +1,15 @@
 package com.netcracker.project.model.impl;
 
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.model.VacationDAO;
+import com.netcracker.project.model.entity.Vacation;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.impl.mappers.VacationMapper;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import javax.sql.DataSource;
-import com.netcracker.project.model.VacationDAO;
-import com.netcracker.project.model.enums.Status;
-import com.netcracker.project.model.entity.Vacation;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +19,8 @@ public class VacationDAOImpl implements VacationDAO {
 
   private static final Logger logger = Logger.getLogger(VacationDAOImpl.class);
   private JdbcTemplate template;
-  private MapperDateConverter converter = new MapperDateConverter();
 
+  @Autowired
   public void setDataSource(DataSource dataSource) {
     template = new JdbcTemplate(dataSource);
   }

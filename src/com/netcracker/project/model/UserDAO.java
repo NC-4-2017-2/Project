@@ -24,7 +24,7 @@ public interface UserDAO {
 
     void updatePassword(BigInteger id, String password);
 
-    void updatePhoto(BigInteger id, File photo);
+    void updatePhoto(BigInteger id, String photo);
 
     void updateProjectStatus(BigInteger id, Integer status);
 

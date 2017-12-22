@@ -12,15 +12,15 @@ import java.util.Collection;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
+@ImportResource("classpath:Spring-User.xml")
 public class UserDAOImpl implements UserDAO {
 
   private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
-  private MapperDateConverter converter = new MapperDateConverter();
-
   private JdbcTemplate template;
 
   @Autowired
@@ -95,8 +95,8 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void updatePhoto(BigInteger id, File photo) {
-
+  public void updatePhoto(BigInteger id, String photo) {
+  //don't forget about File!!!
   }
 
   @Override

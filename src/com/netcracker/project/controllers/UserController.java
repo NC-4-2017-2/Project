@@ -7,6 +7,7 @@ import com.netcracker.project.model.UserDAO.UserRole;
 import com.netcracker.project.model.UserDAO.UserStatus;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
+import java.io.File;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -81,7 +82,53 @@ public class UserController {
     return "response_status/success";
   }
 
-  @RequestMapping(value = "/view={login}", method = RequestMethod.GET)
+  @RequestMapping(value = "/edit_user", method = RequestMethod.POST)
+  public String editUserPost(
+      @RequestParam(value = "userId") BigInteger userId,
+      @RequestParam(value = "firstName") String firstName,
+      @RequestParam(value = "lastName") String lastName,
+      @RequestParam(value = "email") String email,
+      @RequestParam(value = "phoneNumber") String phoneNumber,
+      @RequestParam(value = "photo") String photo,
+      @RequestParam(value = "login") String login,
+      @RequestParam(value = "password") String password,
+      @RequestParam(value = "projectStatus") Integer projectStatus) {
+
+    logger.info("editUserPost() method. User id" + userId
+        + "email: " + email
+        + "phoneNumber: " + phoneNumber
+        + "password: " + password
+        + "photo: " + photo
+        + "projectStatus: " + projectStatus);
+
+    userDAO.updateEmail(userId, email);
+    userDAO.updatePhoneNumber(userId, phoneNumber);
+    userDAO.updatePassword(userId, password);
+    userDAO.updatePhoto(userId, photo);
+    userDAO.updateProjectStatus(userId, projectStatus);
+
+    return "response_status/success";
+  }
+
+  @RequestMapping(value = "/edit_user/{userId}", method = RequestMethod.GET)
+  public String editUserGet(@PathVariable("userId") Integer userId,
+      Model model) {
+    logger.info("editUserGet() method. userId: " + userId);
+    User user = userDAO.findUserByUserId(BigInteger.valueOf(userId));
+    model.addAttribute("userId", user.getUserId());
+    model.addAttribute("firstName", user.getFirstName());
+    model.addAttribute("lastName", user.getLastName());
+    model.addAttribute("email", user.getEmail());
+    model.addAttribute("phoneNumber", user.getPhoneNumber());
+    model.addAttribute("photo", user.getPhoto());
+    model.addAttribute("login", user.getLogin());
+    model.addAttribute("password", user.getPassword());
+    model.addAttribute("projectStatus", user.getProjectStatus());
+
+    return "project/edit_user";
+  }
+
+  @RequestMapping(value = "/findUserByLogin/{login}", method = RequestMethod.GET)
   public String findUserByLogin(Model model,
       @PathVariable("login") String login) {
     logger.info("findUserByLogin() method. Login: " + login);
@@ -101,15 +148,16 @@ public class UserController {
     model.addAttribute("userRole", user.getUserRole());
     model.addAttribute("userStatus", user.getUserStatus());
     model.addAttribute("projectStatus", user.getProjectStatus());
+
     return "user/show_user";
   }
 
-  @RequestMapping(value = "/view={id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/findUserByUserId/{userId}", method = RequestMethod.GET)
   public String findUserByUserId(Model model,
-      @PathVariable("id") Integer id) {
-    logger.info("findUserById() method. Id: " + id);
+      @PathVariable("userId") Integer userId) {
+    logger.info("findUserById() method. userId: " + userId);
 
-    User user = userDAO.findUserByUserId(BigInteger.valueOf(id));
+    User user = userDAO.findUserByUserId(BigInteger.valueOf(userId));
 
     model.addAttribute("userId", user.getUserId());
     model.addAttribute("firstName", user.getFirstName());
@@ -124,14 +172,16 @@ public class UserController {
     model.addAttribute("userRole", user.getUserRole());
     model.addAttribute("userStatus", user.getUserStatus());
     model.addAttribute("projectStatus", user.getProjectStatus());
+
     return "user/show_user";
   }
 
-  // HERE'S AN QUESTION!!!
-  @RequestMapping(value = "/view={lastName}/firstName={firstName}", method = RequestMethod.GET)
+  @RequestMapping(value = "/findUserByLastNameAndFirstName/lastName={lastName}&firstName={firstName}",
+      method = RequestMethod.GET)
   public String findUserByLastNameAndFirstName(Model model,
       @PathVariable("lastName") String lastName,
       @PathVariable("firstName") String firstName) {
+
     logger.info("findUserByLastNameAndFirstName() method. lastName: "
         + lastName
         + " ,firstName: "
@@ -139,10 +189,10 @@ public class UserController {
     Collection<User> userCollection = userDAO
         .findUserByLastNameAndFirstName(lastName, firstName);
     model.addAttribute("modelUser", userCollection);
-    return "user/show_user";
+    return "user/show_user_list";
   }
 
-  @RequestMapping(value = "/view={projectId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/findUserByProjectId/{projectId}", method = RequestMethod.GET)
   public String findUserByProjectId(
       @PathVariable("projectId") BigInteger projectId,
       Model model) {
@@ -150,7 +200,15 @@ public class UserController {
     logger.info("findUserByProjectId() method. projectId: " + projectId);
     Collection<User> userCollection = userDAO.findUserByProjectId(projectId);
     model.addAttribute("modelUser", userCollection);
-    return "user/show_user";
+
+    return "user/show_user_list";
+  }
+
+  //in future
+  @RequestMapping(value = "/create_workPeriod", method = RequestMethod.GET)
+  public String createWorkPeriodGet() {
+    logger.info("createWorkPeriodGet() method. Return create_workPeriod");
+    return "user/create_workPeriod";
   }
 
   @RequestMapping(value = "/create_workPeriod", method = RequestMethod.POST)
@@ -165,26 +223,28 @@ public class UserController {
     return "response_status/success";
   }
 
-  @RequestMapping(value = "/view={id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/findWorkPeriodsByUserId/{id}", method = RequestMethod.GET)
   public String findWorkPeriodsByUserId(Model model,
       @PathVariable("id") BigInteger id) {
     return "user/findWorkPeriodsByUserId";
   }
 
-  @RequestMapping(value = "/view={projectId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/findWorkPeriodsByProjectId/{projectId}", method = RequestMethod.GET)
   public String findWorkPeriodsByProjectId(Model model,
       @PathVariable("projectId") BigInteger projectId) {
     return "user/findWorkPeriodsByProjectId";
   }
 
-  @RequestMapping(value = "/view={userId}/projectId={projectId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/findWorkPeriodByUserIdAndProjectId/userId={userId}&projectId={projectId}",
+      method = RequestMethod.GET)
   public String findWorkPeriodByUserIdAndProjectId(Model model,
       @PathVariable("userId") BigInteger userId,
       @PathVariable("projectId") BigInteger projectId) {
     return "user/findWorkPeriodByUserIdAndProjectId";
   }
 
-  @RequestMapping(value = "/view={projectId}/status={status}", method = RequestMethod.POST)
+  @RequestMapping(value = "/findWorkPeriodByProjectIdAndStatus/projectId={projectId}&status={status}",
+      method = RequestMethod.GET)
   public String findWorkPeriodByProjectIdAndStatus(Model model,
       @PathVariable("projectId") BigInteger projectId,
       @PathVariable("status") Integer status) {

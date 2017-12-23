@@ -1,5 +1,6 @@
 package com.netcracker.project.model.impl.mappers;
 
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +9,7 @@ import com.netcracker.project.model.entity.Vacation;
 import org.springframework.jdbc.core.RowMapper;
 
 public class VacationMapper implements RowMapper<Vacation> {
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   @Override
   public Vacation mapRow(ResultSet rs, int rowNum) throws SQLException {

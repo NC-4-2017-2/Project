@@ -1,5 +1,6 @@
 package com.netcracker.project.model.impl.mappers;
 
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ public class WorkingHoursStatisticMapper implements
   @Override
   public WorkingHoursStatistic mapRow(ResultSet rs, int rowNum)
       throws SQLException {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     Date date = rs.getDate(EnumMapper.WORKING_DATE.getFullName());
     String workingDay = converter
         .convertDateToString(date);

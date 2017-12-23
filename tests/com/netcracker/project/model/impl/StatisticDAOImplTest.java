@@ -6,7 +6,7 @@ import com.netcracker.project.model.entity.UserTaskStatistic;
 import com.netcracker.project.model.entity.VacationStatistic;
 import com.netcracker.project.model.entity.WorkPeriodStatistic;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -14,11 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Locale;
@@ -32,7 +30,7 @@ public class StatisticDAOImplTest {
 
   @Autowired
   private StatisticDAO statisticDAO;
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
 
   @Before

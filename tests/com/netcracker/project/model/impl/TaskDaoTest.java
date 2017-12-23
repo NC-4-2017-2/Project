@@ -8,7 +8,6 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +16,7 @@ import javax.sql.DataSource;
 import com.netcracker.project.model.TaskDAO;
 import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.entity.Task.TaskBuilder;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +47,7 @@ public class TaskDaoTest {
 
   @Test
   public void test1createTask(){
-    MapperDateConverter mdc = new MapperDateConverter();
+    DateConverterService mdc = new DateConverterService();
     Date date = mdc.convertStringToDate("01.12.2017");
     task = new TaskBuilder()
         .taskId(BigInteger.valueOf(300))
@@ -73,7 +72,7 @@ public class TaskDaoTest {
   @Test
   public void test2updateTask(){
 
-    MapperDateConverter mdc = new MapperDateConverter();
+    DateConverterService mdc = new DateConverterService();
     Date date = mdc.convertStringToDate("01.12.2017");
 
     Task taskUpdates = new TaskBuilder()
@@ -103,7 +102,7 @@ public class TaskDaoTest {
   }
 
   private Task buildTask(){
-    MapperDateConverter mdc = new MapperDateConverter();
+    DateConverterService mdc = new DateConverterService();
     Date date = mdc.convertStringToDate("01.12.2017");
     task = new TaskBuilder()
         .taskId(BigInteger.valueOf(6))

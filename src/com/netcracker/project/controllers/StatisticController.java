@@ -4,7 +4,7 @@ import com.netcracker.project.model.entity.SprintStatistic;
 import com.netcracker.project.model.entity.UserTaskStatistic;
 import com.netcracker.project.model.entity.VacationStatistic;
 import com.netcracker.project.model.entity.WorkPeriodStatistic;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +26,7 @@ public class StatisticController {
   @Autowired
   private StatisticService statisticService;
   private static final Logger logger = Logger.getLogger(StatisticService.class);
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   @RequestMapping(value = "/view_sprint={id}", method = RequestMethod.GET)
   public String projectSprintStatLineChart(@PathVariable("id") BigInteger id,

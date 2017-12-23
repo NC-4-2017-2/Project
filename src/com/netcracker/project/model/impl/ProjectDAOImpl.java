@@ -3,11 +3,9 @@ package com.netcracker.project.model.impl;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
-import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.OCStatus;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.model.impl.mappers.SprintMapper;
-import com.netcracker.project.model.impl.mappers.UserMapper;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,10 +15,8 @@ import javax.sql.DataSource;
 import com.netcracker.project.model.impl.mappers.ProjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class ProjectDAOImpl implements ProjectDAO {
@@ -109,8 +105,8 @@ public class ProjectDAOImpl implements ProjectDAO {
   @Override
   public List<Project> findProjectByDate(Date startDate) {
     logger.info("Entering findProjectByDate(startDate=" + startDate + ")");
-    MapperDateConverter dateConverter = new MapperDateConverter();
-    String formattedDate = dateConverter.convertDateToString(startDate);
+    DateConverterService dateConverterService = new DateConverterService();
+    String formattedDate = dateConverterService.convertDateToString(startDate);
 
     List<BigInteger> projectId = findAllProjectIdFromDate(formattedDate);
     List<Project> projects = new ArrayList<>();
@@ -191,7 +187,7 @@ public class ProjectDAOImpl implements ProjectDAO {
   public void createSprint(Sprint sprint, BigInteger projectId) {
     logger.info("Entering createSprint(sprint=" + sprint + "," + " projectId="
         + projectId + ")");
-    MapperDateConverter mdc = new MapperDateConverter();
+    DateConverterService mdc = new DateConverterService();
     template.update(CREATE_SPRINT,
         sprint.getSprintId(),
         sprint.getName(),

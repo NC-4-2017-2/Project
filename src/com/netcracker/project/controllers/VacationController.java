@@ -5,7 +5,7 @@ import com.netcracker.project.model.VacationDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Vacation;
 import com.netcracker.project.model.enums.Status;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -28,7 +28,7 @@ public class VacationController {
   private VacationDAO vacationDAO;
   @Autowired
   private ProjectDAO projectDAO;
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
   public String createVacationPost(

@@ -10,7 +10,7 @@ import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.enums.OCStatus;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.ConvertJspDataService;
 import com.netcracker.project.services.impl.ConvertJspDataServiceImpl;
 import java.math.BigInteger;
@@ -39,7 +39,7 @@ public class ProjectController {
   private UserDAO userDAO;
 
   private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   @RequestMapping(value = "/create_project", method = RequestMethod.POST)
   public String createProject(

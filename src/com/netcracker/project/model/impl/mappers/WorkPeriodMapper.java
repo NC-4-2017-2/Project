@@ -2,6 +2,7 @@ package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 public class WorkPeriodMapper implements RowMapper<WorkPeriod> {
 
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   public WorkPeriod mapRow(ResultSet rs, int rowNum)
       throws SQLException {

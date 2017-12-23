@@ -2,10 +2,9 @@ package com.netcracker.project.controllers.project_form;
 
 
 import com.netcracker.project.model.enums.OCStatus;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class SprintFormData {
 
@@ -14,7 +13,7 @@ public class SprintFormData {
   private String startDate;
   private String plannedEndDate;
   private OCStatus sprintStatus;
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   public SprintFormData(String name,
       Date startDate, Date plannedEndDate) {

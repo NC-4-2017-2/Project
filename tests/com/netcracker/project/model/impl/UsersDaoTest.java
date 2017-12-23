@@ -10,7 +10,7 @@ import com.netcracker.project.model.UserDAO.UserStatus;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -73,7 +73,7 @@ public class UsersDaoTest {
 
   @Test
   public void insertUser() {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     Date dateOfBirth = converter.convertStringToDate("11.11.1986");
     Date hireDate = converter.convertStringToDate("12.12.2010");
 
@@ -156,7 +156,7 @@ public class UsersDaoTest {
 
   @Test
   public void updateWorkingPeriodEndDateByUserId() {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
         .userId(BigInteger.valueOf(2))
         .projectId(BigInteger.valueOf(4))
@@ -185,7 +185,7 @@ public class UsersDaoTest {
 
   @Test
   public void createWorkPeriod() {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     String startDate = "11.11.2013";
     String endDate = "11.12.2013";
 

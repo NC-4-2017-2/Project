@@ -9,7 +9,7 @@ import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.Status;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.ListCountry;
 import java.math.BigInteger;
 import java.security.Principal;
@@ -36,7 +36,7 @@ public class BusinessTripController {
   @Autowired
   private ListCountry countries;
   @Autowired
-  private MapperDateConverter converter;
+  private DateConverterService converter;
 
 
   @RequestMapping(value = "createBusinessTrip", method = RequestMethod.GET)

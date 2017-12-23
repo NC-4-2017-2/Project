@@ -2,13 +2,9 @@ package com.netcracker.project.services.impl;
 
 import com.netcracker.project.controllers.project_form.SprintFormData;
 import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
-import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.Sprint;
 import com.netcracker.project.model.entity.Sprint.SprintBuilder;
-import com.netcracker.project.model.entity.User;
-import com.netcracker.project.model.entity.Vacation;
 import com.netcracker.project.model.entity.WorkPeriod;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
 import com.netcracker.project.services.ConvertJspDataService;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -17,7 +13,7 @@ import java.util.List;
 
 public class ConvertJspDataServiceImpl implements ConvertJspDataService {
 
-  MapperDateConverter converter = new MapperDateConverter();
+  DateConverterService converter = new DateConverterService();
 
   @Override
   public Collection<Sprint> createSprintFromJsp(List<SprintFormData> sprints,

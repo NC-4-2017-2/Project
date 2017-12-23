@@ -12,8 +12,7 @@ import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Project.ProjectBuilder;
 import com.netcracker.project.model.entity.Sprint;
-import com.netcracker.project.model.enums.OCStatus;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.text.DateFormat;
@@ -44,7 +43,7 @@ public class ProjectDaoTest {
 
   private static final String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   @Before
   public void setUp() {
@@ -261,7 +260,7 @@ public class ProjectDaoTest {
   }
 
   private Sprint buildTestSprint() {
-    MapperDateConverter mdc = new MapperDateConverter();
+    DateConverterService mdc = new DateConverterService();
     Date startDate = mdc.convertStringToDate("14.12.2012");
     Date endDate = mdc.convertStringToDate("25.12.2012");
     Date plannedEndDate = mdc.convertStringToDate("26.12.2012");

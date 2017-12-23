@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.enums.Status;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -116,7 +116,7 @@ public class BusinessTripDAOImplTest {
   }
 
   private BusinessTrip getBusinessTripForUpdate() {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     Date startDate = converter.convertStringToDate("15.11.11");
     Date endDate = converter.convertStringToDate("25.12.12");
 
@@ -134,7 +134,7 @@ public class BusinessTripDAOImplTest {
   }
 
   private BusinessTrip getTripForTest() {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     Date startDate = converter.convertStringToDate("11.11.11");
     Date endDate = converter.convertStringToDate("12.12.12");
 

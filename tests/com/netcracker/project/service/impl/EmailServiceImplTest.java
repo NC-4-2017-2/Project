@@ -11,7 +11,7 @@ import com.netcracker.project.model.UserDAO.ProjectStatus;
 import com.netcracker.project.model.UserDAO.UserRole;
 import com.netcracker.project.model.UserDAO.UserStatus;
 import com.netcracker.project.model.entity.User;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.EmailServiceImpl;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -65,7 +65,7 @@ public class EmailServiceImplTest {
 
   @Test
   public void sendPass() {
-    MapperDateConverter converter = new MapperDateConverter();
+    DateConverterService converter = new DateConverterService();
     Date dateOfBirth = converter.convertStringToDate("04.03.96");
     Date hireDate = converter.convertStringToDate("12.02.18");
 

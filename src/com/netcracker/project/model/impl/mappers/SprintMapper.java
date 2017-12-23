@@ -1,17 +1,16 @@
 package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.model.enums.OCStatus;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import com.netcracker.project.model.entity.Sprint;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.jdbc.core.RowMapper;
 
 public class SprintMapper implements RowMapper<Sprint> {
 
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
 
   @Override
   public Sprint mapRow(ResultSet rs, int i) throws SQLException {

@@ -1,7 +1,7 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.model.enums.Status;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.ListCountry;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,8 +69,8 @@ public class BusinessTripValidator {
     if (startDate != null || endDate != null) {
 
       if (checkStartDate(startDate) && checkEndDate(endDate)) {
-        Date start = new MapperDateConverter().convertStringToDateFromJSP(startDate);
-        Date end = new MapperDateConverter().convertStringToDateFromJSP(endDate);
+        Date start = new DateConverterService().convertStringToDateFromJSP(startDate);
+        Date end = new DateConverterService().convertStringToDateFromJSP(endDate);
 
         int dateCompare = start.compareTo(end);
 

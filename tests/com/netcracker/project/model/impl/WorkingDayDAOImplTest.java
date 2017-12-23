@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import com.netcracker.project.model.WorkingDayDAO;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.WorkingDay;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class WorkingDayDAOImplTest {
   private DataSource dataSource;
   private WorkingDay workingDayTest1;
   private WorkingDay workingDayTest2;
-  private MapperDateConverter converter = new MapperDateConverter();
+  private DateConverterService converter = new DateConverterService();
   private static final String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJREFERENCE = "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ?";

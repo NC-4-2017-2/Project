@@ -105,7 +105,7 @@ public class WorkingDayDAOImplTest {
   @Test
   public void test3DeleteWorkingDay() {
     BigInteger id1 = BigInteger.valueOf(44);
-    BigInteger id2 = BigInteger.valueOf(45);
+    BigInteger id2 = BigInteger.valueOf(400);
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id1});
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id1});

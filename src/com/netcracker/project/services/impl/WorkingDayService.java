@@ -1,9 +1,10 @@
 package com.netcracker.project.services.impl;
 
 import com.netcracker.project.model.entity.WorkingDay;
+import com.netcracker.project.model.enums.Status;
+import java.math.BigInteger;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
@@ -13,14 +14,11 @@ import java.util.Locale;
 
 public class WorkingDayService {
 
-  public WorkingDay getWorkingDay(String start, String end,
-      DayOfWeek dayOfWeek) {
+  public WorkingDay getWorkingDay(Long minutes,
+      DayOfWeek dayOfWeek, BigInteger userId,
+      BigInteger pmId) {
     DateConverterService converter = new DateConverterService();
-    LocalTime startTime = converter.getLocalTimeFromString(start);
-    LocalTime endTime = converter.getLocalTimeFromString(end);
-    Long minutesBetweenTimes = converter
-        .getMinutesBetweenLocalTimes(startTime, endTime);
-    Double hoursCount = converter.parseMinutes(minutesBetweenTimes);
+    Double hoursCount = converter.parseMinutes(minutes);
     int currentWeekNumber = getCurrentWeekNumber();
 
     LocalDate localDate = LocalDate.now()
@@ -32,6 +30,9 @@ public class WorkingDayService {
             localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
         .weekNumber(currentWeekNumber)
         .workingHours(hoursCount)
+        .pmId(pmId)
+        .userId(userId)
+        .status(Status.WAITING_FOR_APPROVAL)
         .build();
     return workingDay;
   }

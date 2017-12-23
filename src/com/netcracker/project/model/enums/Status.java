@@ -1,7 +1,7 @@
 package com.netcracker.project.model.enums;
 
 public enum Status {
-  APPROVED(0), DISAPPROVED(1), WAITING_FOR_APPROVAL(3);
+  APPROVED(0), DISAPPROVED(1), WAITING_FOR_APPROVAL(2);
   private int id;
 
   Status(int id) {

@@ -13,19 +13,19 @@ public interface WorkingDayDAO {
 
   String ADD_HOURS_PER_DAY = "INSERT ALL "
       + "    INTO OBJECTS(OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION, OBJECT_VERSION) "
-      + "VALUES (? , NULL, 6, ?, NULL, 1) "
+      + "VALUES (400 , NULL, 6, ?, NULL, 1) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (49, ?, NULL, ?, NULL) "
+      + "VALUES (49, 400, NULL, ?, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (50, ?, ?, NULL, NULL) "
+      + "VALUES (50, 400, ?, NULL, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (51, ?, ?, NULL, NULL) "
+      + "VALUES (51, 400, ?, NULL, NULL) "
       + "    INTO ATTRIBUTES (ATTR_ID, OBJECT_ID, VALUE,DATE_VALUE,LIST_VALUE_ID) "
-      + "VALUES (52, ?, NULL, NULL, ?) "
+      + "VALUES (52, 400, NULL, NULL, ?) "
       + "    INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) "
-      + "VALUES (53, ?, ?) "
+      + "VALUES (53, 400, ?) "
       + "    INTO OBJREFERENCE (ATTR_ID, OBJECT_ID, REFERENCE) "
-      + "VALUES (54, ?, ?) "
+      + "VALUES (54, 400, ?) "
       + "SELECT * FROM DUAL";
 
   String FIND_HOURS_PER_PERIOD =

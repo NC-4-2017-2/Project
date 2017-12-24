@@ -1,5 +1,6 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.WorkingDayValidator;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.WorkingDayDAO;
@@ -11,8 +12,11 @@ import com.netcracker.project.services.impl.WorkingDayService;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +36,7 @@ public class WorkingDayController {
 
   @RequestMapping(value = "/create", method = RequestMethod.GET)
   public String createWorkingDays() {
-    return "workingDay/workingDay";
+    return "workingDay/createWorkingDay";
   }
 
   @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -51,12 +55,71 @@ public class WorkingDayController {
       @RequestParam(value = "saturdayEndTime") String saturdayEndTime,
       @RequestParam(value = "sundayStartTime") String sundayStartTime,
       @RequestParam(value = "sundayEndTime") String sundayEndTime,
-      Principal principal) {
+      Principal principal,
+      Model model) {
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
     BigInteger projectId = projectDAO
         .findProjectIdByUserLogin(userLogin);
     Project project = projectDAO.findProjectByProjectId(projectId);
+
+    WorkingDayValidator validator = new WorkingDayValidator();
+    Map<String, String> errorMap = new HashMap<>();
+
+    if (mondayStartTime.isEmpty() && mondayEndTime.isEmpty() &&
+        tuesdayStartTime.isEmpty() && tuesdayEndTime.isEmpty() &&
+        wednesdayStartTime.isEmpty() && wednesdayEndTime.isEmpty() &&
+        thursdayStartTime.isEmpty() && thursdayEndTime.isEmpty() &&
+        fridayStartTime.isEmpty() && fridayEndTime.isEmpty() &&
+        saturdayStartTime.isEmpty() && saturdayEndTime.isEmpty() &&
+        sundayStartTime.isEmpty() && sundayEndTime.isEmpty()
+        ) {
+      errorMap.put("emptyWorkingDay", "Set at least one day!");
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/createWorkingDay";
+    }
+
+    Map<String, String> mondayMap = validator
+        .validateCreate(mondayStartTime, mondayEndTime, DayOfWeek.MONDAY);
+    if (!mondayMap.isEmpty()) {
+      errorMap.putAll(mondayMap);
+    }
+    Map<String, String> tuesdayMap = validator
+        .validateCreate(tuesdayStartTime, tuesdayEndTime, DayOfWeek.TUESDAY);
+    if (!tuesdayMap.isEmpty()) {
+      errorMap.putAll(tuesdayMap);
+    }
+    Map<String, String> wednesdayMap = validator
+        .validateCreate(wednesdayStartTime, wednesdayEndTime,
+            DayOfWeek.WEDNESDAY);
+    if (!wednesdayMap.isEmpty()) {
+      errorMap.putAll(wednesdayMap);
+    }
+    Map<String, String> thursdayMap = validator
+        .validateCreate(thursdayStartTime, thursdayEndTime, DayOfWeek.THURSDAY);
+    if (!thursdayMap.isEmpty()) {
+      errorMap.putAll(thursdayMap);
+    }
+    Map<String, String> fridayMap = validator
+        .validateCreate(fridayStartTime, fridayEndTime, DayOfWeek.FRIDAY);
+    if (!fridayMap.isEmpty()) {
+      errorMap.putAll(fridayMap);
+    }
+    Map<String, String> saturdayMap = validator
+        .validateCreate(saturdayStartTime, saturdayEndTime, DayOfWeek.SATURDAY);
+    if (!saturdayMap.isEmpty()) {
+      errorMap.putAll(saturdayMap);
+    }
+    Map<String, String> sundayMap = validator
+        .validateCreate(sundayStartTime, sundayEndTime, DayOfWeek.SUNDAY);
+    if (!sundayMap.isEmpty()) {
+      errorMap.putAll(sundayMap);
+    }
+
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/createWorkingDay";
+    }
 
     if (!mondayStartTime.isEmpty() && !mondayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(mondayStartTime, mondayEndTime,
@@ -64,6 +127,7 @@ public class WorkingDayController {
           DayOfWeek.MONDAY);
       workingDayDAO.addHoursPerDay(workingDay);
     }
+
     if (!tuesdayStartTime.isEmpty() && !tuesdayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(tuesdayStartTime, tuesdayEndTime,
           user, project,

@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DateConverterService extends JsonSerializer<Date> {
+public class DateConverterService{
 
   private static final Logger logger = Logger
       .getLogger(BusinessTripDAOImpl.class);
@@ -33,7 +33,7 @@ public class DateConverterService extends JsonSerializer<Date> {
     try {
       date = dateFormat.parse(str);
     } catch (ParseException e) {
-      e.printStackTrace();
+      logger.error("ParseException : " + e.getMessage());
     }
     return date;
   }
@@ -57,13 +57,6 @@ public class DateConverterService extends JsonSerializer<Date> {
     return formattedDate;
   }
 
-  @Override
-  public void serialize(Date date, JsonGenerator jsonGenerator,
-      SerializerProvider serializerProvider)
-      throws IOException {
-    String formattedDate = dateFormat.format(date);
-    jsonGenerator.writeString(formattedDate);
-  }
 
   public Date convertStringToDateFromJSP(String str) {
     Date date = null;
@@ -72,7 +65,7 @@ public class DateConverterService extends JsonSerializer<Date> {
     try {
       date = dateFormat.parse(str);
     } catch (ParseException e) {
-      e.printStackTrace();
+      logger.error("ParseException : " + e.getMessage());
     }
     return date;
   }

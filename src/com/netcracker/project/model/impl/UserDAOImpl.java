@@ -3,10 +3,14 @@ package com.netcracker.project.model.impl;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkPeriod;
+import com.netcracker.project.model.impl.mappers.EnumMapper;
 import com.netcracker.project.model.impl.mappers.UserMapper;
 import com.netcracker.project.model.impl.mappers.WorkPeriodMapper;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +67,8 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public Collection<User> findUserByLastNameAndFirstName(String lastName, String firstName) {
-    logger.info("Entering findUserByFirstNameAndLastName(lastName=" + lastName + "," + " firstName=" + firstName + ")");
+    logger.info("Entering findUserByFirstNameAndLastName(lastName=" + lastName + "," + " firstName="
+        + firstName + ")");
     return template
         .query(FIND_USER_BY_LAST_NAME_AND_FIRST_NAME, new Object[]{lastName, firstName},
             new UserMapper());
@@ -73,6 +78,20 @@ public class UserDAOImpl implements UserDAO {
   public Collection<User> findUserByProjectId(BigInteger projectId) {
     logger.info("Entering findUserByProjectId(" + projectId + ")");
     return template.query(FIND_USER_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+  }
+
+  @Override
+  public Map<String, String> getAllUserName() {
+    logger.info("Entering getAllUserName()");
+    List idAndName = template.queryForList(GET_ALL_USERS);
+    Map<String, String> result = new HashMap<>();
+    for (Object idName : idAndName) {
+      HashMap map = (HashMap) idName;
+      result.put(String.valueOf(map.get(EnumMapper.USER_ID.toString())),
+          String.valueOf(map.get(EnumMapper.FULL_NAME.toString())));
+    }
+
+    return result;
   }
 
   @Override
@@ -95,7 +114,7 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public void updatePhoto(BigInteger id, String photo) {
-  //don't forget about File!!!
+    //don't forget about File!!!
   }
 
   @Override
@@ -142,8 +161,9 @@ public class UserDAOImpl implements UserDAO {
     logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + ","
         + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod
         + ")");
-    template.update(UPDATE_WORKING_PERIOD_END_DATE,workPeriod.getEndWorkDate(), workPeriod.getUserId(),
-        workPeriod.getProjectId());
+    template
+        .update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate(), workPeriod.getUserId(),
+            workPeriod.getProjectId());
   }
 
   @Override

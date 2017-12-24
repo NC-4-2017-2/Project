@@ -15,16 +15,20 @@
             <h2>Create Vacation</h2></td>
         </tr>
         <tr>
-            <td>UserId:</td>
-            <td><input type="text" name="userId" size="70">
-            </td>
+            User name:
+            <select name="userNames">
+                <c:forEach items="${userNames}" var="name">
+                    <option value="${name.key}">${name.value}</option>
+                </c:forEach>
+            </select>
+            <br>
         </tr>
         <tr>
             Project Name: <select name="projectName">
-                <c:forEach items="${projectNamesList}" var="projectName">
-                    <option value="${projectName}">${projectName}</option>
-                </c:forEach>
-            </select><br>
+            <c:forEach items="${projectNamesList}" var="projectName">
+                <option value="${projectName}">${projectName}</option>
+            </c:forEach>
+        </select><br>
         </tr>
         <tr>
             <td>Start Date:</td>
@@ -52,16 +56,6 @@
                     <option name="lmApproveStatus" value="WAITING_FOR_APPROVAL">WAITING FOR APPROVAL
                     </option>
                 </select>
-        </tr>
-        <tr>
-            <td>PM id:</td>
-            <td><input type="text" name="pmId" size="70">
-            </td>
-        </tr>
-        <tr>
-            <td>LM id:</td>
-            <td><input type="text" name="lmId" size="70">
-            </td>
         </tr>
     </table>
     <tr>

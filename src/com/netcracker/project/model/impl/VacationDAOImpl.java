@@ -29,15 +29,14 @@ public class VacationDAOImpl implements VacationDAO {
   public void createVacation(Vacation vacation) {
     logger.info("Entering createVacation(vacation=" + vacation + ")");
     template.update(CREATE_VACATION, new Object[]{
-        "VACATION " + vacation.getVacationId(),
-        vacation.getUserId(),
-        vacation.getProjectId(),
         vacation.getStartDate(),
         vacation.getEndDate(),
-        vacation.getPmStatus(),
-        vacation.getLmStatus(),
+        vacation.getPmStatus().getId(),
+        vacation.getLmStatus().getId(),
+        vacation.getUserId(),
+        vacation.getProjectId(),
         vacation.getPmId(),
-        vacation.getLmId()
+        2
     });
   }
 
@@ -51,6 +50,8 @@ public class VacationDAOImpl implements VacationDAO {
     updateEndDate(vacation.getEndDate(), vacation.getVacationId());
     updatePmStatus(vacation.getPmStatus(), vacation.getVacationId());
     updateLmStatus(vacation.getLmStatus(), vacation.getVacationId());
+    updateProjectId(vacation.getProjectId(), vacation.getVacationId());
+    updateUserId(vacation.getUserId(), vacation.getVacationId());
   }
 
   @Override
@@ -121,4 +122,19 @@ public class VacationDAOImpl implements VacationDAO {
             + vacationId + ")");
     template.update(UPDATE_LM_STATUS, status.getId(), vacationId);
   }
+
+  private void updateProjectId(BigInteger projectId, BigInteger vacationId) {
+    logger.info(
+        "Entering updateProjectId(projectId=" + projectId + "," + " vacationId="
+            + vacationId + ")");
+    template.update(UPDATE_PROJECT_ID, projectId, vacationId);
+  }
+
+  private void updateUserId(BigInteger userId, BigInteger vacationId) {
+    logger.info(
+        "Entering updateProjectId(projectId=" + userId + "," + " vacationId="
+            + vacationId + ")");
+    template.update(UPDATE_USER_ID, userId, vacationId);
+  }
+
 }

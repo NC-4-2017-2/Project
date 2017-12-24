@@ -17,9 +17,17 @@
             </td>
         </tr>
         <tr>
-            <td>UserId:</td>
-            <td><input type="text" name="userId" value="${userId}" size="70">
-            </td>
+            User name:
+            <select name="userNames">
+                <c:set var="id" value="${userId}"/>
+                <c:forEach items="${userNames}" var="name">
+                    <c:if test="${id eq name.key}">
+                        <option selected="selected" value="${name.key}">${name.value}</option>
+                    </c:if>
+                    <option value="${name.key}">${name.value}</option>
+                </c:forEach>
+            </select>
+            <br>
         </tr>
         <tr>
             Project Name: <select name="projectName">
@@ -42,17 +50,18 @@
             <td>PM approve status:</td>
             <td>
                 <select name="pmApproveStatus">
-                    <option value="APPROVED">APPROVED</option>
-                    <option value="DISAPPROVED">DISAPPROVED</option>
-                    <option value="WAITING_FOR_APPROVAL">WAITING FOR APPROVAL</option>
+                    <c:forEach items="${pmApproveStatus}" var="status">
+                        <option value="${status}">${status}</option>
+                    </c:forEach>
                 </select>
         </tr>
         <tr>
             <td>LM approve status:</td>
             <td>
                 <select name="lmApproveStatus">
-                    <option name="lmApproveStatus" value="${lmApproveStatus}">${lmApproveStatus}
-                    </option>
+                    <c:forEach items="${lmApproveStatus}" var="status">
+                        <option value="${status}">${status}</option>
+                    </c:forEach>
                 </select>
         </tr>
 

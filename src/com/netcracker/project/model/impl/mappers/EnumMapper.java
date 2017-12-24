@@ -47,7 +47,8 @@ public enum EnumMapper {
   COUNT_DAYS("COUNT_DAYS"),
   USER_NAME("USER_NAME"),
   USER_PASSWORD("USER_PASSWORD"),
-  USER_ROLE("USER_ROLE");
+  USER_ROLE("USER_ROLE"),
+  FULL_NAME("FULL_NAME");
 
   private String fullName;
 

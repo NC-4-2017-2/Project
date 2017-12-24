@@ -1,19 +1,15 @@
 package com.netcracker.project.model.impl.mappers;
 
-import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.springframework.jdbc.core.RowMapper;
 
 public class UserMapper implements RowMapper<User> {
-
-  private DateConverterService converter;
 
   public User mapRow(ResultSet rs, int rowNum) throws SQLException {
     return new User.UserBuilder()

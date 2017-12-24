@@ -5,6 +5,7 @@ import com.netcracker.project.model.entity.WorkPeriod;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Map;
 
 public interface UserDAO {
 
@@ -17,6 +18,8 @@ public interface UserDAO {
     Collection<User> findUserByLastNameAndFirstName(String lastName, String firstName);
 
     Collection<User> findUserByProjectId(BigInteger projectId);
+
+    Map<String, String> getAllUserName();
 
     void updatePhoneNumber(BigInteger id, String phoneNumber);
 
@@ -376,4 +379,32 @@ public interface UserDAO {
         "SELECT * " +
         "FROM Dual";
 
+    String GET_ALL_USERS = "SELECT EMP.OBJECT_ID AS USER_ID, EMP_LAST_NAME.VALUE ||' '|| EMP_FIRST_NAME.VALUE AS FULL_NAME "
+        + "FROM OBJTYPE EMP_TYPE, OBJECTS EMP,  "
+        + "ATTRIBUTES EMP_LAST_NAME, ATTRIBUTES EMP_FIRST_NAME, ATTRIBUTES EMP_EMAIL,  "
+        + "ATTRIBUTES EMP_BIRTH_DATE, ATTRIBUTES EMP_HIRE_DATE, ATTRIBUTES EMP_PHONE_NUMBER,  "
+        + "ATTRIBUTES EMP_JOB_TITLE, ATTRIBUTES EMP_PROJECT_STATUS,  "
+        + "LISTVALUE EMP_JOB_TITLE_VALUE, LISTVALUE EMP_PROJECT_STATUS_VALUE  "
+        + "WHERE EMP_TYPE.OBJECT_TYPE_ID = 1 AND  "
+        + "EMP.OBJECT_TYPE_ID = EMP_TYPE.OBJECT_TYPE_ID AND  "
+        + "EMP_LAST_NAME.ATTR_ID = 1 AND  "
+        + "EMP_LAST_NAME.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_FIRST_NAME.ATTR_ID = 2 AND  "
+        + "EMP_FIRST_NAME.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_EMAIL.ATTR_ID = 3 AND  "
+        + "EMP_EMAIL.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_BIRTH_DATE.ATTR_ID = 4 AND  "
+        + "EMP_BIRTH_DATE.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_HIRE_DATE.ATTR_ID = 5 AND  "
+        + "EMP_HIRE_DATE.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_PHONE_NUMBER.ATTR_ID = 6 AND  "
+        + "EMP_PHONE_NUMBER.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_JOB_TITLE.ATTR_ID = 8 AND  "
+        + "EMP_JOB_TITLE.OBJECT_ID = EMP.OBJECT_ID AND  "
+        + "EMP_JOB_TITLE_VALUE.ATTR_ID = 8 AND  "
+        + "EMP_JOB_TITLE_VALUE.LIST_VALUE_ID = EMP_JOB_TITLE.LIST_VALUE_ID AND "
+        + "EMP_PROJECT_STATUS.ATTR_ID = 9 AND "
+        + "EMP_PROJECT_STATUS.OBJECT_ID = EMP.OBJECT_ID AND "
+        + "EMP_PROJECT_STATUS_VALUE.ATTR_ID = 9 AND "
+        + "EMP_PROJECT_STATUS_VALUE.LIST_VALUE_ID = EMP_PROJECT_STATUS.LIST_VALUE_ID";
 }

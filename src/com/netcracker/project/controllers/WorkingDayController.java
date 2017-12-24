@@ -125,7 +125,18 @@ public class WorkingDayController {
       WorkingDay workingDay = getWorkingDay(mondayStartTime, mondayEndTime,
           user, project,
           DayOfWeek.MONDAY);
-      workingDayDAO.createWorkingDay(workingDay);
+      Integer existWorkingDay = workingDayDAO
+          .findIfWorkingDayExist(user.getUserId(),
+              workingDay.getDate());
+      if (existWorkingDay > 0) {
+        WorkingDay actualWorkingDay = workingDayDAO
+            .findWorkingDayByUserIdAndDate(user.getUserId(),
+                workingDay.getDate());
+        workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),
+            workingDay.getWorkingHours());
+      } else if (existWorkingDay == 0){
+        workingDayDAO.createWorkingDay(workingDay);
+      }
     }
 
     if (!tuesdayStartTime.isEmpty() && !tuesdayEndTime.isEmpty()) {

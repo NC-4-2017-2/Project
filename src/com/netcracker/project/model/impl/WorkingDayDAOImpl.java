@@ -65,6 +65,11 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   }
 
   @Override
+  public Integer findIfWorkingDayExist(BigInteger userId, Date workingDayDate) {
+    return template.queryForObject(FIND_WORKING_DAY_IF_EXIST, new Object[]{userId, workingDayDate}, Integer.class);
+  }
+
+  @Override
   public void updateWorkingHours(BigInteger workingDayId, Double hours) {
     template.update(UPDATE_WORKING_HOURS, workingDayId, hours, workingDayId);
   }

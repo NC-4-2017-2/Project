@@ -2,6 +2,8 @@ package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -22,9 +24,9 @@ public class UserMapper implements RowMapper<User> {
         .dateOfBirth(rs.getDate(EnumMapper.BIRTH_DATE.getFullName()))
         .hireDate(rs.getDate(EnumMapper.HIRE_DATE.getFullName()))
         .phoneNumber(rs.getString(EnumMapper.PHONE_NUMBER.getFullName()))
-        .jobTitle(UserDAO.JobTitle
+        .jobTitle(JobTitle
             .valueOf(rs.getString(EnumMapper.JOB_TITLE.getFullName())))
-        .projectStatus(UserDAO.ProjectStatus
+        .projectStatus(ProjectStatus
             .valueOf(rs.getString(EnumMapper.STATUS.getFullName())))
         .build();
   }

@@ -1,5 +1,6 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.TaskValidator;
 import com.netcracker.project.model.TaskDAO;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
@@ -8,6 +9,7 @@ import com.netcracker.project.model.entity.Task;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -63,7 +65,7 @@ public class TaskController {
         .projectId(BigInteger.valueOf(projectId))
         .build();
 
-    logger.info("createTask request from DB. Task id: " + id);
+    logger.info("createTask request from DB. Task name: " + name);
     taskDAO.createTask(createTask);
     return "response_status/success";
   }
@@ -140,6 +142,7 @@ public class TaskController {
                                                @PathVariable("priority") TaskPriority priority, Model model) {
 
     logger.info("findTaskByProjectIdAndPriority method. projectId:" + projectId + "priority" + priority);
+   // Map<String, String> mapError = new TaskValidator().validationFindTask(priority)
     Collection<Task> taskCollection = taskDAO.findTaskByProjectIdAndPriority(projectId, priority.getId());
     model.addAttribute("modelTask", taskCollection);
 

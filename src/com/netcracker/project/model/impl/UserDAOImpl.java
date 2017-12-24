@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+
 @Component
 @ImportResource("classpath:Spring-User.xml")
 public class UserDAOImpl implements UserDAO {

@@ -1,15 +1,15 @@
 package com.netcracker.project.service.impl;
 
 
+import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.ProjectStatus;
+import com.netcracker.project.model.enums.UserRole;
+import com.netcracker.project.model.enums.UserStatus;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Locale;
 import javax.sql.DataSource;
 import com.netcracker.project.model.UserDAO;
-import com.netcracker.project.model.UserDAO.JobTitle;
-import com.netcracker.project.model.UserDAO.ProjectStatus;
-import com.netcracker.project.model.UserDAO.UserRole;
-import com.netcracker.project.model.UserDAO.UserStatus;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.EmailServiceImpl;

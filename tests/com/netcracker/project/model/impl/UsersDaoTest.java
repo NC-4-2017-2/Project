@@ -3,13 +3,13 @@ package com.netcracker.project.model.impl;
 import static org.junit.Assert.assertEquals;
 
 import com.netcracker.project.model.UserDAO;
-import com.netcracker.project.model.UserDAO.JobTitle;
-import com.netcracker.project.model.UserDAO.ProjectStatus;
-import com.netcracker.project.model.UserDAO.UserRole;
-import com.netcracker.project.model.UserDAO.UserStatus;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
+import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.ProjectStatus;
+import com.netcracker.project.model.enums.UserRole;
+import com.netcracker.project.model.enums.UserStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.util.Collection;

@@ -42,61 +42,6 @@ public interface UserDAO {
 
     void updateWorkingPeriodStatusByUserId(WorkPeriod workPeriod);
 
-    enum JobTitle {
-        PROJECT_MANAGER(0), LINE_MANAGER(1), SOFTWARE_ENGINEER(2);
-
-        private int id;
-
-        JobTitle(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
-
-    enum ProjectStatus {
-        WORKING(0), TRANSIT(1);
-
-        private int id;
-
-        ProjectStatus(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
-
-    enum UserStatus {
-        WORKING(0), FIRED(1);
-
-        private int id;
-
-        UserStatus(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
-
-    enum UserRole {
-        ROLE_ADMIN(0), ROLE_PM(1), ROLE_LM(2), ROLE_SE(3);
-
-        private int id;
-
-        UserRole(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
 
     String CREATE_USER = "INSERT ALL " +
             "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION,OBJECT_VERSION) VALUES (OBJECT_SEQUENCE.NEXTVAL,NULL,1,?,NULL,1) " +

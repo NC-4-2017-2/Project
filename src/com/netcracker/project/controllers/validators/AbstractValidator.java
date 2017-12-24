@@ -4,7 +4,6 @@ import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
-import com.netcracker.project.services.ListCountry;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,16 +86,6 @@ abstract class AbstractValidator {
     }
   }
 
-  void validateCountry(String country) {
-    if (country == null || country.isEmpty()) {
-      errorMap.put("countryError", "Country can't be empty!");
-    }
-
-    if (country != null && !country.isEmpty()) {
-      validateInCountryList(country);
-    }
-  }
-
   void validateStatus(String status) {
     if (status == null || status.isEmpty()) {
       errorMap.put("statusError", "Status can't be empty!");
@@ -126,19 +115,6 @@ abstract class AbstractValidator {
       }
     }
 
-    return false;
-  }
-
-  private boolean validateInCountryList(String country) {
-    ListCountry listCountry = new ListCountry();
-
-    for (String countryName : listCountry.getCountriesNames()) {
-      if (country.equals(countryName)) {
-        return true;
-      }
-    }
-
-    errorMap.put("countryError", "Country doesn't exist!");
     return false;
   }
 

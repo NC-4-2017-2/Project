@@ -108,7 +108,7 @@ public class BusinessTripDAOImplTest {
 
   @Test
   public void test4DeleteFromTable() {
-    BigInteger id = BigInteger.valueOf(60);
+    BigInteger id = BigInteger.valueOf(1003);
 
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id});
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});

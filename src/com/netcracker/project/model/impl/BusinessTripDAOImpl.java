@@ -26,7 +26,6 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
     template = new JdbcTemplate(dataSource);
   }
 
-
   @Override
   public void createTrip(BusinessTrip trip) {
     logger.info("Entering createTrip(trip=" + trip + ")");

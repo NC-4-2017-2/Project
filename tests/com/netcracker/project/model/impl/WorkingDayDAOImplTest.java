@@ -43,7 +43,7 @@ public class WorkingDayDAOImplTest {
   private static final String DELETE_FROM_OBJREFERENCE = "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ?";
 
   @Before
-  public void setUP() {
+  public void setUp() {
     Locale.setDefault(Locale.ENGLISH);
     template = new JdbcTemplate(dataSource);
   }

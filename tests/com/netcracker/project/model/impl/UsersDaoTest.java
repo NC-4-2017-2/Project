@@ -201,7 +201,7 @@ public class UsersDaoTest {
 
   @Test
   public void deleteUser() {
-    BigInteger id = BigInteger.valueOf(101);
+    BigInteger id = BigInteger.valueOf(1001);
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});
     template.update(DELETE_FROM_OBJECTS, new Object[]{id});

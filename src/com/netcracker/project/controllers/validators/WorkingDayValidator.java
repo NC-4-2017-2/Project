@@ -43,6 +43,11 @@ public class WorkingDayValidator extends AbstractValidator {
         .getMinutesBetweenLocalTimes(
             converter.getLocalTimeFromString(start),
             converter.getLocalTimeFromString(end));
+    DateConverterService service = new DateConverterService();
+    Double workHours = service.parseMinutes(minutesBetween);
+    if (workHours > 12.00) {
+      setErrorToMap("failOvertime", day + " working hours more than 12!");
+    }
     if (minutesBetween < 0) {
       setErrorToMap("minutesBetweenError ",
           day + " start time can't be less than end time");

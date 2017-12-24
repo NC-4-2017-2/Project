@@ -62,9 +62,9 @@ public class WorkingDayController {
     BigInteger projectId = projectDAO
         .findProjectIdByUserLogin(userLogin);
     Project project = projectDAO.findProjectByProjectId(projectId);
+    Map<String, String> errorMap = new HashMap<>();
 
     WorkingDayValidator validator = new WorkingDayValidator();
-    Map<String, String> errorMap = new HashMap<>();
 
     if (mondayStartTime.isEmpty() && mondayEndTime.isEmpty() &&
         tuesdayStartTime.isEmpty() && tuesdayEndTime.isEmpty() &&
@@ -122,62 +122,89 @@ public class WorkingDayController {
     }
 
     if (!mondayStartTime.isEmpty() && !mondayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(mondayStartTime, mondayEndTime,
-          user, project,
-          DayOfWeek.MONDAY);
-      Integer existWorkingDay = workingDayDAO
-          .findIfWorkingDayExist(user.getUserId(),
-              workingDay.getDate());
-      if (existWorkingDay > 0) {
-        WorkingDay actualWorkingDay = workingDayDAO
-            .findWorkingDayByUserIdAndDate(user.getUserId(),
-                workingDay.getDate());
-        workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),
-            workingDay.getWorkingHours());
-      } else if (existWorkingDay == 0){
-        workingDayDAO.createWorkingDay(workingDay);
+      createWorkingDay(mondayStartTime, mondayEndTime, user, project,
+          DayOfWeek.MONDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
       }
     }
 
     if (!tuesdayStartTime.isEmpty() && !tuesdayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(tuesdayStartTime, tuesdayEndTime,
-          user, project,
-          DayOfWeek.TUESDAY);
-      workingDayDAO.createWorkingDay(workingDay);
+      createWorkingDay(tuesdayStartTime, tuesdayEndTime, user, project,
+          DayOfWeek.TUESDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
+      }
     }
     if (!wednesdayStartTime.isEmpty() && !wednesdayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(wednesdayStartTime,
-          wednesdayEndTime,
-          user, project,
-          DayOfWeek.WEDNESDAY);
-      workingDayDAO.createWorkingDay(workingDay);
+      createWorkingDay(wednesdayStartTime, wednesdayEndTime, user, project,
+          DayOfWeek.WEDNESDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
+      }
     }
     if (!thursdayStartTime.isEmpty() && !thursdayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(thursdayStartTime, thursdayEndTime,
-          user, project,
-          DayOfWeek.THURSDAY);
-      workingDayDAO.createWorkingDay(workingDay);
+      createWorkingDay(thursdayStartTime, thursdayEndTime, user, project,
+          DayOfWeek.THURSDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
+      }
     }
     if (!fridayStartTime.isEmpty() && !fridayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(fridayStartTime, fridayEndTime,
-          user, project,
-          DayOfWeek.FRIDAY);
-      workingDayDAO.createWorkingDay(workingDay);
+      createWorkingDay(fridayStartTime, fridayEndTime, user, project,
+          DayOfWeek.FRIDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
+      }
     }
     if (!saturdayStartTime.isEmpty() && !saturdayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(saturdayStartTime, saturdayEndTime,
-          user, project,
-          DayOfWeek.SATURDAY);
-      workingDayDAO.createWorkingDay(workingDay);
+      createWorkingDay(saturdayStartTime, saturdayEndTime, user, project,
+          DayOfWeek.SATURDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
+      }
     }
     if (!sundayStartTime.isEmpty() && !sundayEndTime.isEmpty()) {
-      WorkingDay workingDay = getWorkingDay(sundayStartTime, sundayEndTime,
-          user, project,
-          DayOfWeek.SUNDAY);
+      createWorkingDay(sundayStartTime, sundayEndTime, user, project,
+          DayOfWeek.SUNDAY, errorMap);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "workingDay/createWorkingDay";
+      }
+    }
+    return "response_status/success";
+  }
+
+  private void createWorkingDay(
+      String mondayStartTime,
+      String mondayEndTime, User user,
+      Project project, DayOfWeek day, Map<String, String> errorMap) {
+    WorkingDay workingDay = getWorkingDay(mondayStartTime, mondayEndTime,
+        user, project,
+        day);
+    Integer existWorkingDay = workingDayDAO
+        .findIfWorkingDayExist(user.getUserId(),
+            workingDay.getDate());
+    if (existWorkingDay > 0) {
+      WorkingDay actualWorkingDay = workingDayDAO
+          .findWorkingDayByUserIdAndDate(user.getUserId(),
+              workingDay.getDate());
+      if ((actualWorkingDay.getWorkingHours() + workingDay.getWorkingHours())
+          > 12) {
+        errorMap.put("failOvertime", day + " working hours more than 12!");
+        return;
+      }
+      workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),
+          workingDay.getWorkingHours());
+    } else if (existWorkingDay == 0) {
       workingDayDAO.createWorkingDay(workingDay);
     }
-
-    return "response_status/success";
   }
 
   private WorkingDay getWorkingDay(String start, String end, User user,

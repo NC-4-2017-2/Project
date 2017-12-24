@@ -52,7 +52,7 @@ public class VacationController {
         + "pmApproveStatus: " + pmApproveStatus
         + "lmApproveStatus: " + lmApproveStatus);
     Project project = projectDAO.findProjectByName(projectName);
-
+        //todo lm id
     Vacation vacation = new Vacation.VacationBuilder()
         .userId(new BigInteger(userId.get(0).toString()))
         .projectId(project.getProjectId())

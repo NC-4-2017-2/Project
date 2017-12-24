@@ -36,7 +36,7 @@ public class VacationDAOImpl implements VacationDAO {
         vacation.getUserId(),
         vacation.getProjectId(),
         vacation.getPmId(),
-        2
+        vacation.getLmId()
     });
   }
 

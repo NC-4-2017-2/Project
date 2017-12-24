@@ -4,7 +4,7 @@ package com.netcracker.project.controllers.validators;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
-import com.netcracker.project.model.impl.mappers.MapperDateConverter;
+import com.netcracker.project.services.impl.DateConverterService;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,8 +92,8 @@ public class TaskValidator {
     if (startDate != null || endDate != null) {
 
       if (checkStartDate(startDate) && checkEndDate(endDate)) {
-        Date start = new MapperDateConverter().convertStringToDateFromJSP(startDate);
-        Date end = new MapperDateConverter().convertStringToDateFromJSP(endDate);
+        Date start = new DateConverterService().convertStringToDateFromJSP(startDate);
+        Date end = new DateConverterService().convertStringToDateFromJSP(endDate);
 
         int dateCompare = start.compareTo(end);
 
@@ -121,9 +121,9 @@ public class TaskValidator {
 
       if(checkStartDate(startDate) && checkPlannedEndDate(plannedEndDate)) {
 
-        Date start = new MapperDateConverter()
+        Date start = new DateConverterService()
             .convertStringToDateFromJSP(startDate);
-        Date plannedEnd = new MapperDateConverter()
+        Date plannedEnd = new DateConverterService()
             .convertStringToDateFromJSP(plannedEndDate);
 
         int compareDate = start.compareTo(plannedEnd);

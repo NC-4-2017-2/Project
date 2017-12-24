@@ -16,7 +16,4 @@ public enum TaskPriority {
     return id;
   }
 
-  public Integer getPriorityCost() {
-    return id;
-  }
 }

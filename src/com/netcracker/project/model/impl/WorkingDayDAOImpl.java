@@ -27,10 +27,10 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   }
 
   @Override
-  public void addHoursPerDay(WorkingDay workingDay) {
-    logger.info("Entering addHoursPerDay(workingDay=" + workingDay + ")");
+  public void createWorkingDay(WorkingDay workingDay) {
+    logger.info("Entering createWorkingDay(workingDay=" + workingDay + ")");
 
-    template.update(ADD_HOURS_PER_DAY, new Object[]{
+    template.update(CREATE_WORKING_DAY, new Object[]{
         "WORKDAY" + workingDay.getUserId(),
         workingDay.getDate(),
         workingDay.getWeekNumber(),
@@ -42,12 +42,30 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   }
 
   @Override
+  public WorkingDay findWorkingDayByUserIdAndDate(BigInteger userId,
+      Date workingDayDate) {
+    logger.info("Entering findWorkingDayByUserIdAndDate(userId=" + userId + ", " + "workingDayDate=" + workingDayDate + ")");
+    return template.queryForObject(FIND_WORKING_DAY_BY_USER_ID_AND_DATE, new Object[]{userId, workingDayDate}, new WorkingDayMapper());
+  }
+
+  @Override
   public Collection<WorkingDay> findHoursPerPeriod(BigInteger userId,
       Date startDate,
       Date endDate) {
-    logger.info("Entering findHoursPerPeriod(projectId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
+    logger.info("Entering findHoursPerPeriod(userId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
 
     return template.query(FIND_HOURS_PER_PERIOD, new Object[]{userId,
         startDate, endDate}, new WorkingDayMapper());
+  }
+
+  @Override
+  public Collection<WorkingDay> findWorkingDayByPMIdAndStatus(BigInteger pmId,
+      Integer status) {
+    return template.query(FIND_WORKING_DAYS_BY_PM_ID_AND_STATUS, new Object[]{pmId, status}, new WorkingDayMapper());
+  }
+
+  @Override
+  public void updateWorkingHours(BigInteger workingDayId, Double hours) {
+    template.update(UPDATE_WORKING_HOURS, workingDayId, hours, workingDayId);
   }
 }

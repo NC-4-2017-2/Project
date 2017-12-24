@@ -78,8 +78,8 @@ public class WorkingDayDAOImplTest {
         .status(Status.DISAPPROVED)
         .build();
 
-    workingDay.addHoursPerDay(workingDayTest1);
-    workingDay.addHoursPerDay(workingDayTest2);
+    workingDay.createWorkingDay(workingDayTest1);
+    workingDay.createWorkingDay(workingDayTest2);
   }
 
   @Test
@@ -101,6 +101,26 @@ public class WorkingDayDAOImplTest {
             + "pmId=3}]",
         workingDays.toString());
   }
+
+  @Test
+  public void findWorkingDayByUserIdAndDate() {
+    Date wdDay = converter.convertStringToDate("14.12.2012");
+    WorkingDay result = workingDay.findWorkingDayByUserIdAndDate(BigInteger.valueOf(2), wdDay);
+    assertEquals("WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=8.0, status=APPROVED, pmId=1}", result.toString());
+  }
+
+  @Test
+  public void findWorkingDayByPMIdAndStatus() {
+    Collection<WorkingDay> result = workingDay.findWorkingDayByPMIdAndStatus(BigInteger.valueOf(1), Status.APPROVED.getId());
+    assertEquals("[WorkingDay{workingDayId=13, userId=3, date=2012-12-12, weekNumber=5, workingHours=8.0, status=APPROVED, pmId=1},"
+        + " WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=8.0, status=APPROVED, pmId=1}]", result.toString());
+  }
+
+  @Test
+  public void updateWorkingHours() {
+    workingDay.updateWorkingHours(BigInteger.valueOf(12), 1.1);
+  }
+
 
   @Test
   public void test3DeleteWorkingDay() {

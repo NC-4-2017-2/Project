@@ -125,45 +125,45 @@ public class WorkingDayController {
       WorkingDay workingDay = getWorkingDay(mondayStartTime, mondayEndTime,
           user, project,
           DayOfWeek.MONDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
 
     if (!tuesdayStartTime.isEmpty() && !tuesdayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(tuesdayStartTime, tuesdayEndTime,
           user, project,
           DayOfWeek.TUESDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
     if (!wednesdayStartTime.isEmpty() && !wednesdayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(wednesdayStartTime,
           wednesdayEndTime,
           user, project,
           DayOfWeek.WEDNESDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
     if (!thursdayStartTime.isEmpty() && !thursdayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(thursdayStartTime, thursdayEndTime,
           user, project,
           DayOfWeek.THURSDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
     if (!fridayStartTime.isEmpty() && !fridayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(fridayStartTime, fridayEndTime,
           user, project,
           DayOfWeek.FRIDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
     if (!saturdayStartTime.isEmpty() && !saturdayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(saturdayStartTime, saturdayEndTime,
           user, project,
           DayOfWeek.SATURDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
     if (!sundayStartTime.isEmpty() && !sundayEndTime.isEmpty()) {
       WorkingDay workingDay = getWorkingDay(sundayStartTime, sundayEndTime,
           user, project,
           DayOfWeek.SUNDAY);
-      workingDayDAO.addHoursPerDay(workingDay);
+      workingDayDAO.createWorkingDay(workingDay);
     }
 
     return "response_status/success";

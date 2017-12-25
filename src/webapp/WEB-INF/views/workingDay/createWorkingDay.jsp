@@ -10,7 +10,7 @@
     <title>CreateWorkingDay</title>
 </head>
 <body>
-<form action="/workingDay/create" method="post">
+<form action="/workingDay/createWorkingDay" method="post">
     <table border="0">
         <tr>
             <td>Monday:</td>

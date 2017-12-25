@@ -88,7 +88,7 @@ public class WorkingDayDAOImplTest {
     Date endDate = converter.convertStringToDate("17.09.1991");
 
     Collection<WorkingDay> hoursPerPeriod = workingDay
-        .findHoursPerPeriod(BigInteger.valueOf(1), startDate, endDate);
+        .findWorkingDayPerPeriod(BigInteger.valueOf(1), startDate, endDate);
     Comparator<WorkingDay> comparator = (o1, o2) -> o1.getWorkingDayId()
         .compareTo(o2.getWorkingDayId());
     List<WorkingDay> workingDays = new ArrayList<>(hoursPerPeriod);
@@ -117,15 +117,26 @@ public class WorkingDayDAOImplTest {
   }
 
   @Test
+  public void updateWorkingDayStatus() {
+    workingDay.updateWorkingDayStatus(BigInteger.valueOf(1010), 0);
+  }
+
+  @Test
   public void updateWorkingHours() {
     workingDay.updateWorkingHours(BigInteger.valueOf(12), 1.1);
+  }
+
+  @Test
+  public void findWorkingDayById() {
+    WorkingDay result = workingDay.findWorkingDayById(BigInteger.valueOf(12));
+    assertEquals("WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=13.1, status=APPROVED, pmId=1}", result.toString());
   }
 
 
   @Test
   public void test3DeleteWorkingDay() {
-    BigInteger id1 = BigInteger.valueOf(1008);
-    BigInteger id2 = BigInteger.valueOf(1007);
+    BigInteger id1 = BigInteger.valueOf(1002);
+    BigInteger id2 = BigInteger.valueOf(1003);
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id1});
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id1});

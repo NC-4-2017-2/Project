@@ -42,6 +42,26 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   }
 
   @Override
+  public void updateWorkingDayStatus(BigInteger workingDayId,
+      Integer statusId) {
+    logger.info("Entering updateWorkingDayStatus(workingDayId=" + workingDayId + ", " + "statusId=" + statusId + ")");
+    template.update(UPDATE_WORKING_DAY_STATUS, statusId, workingDayId);
+  }
+
+
+  @Override
+  public void updateWorkingHours(BigInteger workingDayId, Double hours) {
+    logger.info("Entering updateWorkingHours(workingDayId=" + workingDayId + ", " + "hours=" + hours + ")");
+    template.update(UPDATE_WORKING_HOURS, workingDayId, hours, workingDayId);
+  }
+
+  @Override
+  public WorkingDay findWorkingDayById(BigInteger id) {
+    logger.info("Entering findWorkingDayById(id=" + id + ")");
+    return template.queryForObject(FIND_WORKING_DAY_BY_ID, new Object[]{id}, new WorkingDayMapper());
+  }
+
+  @Override
   public WorkingDay findWorkingDayByUserIdAndDate(BigInteger userId,
       Date workingDayDate) {
     logger.info("Entering findWorkingDayByUserIdAndDate(userId=" + userId + ", " + "workingDayDate=" + workingDayDate + ")");
@@ -49,10 +69,10 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   }
 
   @Override
-  public Collection<WorkingDay> findHoursPerPeriod(BigInteger userId,
+  public Collection<WorkingDay> findWorkingDayPerPeriod(BigInteger userId,
       Date startDate,
       Date endDate) {
-    logger.info("Entering findHoursPerPeriod(userId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
+    logger.info("Entering findWorkingDayPerPeriod(userId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
 
     return template.query(FIND_HOURS_PER_PERIOD, new Object[]{userId,
         startDate, endDate}, new WorkingDayMapper());
@@ -67,10 +87,5 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   @Override
   public Integer findIfWorkingDayExist(BigInteger userId, Date workingDayDate) {
     return template.queryForObject(FIND_WORKING_DAY_IF_EXIST, new Object[]{userId, workingDayDate}, Integer.class);
-  }
-
-  @Override
-  public void updateWorkingHours(BigInteger workingDayId, Double hours) {
-    template.update(UPDATE_WORKING_HOURS, workingDayId, hours, workingDayId);
   }
 }

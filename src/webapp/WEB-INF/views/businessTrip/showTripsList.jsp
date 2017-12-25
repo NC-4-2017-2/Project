@@ -6,7 +6,7 @@
 </head>
 <body>
 <c:forEach items="${tripList}" var="trip">
-    <a href="/businessTrip/showTrip/${trip.businessTripId}">BusinessTrip${trip.businessTripId}</a>
+    <a href="/businessTrip/showTrip/${trip.businessTripId}">BusinessTrip${trip.businessTripId}</a> <br>
 </c:forEach>
 </body>
 </html>

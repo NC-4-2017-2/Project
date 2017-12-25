@@ -7,16 +7,21 @@ import com.netcracker.project.model.WorkingDayDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkingDay;
+import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.WorkingDayService;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,12 +39,97 @@ public class WorkingDayController {
   @Autowired
   private DateConverterService converter;
 
-  @RequestMapping(value = "/create", method = RequestMethod.GET)
+  @RequestMapping(value = "/findWorkingDay", method = RequestMethod.GET)
+  public String findWorkingDay() {
+    return "workingDay/findWorkingDay";
+  }
+
+  @RequestMapping(value = "/viewWorkingDay", params = {"startDate",
+      "endDate"}, method = RequestMethod.GET)
+  public String viewWorkingDay(
+      @RequestParam(value = "startDate") String startDate,
+      @RequestParam(value = "endDate") String endDate,
+      Principal principal,
+      Model model) {
+    WorkingDayValidator validator = new WorkingDayValidator();
+    Map<String, String> errorMap = validator.validateFind(startDate, endDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/findWorkingDay";
+    }
+
+    User user = userDAO.findUserByLogin(principal.getName());
+    Collection<WorkingDay> workingDays = workingDayDAO
+        .findWorkingDayPerPeriod(user.getUserId(),
+            converter.convertStringToDateFromJSP(startDate),
+            converter.convertStringToDateFromJSP(endDate));
+    model.addAttribute("workingDays", workingDays);
+    return "workingDay/viewWorkingDay";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/findPMWorkingDay", method = RequestMethod.GET)
+  public String findPMWorkingDay() {
+    return "workingDay/findPMWorkingDay";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/viewPMWorkingDay", params = "status", method = RequestMethod.GET)
+  public String viewPMWorkingDay(@RequestParam(value = "status") String status,
+      Principal principal,
+      Model model) {
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Collection<WorkingDay> workingDays = workingDayDAO
+        .findWorkingDayByPMIdAndStatus(currentUser.getUserId(),
+            Status.valueOf(status).getId());
+    model.addAttribute("workingDays", workingDays);
+    return "workingDay/viewPMWorkingDay";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/showUpdatePMWorkingDayStatus/{id}", method = RequestMethod.GET)
+  public String showUpdatePMWorkingDayStatus(@PathVariable(value = "id") BigInteger id,
+      Model model) {
+    WorkingDay workingDay = workingDayDAO.findWorkingDayById(id);
+    model.addAttribute("workingDay", workingDay);
+    return "workingDay/showPMWorkingDay";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/showUpdatePMWorkingDayStatus/{id}", method = RequestMethod.POST)
+  public String showUpdatePMWorkingDayStatus(@PathVariable(value = "id") BigInteger id,
+      @RequestParam(value = "status") String status,
+      Model model) {
+    workingDayDAO.updateWorkingDayStatus(id, Status.valueOf(status).getId());
+    WorkingDay workingDay = workingDayDAO.findWorkingDayById(id);
+    model.addAttribute("workingDay", workingDay);
+    return "workingDay/showPMWorkingDay";
+  }
+
+  @RequestMapping(value = "/showWorkingDay/{id}", method = RequestMethod.GET)
+  public String showWorkingDay(@PathVariable(value = "id") BigInteger id,
+      Principal principal,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    WorkingDay workingDay = workingDayDAO.findWorkingDayById(id);
+    if (!currentUser.getUserId().equals(workingDay.getUserId()) && !currentUser
+        .getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+      errorMap.put("invalidUser", "Invalid user!");
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/showWorkingDay";
+    }
+    model.addAttribute("currentUser", currentUser);
+    model.addAttribute("workingDay", workingDay);
+    return "workingDay/showWorkingDay";
+  }
+
+  @RequestMapping(value = "/createWorkingDay", method = RequestMethod.GET)
   public String createWorkingDays() {
     return "workingDay/createWorkingDay";
   }
 
-  @RequestMapping(value = "/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/createWorkingDay", method = RequestMethod.POST)
   public String getWorkingDays(
       @RequestParam(value = "mondayStartTime") String mondayStartTime,
       @RequestParam(value = "mondayEndTime") String mondayEndTime,

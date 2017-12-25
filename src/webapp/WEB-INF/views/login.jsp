@@ -1,12 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <style>
+        #err {
+            color: red;
+        }
+    </style>
     <title>Login</title>
 </head>
 <c:url value="/login" var="loginUrl"/>
 <form action="${loginUrl}" method="post">
     <c:if test="${param.error != null}">
-        <p>
+        <p id="err">
             Invalid username or password.
         </p>
     </c:if>

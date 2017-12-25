@@ -52,8 +52,6 @@ abstract class AbstractValidator {
     }
   }
 
-
-
    void validateStartDateAndPlannedEndDate(String startDate, String plannedEndDate){
     if (startDate == null) {
       errorMap.put("start_date_error", "Start date can't null!");
@@ -174,7 +172,6 @@ abstract class AbstractValidator {
     }
   }
 
-
   private boolean checkStartDate(String startDate) {
     if (!checkDate(startDate)) {
       errorMap.put("startDateError", "Wrong start data format!");
@@ -227,7 +224,6 @@ abstract class AbstractValidator {
     }
     return false;
   }
-
 
   private boolean checkDate(String dateString) {
     Pattern p = Pattern.compile(datePattern);

@@ -1,6 +1,6 @@
 package com.netcracker.project.controllers.validators;
 
-import com.netcracker.project.services.ListCountry;
+import com.netcracker.project.services.impl.ListCountry;
 import java.util.Map;
 
 public class BusinessTripValidator extends AbstractValidator {

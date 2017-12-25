@@ -78,42 +78,57 @@ public class WorkingDayController {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/createWorkingDay";
     }
-
-    Map<String, String> mondayMap = validator
-        .validateCreate(mondayStartTime, mondayEndTime, DayOfWeek.MONDAY);
-    if (!mondayMap.isEmpty()) {
-      errorMap.putAll(mondayMap);
+    if (!mondayStartTime.isEmpty() && !mondayEndTime.isEmpty()) {
+      Map<String, String> mondayMap = validator
+          .validateCreate(mondayStartTime, mondayEndTime, DayOfWeek.MONDAY);
+      if (!mondayMap.isEmpty()) {
+        errorMap.putAll(mondayMap);
+      }
     }
-    Map<String, String> tuesdayMap = validator
-        .validateCreate(tuesdayStartTime, tuesdayEndTime, DayOfWeek.TUESDAY);
-    if (!tuesdayMap.isEmpty()) {
-      errorMap.putAll(tuesdayMap);
+    if (!tuesdayStartTime.isEmpty() && !tuesdayEndTime.isEmpty()) {
+      Map<String, String> tuesdayMap = validator
+          .validateCreate(tuesdayStartTime, tuesdayEndTime, DayOfWeek.TUESDAY);
+      if (!tuesdayMap.isEmpty()) {
+        errorMap.putAll(tuesdayMap);
+      }
     }
-    Map<String, String> wednesdayMap = validator
-        .validateCreate(wednesdayStartTime, wednesdayEndTime,
-            DayOfWeek.WEDNESDAY);
-    if (!wednesdayMap.isEmpty()) {
-      errorMap.putAll(wednesdayMap);
+    if (!wednesdayStartTime.isEmpty() && !wednesdayEndTime.isEmpty()) {
+      Map<String, String> wednesdayMap = validator
+          .validateCreate(wednesdayStartTime, wednesdayEndTime,
+              DayOfWeek.WEDNESDAY);
+      if (!wednesdayMap.isEmpty()) {
+        errorMap.putAll(wednesdayMap);
+      }
     }
-    Map<String, String> thursdayMap = validator
-        .validateCreate(thursdayStartTime, thursdayEndTime, DayOfWeek.THURSDAY);
-    if (!thursdayMap.isEmpty()) {
-      errorMap.putAll(thursdayMap);
+    if (!thursdayStartTime.isEmpty() && !thursdayEndTime.isEmpty()) {
+      Map<String, String> thursdayMap = validator
+          .validateCreate(thursdayStartTime, thursdayEndTime,
+              DayOfWeek.THURSDAY);
+      if (!thursdayMap.isEmpty()) {
+        errorMap.putAll(thursdayMap);
+      }
     }
-    Map<String, String> fridayMap = validator
-        .validateCreate(fridayStartTime, fridayEndTime, DayOfWeek.FRIDAY);
-    if (!fridayMap.isEmpty()) {
-      errorMap.putAll(fridayMap);
+    if (!fridayStartTime.isEmpty() && !fridayEndTime.isEmpty()) {
+      Map<String, String> fridayMap = validator
+          .validateCreate(fridayStartTime, fridayEndTime, DayOfWeek.FRIDAY);
+      if (!fridayMap.isEmpty()) {
+        errorMap.putAll(fridayMap);
+      }
     }
-    Map<String, String> saturdayMap = validator
-        .validateCreate(saturdayStartTime, saturdayEndTime, DayOfWeek.SATURDAY);
-    if (!saturdayMap.isEmpty()) {
-      errorMap.putAll(saturdayMap);
+    if (!saturdayStartTime.isEmpty() && !saturdayEndTime.isEmpty()) {
+      Map<String, String> saturdayMap = validator
+          .validateCreate(saturdayStartTime, saturdayEndTime,
+              DayOfWeek.SATURDAY);
+      if (!saturdayMap.isEmpty()) {
+        errorMap.putAll(saturdayMap);
+      }
     }
-    Map<String, String> sundayMap = validator
-        .validateCreate(sundayStartTime, sundayEndTime, DayOfWeek.SUNDAY);
-    if (!sundayMap.isEmpty()) {
-      errorMap.putAll(sundayMap);
+    if (!sundayStartTime.isEmpty() && !sundayEndTime.isEmpty()) {
+      Map<String, String> sundayMap = validator
+          .validateCreate(sundayStartTime, sundayEndTime, DayOfWeek.SUNDAY);
+      if (!sundayMap.isEmpty()) {
+        errorMap.putAll(sundayMap);
+      }
     }
 
     if (!errorMap.isEmpty()) {

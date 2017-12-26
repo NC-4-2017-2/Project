@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,8 +14,7 @@
                 <h2>Create Task</h2></td>
             </tr>
             <tr>
-                <td>Task Id:</td>
-                <td><input type="text" name="taskId" size="20"
+                <td><input type="text" name="taskId" size="20" hidden = true
                            value=${taskId}></td>
             </tr>
             <tr>
@@ -57,12 +57,12 @@
             <tr>
                 <td>Status:</td>
                 <td>
-                <select name="status">
-                <option value="OPENED">OPENED</option>
-                <option value="CLOSED">CLOSED</option>
-                <option value="REOPENED">REOPENED</option>
-                <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
-                </select>
+                    <select name="status">
+                        <option value="OPENED">OPENED</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="REOPENED">REOPENED</option>
+                        <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -81,20 +81,36 @@
                            value=${comments}></td>
             </tr>
             <tr>
-                <td>Author id:</td>
-                <td><input type="text" name="authorId" size="20"
-                           value=${authorId}></td>
+                <td>Author:</td>
+                <td>
+                    <select name="authorNames">
+                        <c:forEach items="${authorNames}" var="name">
+                            <option value="${name.key}">${name.value}</option>
+                        </c:forEach>
+                    </select>
+                </td>
             </tr>
             <tr>
-                <td>User id:</td>
-                <td><input type="text" name="userId" size="20"
-                           value=${userId}></td>
+                <td>User:</td>
+                <td>
+                    <select name="userNames">
+                        <c:forEach items="${userNames}" var="user">
+                            <option value="${user.key}">${user.value}</option>
+                        </c:forEach>
+                    </select>
+                </td>
             </tr>
             <tr>
-                <td>Project id:</td>
-                <td><input type="text" name="projectId" size="20"
-                           value=${projectId}></td>
+                <td>Project Name:</td>
+                <td>
+                    <select name="projectNames">
+                        <c:forEach items="${projectNamesList}" var="projectNames">
+                            <option value="${projectNames}">${projectNames}</option>
+                        </c:forEach>
+                    </select>
+                </td>
             </tr>
+
 
             <tr>
                 <td><input type="submit" value="Create" size="40" width="40"/></td>

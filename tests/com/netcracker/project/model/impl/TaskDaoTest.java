@@ -105,7 +105,7 @@ public class TaskDaoTest {
     DateConverterService mdc = new DateConverterService();
     Date date = mdc.convertStringToDate("01.12.2017");
     task = new TaskBuilder()
-        .taskId(BigInteger.valueOf(6))
+        .taskId(BigInteger.valueOf(300))
         .name("ERP-20")
         .taskType(TaskType.PROJECT_TASK)
         .startDate(date)
@@ -134,19 +134,19 @@ public class TaskDaoTest {
     Collection<Task> tasks = taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(300), TaskStatus.CLOSED.getId());
   }
 
-  @Test
-  public void test5findStatusByUserIdAndDate(){
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-    Date date = null;
-    try {
-      date = dateFormat.parse("01.12.2017");
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    Collection<Task> task = taskDao.findTaskByUserIdAndDate(BigInteger.valueOf(1), date);
-
-  }
+//  @Test
+//  public void test5findStatusByUserIdAndDate(){
+//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
+//    Date date = null;
+//    try {
+//      date = dateFormat.parse("01.12.2017");
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
+//
+//    Collection<Task> task = taskDao.findTaskByUserIdAndDate(BigInteger.valueOf(1), date);
+//
+//  }
 
   @Test
   public void findTaskByProjectIdAndTaskId(){
@@ -163,18 +163,6 @@ public class TaskDaoTest {
     Collection<Task> task = taskDao.findTaskByUserIdAndStatus(BigInteger.valueOf(1), TaskStatus.OPENED.getId());
   }
 
-  @Test
-  public void findTaskByProjectIdAndDate(){
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-    Date date = null;
-    try {
-      date = dateFormat.parse("01.12.2017");
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    Collection<Task> task = taskDao.findTaskByProjectIdAndDate(BigInteger.valueOf(4), date);
-  }
 
   @Test
   public void test7findTaskByProjectIdAndPriority(){
@@ -184,7 +172,7 @@ public class TaskDaoTest {
 
   @Test
   public void deleteForTable(){
-    BigInteger id = BigInteger.valueOf(300);
+    BigInteger id = BigInteger.valueOf(1003);
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});
     template.update(DELETE_FROM_OBJECTS, new Object[]{id});
     template.update(DELETE_FROM_OBJREFERENCE, new Object[]{id});

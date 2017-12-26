@@ -46,6 +46,7 @@ public class Task {
 
   }
 
+
   public TaskType getTaskType() {
     return taskType;
   }
@@ -61,6 +62,7 @@ public class Task {
   public BigInteger getTaskId() {
     return taskId;
   }
+
 
   public String getName() {
     return name;
@@ -117,6 +119,10 @@ public class Task {
     this.status = status;
   }
 
+  public void setReopenCounter(Integer reopenCounter) {
+    this.reopenCounter = reopenCounter;
+  }
+
   public static class TaskBuilder {
 
     private BigInteger taskId;
@@ -138,8 +144,9 @@ public class Task {
 
     }
 
+
     public TaskBuilder taskId(BigInteger taskId) {
-      this.taskId = taskId;
+     this.taskId = taskId;
       return this;
     }
 

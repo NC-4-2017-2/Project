@@ -68,6 +68,7 @@ public class TaskDAOImpl implements TaskDAO {
     updateTaskByProjectId(task.getProjectId(), task.getTaskId());
   }
 
+
   private void updateTaskByName(String name, BigInteger taskId) {
     logger.info(
         "Entering updateTaskName(name=" + name + "," + " taskId=" + taskId
@@ -177,9 +178,16 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByProjectIdAndDate(BigInteger projectId, Date date) {
-    logger.info("Entering findTaskByProjectIdAndDate(projectId=" + projectId + "date" + date + ")");
-    return template.query(FIND_TASK_BY_PROJECT_ID_AND_DATE, new Object[]{projectId, date},
+  public Collection<Task> findTaskByProjectId(BigInteger projectId) {
+    logger.info("Entering findTaskByProjectId(projectId=" + projectId + ")");
+    return template.query(FIND_TASK_BY_PROJECT_ID, new Object[]{projectId},
+        new TaskMapper());
+  }
+
+  @Override
+  public Collection<Task> findTaskByTaskId(BigInteger taskId) {
+    logger.info("Entering findTaskByTaskId. taskId=" + taskId + ")");
+    return template.query(FIND_TASK_BY_TASK_ID, new Object[]{taskId},
         new TaskMapper());
   }
 
@@ -191,9 +199,9 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByUserIdAndDate( BigInteger userId, Date date) {
-    logger.info("Entering findTaskByUserIdAndDate(userId=" + userId + ", " + "date=" + date + ")");
-    return template.query(FIND_TASK_BY_USER_ID_AND_DATE, new Object[]{userId, date}, new TaskMapper());
+  public Collection<Task> findTaskByUserId (BigInteger userId) {
+    logger.info("Entering findTaskByUserIdAndDate(userId=" + userId  + ")");
+    return template.query(FIND_TASK_BY_USER_ID, new Object[]{userId}, new TaskMapper());
   }
 
   @Override

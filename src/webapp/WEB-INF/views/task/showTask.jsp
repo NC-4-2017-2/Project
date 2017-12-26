@@ -8,7 +8,6 @@
 <br>
 <c:forEach var="task" items="${modelTask}">
     <tr>
-       Task id: <td>${task.getTaskId()}</td><br>
        Task name: <td>${task.getName()}</td><br>
        Task Type: <td>${task.getTaskType()}</td><br>
        Start date:  <td>${task.getStartDate()}</td><br>

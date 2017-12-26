@@ -15,8 +15,7 @@ public class TaskMapper implements RowMapper<Task> {
   @Override
   public Task mapRow(ResultSet resultSet, int numRow) throws SQLException {
     return new Task.TaskBuilder()
-        .taskId(new BigInteger(
-            resultSet.getString(EnumMapper.TASK_ID.getFullName())))
+        .taskId(new BigInteger(resultSet.getString(EnumMapper.TASK_ID.getFullName())))
         .name(resultSet.getString(EnumMapper.NAME.getFullName()))
         .taskType(TaskType
             .valueOf(resultSet.getString(EnumMapper.TASK_TYPE.getFullName())))

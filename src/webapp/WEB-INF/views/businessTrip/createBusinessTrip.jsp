@@ -22,23 +22,22 @@
     Choose start date : <input type="date" name="startDate" required><br>
     Choose end date : <input type="date" name="endDate" required><br>
     <c:choose>
-    <c:when  test="${authorId eq pmId }">
-    Choose user : <select name="user" >
-    <c:forEach items="${userList}" var="user">
-        <option value="${user}">${user.firstName} ${user.lastName} ${user.dateOfBirth}</option>
-    </c:forEach>
-    </select><br>
-    </c:when>
-    <c:otherwise>
-        <input type="hidden" name="user" value="${authorId}"/>
-        <input type="hidden" name="authorId" value="${authorId}"/>
-    </c:otherwise>
+        <c:when test="${authorId eq pmId }">
+            <input type="hidden" name="authorId" value="${pmId}"/>
+            Choose user : <select name="user">
+            <c:forEach items="${userList}" var="user">
+                <option value="${user.userId}"
+                        name="user">${user.firstName} ${user.lastName} ${user.dateOfBirth}</option>
+            </c:forEach>
+        </select><br>
+        </c:when>
+        <c:otherwise>
+            <input type="hidden" name="user" value="${authorId}"/>
+            <input type="hidden" name="authorId" value="${authorId}"/>
+        </c:otherwise>
     </c:choose>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+
+    <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Create">
 </form>
 </body>

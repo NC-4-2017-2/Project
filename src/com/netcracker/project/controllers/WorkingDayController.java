@@ -156,8 +156,15 @@ public class WorkingDayController {
       Model model) {
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
-    BigInteger projectId = projectDAO
-        .findProjectIdByUserLogin(userLogin);
+    BigInteger projectId;
+    if (user.getJobTitle() != JobTitle.PROJECT_MANAGER) {
+      projectId = projectDAO
+          .findProjectIdByUserLogin(userLogin);
+    }else {
+      projectId = projectDAO
+          .findProjectIdByPMLogin(userLogin);
+    }
+
     Project project = projectDAO.findProjectByProjectId(projectId);
     Map<String, String> errorMap = new HashMap<>();
 

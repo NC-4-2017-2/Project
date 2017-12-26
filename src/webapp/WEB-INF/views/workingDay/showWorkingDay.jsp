@@ -16,13 +16,10 @@
 
     <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
         <button type="submit" name="status" value="APPROVED">Approve</button>
-        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+        <button type="submit" name="status" value="DISAPPROVED">Disapprove
+        </button>
     </c:if>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+    <%@include file="../errors/errorMap.jsp" %>
 </form>
 </body>
 </html>

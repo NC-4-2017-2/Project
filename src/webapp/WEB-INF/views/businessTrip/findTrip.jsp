@@ -16,11 +16,9 @@
     <option value="DISAPPROVED">DISAPPROVED</option>
     <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
 </select><br>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+
+    <%@include file="../errors/errorMap.jsp" %>
+
     <input type="submit" value="Find">
 </form>
 </body>

@@ -55,11 +55,7 @@
             <td><input name="sundayEndTime" type="time"></td>
         </tr>
     </table>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+    <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Create">
 </form>
 </body>

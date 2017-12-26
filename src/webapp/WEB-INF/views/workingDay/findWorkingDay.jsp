@@ -13,11 +13,7 @@
 <form action="/workingDay/viewWorkingDay">
     Start date: <input type="date" name="startDate"><br>
     End date: <input type="date" name="endDate"><br>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+    <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Find">
 </form>
 </body>

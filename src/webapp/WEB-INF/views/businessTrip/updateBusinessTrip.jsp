@@ -37,11 +37,7 @@
     </c:if>
     </select><br>
 
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+    <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Update">
 </form>
 </body>

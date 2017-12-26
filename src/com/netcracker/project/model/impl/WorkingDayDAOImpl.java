@@ -7,7 +7,6 @@ import javax.sql.DataSource;
 import com.netcracker.project.model.WorkingDayDAO;
 
 import java.util.Date;
-import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.model.impl.mappers.WorkingDayMapper;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.ImportResource;
@@ -20,7 +19,6 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
 
   private static final Logger logger = Logger.getLogger(WorkingDayDAOImpl.class);
   private JdbcTemplate template;
-  private DateConverterService converter = new DateConverterService();
 
   public void setDataSource(DataSource dataSource) {
     template = new JdbcTemplate(dataSource);

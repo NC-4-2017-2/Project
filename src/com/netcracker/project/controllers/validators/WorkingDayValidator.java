@@ -11,6 +11,11 @@ public class WorkingDayValidator extends AbstractValidator {
 
   private String timePattern = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
 
+  public Map<String, String> validateWorkingDayStatus(String status) {
+    validateStatus(status);
+    return getErrorMap();
+  }
+
   public Map<String, String> validateCreate(String start, String end,
       DayOfWeek day) {
     validateIfNull(start, end, day);

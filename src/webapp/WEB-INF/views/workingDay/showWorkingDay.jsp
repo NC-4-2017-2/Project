@@ -10,12 +10,19 @@
     <title>Working Day</title>
 </head>
 <body>
+<form action="/workingDay/showUpdatePMWorkingDayStatus/${workingDay.workingDayId}"
+      method="post">
     ${workingDay}
 
+    <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
+        <button type="submit" name="status" value="APPROVED">Approve</button>
+        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+    </c:if>
     <p><c:if test="${not empty errorMap}">
         <c:forEach items="${errorMap}" var="error">
             ${error.value}<br>
         </c:forEach>
     </c:if></p>
+</form>
 </body>
 </html>

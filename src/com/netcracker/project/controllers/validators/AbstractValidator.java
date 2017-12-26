@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.util.StringUtils;
 
 abstract class AbstractValidator {
 
@@ -22,15 +23,15 @@ abstract class AbstractValidator {
   }
 
   void validateStartEndDate(String startDate, String endDate) {
-    if (startDate == null) {
+    if (StringUtils.isEmpty(startDate)) {
       errorMap.put("startDateError", "Start date can't null!");
     }
 
-    if (endDate == null) {
+    if (StringUtils.isEmpty(endDate)) {
       errorMap.put("endDateError", "End date can't null!");
     }
 
-    if (startDate != null && endDate != null) {
+    if (!StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)) {
 
       if (checkStartDate(startDate) && checkEndDate(endDate)) {
         Date start = new DateConverterService()
@@ -52,7 +53,8 @@ abstract class AbstractValidator {
     }
   }
 
-   void validateStartDateAndPlannedEndDate(String startDate, String plannedEndDate){
+  void validateStartDateAndPlannedEndDate(String startDate,
+      String plannedEndDate) {
     if (startDate == null) {
       errorMap.put("start_date_error", "Start date can't null!");
     }
@@ -62,7 +64,7 @@ abstract class AbstractValidator {
 
     if (startDate != null || plannedEndDate != null) {
 
-      if(checkStartDate(startDate) && checkPlannedEndDate(plannedEndDate)) {
+      if (checkStartDate(startDate) && checkPlannedEndDate(plannedEndDate)) {
 
         Date start = new DateConverterService()
             .convertStringToDateFromJSP(startDate);
@@ -85,7 +87,7 @@ abstract class AbstractValidator {
   }
 
   void validateStatus(String status) {
-    if (status == null || status.isEmpty()) {
+    if (StringUtils.isEmpty(status)) {
       errorMap.put("statusError", "Status can't be empty!");
     }
 
@@ -116,58 +118,58 @@ abstract class AbstractValidator {
     return false;
   }
 
-   void validateTaskStatus(String taskStatus){
-    if (taskStatus == null || taskStatus.toString().isEmpty()){
+  void validateTaskStatus(String taskStatus) {
+    if (taskStatus == null || taskStatus.toString().isEmpty()) {
       errorMap.put("status_error", "status can't to be empty!");
     }
-    if (!taskStatusCheck(taskStatus)){
+    if (!taskStatusCheck(taskStatus)) {
       errorMap.put("status_error", "task status not found!");
     }
   }
 
-   void validateName(String name){
-    if (name == null || name.isEmpty()){
+  void validateName(String name) {
+    if (name == null || name.isEmpty()) {
       errorMap.put("name_error", "name can't to be null!");
     }
-    if (!checkString(name)){
+    if (!checkString(name)) {
       errorMap.put("name_error", "invalid name, please try again!");
     }
   }
 
-   void validateDescription(String description){
-    if (description == null || description.isEmpty()){
+  void validateDescription(String description) {
+    if (description == null || description.isEmpty()) {
       errorMap.put("description_error", "description can't to be empty!");
     }
 
-    if (!checkString(description)){
+    if (!checkString(description)) {
       errorMap.put("description_error", "you entered incorrect symbols");
     }
   }
 
-   void validateComment(String comment){
-    if (comment == null || comment.isEmpty()){
+  void validateComment(String comment) {
+    if (comment == null || comment.isEmpty()) {
       errorMap.put("comment_error", "We must write comment!");
     }
-    if (!checkString(comment)){
+    if (!checkString(comment)) {
       errorMap.put("comment_error", "you entered incorrect comment");
     }
   }
 
-   void validateTaskType(String taskType){
-    if (taskType == null || taskType.toString().isEmpty()){
+  void validateTaskType(String taskType) {
+    if (taskType == null || taskType.toString().isEmpty()) {
       errorMap.put("task_type_error", "task type can't to be null!");
     }
-    if (!taskTypeCheck(taskType)){
+    if (!taskTypeCheck(taskType)) {
       errorMap.put("task_type_error", "this task type not found! ");
     }
   }
 
-  void validatePriority(String priority){
-    if (priority == null || priority.toString().isEmpty()){
+  void validatePriority(String priority) {
+    if (priority == null || priority.toString().isEmpty()) {
       errorMap.put("priority_error", "priority can't to be empty!");
     }
 
-    if (!taskPriorityCheck(priority)){
+    if (!taskPriorityCheck(priority)) {
       errorMap.put("priority_error", "this task priority not found!");
     }
   }
@@ -190,35 +192,35 @@ abstract class AbstractValidator {
     return true;
   }
 
-  private boolean checkPlannedEndDate(String plannedEndDate){
-    if (!checkDate(plannedEndDate)){
+  private boolean checkPlannedEndDate(String plannedEndDate) {
+    if (!checkDate(plannedEndDate)) {
       errorMap.put("planned_end_date_error", "Wrong planned end date format");
       return false;
     }
     return true;
   }
 
-  private boolean taskStatusCheck(String taskStatus){
-    for (TaskStatus statuses: TaskStatus.values()){
-      if (statuses.name().equals(taskStatus)){
+  private boolean taskStatusCheck(String taskStatus) {
+    for (TaskStatus statuses : TaskStatus.values()) {
+      if (statuses.name().equals(taskStatus)) {
         return true;
       }
     }
     return false;
   }
 
-  private boolean taskTypeCheck(String type){
-    for (TaskType types: TaskType.values()){
-      if (types.name().equals(type)){
+  private boolean taskTypeCheck(String type) {
+    for (TaskType types : TaskType.values()) {
+      if (types.name().equals(type)) {
         return true;
       }
     }
     return false;
   }
 
-  private boolean taskPriorityCheck(String taskPriority){
-    for (TaskPriority priorities: TaskPriority.values()){
-      if (priorities.name().equals(taskPriority)){
+  private boolean taskPriorityCheck(String taskPriority) {
+    for (TaskPriority priorities : TaskPriority.values()) {
+      if (priorities.name().equals(taskPriority)) {
         return true;
       }
     }
@@ -231,7 +233,7 @@ abstract class AbstractValidator {
     return m.matches();
   }
 
-  private boolean checkString(String enteringString){
+  private boolean checkString(String enteringString) {
     Pattern pattern = Pattern.compile(symbolPattern);
     Matcher matcher = pattern.matcher(enteringString);
     return matcher.matches();

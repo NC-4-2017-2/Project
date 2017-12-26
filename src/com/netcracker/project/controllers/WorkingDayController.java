@@ -92,11 +92,18 @@ public class WorkingDayController {
   public String showUpdatePMWorkingDayStatus(
       @PathVariable(value = "id") BigInteger id,
       @RequestParam(value = "status") String status,
-      Model model, Principal principal) {
+      Model model,
+      Principal principal) {
     WorkingDayValidator validator = new WorkingDayValidator();
+    Integer workingDayExistence = workingDayDAO.findIfWorkingDayExists(id);
+    Map<String, String> existenceError = new WorkingDayValidator()
+        .validateExistence(workingDayExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "workingDay/showWorkingDay";
+    }
     WorkingDay workingDay = workingDayDAO.findWorkingDayById(id);
     User currentUser = userDAO.findUserByLogin(principal.getName());
-
     Map<String, String> errorMap = validator
         .validateWorkingDayStatus(status);
     if (!errorMap.isEmpty()) {
@@ -160,7 +167,7 @@ public class WorkingDayController {
     if (user.getJobTitle() != JobTitle.PROJECT_MANAGER) {
       projectId = projectDAO
           .findProjectIdByUserLogin(userLogin);
-    }else {
+    } else {
       projectId = projectDAO
           .findProjectIdByPMLogin(userLogin);
     }
@@ -329,7 +336,7 @@ public class WorkingDayController {
         user, project,
         day);
     Integer existWorkingDay = workingDayDAO
-        .findIfWorkingDayExist(user.getUserId(),
+        .findIfWorkingDayExists(user.getUserId(),
             workingDay.getDate());
     if (existWorkingDay > 0) {
       WorkingDay actualWorkingDay = workingDayDAO

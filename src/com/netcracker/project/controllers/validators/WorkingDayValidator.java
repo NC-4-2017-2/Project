@@ -45,6 +45,13 @@ public class WorkingDayValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateExistence(Integer workingDayExistence) {
+    if (workingDayExistence == 0) {
+      setErrorToMap("workingDayExistenceError", "Working day doesn't exists!");
+    }
+    return getErrorMap();
+  }
+
   private void validateIfStartIsEmpty(String start, String end, DayOfWeek day) {
     if (start.isEmpty() && !end.isEmpty()) {
       setErrorToMap("startDayEmptyError", day + " start day is empty!");

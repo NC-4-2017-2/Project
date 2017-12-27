@@ -1,7 +1,9 @@
 package com.netcracker.project.controllers.validators;
 
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.services.impl.ListCountry;
 import java.util.Map;
+import org.springframework.util.StringUtils;
 
 public class BusinessTripValidator extends AbstractValidator {
 
@@ -22,13 +24,17 @@ public class BusinessTripValidator extends AbstractValidator {
     validateCountry(country);
     validateStartEndDate(startDate, endDate);
     validateStatus(status);
+    return getErrorMap();
+  }
 
+  public Map<String, String> validateInputId(String id) {
+    validateId(id);
     return getErrorMap();
   }
 
   private void validateCountry(String country) {
-    if (country == null || country.isEmpty()) {
-      setErrorToMap("countryError", "Country can't be empty!");
+    if (StringUtils.isEmpty(country)) {
+      setErrorToMap("EMPTY_COUNTRY_ERROR", ErrorMessages.EMPTY_COUNTRY_ERROR);
     }
 
     if (country != null && !country.isEmpty()) {
@@ -44,6 +50,6 @@ public class BusinessTripValidator extends AbstractValidator {
         return;
       }
     }
-    setErrorToMap("countryError", "Country doesn't exist!");
+    setErrorToMap("COUNTRY_EXISTENCE_ERROR", ErrorMessages.COUNTRY_EXISTENCE_ERROR);
   }
 }

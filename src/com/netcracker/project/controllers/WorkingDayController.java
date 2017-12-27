@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers;
 
 import com.netcracker.project.controllers.validators.WorkingDayValidator;
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.WorkingDayDAO;
@@ -58,7 +59,6 @@ public class WorkingDayController {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/findWorkingDay";
     }
-
     User user = userDAO.findUserByLogin(principal.getName());
     Collection<WorkingDay> workingDays = workingDayDAO
         .findWorkingDayPerPeriod(user.getUserId(),
@@ -90,21 +90,27 @@ public class WorkingDayController {
   @Secured({"ROLE_PM"})
   @RequestMapping(value = "/showUpdatePMWorkingDayStatus/{id}", method = RequestMethod.POST)
   public String showUpdatePMWorkingDayStatus(
-      @PathVariable(value = "id") BigInteger id,
+      @PathVariable(value = "id") String id,
       @RequestParam(value = "status") String status,
       Model model,
       Principal principal) {
     WorkingDayValidator validator = new WorkingDayValidator();
-    Integer workingDayExistence = workingDayDAO.findIfWorkingDayExists(id);
+    Map<String, String> errorMap = validator.validateInputId(id);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/showWorkingDay";
+    }
+    BigInteger bigIntegerId = new BigInteger(id);
+    Integer workingDayExistence = workingDayDAO.findIfWorkingDayExists(bigIntegerId);
     Map<String, String> existenceError = new WorkingDayValidator()
         .validateExistence(workingDayExistence);
     if (!existenceError.isEmpty()) {
       model.addAttribute("errorMap", existenceError);
       return "workingDay/showWorkingDay";
     }
-    WorkingDay workingDay = workingDayDAO.findWorkingDayById(id);
+    WorkingDay workingDay = workingDayDAO.findWorkingDayById(bigIntegerId);
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    Map<String, String> errorMap = validator
+    errorMap = validator
         .validateWorkingDayStatus(status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("workingDay", workingDay);
@@ -112,24 +118,29 @@ public class WorkingDayController {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/showWorkingDay";
     }
-    workingDayDAO.updateWorkingDayStatus(id, Status.valueOf(status).getId());
-    WorkingDay updatedWorkingDay = workingDayDAO.findWorkingDayById(id);
-
+    workingDayDAO.updateWorkingDayStatus(bigIntegerId, Status.valueOf(status).getId());
+    WorkingDay updatedWorkingDay = workingDayDAO.findWorkingDayById(bigIntegerId);
     model.addAttribute("workingDay", updatedWorkingDay);
     model.addAttribute("currentUser", currentUser);
     return "workingDay/showWorkingDay";
   }
 
   @RequestMapping(value = "/showWorkingDay/{id}", method = RequestMethod.GET)
-  public String showWorkingDay(@PathVariable(value = "id") BigInteger id,
+  public String showWorkingDay(@PathVariable(value = "id") String id,
       Principal principal,
       Model model) {
-    Map<String, String> errorMap = new HashMap<>();
+    WorkingDayValidator validator = new WorkingDayValidator();
+    Map<String, String> errorMap = validator.validateInputId(id);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/showWorkingDay";
+    }
+    BigInteger bigIntegerId = new BigInteger(id);
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    WorkingDay workingDay = workingDayDAO.findWorkingDayById(id);
+    WorkingDay workingDay = workingDayDAO.findWorkingDayById(bigIntegerId);
     if (!currentUser.getUserId().equals(workingDay.getUserId()) && !currentUser
         .getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
-      errorMap.put("invalidUser", "Invalid user!");
+      errorMap.put("INVALID_USER_ERROR", ErrorMessages.INVALID_USER_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "workingDay/showWorkingDay";
     }
@@ -192,7 +203,7 @@ public class WorkingDayController {
         StringUtils.isEmpty(sundayStartTime) && StringUtils
         .isEmpty(sundayEndTime)
         ) {
-      errorMap.put("emptyWorkingDay", "Set at least one day!");
+      errorMap.put("EMPTY_DAY_ERROR", ErrorMessages.EMPTY_DAY_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "workingDay/createWorkingDay";
     }
@@ -344,7 +355,7 @@ public class WorkingDayController {
               workingDay.getDate());
       if ((actualWorkingDay.getWorkingHours() + workingDay.getWorkingHours())
           > 12) {
-        errorMap.put("failOvertime", day + " working hours more than 12!");
+        errorMap.put("WORKING_DAY_OVERSTATEMENT_ERROR", day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
         return;
       }
       workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),

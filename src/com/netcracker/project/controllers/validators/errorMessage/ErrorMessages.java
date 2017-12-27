@@ -2,7 +2,7 @@ package com.netcracker.project.controllers.validators.errorMessage;
 
 public interface  ErrorMessages {
   String TIME_ERROR = " wrong start time format!";
-  String WORKING_EXISTENCE_ERROR = "Working day doesn't exists!";
+  String WORKING_EXISTENCE_ERROR = "Working day doesn't exist!";
   String EMPTY_START_DAY_ERROR = " start day is empty!";
   String EMPTY_END_DAY_ERROR = " end day is empty!";
   String NULL_ERROR = " can't be null!";
@@ -26,4 +26,5 @@ public interface  ErrorMessages {
   String INCORRECT_STATUS_ERROR = "Incorrect status!";
   String WRONG_START_DATE_FORMAT_ERROR = "Wrong start data format!";
   String WRONG_END_DATE_FORMAT_ERROR = "Wrong end data format!";
+  String BUSINESS_TRIP_ERROR = "Business trip doesn't exist!";
 }

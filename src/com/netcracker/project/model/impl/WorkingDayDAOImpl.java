@@ -84,7 +84,8 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
 
   @Override
   public Integer findIfWorkingDayExists(BigInteger userId, Date workingDayDate) {
-    return template.queryForObject(FIND_WORKING_DAY_IF_EXIST, new Object[]{userId, workingDayDate}, Integer.class);
+    return template.queryForObject(
+        FIND_WORKING_DAY_IF_EXISTS, new Object[]{userId, workingDayDate}, Integer.class);
   }
 
   @Override

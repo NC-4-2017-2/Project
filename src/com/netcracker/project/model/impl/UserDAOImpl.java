@@ -124,6 +124,12 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public Integer findIfPMExists(BigInteger id) {
+    logger.info("Entering findIfPMExists(id=" + id + ")");
+    return template.queryForObject(FIND_PM_IF_EXISTS, new Object[]{id}, Integer.class);
+  }
+
+  @Override
   public Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id) {
     logger.info("Entering findWorkPeriodsByUserId(id=" + id + ")");
     return template.query(FIND_WORK_PERIOD_BY_USER_ID, new Object[]{id}, new WorkPeriodMapper());

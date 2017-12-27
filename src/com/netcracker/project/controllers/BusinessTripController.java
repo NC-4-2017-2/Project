@@ -39,8 +39,7 @@ public class BusinessTripController {
   @Autowired
   private DateConverterService converter;
 
-
-  @RequestMapping(value = "createBusinessTrip", method = RequestMethod.GET)
+  @RequestMapping(value = "/createBusinessTrip", method = RequestMethod.GET)
   public String createBusinessTripGet(Model model, Principal principal) {
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
@@ -65,7 +64,7 @@ public class BusinessTripController {
     return "businessTrip/createBusinessTrip";
   }
 
-  @RequestMapping(value = "createBusinessTrip/projectId/{projectId}/pmId/{pmId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/createBusinessTrip/projectId/{projectId}/pmId/{pmId}", method = RequestMethod.POST)
   public String createBusinessTripPost(
       @PathVariable(value = "projectId") String projectId,
       @PathVariable(value = "pmId") String pmId,
@@ -89,7 +88,6 @@ public class BusinessTripController {
     }
     BigInteger projectBigIntegerId = new BigInteger(projectId);
     BigInteger pmBigIntegerId = new BigInteger(pmId);
-
 
     Collection<User> users = userDAO.findUserByProjectId(projectBigIntegerId);
     errorMap = new BusinessTripValidator()
@@ -121,16 +119,23 @@ public class BusinessTripController {
     return "response_status/success";
   }
 
-  @RequestMapping(value = "businessTripToUpdate/{id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/businessTripToUpdate/{id}", method = RequestMethod.GET)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") String id) {
+    Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
-    Map<String, String> errorMap = validator.validateInputId(id);
+    errorMap = validator.validateInputId(id);
     if(!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
     BigInteger bigIntegerId = new BigInteger(id);
+    Integer businessTripExistence = businessTripDAO.findIfBusinessTripExists(bigIntegerId);
+    Map<String, String> existenceError = validator.validateExistence(businessTripExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "businessTrip/updateBusinessTrip";
+    }
     BusinessTrip trip = businessTripDAO.findBusinessTripById(bigIntegerId);
     model.addAttribute("countryList", countries.getCountriesNames());
     model.addAttribute("businessTripId", trip.getBusinessTripId());
@@ -141,24 +146,30 @@ public class BusinessTripController {
     return "businessTrip/updateBusinessTrip";
   }
 
-  @RequestMapping(value = "businessTripToUpdate/{id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/businessTripToUpdate/{id}", method = RequestMethod.POST)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") String id,
       @RequestParam(value = "country") String country,
       @RequestParam(value = "startDate") String startDate,
       @RequestParam(value = "endDate") String endDate,
       @RequestParam(value = "status") String status) {
+    Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
-    Map<String, String> errorMap = validator.validateInputId(id);
+    errorMap = validator.validateInputId(id);
     if(!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
     BigInteger bigIntegerId = new BigInteger(id);
+    Integer businessTripExistence = businessTripDAO.findIfBusinessTripExists(bigIntegerId);
+    Map<String, String> existenceError = validator.validateExistence(businessTripExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "businessTrip/updateBusinessTrip";
+    }
     errorMap = new BusinessTripValidator()
         .validateUpdate(country, startDate, endDate, status);
     Status correctStatus = businessTripDAO.findBusinessTripById(bigIntegerId).getStatus();
-
     if (!errorMap.isEmpty()) {
       model.addAttribute("countryList", countries.getCountriesNames());
       model.addAttribute("businessTripId", bigIntegerId);
@@ -169,7 +180,6 @@ public class BusinessTripController {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
-
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
         .businessTripId(bigIntegerId)
         .country(country)
@@ -182,7 +192,7 @@ public class BusinessTripController {
     return "response_status/success";
   }
 
-  @RequestMapping(value = "findTrip", method = RequestMethod.GET)
+  @RequestMapping(value = "/findTrip", method = RequestMethod.GET)
   public String findTripByStatus() {
     return "businessTrip/findTrip";
   }
@@ -216,17 +226,24 @@ public class BusinessTripController {
     return "businessTrip/showTripsList";
   }
 
-  @RequestMapping(value = "showTrip/{businessTripId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/showTrip/{businessTripId}", method = RequestMethod.GET)
   public String showTrip(
       @PathVariable(value = "businessTripId") String tripId,
       Model model) {
+    Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
-    Map<String, String> errorMap = validator.validateInputId(tripId);
+    errorMap = validator.validateInputId(tripId);
     if(!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/showTrip";
     }
     BigInteger bigIntegerId = new BigInteger(tripId);
+    Integer businessTripExistence = businessTripDAO.findIfBusinessTripExists(bigIntegerId);
+    Map<String, String> existenceError = validator.validateExistence(businessTripExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "businessTrip/showTrip";
+    }
     BusinessTrip trip = businessTripDAO
         .findBusinessTripById(bigIntegerId);
     model.addAttribute("businessTrip", trip);

@@ -32,6 +32,13 @@ public class BusinessTripValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateExistence(Integer businessTripExistence) {
+    if (businessTripExistence == 0) {
+      setErrorToMap("BUSINESS_TRIP_ERROR", ErrorMessages.BUSINESS_TRIP_ERROR);
+    }
+    return getErrorMap();
+  }
+
   private void validateCountry(String country) {
     if (StringUtils.isEmpty(country)) {
       setErrorToMap("EMPTY_COUNTRY_ERROR", ErrorMessages.EMPTY_COUNTRY_ERROR);

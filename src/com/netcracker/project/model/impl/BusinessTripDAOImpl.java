@@ -19,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @ImportResource("classpath:Spring-BusinessTrip.xml")
 public class BusinessTripDAOImpl implements BusinessTripDAO {
 
-  private static final Logger logger = Logger.getLogger(BusinessTripDAOImpl.class);
+  private static final Logger logger = Logger
+      .getLogger(BusinessTripDAOImpl.class);
   private JdbcTemplate template;
 
   public void setDataSource(DataSource dataSource) {
@@ -55,7 +56,8 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   @Override
   public BusinessTrip findBusinessTripById(BigInteger id) {
     logger.info("Entering findBusinessTripById(id=" + id + ")");
-    return template.queryForObject(FIND_TRIP_BY_TRIP_ID, new Object[]{id}, new BusinessTripMapper());
+    return template.queryForObject(FIND_TRIP_BY_TRIP_ID, new Object[]{id},
+        new BusinessTripMapper());
   }
 
   @Override
@@ -77,7 +79,8 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
       Integer status) {
     logger.info("Entering findTripByPMIdAndStatus(pmId=" + pmId + ","
         + " status=" + status + ")");
-    return template.query(FIND_BUSINESS_TRIP_BY_PM_ID_AND_STATUS, new Object[]{pmId, status},
+    return template.query(FIND_BUSINESS_TRIP_BY_PM_ID_AND_STATUS,
+        new Object[]{pmId, status},
         new BusinessTripMapper());
   }
 
@@ -86,7 +89,8 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
       Integer status) {
     logger.info("Entering findTripByUserIdAndStatus(userId=" + userId + ","
         + " status=" + status + ")");
-    return template.query(FIND_BUSINESS_TRIP_BY_USER_ID_AND_STATUS, new Object[]{userId, status},
+    return template.query(FIND_BUSINESS_TRIP_BY_USER_ID_AND_STATUS,
+        new Object[]{userId, status},
         new BusinessTripMapper());
   }
 
@@ -115,5 +119,13 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
         "Entering updateStatus(status=" + status + "," + " businessTripId="
             + businessTripId + ")");
     template.update(UPDATE_STATUS, status.getId(), businessTripId);
+  }
+
+  @Override
+  public Integer findIfBusinessTripExists(BigInteger id) {
+    logger.info("Entering findIfBusinessTripExists(id=" + id + ")");
+    return template
+        .queryForObject(FIND_BUSINESS_TRIP_IF_EXISTS, new Object[]{id},
+            Integer.class);
   }
 }

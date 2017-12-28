@@ -291,6 +291,37 @@ public class BusinessTripController {
     return "businessTrip/showTrip";
   }
 
+  @RequestMapping(value = "/findTripByStatusPerPeriod", method = RequestMethod.GET)
+  public String findTripStatusAndPerPeriod() {
+    return "businessTrip/findTripByStatusPerPeriod";
+  }
+
+  @RequestMapping(value = "/showTrip", params = {"status", "startDate",
+      "endDate"}, method = RequestMethod.GET)
+  public String findTripStatusAndPerPeriodGET(
+      @RequestParam(value = "status") String status,
+      @RequestParam(value = "startDate") String startDate,
+      @RequestParam(value = "endDate") String endDate,
+      Principal principal,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    BusinessTripValidator validator = new BusinessTripValidator();
+    errorMap = validator.validateBusinessTripStatus(status);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/findTripByStatusPerPeriod";
+    }
+    errorMap = validator.validateBetweenDates(startDate, endDate);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/findTripByStatusPerPeriod";
+    }
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Collection<BusinessTrip> businessTrips = businessTripDAO.findTripByUserIdAndStatusAndPerPeriod(currentUser.getUserId(),
+        converter.convertStringToDateFromJSP(startDate), converter.convertStringToDateFromJSP(endDate), Status.valueOf(status).getId());
+    return "businessTrip/showTrip";
+  }
+
   @Secured({"ROLE_PM"})
   @RequestMapping(value = "/updateTripStatus/{id}", method = RequestMethod.POST)
   public String updateTripStatus(

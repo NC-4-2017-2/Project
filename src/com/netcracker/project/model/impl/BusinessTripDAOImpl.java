@@ -93,10 +93,20 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
   }
 
   @Override
+  public Collection<BusinessTrip> findTripByUserIdAndStatusAndPerPeriod(
+      BigInteger userId, Date startDate, Date endDate, Integer status) {
+    logger.info(
+        "Entering findTripByUserIdAndStatusAndPerPeriod(userId=" + userId + "," + " status=" + status + ","
+            + " startDate=" + startDate + "," + " endDate=" + endDate + ")");
+    return template.query(FIND_BUSINESS_TRIP_BY_USER_ID_AND_STATUS_AND_PER_PERIOD, new Object[]{userId, startDate, endDate, status}, new BusinessTripMapper());
+  }
+
+  @Override
   public void updateBusinessTripStatus(BigInteger businessTripId,
       Integer statusId) {
     logger.info(
-        "Entering updateBusinessTripStatus(statusId=" + statusId + ", " + " businessTripId="
+        "Entering updateBusinessTripStatus(statusId=" + statusId + ","
+            + " businessTripId="
             + businessTripId + ")");
     template.update(UPDATE_STATUS, statusId, businessTripId);
   }

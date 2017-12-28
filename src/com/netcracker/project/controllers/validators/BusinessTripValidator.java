@@ -38,6 +38,11 @@ public class BusinessTripValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateBetweenDates(String startDate, String endDate) {
+    validateStartEndDate(startDate, endDate);
+    return getErrorMap();
+  }
+
   private void validateCountry(String country) {
     if (StringUtils.isEmpty(country)) {
       setErrorToMap("EMPTY_COUNTRY_ERROR", ErrorMessages.EMPTY_COUNTRY_ERROR);
@@ -59,4 +64,5 @@ public class BusinessTripValidator extends AbstractValidator {
     setErrorToMap("COUNTRY_EXISTENCE_ERROR",
         ErrorMessages.COUNTRY_EXISTENCE_ERROR);
   }
+
 }

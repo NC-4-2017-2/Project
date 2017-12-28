@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class BusinessTripDAOImplTest {
 
   @Autowired
-  private BusinessTripDAO businessTrip;
+  private BusinessTripDAO businessTripDAO;
   private JdbcTemplate template;
   @Autowired
   private DataSource dataSource;
@@ -47,16 +47,16 @@ public class BusinessTripDAOImplTest {
   public void test1CreateTrip() {
     BusinessTrip result = getTripForTest();
 
-    businessTrip.createTrip(result);
+    businessTripDAO.createTrip(result);
   }
 
   @Test
   public void test2UpdateTripAndFindByUserId() {
     BusinessTrip businessTripTestSecond = getBusinessTripForUpdate();
 
-    businessTrip.updateTrip(businessTripTestSecond);
+    businessTripDAO.updateTrip(businessTripTestSecond);
 
-    Collection<BusinessTrip> tripByUserId = businessTrip
+    Collection<BusinessTrip> tripByUserId = businessTripDAO
         .findTripByUserId(BigInteger.valueOf(1));
 
     assertEquals(1, tripByUserId.size());
@@ -71,7 +71,7 @@ public class BusinessTripDAOImplTest {
 
   @Test
   public void test3FindTripByProjectId() {
-    Collection<BusinessTrip> tripByProjectId = businessTrip
+    Collection<BusinessTrip> tripByProjectId = businessTripDAO
         .findTripByProjectId(BigInteger.valueOf(4));
 
     assertEquals(3, tripByProjectId.size());
@@ -86,7 +86,7 @@ public class BusinessTripDAOImplTest {
 
   @Test
   public void findTripByPMIdAndStatus() {
-    Collection<BusinessTrip> result = businessTrip
+    Collection<BusinessTrip> result = businessTripDAO
         .findTripByPMIdAndStatus(BigInteger.valueOf(1), Status.APPROVED.getId());
 
     assertEquals(2, result.size());
@@ -101,7 +101,7 @@ public class BusinessTripDAOImplTest {
 
   @Test
   public void findBusinessTripById() {
-    BusinessTrip result = businessTrip.findBusinessTripById(BigInteger.valueOf(8));
+    BusinessTrip result = businessTripDAO.findBusinessTripById(BigInteger.valueOf(8));
     assertEquals("BusinessTrip{businessTripId=8, projectId=4, userId=2, authorId=2, pmId=1, country='USA', startDate=2012-12-13, endDate=2013-02-13, status=APPROVED}",
         result.toString());
   }
@@ -154,8 +154,18 @@ public class BusinessTripDAOImplTest {
 
   @Test
   public void findTripByUserIdAndStatus() {
-    Collection<BusinessTrip> result = businessTrip.findTripByUserIdAndStatus(BigInteger.valueOf(2), Status.APPROVED.getId());
+    Collection<BusinessTrip> result = businessTripDAO.findTripByUserIdAndStatus(BigInteger.valueOf(2), Status.APPROVED.getId());
     assertEquals("[BusinessTrip{businessTripId=8, projectId=4, userId=2, authorId=2, pmId=1,"
         + " country='USA', startDate=2012-12-13, endDate=2013-02-13, status=APPROVED}]", result.toString());
+  }
+
+  @Test
+  public void findTripByUserIdAndStatusAndPerPeriod() {
+    DateConverterService converter = new DateConverterService();
+    Collection<BusinessTrip> result = businessTripDAO.findTripByUserIdAndStatusAndPerPeriod(BigInteger.valueOf(2),
+        converter.convertStringToDateFromJSP("2012-03-30"),
+        converter.convertStringToDateFromJSP("2014-05-20"),
+        Status.DISAPPROVED.getId());
+    assertEquals("[BusinessTrip{businessTripId=8, projectId=4, userId=2, authorId=2, pmId=1, country='Antarctica', startDate=2012-04-30, endDate=2014-04-20, status=DISAPPROVED}]", result.toString());
   }
 }

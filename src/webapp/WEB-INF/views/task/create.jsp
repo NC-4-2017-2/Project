@@ -3,6 +3,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <style>
+        p {
+            color: red;
+        }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Create a new task</title>
 </head>
@@ -35,8 +40,7 @@
                            value=${startDate}></td>
             </tr>
             <tr>
-                <td>EndDate:</td>
-                <td><input type="date" name="endDate" size="20"
+                <td><input type="date" name="endDate" size="20" hidden = false
                            value=${endDate}></td>
             </tr>
             <tr>
@@ -71,8 +75,7 @@
                            value=${description}></td>
             </tr>
             <tr>
-                <td>Reopen counter:</td>
-                <td><input type="text" name="reopenCounter" size="20"
+                <td><input type="text" name="reopenCounter" size="20" hidden = false
                            value=${reopenCounter}></td>
             </tr>
             <tr>
@@ -111,6 +114,7 @@
                 </td>
             </tr>
 
+            <%@include file="../errors/errorMap.jsp" %>
 
             <tr>
                 <td><input type="submit" value="Create" size="40" width="40"/></td>

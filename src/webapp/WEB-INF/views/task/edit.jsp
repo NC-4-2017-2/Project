@@ -35,12 +35,11 @@
                 </tr>
                 <tr>
                     <td>StartDate:</td>
-                    <td><input type="date" name="startDate" size="20"
-                               value=${task.getStartDate()}></td>
+                    <td><input type="date" name="startDate"
+                               value="${task.getStartDate()}" ></td>
                 </tr>
                 <tr>
-                    <td>EndDate:</td>
-                    <td><input type="date" name="endDate" size="20"
+                    <td><input type="date" name="endDate" size="20" hidden = false
                                value=${task.getEndDate()}></td>
                 </tr>
                 <tr>
@@ -75,8 +74,7 @@
                                value=${task.getDescription()}></td>
                 </tr>
                 <tr>
-                    <td>Reopen counter:</td>
-                    <td><input type="text" name="reopenCounter" size="20"
+                    <td><input type="text" name="reopenCounter" size="20" hidden = false
                                value=${task.getReopenCounter()}></td>
                 </tr>
                 <tr>

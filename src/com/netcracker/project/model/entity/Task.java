@@ -123,6 +123,10 @@ public class Task {
     this.reopenCounter = reopenCounter;
   }
 
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
+
   public static class TaskBuilder {
 
     private BigInteger taskId;

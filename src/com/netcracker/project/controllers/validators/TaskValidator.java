@@ -1,49 +1,71 @@
 package com.netcracker.project.controllers.validators;
 
+import com.netcracker.project.model.ProjectDAO;
+import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.Task;
+import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
 import com.netcracker.project.services.impl.DateConverterService;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class TaskValidator extends AbstractValidator {
 
   private Map<String, String> errorMap;
   private String datePattern = "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])";
-  String symbolPattern = "[A-Za-zА-Яа-я0-9\\p{P}\\s]{302}";
+  private String symbolPattern = "^[\\pL\\pN0-9\\p{Punct}\\s]+$";
 
+  @Autowired
+  private ProjectDAO projectDAO;
 
-  public Map<String, String> validationCreate(String name, String startDate,
-      String endDate, String plannedEndDate,
-      String description, String comment) {
-
-    validateName(name);
-    validateStartEndDate(startDate, endDate);
-    validateStartDateAndPlannedEndDate(startDate, plannedEndDate);
-    validateDescription(description);
-    validateComment(comment);
-
-    return getErrorMap();
+  public TaskValidator() {
+    errorMap = new HashMap<>();
   }
 
-  public Map<String, String> validationUpdate(String name, String taskType,
-      String startDate, String endDate,
+  public Map<String, String> validationCreate(String name, String taskType, String startDate,
       String plannedEndDate, String priority, String status,
-      String description, String comment) {
+      String description, String comment, String authorId, String userId, String project) {
+
     validateName(name);
     validateTaskType(taskType);
-    validateStartEndDate(startDate, endDate);
     validateStartDateAndPlannedEndDate(startDate, plannedEndDate);
     validatePriority(priority);
     validateTaskStatus(status);
     validateDescription(description);
     validateComment(comment);
+    validateAuthorId(authorId);
+    validateUserId(userId);
+    validateProjects(project);
 
-    return getErrorMap();
+    return errorMap;
+  }
+
+  public Map<String, String> validationUpdate(String name, String taskType, String startDate,
+      String plannedEndDate, String priority, String status,
+      String description, String comment, String authorId, String userId, String project) {
+
+    validateName(name);
+    validateTaskType(taskType);
+    validateStartDateAndPlannedEndDate(startDate, plannedEndDate);
+    validatePriority(priority);
+    validateTaskStatus(status);
+    validateDescription(description);
+    validateComment(comment);
+    validateAuthorId(authorId);
+    validateUserId(userId);
+    validateProjects(project);
+
+    return errorMap;
   }
 
   public Map<String, String> validationFindTask(String priority) {
@@ -51,14 +73,24 @@ public class TaskValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  private void validateTaskStatus(String taskStatus){
-    if (taskStatus == null || taskStatus.toString().isEmpty()){
-      errorMap.put("status_error", "status can't to be empty!");
+  private void validateName(String name){
+    if (name == null || name.isEmpty()){
+      errorMap.put("name_error", "name can't to be null!");
     }
-    if (!taskStatusCheck(taskStatus)){
-      errorMap.put("status_error", "task status not found!");
+    if (!checkString(name)){
+      errorMap.put("name_error", "invalid name, please try again!");
     }
   }
+
+  private void validateTaskType(String taskType){
+    if (taskType == null || taskType.toString().isEmpty()){
+      errorMap.put("task_type_error", "task type can't to be null!");
+    }
+    if (!taskTypeCheck(taskType)){
+      errorMap.put("task_type_error", "this task type not found! ");
+    }
+  }
+
 
 
   private void validateStartDateAndPlannedEndDate(String startDate, String plannedEndDate){
@@ -93,14 +125,25 @@ public class TaskValidator extends AbstractValidator {
     }
   }
 
-  private void validateName(String name){
-    if (name == null || name.isEmpty()){
-      errorMap.put("name_error", "name can't to be null!");
+  private void validatePriority(String priority){
+    if (priority == null || priority.toString().isEmpty()){
+      errorMap.put("priority_error", "priority can't to be empty!");
     }
-    if (!checkString(name)){
-      errorMap.put("name_error", "invalid name, please try again!");
+
+    if (!taskPriorityCheck(priority)){
+      errorMap.put("priority_error", "this task priority not found!");
     }
   }
+
+  private void validateTaskStatus(String taskStatus){
+    if (taskStatus == null || taskStatus.toString().isEmpty()){
+      errorMap.put("status_error", "status can't to be empty!");
+    }
+    if (!taskStatusCheck(taskStatus)){
+      errorMap.put("status_error", "task status not found!");
+    }
+  }
+
 
   private void validateDescription(String description){
     if (description == null || description.isEmpty()){
@@ -121,22 +164,30 @@ public class TaskValidator extends AbstractValidator {
     }
   }
 
-  private void validateTaskType(String taskType){
-    if (taskType == null || taskType.toString().isEmpty()){
-      errorMap.put("task_type_error", "task type can't to be null!");
+  private void validateAuthorId(String authorId){
+    if (authorId.isEmpty() || authorId == null){
+      errorMap.put("author_error","user is null");
     }
-    if (!taskTypeCheck(taskType)){
-      errorMap.put("task_type_error", "this task type not found! ");
+    if (!checkString(authorId.toString())){
+      errorMap.put("author_error","user is incorrect");
     }
   }
 
-  private void validatePriority(String priority){
-    if (priority == null || priority.toString().isEmpty()){
-      errorMap.put("priority_error", "priority can't to be empty!");
+  private void validateUserId(String userId){
+    if (userId.isEmpty() || userId == null){
+      errorMap.put("user_error","user is null");
     }
+    if (!checkString(userId.toString())){
+      errorMap.put("user_error","user is incorrect");
+    }
+  }
 
-    if (!taskPriorityCheck(priority)){
-      errorMap.put("priority_error", "this task priority not found!");
+  private void validateProjects(String projectName){
+    if (projectName.isEmpty() || projectName == null){
+      errorMap.put("projectName_error","projectName is null");
+    }
+    if (!checkString(projectName.toString())){
+      errorMap.put("projectName_error","projectName is incorrect");
     }
   }
 
@@ -184,6 +235,7 @@ public class TaskValidator extends AbstractValidator {
     }
     return false;
   }
+
 
   private boolean checkDate(String dateString) {
     Pattern p = Pattern.compile(datePattern);

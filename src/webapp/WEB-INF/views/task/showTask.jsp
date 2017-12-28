@@ -11,7 +11,9 @@
        Task name: <td>${task.getName()}</td><br>
        Task Type: <td>${task.getTaskType()}</td><br>
        Start date:  <td>${task.getStartDate()}</td><br>
+        <c:if test="${task.getStatus() eq 'CLOSED'}">
        End date: <td>${task.getEndDate()}</td><br>
+        </c:if>
        Planned end date: <td>${task.getPlannedEndDate()}</td><br>
        Priority: <td>${task.getPriority()}</td><br>
        Status: <td>${task.getStatus()}</td><br>

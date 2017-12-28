@@ -71,25 +71,34 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
       Date startDate,
       Date endDate) {
     logger.info("Entering findWorkingDayPerPeriod(userId=" + userId + ", " + "startDate=" + startDate + ", " + "endDate=" + endDate + ")");
-
     return template.query(FIND_HOURS_PER_PERIOD, new Object[]{userId,
         startDate, endDate}, new WorkingDayMapper());
   }
 
   @Override
+  public Collection<WorkingDay> findWorkingDayByUserIdAndStatus(
+      BigInteger userId, Integer status) {
+    logger.info("Entering findWorkingDayByUserIdAndStatus(userId=" + userId + ", " + "status=" + status + ")");
+    return template.query(FIND_WORKING_DAY_BY_USER_ID_AND_STATUS, new Object[]{userId, status}, new WorkingDayMapper());
+  }
+
+  @Override
   public Collection<WorkingDay> findWorkingDayByPMIdAndStatus(BigInteger pmId,
       Integer status) {
+    logger.info("Entering findWorkingDayByPMIdAndStatus(pmId=" + pmId + ", " + "status=" + status + ")");
     return template.query(FIND_WORKING_DAYS_BY_PM_ID_AND_STATUS, new Object[]{pmId, status}, new WorkingDayMapper());
   }
 
   @Override
   public Integer findIfWorkingDayExists(BigInteger userId, Date workingDayDate) {
+    logger.info("Entering findIfWorkingDayExists(userId=" + userId + ", " + "workingDayDate=" + workingDayDate + ")");
     return template.queryForObject(
         FIND_WORKING_DAY_IF_EXISTS, new Object[]{userId, workingDayDate}, Integer.class);
   }
 
   @Override
   public Integer findIfWorkingDayExists(BigInteger id) {
+    logger.info("Entering findIfWorkingDayExists(id=" + id + ")");
     return template.queryForObject(FIND_WORKING_DAY_IF_EXISTS_BY_WORKING_DAY_ID, new Object[]{id}, Integer.class);
   }
 }

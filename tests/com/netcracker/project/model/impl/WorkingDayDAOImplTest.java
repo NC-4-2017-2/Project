@@ -31,7 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class WorkingDayDAOImplTest {
 
   @Autowired
-  private WorkingDayDAO workingDay;
+  private WorkingDayDAO workingDayDAO;
   private JdbcTemplate template;
   @Autowired
   private DataSource dataSource;
@@ -78,8 +78,8 @@ public class WorkingDayDAOImplTest {
         .status(Status.DISAPPROVED)
         .build();
 
-    workingDay.createWorkingDay(workingDayTest1);
-    workingDay.createWorkingDay(workingDayTest2);
+    workingDayDAO.createWorkingDay(workingDayTest1);
+    workingDayDAO.createWorkingDay(workingDayTest2);
   }
 
   @Test
@@ -87,7 +87,7 @@ public class WorkingDayDAOImplTest {
     Date startDate = converter.convertStringToDate("09.05.1991");
     Date endDate = converter.convertStringToDate("17.09.1991");
 
-    Collection<WorkingDay> hoursPerPeriod = workingDay
+    Collection<WorkingDay> hoursPerPeriod = workingDayDAO
         .findWorkingDayPerPeriod(BigInteger.valueOf(1), startDate, endDate);
     Comparator<WorkingDay> comparator = (o1, o2) -> o1.getWorkingDayId()
         .compareTo(o2.getWorkingDayId());
@@ -105,33 +105,41 @@ public class WorkingDayDAOImplTest {
   @Test
   public void findWorkingDayByUserIdAndDate() {
     Date wdDay = converter.convertStringToDate("14.12.2012");
-    WorkingDay result = workingDay.findWorkingDayByUserIdAndDate(BigInteger.valueOf(2), wdDay);
+    WorkingDay result = workingDayDAO
+        .findWorkingDayByUserIdAndDate(BigInteger.valueOf(2), wdDay);
     assertEquals("WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=8.0, status=APPROVED, pmId=1}", result.toString());
   }
 
   @Test
   public void findWorkingDayByPMIdAndStatus() {
-    Collection<WorkingDay> result = workingDay.findWorkingDayByPMIdAndStatus(BigInteger.valueOf(1), Status.APPROVED.getId());
+    Collection<WorkingDay> result = workingDayDAO
+        .findWorkingDayByPMIdAndStatus(BigInteger.valueOf(1), Status.APPROVED.getId());
     assertEquals("[WorkingDay{workingDayId=13, userId=3, date=2012-12-12, weekNumber=5, workingHours=8.0, status=APPROVED, pmId=1},"
         + " WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=8.0, status=APPROVED, pmId=1}]", result.toString());
   }
 
   @Test
   public void updateWorkingDayStatus() {
-    workingDay.updateWorkingDayStatus(BigInteger.valueOf(1010), 0);
+    workingDayDAO.updateWorkingDayStatus(BigInteger.valueOf(1010), 0);
   }
 
   @Test
   public void updateWorkingHours() {
-    workingDay.updateWorkingHours(BigInteger.valueOf(12), 1.1);
+    workingDayDAO.updateWorkingHours(BigInteger.valueOf(12), 1.1);
   }
 
   @Test
   public void findWorkingDayById() {
-    WorkingDay result = workingDay.findWorkingDayById(BigInteger.valueOf(12));
+    WorkingDay result = workingDayDAO.findWorkingDayById(BigInteger.valueOf(12));
     assertEquals("WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=13.1, status=APPROVED, pmId=1}", result.toString());
   }
 
+  @Test
+  public void findWorkingDayByUserIdAndStatus() {
+    Collection<WorkingDay> result = workingDayDAO
+        .findWorkingDayByUserIdAndStatus(BigInteger.valueOf(2), 0);
+    assertEquals("[WorkingDay{workingDayId=12, userId=2, date=2012-12-14, weekNumber=48, workingHours=13.1, status=APPROVED, pmId=1}]", result.toString());
+  }
 
   @Test
   public void test3DeleteWorkingDay() {

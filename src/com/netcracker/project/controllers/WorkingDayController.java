@@ -41,9 +41,9 @@ public class WorkingDayController {
   @Autowired
   private DateConverterService converter;
 
-  @RequestMapping(value = "/findWorkingDay", method = RequestMethod.GET)
+  @RequestMapping(value = "/findWorkingDayPerPeriod", method = RequestMethod.GET)
   public String findWorkingDay() {
-    return "workingDay/findWorkingDay";
+    return "workingDay/findWorkingDayPerPeriod";
   }
 
   @RequestMapping(value = "/viewWorkingDay", params = {"startDate",
@@ -57,7 +57,7 @@ public class WorkingDayController {
     Map<String, String> errorMap = validator.validateFind(startDate, endDate);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "workingDay/findWorkingDay";
+      return "workingDay/findWorkingDayPerPeriod";
     }
     User user = userDAO.findUserByLogin(principal.getName());
     Collection<WorkingDay> workingDays = workingDayDAO
@@ -79,6 +79,12 @@ public class WorkingDayController {
   public String viewPMWorkingDay(@RequestParam(value = "status") String status,
       Principal principal,
       Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = new WorkingDayValidator().validateWorkingDayStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/findPMWorkingDay";
+    }
     User currentUser = userDAO.findUserByLogin(principal.getName());
     Collection<WorkingDay> workingDays = workingDayDAO
         .findWorkingDayByPMIdAndStatus(currentUser.getUserId(),
@@ -164,6 +170,30 @@ public class WorkingDayController {
         workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
     model.addAttribute("workingDay", workingDay);
     return "workingDay/showWorkingDay";
+  }
+
+  @RequestMapping(value = "/findUserWorkingDayByStatus", method = RequestMethod.GET)
+  public String findWorkingDayByUserIdAndStatus() {
+    return "workingDay/findWorkingDayByStatus";
+  }
+
+  @RequestMapping(value = "/viewWorkingDay", params = "status", method = RequestMethod.GET)
+  public String viewWorkingDayByStatus(
+      @RequestParam(value = "status") String status,
+      Principal principal,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = new WorkingDayValidator().validateWorkingDayStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "workingDay/findWorkingDayByStatus";
+    }
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Collection<WorkingDay> workingDays = workingDayDAO
+        .findWorkingDayByUserIdAndStatus(currentUser.getUserId(),
+            Status.valueOf(status).getId());
+    model.addAttribute("workingDays", workingDays);
+    return "workingDay/viewWorkingDay";
   }
 
   @RequestMapping(value = "/createWorkingDay", method = RequestMethod.GET)
@@ -381,8 +411,9 @@ public class WorkingDayController {
       if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
         workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
             Status.WAITING_FOR_APPROVAL.getId());
-      }else {
-        workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(), Status.WAITING_FOR_APPROVAL.getId());
+      } else {
+        workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
+            Status.WAITING_FOR_APPROVAL.getId());
       }
     } else if (existWorkingDay == 0) {
       workingDayDAO.createWorkingDay(workingDay);

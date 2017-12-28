@@ -144,7 +144,12 @@ public class WorkingDayController {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/showWorkingDay";
     }
+    User workingDayUser = userDAO.findUserByUserId(workingDay.getUserId());
+    User workingDayPm = userDAO.findUserByUserId(workingDay.getPmId());
+
     model.addAttribute("currentUser", currentUser);
+    model.addAttribute("workingDayUser", workingDayUser.getFirstName() + " " + workingDayUser.getLastName());
+    model.addAttribute("workingDayPm", workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
     model.addAttribute("workingDay", workingDay);
     return "workingDay/showWorkingDay";
   }
@@ -155,7 +160,7 @@ public class WorkingDayController {
   }
 
   @RequestMapping(value = "/createWorkingDay", method = RequestMethod.POST)
-  public String createWorkingDay(
+  public String createWorkingDayPost(
       @RequestParam(value = "mondayStartTime") String mondayStartTime,
       @RequestParam(value = "mondayEndTime") String mondayEndTime,
       @RequestParam(value = "tuesdayStartTime") String tuesdayStartTime,

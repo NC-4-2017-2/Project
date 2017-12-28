@@ -22,6 +22,14 @@ public class WorkingDayService {
     int currentWeekNumber = getCurrentWeekNumber();
     LocalDate localDate = getLocalDatePrevious(currentWeekNumber, dayOfWeek);
 
+    Status status;
+
+    if (userId.equals(pmId)) {
+      status = Status.APPROVED;
+    }else {
+      status = Status.WAITING_FOR_APPROVAL;
+    }
+
     return new WorkingDay.WorkingDayBuilder()
         .date(Date.from(
             localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
@@ -29,7 +37,7 @@ public class WorkingDayService {
         .workingHours(hoursCount)
         .pmId(pmId)
         .userId(userId)
-        .status(Status.WAITING_FOR_APPROVAL)
+        .status(status)
         .build();
   }
 

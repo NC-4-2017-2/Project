@@ -96,12 +96,13 @@ public class WorkingDayController {
       Principal principal) {
     WorkingDayValidator validator = new WorkingDayValidator();
     Map<String, String> errorMap = validator.validateInputId(id);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/showWorkingDay";
     }
     BigInteger bigIntegerId = new BigInteger(id);
-    Integer workingDayExistence = workingDayDAO.findIfWorkingDayExists(bigIntegerId);
+    Integer workingDayExistence = workingDayDAO
+        .findIfWorkingDayExists(bigIntegerId);
     Map<String, String> existenceError = new WorkingDayValidator()
         .validateExistence(workingDayExistence);
     if (!existenceError.isEmpty()) {
@@ -120,11 +121,15 @@ public class WorkingDayController {
     }
     User workingDayUser = userDAO.findUserByUserId(workingDay.getUserId());
     User workingDayPm = userDAO.findUserByUserId(workingDay.getPmId());
-    workingDayDAO.updateWorkingDayStatus(bigIntegerId, Status.valueOf(status).getId());
-    WorkingDay updatedWorkingDay = workingDayDAO.findWorkingDayById(bigIntegerId);
+    workingDayDAO
+        .updateWorkingDayStatus(bigIntegerId, Status.valueOf(status).getId());
+    WorkingDay updatedWorkingDay = workingDayDAO
+        .findWorkingDayById(bigIntegerId);
 
-    model.addAttribute("workingDayUser", workingDayUser.getFirstName() + " " + workingDayUser.getLastName());
-    model.addAttribute("workingDayPm", workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
+    model.addAttribute("workingDayUser",
+        workingDayUser.getFirstName() + " " + workingDayUser.getLastName());
+    model.addAttribute("workingDayPm",
+        workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
     model.addAttribute("workingDay", updatedWorkingDay);
     model.addAttribute("currentUser", currentUser);
     return "workingDay/showWorkingDay";
@@ -136,7 +141,7 @@ public class WorkingDayController {
       Model model) {
     WorkingDayValidator validator = new WorkingDayValidator();
     Map<String, String> errorMap = validator.validateInputId(id);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/showWorkingDay";
     }
@@ -153,8 +158,10 @@ public class WorkingDayController {
     User workingDayPm = userDAO.findUserByUserId(workingDay.getPmId());
 
     model.addAttribute("currentUser", currentUser);
-    model.addAttribute("workingDayUser", workingDayUser.getFirstName() + " " + workingDayUser.getLastName());
-    model.addAttribute("workingDayPm", workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
+    model.addAttribute("workingDayUser",
+        workingDayUser.getFirstName() + " " + workingDayUser.getLastName());
+    model.addAttribute("workingDayPm",
+        workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
     model.addAttribute("workingDay", workingDay);
     return "workingDay/showWorkingDay";
   }
@@ -365,11 +372,18 @@ public class WorkingDayController {
               workingDay.getDate());
       if ((actualWorkingDay.getWorkingHours() + workingDay.getWorkingHours())
           > 12) {
-        errorMap.put("WORKING_DAY_OVERSTATEMENT_ERROR", day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
+        errorMap.put("WORKING_DAY_OVERSTATEMENT_ERROR",
+            day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
         return;
       }
       workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),
           workingDay.getWorkingHours());
+      if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+        workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
+            Status.WAITING_FOR_APPROVAL.getId());
+      }else {
+        workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(), Status.WAITING_FOR_APPROVAL.getId());
+      }
     } else if (existWorkingDay == 0) {
       workingDayDAO.createWorkingDay(workingDay);
     }

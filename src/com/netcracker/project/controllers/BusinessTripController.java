@@ -46,14 +46,14 @@ public class BusinessTripController {
     User user = userDAO.findUserByLogin(userLogin);
     BigInteger projectId = null;
 
-    if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)) {
-      projectId = projectDAO
-          .findProjectIdByUserLogin(userLogin);
-    }
     if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
       projectId = projectDAO
           .findProjectIdByPMLogin(userLogin);
+    } else {
+      projectId = projectDAO
+          .findProjectIdByUserLogin(userLogin);
     }
+
     Collection<User> users = userDAO.findUserByProjectId(projectId);
     Project project = projectDAO.findProjectByProjectId(projectId);
     User projectManager = userDAO

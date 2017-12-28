@@ -2,7 +2,6 @@ package com.netcracker.project.model.impl;
 
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.entity.BusinessTrip;
-import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.impl.mappers.BusinessTripMapper;
 import java.util.Date;
 import javax.sql.DataSource;
@@ -50,7 +49,6 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
     updateCountry(trip.getCountry(), trip.getBusinessTripId());
     updateStartDate(trip.getStartDate(), trip.getBusinessTripId());
     updateEndDate(trip.getEndDate(), trip.getBusinessTripId());
-    updateStatus(trip.getStatus(), trip.getBusinessTripId());
   }
 
   @Override
@@ -94,6 +92,15 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
         new BusinessTripMapper());
   }
 
+  @Override
+  public void updateBusinessTripStatus(BigInteger businessTripId,
+      Integer statusId) {
+    logger.info(
+        "Entering updateBusinessTripStatus(statusId=" + statusId + ", " + " businessTripId="
+            + businessTripId + ")");
+    template.update(UPDATE_STATUS, statusId, businessTripId);
+  }
+
   private void updateCountry(String country, BigInteger businessTripId) {
     logger.info(
         "Entering updateCountry(country=" + country + "," + " businessTripId="
@@ -112,13 +119,6 @@ public class BusinessTripDAOImpl implements BusinessTripDAO {
         "Entering updateEndDate(endDate=" + endDate + "," + " businessTripId="
             + businessTripId + ")");
     template.update(UPDATE_END_DATE, endDate, businessTripId);
-  }
-
-  private void updateStatus(Status status, BigInteger businessTripId) {
-    logger.info(
-        "Entering updateStatus(status=" + status + "," + " businessTripId="
-            + businessTripId + ")");
-    template.update(UPDATE_STATUS, status.getId(), businessTripId);
   }
 
   @Override

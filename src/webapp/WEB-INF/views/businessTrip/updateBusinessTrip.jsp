@@ -10,7 +10,7 @@
     <title>UpdateBusinessTrip</title>
 </head>
 <body>
-<form action="/businessTrip/businessTripToUpdate/${businessTripId}"
+<form action="/businessTrip/updateBusinessTrip/${businessTripId}"
       method="post">
     Choose country:<select name="country" required>
     <option selected="selected"
@@ -24,18 +24,6 @@
                      required><br>
     EndDate:<input type="date" name="endDate" value="${endDate}"
                    required><br>
-
-    Status:<select name="status" required>
-    <c:if test="${status eq 'APPROVED'}">
-        <option selected="selected" value="APPROVED">APPROVED</option>
-        <option value="DISAPPROVED">DISAPPROVED</option>
-    </c:if>
-
-    <c:if test="${status eq 'DISAPPROVED'}">
-        <option selected="selected" value="DISAPPROVED">DISAPPROVED</option>
-        <option value="APPROVED">APPROVED</option>
-    </c:if>
-    </select><br>
 
     <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Update">

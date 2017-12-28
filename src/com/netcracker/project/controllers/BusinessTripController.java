@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,8 +55,11 @@ public class BusinessTripController {
           .findProjectIdByPMLogin(userLogin);
     }
     Collection<User> users = userDAO.findUserByProjectId(projectId);
-
     Project project = projectDAO.findProjectByProjectId(projectId);
+    User projectManager = userDAO
+        .findUserByUserId(project.getProjectManagerId());
+    users.add(projectManager);
+
     model.addAttribute("pmId", project.getProjectManagerId());
     model.addAttribute("projectId", project.getProjectId());
     model.addAttribute("countryList", countries.getCountriesNames());
@@ -70,24 +74,36 @@ public class BusinessTripController {
       @PathVariable(value = "pmId") String pmId,
       @RequestParam(value = "startDate") String startDate,
       @RequestParam(value = "endDate") String endDate,
-      @RequestParam(value = "user") BigInteger userId,
-      @RequestParam(value = "authorId") BigInteger authorId,
+      @RequestParam(value = "user") String userId,
+      @RequestParam(value = "authorId") String authorId,
       @RequestParam(value = "country") String country,
-      Model model) {
+      Model model, Principal principal) {
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(projectId);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/createBusinessTrip";
+    }
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/createBusinessTrip";
+    }
+    errorMap = validator.validateInputId(authorId);
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/createBusinessTrip";
     }
     errorMap = validator.validateInputId(pmId);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/createBusinessTrip";
     }
     BigInteger projectBigIntegerId = new BigInteger(projectId);
     BigInteger pmBigIntegerId = new BigInteger(pmId);
+    BigInteger userBigIntegerId = new BigInteger(userId);
+    BigInteger authorBigIntegerId = new BigInteger(authorId);
 
     Collection<User> users = userDAO.findUserByProjectId(projectBigIntegerId);
     errorMap = new BusinessTripValidator()
@@ -104,34 +120,46 @@ public class BusinessTripController {
       return "businessTrip/createBusinessTrip";
     }
 
+    String currentUserLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(currentUserLogin);
+    Status status;
+    if (currentUser.getJobTitle().name()
+        .equals(JobTitle.PROJECT_MANAGER.name())) {
+      status = Status.APPROVED;
+    } else {
+      status = Status.WAITING_FOR_APPROVAL;
+    }
+
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
-        .authorId(authorId)
+        .authorId(authorBigIntegerId)
         .projectId(projectBigIntegerId)
-        .userId(userId)
+        .userId(userBigIntegerId)
         .pmId(pmBigIntegerId)
         .country(country)
         .startDate(converter.convertStringToDateFromJSP(startDate))
         .endDate(converter.convertStringToDateFromJSP(endDate))
-        .status(Status.DISAPPROVED)
+        .status(status)
         .build();
 
     businessTripDAO.createTrip(trip);
     return "response_status/success";
   }
 
-  @RequestMapping(value = "/businessTripToUpdate/{id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/updateBusinessTrip/{id}", method = RequestMethod.GET)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") String id) {
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(id);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
     BigInteger bigIntegerId = new BigInteger(id);
-    Integer businessTripExistence = businessTripDAO.findIfBusinessTripExists(bigIntegerId);
-    Map<String, String> existenceError = validator.validateExistence(businessTripExistence);
+    Integer businessTripExistence = businessTripDAO
+        .findIfBusinessTripExists(bigIntegerId);
+    Map<String, String> existenceError = validator
+        .validateExistence(businessTripExistence);
     if (!existenceError.isEmpty()) {
       model.addAttribute("errorMap", existenceError);
       return "businessTrip/updateBusinessTrip";
@@ -146,46 +174,46 @@ public class BusinessTripController {
     return "businessTrip/updateBusinessTrip";
   }
 
-  @RequestMapping(value = "/businessTripToUpdate/{id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/updateBusinessTrip/{id}", method = RequestMethod.POST)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") String id,
       @RequestParam(value = "country") String country,
       @RequestParam(value = "startDate") String startDate,
-      @RequestParam(value = "endDate") String endDate,
-      @RequestParam(value = "status") String status) {
+      @RequestParam(value = "endDate") String endDate) {
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(id);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
     BigInteger bigIntegerId = new BigInteger(id);
-    Integer businessTripExistence = businessTripDAO.findIfBusinessTripExists(bigIntegerId);
-    Map<String, String> existenceError = validator.validateExistence(businessTripExistence);
+    Integer businessTripExistence = businessTripDAO
+        .findIfBusinessTripExists(bigIntegerId);
+    Map<String, String> existenceError = validator
+        .validateExistence(businessTripExistence);
     if (!existenceError.isEmpty()) {
       model.addAttribute("errorMap", existenceError);
       return "businessTrip/updateBusinessTrip";
     }
     errorMap = new BusinessTripValidator()
-        .validateUpdate(country, startDate, endDate, status);
-    Status correctStatus = businessTripDAO.findBusinessTripById(bigIntegerId).getStatus();
+        .validateUpdate(country, startDate, endDate);
+
     if (!errorMap.isEmpty()) {
       model.addAttribute("countryList", countries.getCountriesNames());
       model.addAttribute("businessTripId", bigIntegerId);
       model.addAttribute("startDate", startDate);
       model.addAttribute("endDate", endDate);
-      model.addAttribute("status", correctStatus);
       model.addAttribute("tripCountry", country);
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/updateBusinessTrip";
     }
+
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
         .businessTripId(bigIntegerId)
         .country(country)
         .startDate(converter.convertStringToDateFromJSP(startDate))
         .endDate(converter.convertStringToDateFromJSP(endDate))
-        .status(Status.valueOf(status))
         .build();
 
     businessTripDAO.updateTrip(trip);
@@ -197,56 +225,146 @@ public class BusinessTripController {
     return "businessTrip/findTrip";
   }
 
-  @RequestMapping(value = "findTrip", params = "status",
+  @RequestMapping(value = "viewTrip", params = "status",
       method = RequestMethod.GET)
   public String showTripList(
       @RequestParam(value = "status") String status,
       Principal principal,
       Model model) {
     Map<String, String> errorMap = new BusinessTripValidator()
-        .validateFind(status);
+        .validateBusinessTripStatus(status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/findTrip";
     }
+
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
-    Collection<BusinessTrip> trips = null;
-    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
-      trips = businessTripDAO
-          .findTripByPMIdAndStatus(user.getUserId(),
-              Status.valueOf(status).getId());
-    }
-    if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)) {
-      trips = businessTripDAO
-          .findTripByUserIdAndStatus(user.getUserId(),
-              Status.valueOf(status).getId());
-    }
+    Collection<BusinessTrip> trips = businessTripDAO
+        .findTripByUserIdAndStatus(user.getUserId(),
+            Status.valueOf(status).getId());
+
     model.addAttribute("tripList", trips);
-    return "businessTrip/showTripsList";
+    return "businessTrip/viewTrip";
   }
 
   @RequestMapping(value = "/showTrip/{businessTripId}", method = RequestMethod.GET)
   public String showTrip(
       @PathVariable(value = "businessTripId") String tripId,
-      Model model) {
+      Model model, Principal principal) {
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(tripId);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/showTrip";
     }
     BigInteger bigIntegerId = new BigInteger(tripId);
-    Integer businessTripExistence = businessTripDAO.findIfBusinessTripExists(bigIntegerId);
-    Map<String, String> existenceError = validator.validateExistence(businessTripExistence);
+    Integer businessTripExistence = businessTripDAO
+        .findIfBusinessTripExists(bigIntegerId);
+    Map<String, String> existenceError = validator
+        .validateExistence(businessTripExistence);
     if (!existenceError.isEmpty()) {
       model.addAttribute("errorMap", existenceError);
       return "businessTrip/showTrip";
     }
     BusinessTrip trip = businessTripDAO
         .findBusinessTripById(bigIntegerId);
+    User businessTripUser = userDAO.findUserByUserId(trip.getUserId());
+    User businessTripAuthor = userDAO.findUserByUserId(trip.getAuthorId());
+    User businessTripPM = userDAO.findUserByUserId(trip.getPmId());
+    String currentUserLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(currentUserLogin);
+    Project businessTripProject = projectDAO
+        .findProjectByProjectId(trip.getProjectId());
+
     model.addAttribute("businessTrip", trip);
+    model.addAttribute("businessTripUser",
+        businessTripUser.getFirstName() + " " + businessTripUser.getLastName());
+    model.addAttribute("businessTripAuthor",
+        businessTripAuthor.getFirstName() + " " + businessTripAuthor
+            .getLastName());
+    model.addAttribute("businessTripPM",
+        businessTripPM.getFirstName() + " " + businessTripPM.getLastName());
+    model.addAttribute("businessTripProject", businessTripProject.getName());
+    model.addAttribute("currentUser", currentUser);
     return "businessTrip/showTrip";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/updateTripStatus/{id}", method = RequestMethod.POST)
+  public String updateTripStatus(
+      @PathVariable(value = "id") String id,
+      @RequestParam(value = "status") String status,
+      Model model, Principal principal) {
+    BusinessTripValidator validator = new BusinessTripValidator();
+
+    Map<String, String> inputIdMap = validator.validateInputId(id);
+    if (!inputIdMap.isEmpty()) {
+      model.addAttribute("errorMap", inputIdMap);
+    }
+
+    BigInteger tripId = new BigInteger(id);
+    Integer businessTripExistence = businessTripDAO
+        .findIfBusinessTripExists(tripId);
+    Map<String, String> existenceError = validator
+        .validateExistence(businessTripExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+    }
+    BusinessTrip businessTrip = businessTripDAO
+        .findBusinessTripById(tripId);
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Map<String, String> errorMap = validator
+        .validateBusinessTripStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("businessTrip", businessTrip);
+      model.addAttribute("currentUser", currentUser);
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/showTrip";
+    }
+    businessTripDAO
+        .updateBusinessTripStatus(tripId, Status.valueOf(status).getId());
+    BusinessTrip updatedBusinessTrip = businessTripDAO
+        .findBusinessTripById(tripId);
+    User businessTripUser = userDAO
+        .findUserByUserId(updatedBusinessTrip.getUserId());
+    User businessTripAuthor = userDAO
+        .findUserByUserId(updatedBusinessTrip.getAuthorId());
+    User businessTripPM = userDAO
+        .findUserByUserId(updatedBusinessTrip.getPmId());
+    Project businessTripProject = projectDAO
+        .findProjectByProjectId(updatedBusinessTrip.getProjectId());
+
+    model.addAttribute("businessTripUser",
+        businessTripUser.getFirstName() + " " + businessTripUser.getLastName());
+    model.addAttribute("businessTripAuthor",
+        businessTripAuthor.getFirstName() + " " + businessTripAuthor
+            .getLastName());
+    model.addAttribute("businessTripPM",
+        businessTripPM.getFirstName() + " " + businessTripPM.getLastName());
+    model.addAttribute("businessTripProject", businessTripProject.getName());
+    model.addAttribute("businessTrip", updatedBusinessTrip);
+    model.addAttribute("currentUser", currentUser);
+    return "businessTrip/showTrip";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/findPMTrip", method = RequestMethod.GET)
+  public String findPMTrip() {
+    return "businessTrip/findPMTrip";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/viewPMTrip", params = "status", method = RequestMethod.GET)
+  public String viewPMWorkingDay(@RequestParam(value = "status") String status,
+      Principal principal,
+      Model model) {
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Collection<BusinessTrip> businessTrip = businessTripDAO
+        .findTripByPMIdAndStatus(currentUser.getUserId(),
+            Status.valueOf(status).getId());
+    model.addAttribute("tripList", businessTrip);
+    return "businessTrip/viewTrip";
   }
 }

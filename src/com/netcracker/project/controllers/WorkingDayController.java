@@ -118,8 +118,13 @@ public class WorkingDayController {
       model.addAttribute("errorMap", errorMap);
       return "workingDay/showWorkingDay";
     }
+    User workingDayUser = userDAO.findUserByUserId(workingDay.getUserId());
+    User workingDayPm = userDAO.findUserByUserId(workingDay.getPmId());
     workingDayDAO.updateWorkingDayStatus(bigIntegerId, Status.valueOf(status).getId());
     WorkingDay updatedWorkingDay = workingDayDAO.findWorkingDayById(bigIntegerId);
+
+    model.addAttribute("workingDayUser", workingDayUser.getFirstName() + " " + workingDayUser.getLastName());
+    model.addAttribute("workingDayPm", workingDayPm.getFirstName() + " " + workingDayPm.getLastName());
     model.addAttribute("workingDay", updatedWorkingDay);
     model.addAttribute("currentUser", currentUser);
     return "workingDay/showWorkingDay";

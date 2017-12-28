@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 public class BusinessTripValidator extends AbstractValidator {
 
-  public Map<String, String> validateFind(String status) {
+  public Map<String, String> validateBusinessTripStatus(String status) {
     validateStatus(status);
     return getErrorMap();
   }
@@ -20,10 +20,9 @@ public class BusinessTripValidator extends AbstractValidator {
   }
 
   public Map<String, String> validateUpdate(String country, String startDate,
-      String endDate, String status) {
+      String endDate) {
     validateCountry(country);
     validateStartEndDate(startDate, endDate);
-    validateStatus(status);
     return getErrorMap();
   }
 
@@ -57,6 +56,7 @@ public class BusinessTripValidator extends AbstractValidator {
         return;
       }
     }
-    setErrorToMap("COUNTRY_EXISTENCE_ERROR", ErrorMessages.COUNTRY_EXISTENCE_ERROR);
+    setErrorToMap("COUNTRY_EXISTENCE_ERROR",
+        ErrorMessages.COUNTRY_EXISTENCE_ERROR);
   }
 }

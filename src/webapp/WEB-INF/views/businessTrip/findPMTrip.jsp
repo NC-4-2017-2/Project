@@ -1,22 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
-    <title>FindTripByStatus</title>
+    <title>Find PM Working Day</title>
 </head>
 <body>
-<form action="/businessTrip/viewTrip">
+<form action="/businessTrip/viewPMTrip">
     Choose status:<select name="status" required>
     <option value="APPROVED">APPROVED</option>
     <option value="DISAPPROVED">DISAPPROVED</option>
     <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
 </select><br>
-
     <%@include file="../errors/errorMap.jsp" %>
 
     <input type="submit" value="Find">

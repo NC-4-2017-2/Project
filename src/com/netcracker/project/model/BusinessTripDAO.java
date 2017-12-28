@@ -20,6 +20,8 @@ public interface BusinessTripDAO {
 
   Collection<BusinessTrip> findTripByUserIdAndStatus(BigInteger userId, Integer status);
 
+  void updateBusinessTripStatus (BigInteger businessTripId, Integer statusId);
+
   Integer findIfBusinessTripExists(BigInteger id);
 
   String CREATE_TRIP = "INSERT ALL " +

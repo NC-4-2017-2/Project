@@ -39,78 +39,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/project")
 public class ProjectController {
 
-  private static final Logger logger = Logger
-      .getLogger(ProjectController.class);
   @Autowired
   private ProjectDAO projectDAO;
   @Autowired
   private UserDAO userDAO;
 
+  private static final Logger logger = Logger
+      .getLogger(ProjectController.class);
+
   private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
   private DateConverterService converter = new DateConverterService();
-
-
-  @RequestMapping(value = "/createSprints/{countSprints}", method = RequestMethod.POST)
-  public String createSprintsPost(
-      @PathVariable("countSprints") Integer countSprints,
-      HttpServletRequest request,
-      Model model) {
-    List<Sprint> sprintList = new ArrayList<>();
-
-    for (int index = 0; index < countSprints; index++) {
-      sprintList.add(new Sprint.SprintBuilder()
-          .name(request.getParameter("sprintName" + index))
-          .startDate(converter.convertStringToDateFromJSP(
-              request.getParameter("startDate" + index)))
-          .plannedEndDate(converter.convertStringToDateFromJSP(
-              request.getParameter("planedEndDate" + index)))
-          .build());
-    }
-    model.addAttribute("sprintList", sprintList);
-    return "/project/setCountWorkers";
-  }
-
-  @RequestMapping(value = "/createWorkers", params = "countWorkers", method = RequestMethod.GET)
-  public String createWorkers(
-      @RequestParam("countWorkers") Integer countWorkers,
-      HttpServletRequest request,
-      Model model) {
-    model.addAttribute("countWorkers", countWorkers);
-    return "project/createWorkersForm";
-  }
-
-  @RequestMapping(value = "/createWorkers", params = "countWorkers", method = RequestMethod.POST)
-  public String createWorkersPost(
-      @RequestParam("countWorkers") Integer countWorkers,
-      Model model,
-      HttpServletRequest request) {
-    List<WorkPeriod> workPeriods = new ArrayList<>();
-
-    for (int i = 0; i < countWorkers; i++) {
-      Collection<User> users = userDAO
-          .findUserByLastNameAndFirstName(
-              request.getParameter("userLastName" + i),
-              request.getParameter("userFirstName" + i));
-      User user = null;
-      if (users.size() == 1) {
-        Iterator<User> iterator = users.iterator();
-        while (iterator.hasNext()) {
-          user = iterator.next();
-        }
-      }
-
-      new WorkPeriod.WorkPeriodBuilder()
-          .userId(user.getUserId())
-          .startWorkDate(converter.convertStringToDateFromJSP(
-              request.getParameter("startDate" + i)))
-          .endWorkDate(converter
-              .convertStringToDateFromJSP(request.getParameter("endDate" + i)))
-          .build();
-    }
-
-    model.addAttribute("countWorkers", countWorkers);
-    return "project/createWorkersForm";
-  }
 
   @RequestMapping(value = "/createProject")
   public String createProject() {
@@ -192,6 +130,8 @@ public class ProjectController {
         .projectManagerId(pmIdBigInteger)
         .projectStatus(OCStatus.OPENED)
         .build();
+//TODO work period creation and validation
+    projectDAO.createProject(project, sprints, workPeriods);
 
     return "response_status/success";
   }

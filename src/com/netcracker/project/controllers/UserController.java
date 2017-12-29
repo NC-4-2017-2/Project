@@ -158,7 +158,6 @@ public class UserController {
     logger.info("findUserById() method. userId: " + userId);
 
     User user = userDAO.findUserByUserId(BigInteger.valueOf(userId));
-
     model.addAttribute("userId", user.getUserId());
     model.addAttribute("firstName", user.getFirstName());
     model.addAttribute("lastName", user.getLastName());

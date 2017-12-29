@@ -26,7 +26,7 @@ public class WorkingDayService {
 
     if (userId.equals(pmId)) {
       status = Status.APPROVED;
-    }else {
+    } else {
       status = Status.WAITING_FOR_APPROVAL;
     }
 

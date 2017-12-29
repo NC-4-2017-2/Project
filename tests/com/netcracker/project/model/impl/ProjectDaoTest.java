@@ -107,7 +107,7 @@ public class ProjectDaoTest {
         .projectStatus(OPENED)
         .build();
 
-    projectDAO.createProject(project);
+    //projectDAO.createProject(project);
 
     Project result = projectDAO.findProjectByProjectId(BigInteger.valueOf(200));
     assertThat(BigInteger.valueOf(200), is(result.getProjectId()));

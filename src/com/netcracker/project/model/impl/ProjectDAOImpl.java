@@ -3,6 +3,7 @@ package com.netcracker.project.model.impl;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.enums.OCStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.model.impl.mappers.SprintMapper;
@@ -17,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ProjectDAOImpl implements ProjectDAO {
@@ -30,14 +32,21 @@ public class ProjectDAOImpl implements ProjectDAO {
   }
 
   @Override
-  public void createProject(Project project) {
-    logger.info("Entering createProject(project_form=" + project + ")");
-    template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
-        project.getName(),
-        project.getStartDate(),
-        project.getEndDate(),
-        project.getProjectStatus().getId(),
-        project.getProjectManagerId()});
+  @Transactional(rollbackFor = Exception.class)
+  public void createProject(Project project, Collection<Sprint> sprints,
+      Collection<WorkPeriod> workPeriods) {
+    try {
+      insertProject(project);
+      Project currentProject = findProjectByName(project.getName());
+      for (Sprint sprint : sprints) {
+        insertSprint(sprint, currentProject.getProjectId());
+      }
+      for(WorkPeriod workPeriod : workPeriods) {
+        addUser(currentProject.getProjectId(), workPeriod.getUserId());
+      }
+    } catch (Exception e) {
+      throw e;
+    }
 
   }
 
@@ -119,14 +128,19 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   @Override
   public BigInteger findProjectIdByUserLogin(String userLogin) {
-    logger.info("Entering findProjectIdByUserLogin(startDate=" + userLogin + ")");
-    return template.queryForObject(FIND_PROJECT_ID_BY_USER_LOGIN, new Object[]{userLogin}, BigInteger.class);
+    logger
+        .info("Entering findProjectIdByUserLogin(startDate=" + userLogin + ")");
+    return template
+        .queryForObject(FIND_PROJECT_ID_BY_USER_LOGIN, new Object[]{userLogin},
+            BigInteger.class);
   }
 
   @Override
   public BigInteger findProjectIdByPMLogin(String pmLogin) {
     logger.info("Entering findProjectIdByPMLogin(startDate=" + pmLogin + ")");
-    return template.queryForObject(FIND_PROJECT_ID_BY_PM_LOGIN, new Object[]{pmLogin}, BigInteger.class);
+    return template
+        .queryForObject(FIND_PROJECT_ID_BY_PM_LOGIN, new Object[]{pmLogin},
+            BigInteger.class);
   }
 
   @Override
@@ -186,7 +200,6 @@ public class ProjectDAOImpl implements ProjectDAO {
   public void createSprint(Sprint sprint, BigInteger projectId) {
     logger.info("Entering createSprint(sprint=" + sprint + "," + " projectId="
         + projectId + ")");
-    DateConverterService mdc = new DateConverterService();
     template.update(CREATE_SPRINT,
         sprint.getSprintId(),
         sprint.getName(),
@@ -224,6 +237,34 @@ public class ProjectDAOImpl implements ProjectDAO {
     template.update(UPDATE_SPRINT_PLANNED_END_DATE, plannedEndDate, sprintId);
   }
 
+  @Override
+  public void insertProject(Project project) {
+    template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
+        project.getName(),
+        project.getStartDate(),
+        project.getEndDate(),
+        project.getProjectStatus().getId(),
+        project.getProjectManagerId()});
+  }
+
+  @Override
+  public void insertSprint(Sprint sprint, BigInteger projectId) {
+    template.update(CREATE_SPRINT,
+        sprint.getSprintId(),
+        sprint.getName(),
+        sprint.getStartDate(),
+        sprint.getPlannedEndDate(),
+        sprint.getPlannedEndDate(),
+        OCStatus.OPENED.getId(),
+        projectId
+    );
+  }
+
+  @Override
+  public void insertUser(BigInteger userId) {
+
+  }
+
   private Collection<BigInteger> getAllTaskIdByProject(BigInteger projectId) {
     logger.info("Entering getAllTaskIdByProject(projectId=" + projectId + ")");
     return template
@@ -246,7 +287,6 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     return projectsId;
   }
-
 
   private OCStatus getStatusById(BigInteger projectId) {
     logger.info("Entering getStatusById(projectId=" + projectId + ")");

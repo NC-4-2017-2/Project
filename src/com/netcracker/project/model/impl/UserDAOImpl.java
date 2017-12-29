@@ -81,6 +81,15 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public Collection<User> findUsersByJobTitleAndProjectStatus(Integer jobTitle,
+      Integer projectStatus) {
+    logger.info("Entering findUsersByJobTitleAndProjectStatus(jobTitle=" + jobTitle + "," + " projectStatus="
+        + projectStatus + ")");
+    return template.query(FIND_USERS_BY_JOB_TITLE_AND_PROJECT_STATUS, new Object[]{jobTitle, projectStatus}, new UserMapper());
+  }
+
+  @Deprecated
+  @Override
   public Map<String, String> getAllUserName() {
     logger.info("Entering getAllUserName()");
     List idAndName = template.queryForList(GET_ALL_USERS);
@@ -127,6 +136,15 @@ public class UserDAOImpl implements UserDAO {
   public Integer findIfPMExists(BigInteger id) {
     logger.info("Entering findIfPMExists(id=" + id + ")");
     return template.queryForObject(FIND_PM_IF_EXISTS, new Object[]{id}, Integer.class);
+  }
+
+  @Override
+  public Integer findHiredUserIfExistsByLastFirstNameAndJobTitle(
+      String lastName, String firstName, Integer jobTitle) {
+    logger.info(
+        "Entering findHiredUserIfExistsByLastFirstNameAndJobTitle(lastName=" + lastName + "," + " firstName=" + firstName + "  jobTitle="
+            + jobTitle + ")");
+    return template.queryForObject(FIND_HIRED_USER_IF_EXISTS_BY_LAST_FIRST_NAME_AND_JOB_TITLE, new Object[]{lastName, firstName, jobTitle}, Integer.class);
   }
 
   @Override

@@ -46,7 +46,7 @@ public interface ProjectDAO {
   BigInteger findProjectIdByUserLogin(String userLogin);
 
   BigInteger findProjectIdByPMLogin(String pmLogin);
-  
+
   String CREATE_PROJECT =
       "INSERT ALL "
           + " INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION, OBJECT_VERSION) VALUES (OBJECT_SEQUENCE.NEXTVAL,NULL,2,'Project'||?,NULL, 1) "

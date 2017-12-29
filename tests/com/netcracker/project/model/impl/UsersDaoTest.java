@@ -200,6 +200,26 @@ public class UsersDaoTest {
   }
 
   @Test
+  public void findUsersByJobTitleAndProjectStatus() {
+    Collection<User> result = userDao.findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(), ProjectStatus.WORKING.getId());
+    assertEquals("[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+        + " User{userId=104, firstName='Victor', lastName='Pavlov', email='pavlov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+        + " phoneNumber='09797979780', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+        + " User{userId=105, firstName='Victor', lastName='Ovechkin', email='ovechkin@gmail.com', dateOfBirth=1992-04-25, hireDate=2011-06-02,"
+        + " phoneNumber='09797979794', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+        + " User{userId=107, firstName='Taras', lastName='Strahov', email='strahov@gmail.com', dateOfBirth=1994-07-07, hireDate=2011-05-22,"
+        + " phoneNumber='09797979792', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
+        result.toString());
+  }
+
+  @Test
+  public void findHiredUserIfExistsByLastFirstNameAndJobTitle() {
+    Integer result = userDao.findHiredUserIfExistsByLastFirstNameAndJobTitle("Adminov", "Admin", JobTitle.SOFTWARE_ENGINEER.getId());
+    assertEquals("0", result.toString());
+  }
+
+  @Test
   public void deleteUser() {
     BigInteger id = BigInteger.valueOf(1001);
 

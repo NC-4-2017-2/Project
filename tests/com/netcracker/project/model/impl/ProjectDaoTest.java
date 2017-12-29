@@ -103,9 +103,9 @@ public class ProjectDaoTest {
         .name("Test")
         .startDate(start)
         .endDate(end)
+        .projectManagerId(BigInteger.valueOf(2))
+        .projectStatus(OPENED)
         .build();
-    project.setProjectStatus(OPENED);
-    project.setProjectManagerId(BigInteger.valueOf(2));
 
     projectDAO.createProject(project);
 
@@ -251,10 +251,9 @@ public class ProjectDaoTest {
         .name("PROJECT1")
         .startDate(startDate)
         .endDate(endDate)
+        .projectManagerId(BigInteger.valueOf(1))
+        .projectStatus(OPENED)
         .build();
-
-    project.setProjectStatus(OPENED);
-    project.setProjectManagerId(BigInteger.valueOf(1));
 
     return project;
   }

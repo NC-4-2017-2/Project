@@ -1,6 +1,7 @@
 package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.enums.OCStatus;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,8 @@ public class ProjectMapper implements RowMapper<Project> {
         .name(rs.getString(EnumMapper.NAME.getFullName()))
         .startDate(rs.getDate(EnumMapper.START_DATE.getFullName()))
         .endDate(rs.getDate(EnumMapper.END_DATE.getFullName()))
+        .projectManagerId(new BigInteger(rs.getString(EnumMapper.PM_ID.getFullName())))
+        .projectStatus(OCStatus.valueOf(rs.getString(EnumMapper.STATUS.getFullName())))
         .build();
   }
 

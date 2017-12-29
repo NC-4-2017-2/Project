@@ -70,28 +70,28 @@ public class ProjectDAOImpl implements ProjectDAO {
     logger.info(
         "Entering addUsersPMSprintToProject(project_form=" + project + ")");
     //todo delete List users id and set workPeriods from projectController
-    List<BigInteger> idUsers = getIdUsers(project.getProjectId());
-    Collection<BigInteger> tasks = getAllTaskIdByProject(
-        project.getProjectId());
-    Collection<Sprint> sprints = getAllSprints(project.getProjectId());
-    BigInteger idPms = getIdPM(project.getProjectId());
-    OCStatus status = getStatusById(project.getProjectId());
-
-    if (idUsers.size() != 0) {
-      project.setUsersId(idUsers);
-    }
-    if (idPms != null) {
-      project.setProjectManagerId(idPms);
-    }
-    if (sprints.size() != 0) {
-      project.setSprints(sprints);
-    }
-    if (tasks.size() != 0) {
-      project.setTasksId(tasks);
-    }
-    if (status != null) {
-      project.setProjectStatus(status);
-    }
+//    List<BigInteger> idUsers = getIdUsers(project.getProjectId());
+//    Collection<BigInteger> tasks = getAllTaskIdByProject(
+//        project.getProjectId());
+//    Collection<Sprint> sprints = getAllSprints(project.getProjectId());
+//    BigInteger idPms = getIdPM(project.getProjectId());
+//    OCStatus status = getStatusById(project.getProjectId());
+//
+//    if (idUsers.size() != 0) {
+//      project.setUsersId(idUsers);
+//    }
+//    if (idPms != null) {
+//      project.setProjectManagerId(idPms);
+//    }
+//    if (sprints.size() != 0) {
+//      project.setSprints(sprints);
+//    }
+//    if (tasks.size() != 0) {
+//      project.setTasksId(tasks);
+//    }
+//    if (status != null) {
+//      project.setProjectStatus(status);
+//    }
   }
 
   @Override
@@ -100,7 +100,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         "Entering findAllOpenedProjects()");
     return template.queryForList(FIND_ALL_OPENED_PROJECTS, String.class);
   }
-
 
   @Override
   public List<Project> findProjectByDate(Date startDate) {

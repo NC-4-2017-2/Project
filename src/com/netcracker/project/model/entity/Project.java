@@ -13,16 +13,14 @@ public class Project {
   private Date endDate;
   private OCStatus projectStatus;
   private BigInteger projectManagerId;
-  private Collection<BigInteger> usersId;
-  private Collection<BigInteger> tasksId;
-  private Collection<WorkPeriod> workPeriods;
-  private Collection<Sprint> sprints;
 
   private Project(ProjectBuilder builder) {
     this.projectId = builder.projectId;
     this.name = builder.name;
     this.startDate = builder.startDate;
     this.endDate = builder.endDate;
+    this.projectManagerId = builder.projectManagerId;
+    this.projectStatus = builder.projectStatus;
   }
 
   public Project() {
@@ -52,53 +50,14 @@ public class Project {
     return projectManagerId;
   }
 
-  public Collection<BigInteger> getUsersId() {
-    return usersId;
-  }
-
-  public Collection<BigInteger> getTasksId() {
-    return tasksId;
-  }
-
-  public Collection<Sprint> getSprints() {
-    return sprints;
-  }
-
-  public void setUsersId(Collection<BigInteger> usersId) {
-    this.usersId = usersId;
-  }
-
-  public void setProjectManagerId(BigInteger projectManagerId) {
-    this.projectManagerId = projectManagerId;
-  }
-
-  public void setSprints(Collection<Sprint> sprints) {
-    this.sprints = sprints;
-  }
-
-  public void setTasksId(Collection<BigInteger> tasksId) {
-    this.tasksId = tasksId;
-  }
-
-  public void setProjectStatus(OCStatus projectStatus) {
-    this.projectStatus = projectStatus;
-  }
-
-  public Collection<WorkPeriod> getWorkPeriods() {
-    return workPeriods;
-  }
-
-  public void setWorkPeriods(
-      Collection<WorkPeriod> workPeriods) {
-    this.workPeriods = workPeriods;
-  }
-
   public static class ProjectBuilder {
 
     private BigInteger projectId;
     private String name;
     private Date startDate;
     private Date endDate;
+    private OCStatus projectStatus;
+    private BigInteger projectManagerId;
 
     public ProjectBuilder() {
     }
@@ -120,6 +79,16 @@ public class Project {
 
     public ProjectBuilder endDate(Date endDate) {
       this.endDate = endDate;
+      return this;
+    }
+
+    public ProjectBuilder projectStatus(OCStatus projectStatus) {
+      this.projectStatus = projectStatus;
+      return this;
+    }
+
+    public ProjectBuilder projectManagerId(BigInteger projectManagerId) {
+      this.projectManagerId = projectManagerId;
       return this;
     }
 

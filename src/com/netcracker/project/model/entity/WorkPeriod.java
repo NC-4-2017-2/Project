@@ -21,9 +21,6 @@ public class WorkPeriod {
     this.workPeriodStatus = builder.workPeriodStatus;
   }
 
-  private WorkPeriod() {
-  }
-
   public BigInteger getWorkPeriodId() {
     return workPeriodId;
   }

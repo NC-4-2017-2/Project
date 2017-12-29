@@ -3,6 +3,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <style>
+        p {
+            color: red;
+        }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Update task</title>
 </head>
@@ -116,6 +121,9 @@
                     </c:forEach>
             </form>
         </table>
+
+        <%@include file="../errors/errorMap.jsp" %>
+
         <tr>
             <td><input type="submit" value="Update" size="40" width="40"/></td>
         </tr>

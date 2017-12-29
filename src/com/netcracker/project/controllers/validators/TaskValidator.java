@@ -70,35 +70,34 @@ public class TaskValidator extends AbstractValidator {
 
   public Map<String, String> validationFindTask(String priority) {
     validatePriority(priority);
-    return getErrorMap();
+    return errorMap;
   }
 
   private void validateName(String name){
     if (name == null || name.isEmpty()){
-      errorMap.put("name_error", "name can't to be null!");
+      errorMap.put("name_error", "Name can't to be null!");
     }
     if (!checkString(name)){
-      errorMap.put("name_error", "invalid name, please try again!");
+      errorMap.put("name_error", "Invalid name, please try again!");
     }
   }
 
   private void validateTaskType(String taskType){
     if (taskType == null || taskType.toString().isEmpty()){
-      errorMap.put("task_type_error", "task type can't to be null!");
+      errorMap.put("task_type_error", "Task type can't to be null");
     }
     if (!taskTypeCheck(taskType)){
-      errorMap.put("task_type_error", "this task type not found! ");
+      errorMap.put("task_type_error", "This task type not found");
     }
   }
 
 
-
   private void validateStartDateAndPlannedEndDate(String startDate, String plannedEndDate){
     if (startDate == null) {
-      errorMap.put("start_date_error", "Start date can't null!");
+      errorMap.put("start_date_error", "Start date can't null");
     }
     if (plannedEndDate == null) {
-      errorMap.put("planned_end_date_error", "End date can't null!");
+      errorMap.put("planned_end_date_error", "End date can't null");
     }
 
     if (startDate != null || plannedEndDate != null) {
@@ -113,13 +112,11 @@ public class TaskValidator extends AbstractValidator {
         int compareDate = start.compareTo(plannedEnd);
 
         if (compareDate == 0) {
-          errorMap.put("date_error",
-              "Start date can't be same as planned end date!");
+          errorMap.put("date_error", "Start date can't be same as planned end date");
         }
 
         if (compareDate == 1) {
-          errorMap.put("date_error",
-              "Start date can't be bigger than planned end date!");
+          errorMap.put("date_error", "Start date can't be bigger than planned end date");
         }
       }
     }
@@ -127,31 +124,31 @@ public class TaskValidator extends AbstractValidator {
 
   private void validatePriority(String priority){
     if (priority == null || priority.toString().isEmpty()){
-      errorMap.put("priority_error", "priority can't to be empty!");
+      errorMap.put("priority_error", "Priority can't to be empty");
     }
 
     if (!taskPriorityCheck(priority)){
-      errorMap.put("priority_error", "this task priority not found!");
+      errorMap.put("priority_error", "This task priority not found");
     }
   }
 
   private void validateTaskStatus(String taskStatus){
     if (taskStatus == null || taskStatus.toString().isEmpty()){
-      errorMap.put("status_error", "status can't to be empty!");
+      errorMap.put("status_error", "Status can't to be empty!");
     }
     if (!taskStatusCheck(taskStatus)){
-      errorMap.put("status_error", "task status not found!");
+      errorMap.put("status_error", "Task status not found!");
     }
   }
 
 
   private void validateDescription(String description){
     if (description == null || description.isEmpty()){
-      errorMap.put("description_error", "description can't to be empty!");
+      errorMap.put("description_error", "Description can't to be empty!");
     }
 
     if (!checkString(description)){
-      errorMap.put("description_error", "you entered incorrect symbols");
+      errorMap.put("description_error", "You entered incorrect symbols");
     }
   }
 
@@ -160,34 +157,34 @@ public class TaskValidator extends AbstractValidator {
       errorMap.put("comment_error", "We must write comment!");
     }
     if (!checkString(comment)){
-      errorMap.put("comment_error", "you entered incorrect comment");
+      errorMap.put("comment_error", "You entered incorrect comment");
     }
   }
 
   private void validateAuthorId(String authorId){
     if (authorId.isEmpty() || authorId == null){
-      errorMap.put("author_error","user is null");
+      errorMap.put("author_error","User is null");
     }
     if (!checkString(authorId.toString())){
-      errorMap.put("author_error","user is incorrect");
+      errorMap.put("author_error","User is incorrect");
     }
   }
 
   private void validateUserId(String userId){
     if (userId.isEmpty() || userId == null){
-      errorMap.put("user_error","user is null");
+      errorMap.put("user_error","User is null");
     }
     if (!checkString(userId.toString())){
-      errorMap.put("user_error","user is incorrect");
+      errorMap.put("user_error","User is incorrect");
     }
   }
 
   private void validateProjects(String projectName){
     if (projectName.isEmpty() || projectName == null){
-      errorMap.put("projectName_error","projectName is null");
+      errorMap.put("projectName_error","Project name is null");
     }
     if (!checkString(projectName.toString())){
-      errorMap.put("projectName_error","projectName is incorrect");
+      errorMap.put("projectName_error","Project name is incorrect");
     }
   }
 

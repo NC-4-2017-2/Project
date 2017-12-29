@@ -14,6 +14,7 @@ import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -144,14 +145,8 @@ public class TaskController {
             comments, authorId.toString(), userId.toString(), projectName);
 
     if (!errorMap.isEmpty()){
-      model.addAttribute("name", name);
-      model.addAttribute("taskType", type);
-      model.addAttribute("startDate", startDate);
-      model.addAttribute("plannedEndDate", plannedEndDate);
-      model.addAttribute("priority", priority);
-      model.addAttribute("status",  status);
-      model.addAttribute("description", description);
-      model.addAttribute("comments", comments);
+      Collection<Task> taskCollection = taskDAO.findTaskByTaskId(id);
+      model.addAttribute("modelTask", taskCollection);
       Map<String, String> authorNames = userDAO.getAllUserName();
       model.addAttribute("authorNames", authorNames);
       Map<String, String> userNames = userDAO.getAllUserName();
@@ -181,15 +176,14 @@ public class TaskController {
         .build();
 
     if (TaskStatus.valueOf(status).getId() == 2){
-      reopenCounter++;
+        reopenCounter++;
+        taskDAO.updateReopenCounter(reopenCounter, updatingTask.getTaskId());
     }
 
     if (TaskStatus.valueOf(status).getId() == 1){
-      Date date = new Date();
-      updatingTask.setEndDate(date);
+        Date date = new Date();
+        taskDAO.updateEndDate(date, updatingTask.getTaskId());
     }
-
-    updatingTask.setReopenCounter(reopenCounter);
 
     taskDAO.updateTask(updatingTask);
 

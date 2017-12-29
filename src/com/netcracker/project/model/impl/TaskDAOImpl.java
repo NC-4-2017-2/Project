@@ -6,6 +6,7 @@ import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
 import com.netcracker.project.model.impl.mappers.TaskMapper;
+import java.time.LocalDate;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -56,12 +57,11 @@ public class TaskDAOImpl implements TaskDAO {
     updateTaskByName(task.getName(), task.getTaskId());
     updateTaskByType(task.getTaskType(), task.getTaskId());
     updateTaskByStartDate(task.getStartDate(), task.getTaskId());
-    updateTaskByEndDate(task.getEndDate(), task.getTaskId());
     updateTaskByPlannedEndDate(task.getPlannedEndDate(), task.getTaskId());
     updateTaskByTaskPriority(task.getPriority(), task.getTaskId());
     updateTaskByStatus(task.getStatus(), task.getTaskId());
     updateTaskByDescription(task.getDescription(), task.getTaskId());
-    updateTaskByReopenCounter(task.getReopenCounter(), task.getTaskId());
+  //  updateTaskByReopenCounter(task.getReopenCounter(), task.getTaskId());
     updateTaskByComment(task.getComments(), task.getTaskId());
     updateTaskByTaskAuthor(task.getAuthorId(), task.getTaskId());
     updateTaskByUserId(task.getUserId(), task.getTaskId());
@@ -207,7 +207,7 @@ public class TaskDAOImpl implements TaskDAO {
   @Override
   public Collection<Task> findTaskByUserIdAndPriority(BigInteger userId, Integer taskPriority) {
     logger.info("Entering findTaskByPriority(userId=" + userId + ", " + "taskPriority="
-            + taskPriority + ")");
+        + taskPriority + ")");
     return template.query(FIND_TASK_BY_USER_ID_AND_PRIORITY, new Object[]{userId, taskPriority},
         new TaskMapper());
   }
@@ -218,7 +218,7 @@ public class TaskDAOImpl implements TaskDAO {
     logger.info("Entering findTaskByStatusAndUserId(id=" + userId + ", " + "status="
         + taskStatus + ")");
     return template.query(FIND_TASK_BY_USER_ID_AND_STATUS, new Object[]{userId, taskStatus},
-            new TaskMapper());
+        new TaskMapper());
   }
 
   @Override
@@ -227,5 +227,21 @@ public class TaskDAOImpl implements TaskDAO {
         "Entering updateStatus(status=" + taskStatus + ")" + "Entering taskId="
             + taskId);
     template.update(UPDATE_TASK_BY_TASK_STATUS, taskStatus, taskId);
+  }
+
+  @Override
+  public void updateEndDate(Date date, BigInteger taskId) {
+    logger.info(
+        "Entering updateStatus(date=" + date + ")" + "Entering taskId="
+            + taskId);
+    template.update(UPDATE_END_DATE, date, taskId);
+  }
+
+  @Override
+  public void updateReopenCounter(Integer counter, BigInteger taskId) {
+    logger.info(
+        "Entering updateStatus(counter=" + counter + ")" + "Entering taskId="
+            + taskId);
+    template.update(UPDATE_REOPEN_COUNTER, counter, taskId);
   }
 }

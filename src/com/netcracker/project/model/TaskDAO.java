@@ -2,6 +2,7 @@ package com.netcracker.project.model;
 
 import com.netcracker.project.model.entity.Task;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -29,6 +30,21 @@ public interface TaskDAO {
 
   void updateStatus(Integer taskStatus, BigInteger taskId);
 
+  void updateEndDate(Date date, BigInteger taskId);
+
+  void updateReopenCounter(Integer counter, BigInteger taskId);
+
+  String UPDATE_END_DATE =
+          " UPDATE ATTRIBUTES " +
+          " SET DATE_VALUE = ? " +
+          " WHERE ATTRIBUTES.OBJECT_ID = ? " +
+          " AND ATTRIBUTES.ATTR_ID = 23 ";
+
+  String UPDATE_REOPEN_COUNTER =
+      " UPDATE ATTRIBUTES " +
+      " SET ATTRIBUTES.VALUE = ? " +
+      " WHERE ATTRIBUTES.OBJECT_ID = ? " +
+      " AND ATTRIBUTES.ATTR_ID = 28 ";;
 
   String CREATE_TASK =
           "INSERT ALL " +

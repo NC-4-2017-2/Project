@@ -35,10 +35,10 @@ public class StatisticServiceImpl implements StatisticService {
   }
 
   @Override
-  public UserTaskStatistic getTaskCountByProjectIdPieChart(
+  public UserTaskStatistic getTaskCountByProjectIdAndDatePieChart(
       BigInteger projectId, Date startDate, Date endDate) {
     logger.info(
-        "getTaskCountByProjectIdPieChart() method. projectId = " + projectId
+        "getTaskCountByProjectIdAndDatePieChart() method. projectId = " + projectId
             + " startDate : " + startDate + " endDate : " + endDate);
     return statistic
         .findProjectTaskStatisticCountByProjectIdAndPeriod(projectId, startDate,

@@ -2,13 +2,7 @@ package com.netcracker.project.services.impl;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -39,7 +33,7 @@ public class DateConverterService{
   }
 
   public String convertDateToString(Date startDate) {
-    String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
+    String pattern = "yyyy-MM-dd";
     String patternWriteFormat = "yyyy-MM-dd";
     String dateStr = startDate.toString();
     DateFormat readFormat = new SimpleDateFormat(pattern, Locale.US);

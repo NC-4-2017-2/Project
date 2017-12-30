@@ -20,6 +20,7 @@ public interface UserDAO {
 
     Collection<User> findUsersByJobTitleAndProjectStatus(Integer jobTitle, Integer projectStatus);
 
+    @Deprecated
     Map<String, String> getAllUserName();
 
     void updatePhoneNumber(BigInteger id, String phoneNumber);

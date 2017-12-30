@@ -8,7 +8,6 @@
         src="${ctx}/resources/js/jquery-2.1.4.js"></script>
 <script type="text/javascript">
   jQuery(document).ready(function () {
-
     var options = {
           chart: {
             renderTo: 'container',

@@ -14,7 +14,7 @@ public interface StatisticService {
 
   List<SprintStatistic> getProjectSprintStatLineChart(BigInteger projectId);
 
-  UserTaskStatistic getTaskCountByProjectIdPieChart(BigInteger projectId,
+  UserTaskStatistic getTaskCountByProjectIdAndDatePieChart(BigInteger projectId,
       Date startDate, Date endDate);
 
   UserTaskStatistic getTaskCountByUserIdPieChart(BigInteger userId,

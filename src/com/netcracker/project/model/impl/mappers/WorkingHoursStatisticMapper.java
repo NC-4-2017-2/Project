@@ -2,7 +2,7 @@ package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;

@@ -10,7 +10,7 @@
     <title>Create project form</title>
 </head>
 <body>
-<form action="createProject/${countSprints}/${countWorkers}" method="post">
+<form action="/project/createProject/${countSprints}/${countWorkers}" method="post">
     <table border="0">
         <tr>
             <th>

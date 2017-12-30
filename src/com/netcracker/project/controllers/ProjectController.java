@@ -1,10 +1,7 @@
 package com.netcracker.project.controllers;
 
-import com.netcracker.project.controllers.project_form.SprintFormData;
-import com.netcracker.project.controllers.project_form.SprintsForm;
-import com.netcracker.project.controllers.project_form.WorkPeriodForm;
-import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
 import com.netcracker.project.controllers.validators.ProjectValidator;
+import com.netcracker.project.controllers.validators.UserValidator;
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
@@ -26,14 +23,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,9 +41,6 @@ public class ProjectController {
   private ProjectDAO projectDAO;
   @Autowired
   private UserDAO userDAO;
-
-  private static final Logger logger = Logger
-      .getLogger(ProjectController.class);
 
   private ConvertJspDataService convertService = new ConvertJspDataServiceImpl();
   private DateConverterService converter = new DateConverterService();
@@ -104,6 +95,10 @@ public class ProjectController {
       @RequestParam("pmId") String pmId,
       Model model,
       HttpServletRequest request) {
+    Collection<User> pmOnTransit = userDAO
+        .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
+            ProjectStatus.TRANSIT.getId());
+
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = new HashMap<>();
 
@@ -114,6 +109,7 @@ public class ProjectController {
       model.addAttribute("countWorkers", countWorkers);
       errorMap.put("PROJECT_EXIST_ERROR",
           projectName + " " + ErrorMessages.PROJECT_EXIST_ERROR);
+      model.addAttribute("pmOnTransitList", pmOnTransit);
       model.addAttribute("errorMap", errorMap);
 
       return "project/createProjectForm";
@@ -121,20 +117,24 @@ public class ProjectController {
 
     errorMap = validator.validateInteger(countSprints);
     if (!errorMap.isEmpty()) {
+      model.addAttribute("pmOnTransitList", pmOnTransit);
       model.addAttribute("countSprints", countSprints);
       model.addAttribute("countWorkers", countWorkers);
       model.addAttribute("errorMap", errorMap);
       return "project/createProjectForm";
     }
+
     Integer countSprintsInteger = new Integer(countSprints);
 
     errorMap = validator.validateInteger(countWorkers);
     if (!errorMap.isEmpty()) {
       model.addAttribute("countSprints", countSprints);
       model.addAttribute("countWorkers", countWorkers);
+      model.addAttribute("pmOnTransitList", pmOnTransit);
       model.addAttribute("errorMap", errorMap);
       return "project/createProjectForm";
     }
+
     Integer countWorkersInteger = new Integer(countWorkers);
 
     errorMap = validator
@@ -142,9 +142,10 @@ public class ProjectController {
     Collection<Sprint> sprints = new ArrayList<>();
 
     if (!errorMap.isEmpty()) {
+      model.addAttribute("pmOnTransitList", pmOnTransit);
+      model.addAttribute("errorMap", errorMap);
       model.addAttribute("countSprints", countSprints);
       model.addAttribute("countWorkers", countWorkers);
-      model.addAttribute("errorMap", errorMap);
       return "project/createProjectForm";
     }
 
@@ -160,10 +161,12 @@ public class ProjectController {
 
       if (!errorMap.isEmpty()) {
         model.addAttribute("countSprints", countSprints);
+        model.addAttribute("pmOnTransitList", pmOnTransit);
         model.addAttribute("countWorkers", countWorkers);
         model.addAttribute("errorMap", errorMap);
         return "project/createProjectForm";
       }
+
       Date startDateSprint = converter
           .convertStringToDateFromJSP(startDateParam);
       Date endDateSprint = converter.convertStringToDateFromJSP(endDateParam);
@@ -193,12 +196,22 @@ public class ProjectController {
         model.addAttribute("countSprints", countSprints);
         model.addAttribute("countWorkers", countWorkers);
         model.addAttribute("errorMap", errorMap);
+        model.addAttribute("pmOnTransitList", pmOnTransit);
         return "project/createProjectForm";
       }
-      if (users.size() == 1) {
+      if (users.size() >= 1) {
         Iterator<User> iterator = users.iterator();
         while (iterator.hasNext()) {
           user = iterator.next();
+          if(user.getProjectStatus().name().equals(ProjectStatus.WORKING.name())) {
+            errorMap.put("USER_PROJECT_STATUS_WORKING_ERROR", user.getLastName() + " " +
+                user.getFirstName() + " " + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
+            model.addAttribute("pmOnTransitList", pmOnTransit);
+            model.addAttribute("countWorkers", countWorkers);
+            model.addAttribute("countSprints", countSprints);
+            model.addAttribute("errorMap", errorMap);
+            return "project/createProjectForm";
+          }
         }
       }
 
@@ -208,11 +221,13 @@ public class ProjectController {
       errorMap = validator
           .validateDates(startDateParam, endDateParam);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("countSprints", countSprints);
+        model.addAttribute("pmOnTransitList", pmOnTransit);
         model.addAttribute("countWorkers", countWorkers);
+        model.addAttribute("countSprints", countSprints);
         model.addAttribute("errorMap", errorMap);
         return "project/createProjectForm";
       }
+
       Date startDateWP = converter.convertStringToDateFromJSP(startDateParam);
       Date endDateWP = converter.convertStringToDateFromJSP(endDateParam);
 
@@ -235,135 +250,125 @@ public class ProjectController {
         .build();
 
     projectDAO.createProject(project, sprints, workPeriods);
+    userDAO.updateProjectStatus(pmIdBigInteger, ProjectStatus.WORKING.getId());
     Project currentProject = projectDAO.findProjectByName(projectName);
     for (WorkPeriod period : workPeriods) {
       userDAO.createWorkPeriod(period, currentProject.getProjectId());
+      userDAO.updateProjectStatus(period.getUserId(), ProjectStatus.WORKING.getId());
     }
 
     return "response_status/success";
   }
 
+  @RequestMapping(value = "/findProjectByStartDate", method = RequestMethod.GET)
+  public String findProjectByStartDate() {
+    return "project/findProjectByStartDate";
+  }
 
-  @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
-  public String editProjectPost(
-      @RequestParam("projectId") BigInteger projectId,
+  @RequestMapping(value = "/findProjectByStartDate", params = {"startDate", "endDate"}, method = RequestMethod.GET)
+  public String findProjectPerPeriodDate(
+      @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
-      @RequestParam("projectStatus") OCStatus projectStatus,
-      @RequestParam("projectManagerId") BigInteger projectManagerId,
-      @ModelAttribute("modelSprint") SprintsForm sprintsForm,
-      @ModelAttribute("modelWorkers") WorkPeriodForm workPeriodForm) {
-    logger.info("editProjectPost() method. Project id" + projectId
-        + "endDate: " + endDate
-        + "projectStatus: " + projectStatus
-        + "projectManagerId: " + projectManagerId
-        + "sprintsForm: " + sprintsForm);
-
-    projectDAO
-        .updateEndDate(projectId,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    ProjectValidator validator = new ProjectValidator();
+    errorMap = validator.validateDates(startDate, endDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/findProjectByStartDate";
+    }
+    Collection<Project> projectList = projectDAO
+        .findProjectByStartDate(converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
-    projectDAO.updateStatus(projectId, projectStatus);
-    projectDAO.updatePM(projectId, projectManagerId);
+    model.addAttribute("projectList", projectList);
+    return "project/viewProject";
+  }
 
-    if (sprintsForm.getSprints() != null) {
-      List<SprintFormData> sprints = sprintsForm.getSprints();
-      sprints.forEach(sprintData -> {
-        projectDAO.updateSprintStatus(sprintData.getId(),
-            sprintData.getSprintStatus());
-        projectDAO.updateSprintPlannedEndDate(sprintData.getId(),
-            converter
-                .convertStringToDateFromJSP(sprintData.getPlannedEndDate()));
-      });
+  @RequestMapping(value = "/showProject/{id}", method = RequestMethod.GET)
+  public String showProject(
+      @PathVariable("id") String id,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    ProjectValidator validator = new ProjectValidator();
+    errorMap = validator.validateInputId(id);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/showProject";
     }
-
-    if (workPeriodForm.getWorkers() != null) {
-      List<WorkPeriodFormData> workings = workPeriodForm.getWorkers();
-
-      workings.forEach(wp -> {
-        WorkPeriod workPeriod = new WorkPeriod.WorkPeriodBuilder()
-            .projectId(wp.getProjectId())
-            .userId(wp.getUserId())
-            .startWorkDate(
-                converter.convertStringToDateFromJSP(wp.getStartWorkDate()))
-            .endWorkDate(
-                converter.convertStringToDateFromJSP(wp.getEndWorkDate()))
-            .projectId(projectId)
-            .workPeriodStatus(wp.getWorkPeriodStatus())
-            .build();
-        userDAO.updateWorkingPeriodEndDateByUserId(workPeriod);
-        userDAO.updateWorkingPeriodStatusByUserId(workPeriod);
-      });
+    BigInteger bigIntegerProjectId = new BigInteger(id);
+    Integer projectExistence = projectDAO.findIfProjectExists(bigIntegerProjectId);
+    Map<String, String> existenceError = validator
+        .validateExistence(projectExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "project/showProject";
     }
-
-    return "response_status/success";
-  }
-
-  @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
-  public String editProjectGet(@PathVariable("id") Integer id, Model model) {
-    logger.info("editProjectGet() method. Id: " + id);
-    Project project = projectDAO.findProjectByProjectId(BigInteger.valueOf(id));
-    model.addAttribute("projectId", project.getProjectId());
-    model.addAttribute("projectName", project.getName());
-    model.addAttribute("startDate", project.getStartDate());
-    model.addAttribute("endDate", project.getEndDate());
-    model.addAttribute("projectStatus", project.getProjectStatus());
-    model.addAttribute("pmId", project.getProjectManagerId());
-    model.addAttribute("pmId", project.getProjectManagerId());
-
-    Collection<Sprint> sprintCollection = null;
-
-    Collection<WorkPeriod> workPeriodCollection = userDAO
-        .findWorkPeriodByProjectIdAndStatus(project.getProjectId(),
-            project.getProjectStatus().getId());
-
-    SprintsForm sprintForm = new SprintsForm();
-    List<SprintFormData> sprints = convertService
-        .convertSprintToSprintForm(sprintCollection);
-    sprintForm.setSprints(sprints);
-
-    WorkPeriodForm workPeriodForm = new WorkPeriodForm();
-    List<WorkPeriodFormData> workPeriodFormData = convertService
-        .convertWorkPeriodToWPForm(
-            workPeriodCollection);
-    workPeriodForm.setWorkers(workPeriodFormData);
-
-    model.addAttribute("modelSprint", sprintForm);
-    model.addAttribute("modelWork", workPeriodForm);
-
-    return "project/edit_project";
-  }
-
-
-  @RequestMapping(value = "/findProjectByProjectId/{id}", method = RequestMethod.GET)
-  public String findProjectByProjectId(Model model,
-      @PathVariable("id") Integer id) {
-    logger.info("findProjectByProjectId() method. Id: " + id);
-
-    Project project = projectDAO
-        .findProjectByProjectId(BigInteger.valueOf(id));
+    Project project = projectDAO.findProjectByProjectId(bigIntegerProjectId);
     model.addAttribute("project", project);
-
-    return "project/show_project";
+    return "project/showProject";
   }
 
-  @RequestMapping(value = "/findProjectByName/{name}", method = RequestMethod.GET)
-  public String findProjectByName(Model model,
-      @PathVariable("name") String name) {
-    logger.info("findProjectByProjectId() method. Id: " + name);
-
-    Project project = projectDAO.findProjectByName(name);
-    model.addAttribute("project", project);
-
-    return "project/show_project";
+  @RequestMapping(value = "/showProjectUsersToDelete/{id}", method = RequestMethod.GET)
+  public String getProjectUsersToDelete(
+      @PathVariable("id") String id,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    ProjectValidator validator = new ProjectValidator();
+    errorMap = validator.validateInputId(id);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/deleteUserFromProject";
+    }
+    BigInteger bigIntegerProjectId = new BigInteger(id);
+    Collection<User> userList = userDAO.findUserByProjectId(bigIntegerProjectId);
+    model.addAttribute("projectId", bigIntegerProjectId);
+    model.addAttribute("userList", userList);
+    return "project/deleteUserFromProject";
   }
 
-  @RequestMapping(value = "/findProjectByDate/{date}", method = RequestMethod.GET)
-  public String findProjectByDate(Model model,
-      @PathVariable("date") Date date) {
-    logger.info("findProjectByProjectId() method. Id: " + date);
-
-    Collection<Project> projects = projectDAO.findProjectByDate(date);
-    model.addAttribute("projectCollection", projects);
-
-    return "project/show_project";
+  @RequestMapping(value = "/deleteUserFromProject/project/{projectId}/user/{userId}", method = RequestMethod.POST)
+  public String deleteUserFromProject(
+      @PathVariable("projectId") String projectId,
+      @PathVariable("userId") String userId,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    Map<String, String> existenceError = new HashMap<>();
+    ProjectValidator projectValidator = new ProjectValidator();
+    errorMap = projectValidator.validateInputId(projectId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/deleteUserFromProject";
+    }
+    BigInteger bigIntegerProjectId = new BigInteger(projectId);
+    Integer projectExistence = projectDAO.findIfProjectExists(bigIntegerProjectId);
+    projectValidator.validateExistence(projectExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "project/deleteUserFromProject";
+    }
+    UserValidator userValidator = new UserValidator();
+    errorMap = userValidator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/deleteUserFromProject";
+    }
+    BigInteger bigIntegerUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findIfSEExists(bigIntegerUserId);
+    existenceError = userValidator
+        .validateExistence(userExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "project/deleteUserFromProject";
+    }
+    projectDAO.deleteUserByUserId(bigIntegerUserId, bigIntegerProjectId);
+    userDAO.updateProjectStatus(bigIntegerUserId, ProjectStatus.TRANSIT.getId());
+    //TODO validate incoming work period and test this method
+    WorkPeriod workPeriod = userDAO.findWorkingWorkPeriodByUserIdAndProjectId(bigIntegerUserId, bigIntegerProjectId);
+    userDAO.updateWorkingPeriodStatusByUserId(workPeriod.getUserId(), workPeriod.getProjectId(), WorkPeriodStatus.FIRED.getId());
+    Collection<User> userList = userDAO.findUserByProjectId(bigIntegerProjectId);
+    model.addAttribute("projectId", bigIntegerProjectId);
+    model.addAttribute("userList", userList);
+    return "project/deleteUserFromProject";
   }
+
 }

@@ -3,7 +3,7 @@ package com.netcracker.project.controllers.validators;
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import java.util.Map;
 
-public class ProjectValidator extends AbstractValidator {
+public class UserValidator extends AbstractValidator {
 
   public Map<String, String> validateInteger(String countSprints) {
     validateId(countSprints);
@@ -22,7 +22,7 @@ public class ProjectValidator extends AbstractValidator {
 
   public Map<String, String> validateExistence(Integer projectExistence) {
     if (projectExistence == 0) {
-      setErrorToMap("PROJECT_ERROR", ErrorMessages.PROJECT_ERROR);
+      setErrorToMap("USER_ERROR", ErrorMessages.USER_ERROR);
     }
     return getErrorMap();
   }

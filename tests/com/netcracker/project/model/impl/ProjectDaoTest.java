@@ -291,7 +291,22 @@ public class ProjectDaoTest {
   public void findProjectIdByPMLogin() {
     BigInteger result = projectDAO.findProjectIdByPMLogin("ivanov");
     assertEquals(BigInteger.valueOf(4), result);
+  }
 
+  @Test
+  public void findProjectByStartDate() {
+    Collection<Project> result = projectDAO.findProjectByStartDate(converter.convertStringToDateFromJSP("2012-01-01"),
+        converter.convertStringToDateFromJSP("2018-01-01"));
+    assertEquals("[Project{projectId=1012, name='qwe2', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109},"
+        + " Project{projectId=1014, name='qwe3', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=110},"
+        + " Project{projectId=1010, name='qwe', startDate=2017-01-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109},"
+        + " Project{projectId=1017, name='qwe4', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109}]", result.toString());
+  }
+
+  @Test
+  public void findIfProjectExists() {
+    Integer result = projectDAO.findIfProjectExists(BigInteger.valueOf(4));
+    assertEquals("1", result.toString());
   }
 }
 

@@ -28,5 +28,7 @@ public interface  ErrorMessages {
   String WRONG_END_DATE_FORMAT_ERROR = "Wrong end data format!";
   String BUSINESS_TRIP_ERROR = "Business trip doesn't exist!";
   String USER_ERROR = "User does not exist!";
-  String PROJECT_EXIST_ERROR = "Project already exist, please choose another name!";
+  String PROJECT_EXIST_ERROR = "Project already exists, please choose another name!";
+  String USER_PROJECT_STATUS_WORKING_ERROR = "is currently working!";
+  String PROJECT_ERROR = "Project doesn't exist!";
 }

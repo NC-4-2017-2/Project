@@ -139,6 +139,12 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public Integer findIfSEExists(BigInteger id) {
+    logger.info("Entering findIfSEExists(id=" + id + ")");
+    return template.queryForObject(FIND_SE_IF_EXISTS, new Object[]{id}, Integer.class);
+  }
+
+  @Override
   public Integer findHiredUserIfExistsByLastFirstNameAndJobTitle(
       String lastName, String firstName, Integer jobTitle) {
     logger.info(
@@ -193,10 +199,17 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public void updateWorkingPeriodStatusByUserId(WorkPeriod workPeriod) {
     logger.info("Entering updateWorkingPeriodStatusByUserId(userId=" + workPeriod.getUserId() + ","
-        + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod
-        + ")");
+        + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
     template.update(UPDATE_WORKING_PERIOD_STATUS, workPeriod.getWorkPeriodStatus().getId(),
         workPeriod.getUserId(), workPeriod.getProjectId());
+  }
+
+  @Override
+  public void updateWorkingPeriodStatusByUserId(BigInteger userId,
+      BigInteger projectId, Integer status) {
+    logger.info("Entering updateWorkingPeriodStatusByUserId(userId=" + userId + ","
+        + " projectId=" + projectId + "," + " status=" + status + ")");
+    template.update(UPDATE_WORKING_PERIOD_STATUS, status, userId, projectId);
   }
 
   @Override
@@ -212,4 +225,12 @@ public class UserDAOImpl implements UserDAO {
     });
   }
 
+  @Override
+  public WorkPeriod findWorkingWorkPeriodByUserIdAndProjectId(BigInteger userId,
+      BigInteger projectId) {
+    logger.info(
+        "Entering findWorkingWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId="
+            + projectId + ")");
+    return template.queryForObject(FIND_WORKING_WORK_PERIOD_BY_USER_ID_AND_PROJECT_ID, new Object[]{userId, projectId}, new WorkPeriodMapper());
+  }
 }

@@ -19,8 +19,6 @@ public interface ProjectDAO {
 
   void insertSprint(Sprint sprint, BigInteger projectId);
 
-  void insertUser(BigInteger userId);
-
   Project findProjectByProjectId(BigInteger id);
 
   Project findProjectByName(String name);
@@ -30,6 +28,8 @@ public interface ProjectDAO {
   List<Project> findProjectByDate(Date startDate);
 
   Collection<String> findAllOpenedProjects();
+
+  Collection<Project> findProjectByStartDate(Date startDate, Date endDate);
 
   List<BigInteger> getIdUsers(BigInteger projectId);
 
@@ -56,6 +56,8 @@ public interface ProjectDAO {
   BigInteger findProjectIdByUserLogin(String userLogin);
 
   BigInteger findProjectIdByPMLogin(String pmLogin);
+
+  Integer findIfProjectExists(BigInteger projectId);
 
   String CREATE_PROJECT =
       "INSERT ALL "
@@ -283,4 +285,46 @@ public interface ProjectDAO {
       + "PROJECT_PM_REF.ATTR_ID = 18 AND "
       + "PROJECT_PM_REF.REFERENCE = USER_ID.OBJECT_ID AND "
       + "PROJECT_ID.OBJECT_ID = PROJECT_PM_REF.OBJECT_ID";
+  
+  String FIND_PROJECT_BY_START_DATE = "SELECT PROJECT_ID.OBJECT_ID AS PROJECT_ID, PR_NAME.VALUE AS NAME, START_DATE.DATE_VALUE AS START_DATE, END_DATE.DATE_VALUE AS END_DATE, "
+      + "PM_ID.OBJECT_ID AS PM_ID, PR_STATUS_VALUE.VALUE AS STATUS "
+      + "FROM OBJECTS PROJECT_ID, OBJECTS PM_ID, "
+      + "ATTRIBUTES PR_NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, ATTRIBUTES PR_STATUS, "
+      + "OBJREFERENCE PM_PROJECT_REF, "
+      + "LISTVALUE PR_STATUS_VALUE "
+      + "WHERE PR_NAME.ATTR_ID = 14 AND "
+      + "PR_NAME.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      + "START_DATE.ATTR_ID = 15 AND "
+      + "START_DATE.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      + "START_DATE.DATE_VALUE >= ? AND START_DATE.DATE_VALUE <= ? AND "
+      + "END_DATE.ATTR_ID = 16 AND "
+      + "END_DATE.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      + "PR_STATUS.ATTR_ID = 17 AND "
+      + "PM_PROJECT_REF.ATTR_ID = 18 AND "
+      + "PM_PROJECT_REF.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      + "PM_ID.OBJECT_ID = PM_PROJECT_REF.REFERENCE AND "
+      + "PR_STATUS.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      + "PR_STATUS_VALUE.ATTR_ID = 59 AND "
+      + "PR_STATUS_VALUE.LIST_VALUE_ID = PR_STATUS.LIST_VALUE_ID";
+
+  String FIND_PROJECT_BY_ID_IF_EXIST = "SELECT COUNT(PROJECT_ID.OBJECT_ID) AS EXIST "
+      +"FROM OBJTYPE PR_TYPE, OBJECTS PROJECT_ID, OBJECTS PM_ID, "
+      +"ATTRIBUTES PR_NAME, ATTRIBUTES START_DATE, ATTRIBUTES END_DATE, ATTRIBUTES PR_STATUS, "
+      +"OBJREFERENCE PM_PROJECT_REF, "
+      +"LISTVALUE PR_STATUS_VALUE "
+      +"WHERE PROJECT_ID.OBJECT_ID = ? AND "
+      +"PR_TYPE.CODE = 'PROJECT' AND "
+      +"PR_NAME.ATTR_ID = 14 AND "
+      +"PR_NAME.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      +"START_DATE.ATTR_ID = 15 AND "
+      +"START_DATE.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      +"END_DATE.ATTR_ID = 16 AND "
+      +"END_DATE.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      +"PR_STATUS.ATTR_ID = 17 AND "
+      +"PR_STATUS.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      +"PM_PROJECT_REF.ATTR_ID = 18 AND "
+      +"PM_PROJECT_REF.OBJECT_ID = PROJECT_ID.OBJECT_ID AND "
+      +"PM_ID.OBJECT_ID = PM_PROJECT_REF.REFERENCE AND "
+      +"PR_STATUS_VALUE.ATTR_ID = 59 AND "
+      +"PR_STATUS_VALUE.LIST_VALUE_ID = PR_STATUS.LIST_VALUE_ID";
 }

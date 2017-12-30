@@ -342,6 +342,7 @@ public class BusinessTripController {
         .validateExistence(businessTripExistence);
     if (!existenceError.isEmpty()) {
       model.addAttribute("errorMap", existenceError);
+      return "businessTrip/showTrip";
     }
     BusinessTrip businessTrip = businessTripDAO
         .findBusinessTripById(tripId);

@@ -64,7 +64,8 @@ public class UsersDaoTest {
 
   @Test
   public void findUserByLastNameAndFirstName() {
-    Collection result = userDao.findUserByLastNameAndFirstName("Ivanov", "Ivan");
+    Collection result = userDao
+        .findUserByLastNameAndFirstName("Ivanov", "Ivan");
     assertEquals(
         "[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
             + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
@@ -141,10 +142,12 @@ public class UsersDaoTest {
 
   @Test
   public void findUserByProjectId() {
-    Collection<User> userCollection = userDao.findUserByProjectId(BigInteger.valueOf(4));
-    assertEquals("[User{userId=2, firstName='Petr', lastName='Petrov', email='petrov@gmail.com', dateOfBirth=1992-03-30, hireDate=2011-04-30,"
+    Collection<User> userCollection = userDao
+        .findUserByProjectId(BigInteger.valueOf(4));
+    assertEquals(
+        "[User{userId=2, firstName='Petr', lastName='Petrov', email='petrov@gmail.com', dateOfBirth=1992-03-30, hireDate=2011-04-30,"
             + " phoneNumber='09797979796', photo='null', jobTitle=LINE_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
-        + " User{userId=3, firstName='Admin', lastName='Adminov', email='admin@gmail.com', dateOfBirth=1991-03-30, hireDate=2011-04-30,"
+            + " User{userId=3, firstName='Admin', lastName='Adminov', email='admin@gmail.com', dateOfBirth=1991-03-30, hireDate=2011-04-30,"
             + " phoneNumber='09797979795', photo='null', jobTitle=SOFTWARE_ENGINEER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
         userCollection.toString());
   }
@@ -196,26 +199,31 @@ public class UsersDaoTest {
         .userId(BigInteger.valueOf(2))
         .projectId(BigInteger.valueOf(4))
         .build();
-    userDao.createWorkPeriod(workPeriod);
+    userDao.createWorkPeriod(workPeriod, BigInteger.valueOf(4));
   }
 
   @Test
   public void findUsersByJobTitleAndProjectStatus() {
-    Collection<User> result = userDao.findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(), ProjectStatus.WORKING.getId());
-    assertEquals("[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
-        + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
-        + " User{userId=104, firstName='Victor', lastName='Pavlov', email='pavlov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
-        + " phoneNumber='09797979780', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
-        + " User{userId=105, firstName='Victor', lastName='Ovechkin', email='ovechkin@gmail.com', dateOfBirth=1992-04-25, hireDate=2011-06-02,"
-        + " phoneNumber='09797979794', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
-        + " User{userId=107, firstName='Taras', lastName='Strahov', email='strahov@gmail.com', dateOfBirth=1994-07-07, hireDate=2011-05-22,"
-        + " phoneNumber='09797979792', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
+    Collection<User> result = userDao
+        .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
+            ProjectStatus.WORKING.getId());
+    assertEquals(
+        "[User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+            + " User{userId=104, firstName='Victor', lastName='Pavlov', email='pavlov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979780', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+            + " User{userId=105, firstName='Victor', lastName='Ovechkin', email='ovechkin@gmail.com', dateOfBirth=1992-04-25, hireDate=2011-06-02,"
+            + " phoneNumber='09797979794', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING},"
+            + " User{userId=107, firstName='Taras', lastName='Strahov', email='strahov@gmail.com', dateOfBirth=1994-07-07, hireDate=2011-05-22,"
+            + " phoneNumber='09797979792', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}]",
         result.toString());
   }
 
   @Test
   public void findHiredUserIfExistsByLastFirstNameAndJobTitle() {
-    Integer result = userDao.findHiredUserIfExistsByLastFirstNameAndJobTitle("Adminov", "Admin", JobTitle.SOFTWARE_ENGINEER.getId());
+    Integer result = userDao
+        .findHiredUserIfExistsByLastFirstNameAndJobTitle("Adminov", "Admin",
+            JobTitle.SOFTWARE_ENGINEER.getId());
     assertEquals("0", result.toString());
   }
 

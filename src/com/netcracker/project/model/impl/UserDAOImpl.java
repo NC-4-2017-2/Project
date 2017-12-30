@@ -200,15 +200,15 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void createWorkPeriod(WorkPeriod workPeriod) {
+  public void createWorkPeriod(WorkPeriod workPeriod, BigInteger projectId) {
     logger.info("Entering createWorkPeriod(workPeriod=" + workPeriod + ")");
     this.template.update(CREATE_WORK_PERIOD, new Object[]{
-        "WorkPeriod" + workPeriod.getWorkPeriodId(),
+        "WorkPeriod" + workPeriod.getUserId(),
         workPeriod.getStartWorkDate(),
         workPeriod.getEndWorkDate(),
         workPeriod.getWorkPeriodStatus().getId(),
         workPeriod.getUserId(),
-        workPeriod.getProjectId()
+        projectId
     });
   }
 

@@ -4,6 +4,8 @@ import com.netcracker.project.controllers.project_form.SprintFormData;
 import com.netcracker.project.controllers.project_form.SprintsForm;
 import com.netcracker.project.controllers.project_form.WorkPeriodForm;
 import com.netcracker.project.controllers.project_form.WorkPeriodFormData;
+import com.netcracker.project.controllers.validators.ProjectValidator;
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.Project;
@@ -24,6 +26,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,51 +62,125 @@ public class ProjectController {
       "countWorkers"},
       method = RequestMethod.GET)
   public String createSprints(
-      @RequestParam("countSprints") Integer sprintCount,
-      @RequestParam("countWorkers") Integer workersCount,
+      @RequestParam("countSprints") String sprintCount,
+      @RequestParam("countWorkers") String workersCount,
       Model model) {
+    ProjectValidator validator = new ProjectValidator();
+
+    Map<String, String> errorMap = validator
+        .validateInteger(sprintCount);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createProject";
+    }
+
+    errorMap = validator.validateInteger(workersCount);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createProject";
+    }
+
+    Integer sprintCountInt = new Integer(sprintCount);
+    Integer workersCountInt = new Integer(workersCount);
+
     Collection<User> pmOnTransit = userDAO
         .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
             ProjectStatus.TRANSIT.getId());
 
     model.addAttribute("pmOnTransitList", pmOnTransit);
-    model.addAttribute("countSprints", sprintCount);
-    model.addAttribute("countWorkers", sprintCount);
+    model.addAttribute("countSprints", sprintCountInt);
+    model.addAttribute("countWorkers", workersCountInt);
     return "project/createProjectForm";
   }
 
   @RequestMapping(value = "/createProject/{countSprints}/{countWorkers}", method = RequestMethod.POST)
   public String createProjectPost(
-      @PathVariable("countSprints") Integer countSprints,
-      @PathVariable("countWorkers") Integer countWorkers,
+      @PathVariable("countSprints") String countSprints,
+      @PathVariable("countWorkers") String countWorkers,
       @RequestParam("projectName") String projectName,
       @RequestParam("projectStartDate") String projectStartDate,
       @RequestParam("projectEndDate") String projectEndDate,
       @RequestParam("pmId") String pmId,
       Model model,
       HttpServletRequest request) {
+    ProjectValidator validator = new ProjectValidator();
 
+    Map<String, String> errorMap = validator.validateInteger(countSprints);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("countSprints", countSprints);
+      model.addAttribute("countWorkers", countWorkers);
+      model.addAttribute("errorMap", errorMap);
+      return "project/createProjectForm";
+    }
+    Integer countSprintsInteger = new Integer(countSprints);
+
+    errorMap = validator.validateInteger(countWorkers);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("countSprints", countSprints);
+      model.addAttribute("countWorkers", countWorkers);
+      model.addAttribute("errorMap", errorMap);
+      return "project/createProjectForm";
+    }
+    Integer countWorkersInteger = new Integer(countWorkers);
+
+    errorMap = validator
+        .validateDates(projectStartDate, projectEndDate);
     Collection<Sprint> sprints = new ArrayList<>();
 
-    for (int index = 0; index < countSprints; index++) {
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("countSprints", countSprints);
+      model.addAttribute("countWorkers", countWorkers);
+      model.addAttribute("errorMap", errorMap);
+      return "project/createProjectForm";
+    }
+
+    Date startDate = converter.convertStringToDateFromJSP(projectStartDate);
+    Date endDate = converter.convertStringToDateFromJSP(projectEndDate);
+
+    for (int index = 0; index < countSprintsInteger; index++) {
+      String startDateParam = request.getParameter("startDate" + index);
+      String endDateParam = request.getParameter("planedEndDate" + index);
+
+      errorMap = validator
+          .validateDates(startDateParam, endDateParam);
+
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("countSprints", countSprints);
+        model.addAttribute("countWorkers", countWorkers);
+        model.addAttribute("errorMap", errorMap);
+        return "project/createProjectForm";
+      }
+      Date startDateSprint = converter
+          .convertStringToDateFromJSP(startDateParam);
+      Date endDateSprint = converter.convertStringToDateFromJSP(endDateParam);
+
       sprints.add(new Sprint.SprintBuilder()
           .name(request.getParameter("sprintName" + index))
-          .startDate(converter.convertStringToDateFromJSP(
-              request.getParameter("startDate" + index)))
-          .plannedEndDate(converter.convertStringToDateFromJSP(
-              request.getParameter("planedEndDate" + index)))
+          .startDate(startDateSprint)
+          .plannedEndDate(endDateSprint)
           .build());
     }
 
     Collection<WorkPeriod> workPeriods = new ArrayList<>();
 
-    for (int i = 0; i < countWorkers; i++) {
+    for (int i = 0; i < countWorkersInteger; i++) {
+
       Collection<User> users = userDAO
           .findUserByLastNameAndFirstName(
               request.getParameter("userLastName" + i),
               request.getParameter("userFirstName" + i));
 
       User user = null;
+      if (users.size() == 0) {
+        errorMap
+            .put("USER_ERROR", request.getParameter("userLastName" + i) + " " +
+                request.getParameter("userFirstName" + i) + " "
+                + ErrorMessages.USER_ERROR);
+        model.addAttribute("countSprints", countSprints);
+        model.addAttribute("countWorkers", countWorkers);
+        model.addAttribute("errorMap", errorMap);
+        return "project/createProjectForm";
+      }
       if (users.size() == 1) {
         Iterator<User> iterator = users.iterator();
         while (iterator.hasNext()) {
@@ -111,11 +188,23 @@ public class ProjectController {
         }
       }
 
+      String startDateParam = request.getParameter("startDate" + i);
+      String endDateParam = request.getParameter("endDate" + i);
+
+      errorMap = validator
+          .validateDates(startDateParam, endDateParam);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("countSprints", countSprints);
+        model.addAttribute("countWorkers", countWorkers);
+        model.addAttribute("errorMap", errorMap);
+        return "project/createProjectForm";
+      }
+      Date startDateWP = converter.convertStringToDateFromJSP(startDateParam);
+      Date endDateWP = converter.convertStringToDateFromJSP(endDateParam);
+
       workPeriods.add(new WorkPeriod.WorkPeriodBuilder()
-          .startWorkDate(converter.convertStringToDateFromJSP(
-              request.getParameter("startDate" + i)))
-          .endWorkDate(converter
-              .convertStringToDateFromJSP(request.getParameter("endDate" + i)))
+          .startWorkDate(startDateWP)
+          .endWorkDate(endDateWP)
           .userId(user.getUserId())
           .workPeriodStatus(WorkPeriodStatus.WORKING)
           .build());
@@ -125,13 +214,17 @@ public class ProjectController {
 
     Project project = new ProjectBuilder()
         .name(projectName)
-        .startDate(converter.convertStringToDateFromJSP(projectStartDate))
-        .endDate(converter.convertStringToDateFromJSP(projectEndDate))
+        .startDate(startDate)
+        .endDate(endDate)
         .projectManagerId(pmIdBigInteger)
         .projectStatus(OCStatus.OPENED)
         .build();
-//TODO work period creation and validation
+
     projectDAO.createProject(project, sprints, workPeriods);
+    Project currentProject = projectDAO.findProjectByName(projectName);
+    for (WorkPeriod period : workPeriods) {
+      userDAO.createWorkPeriod(period, currentProject.getProjectId());
+    }
 
     return "response_status/success";
   }

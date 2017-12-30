@@ -40,7 +40,7 @@ public interface UserDAO {
 
     Collection<WorkPeriod> findWorkPeriodByProjectIdAndStatus(BigInteger projectId, Integer status);
 
-    void createWorkPeriod(WorkPeriod workPeriod);
+    void createWorkPeriod(WorkPeriod workPeriod, BigInteger projectId);
 
     void updateWorkingPeriodEndDateByUserId(WorkPeriod workPeriod);
 

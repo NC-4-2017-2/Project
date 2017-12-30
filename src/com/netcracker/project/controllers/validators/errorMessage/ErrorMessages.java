@@ -27,4 +27,5 @@ public interface  ErrorMessages {
   String WRONG_START_DATE_FORMAT_ERROR = "Wrong start data format!";
   String WRONG_END_DATE_FORMAT_ERROR = "Wrong end data format!";
   String BUSINESS_TRIP_ERROR = "Business trip doesn't exist!";
+  String USER_ERROR = "User does not exist !";
 }

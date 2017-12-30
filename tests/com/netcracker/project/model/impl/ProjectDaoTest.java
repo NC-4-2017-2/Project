@@ -70,6 +70,13 @@ public class ProjectDaoTest {
   }
 
   @Test
+  public void findProjectByNameIfExistTest() {
+    Integer result = projectDAO.findProjectByNameIfExist("lsks");
+
+    assertEquals("0", result.toString());
+
+  }
+  @Test
   public void findProjectByDateTest() {
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Project expProject = buildTestProject();

@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -104,8 +105,21 @@ public class ProjectController {
       Model model,
       HttpServletRequest request) {
     ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = new HashMap<>();
 
-    Map<String, String> errorMap = validator.validateInteger(countSprints);
+    Integer existenceProject = projectDAO
+        .findProjectByNameIfExist(projectName);
+    if (existenceProject >= 1) {
+      model.addAttribute("countSprints", countSprints);
+      model.addAttribute("countWorkers", countWorkers);
+      errorMap.put("PROJECT_EXIST_ERROR",
+          projectName + " " + ErrorMessages.PROJECT_EXIST_ERROR);
+      model.addAttribute("errorMap", errorMap);
+
+      return "project/createProjectForm";
+    }
+
+    errorMap = validator.validateInteger(countSprints);
     if (!errorMap.isEmpty()) {
       model.addAttribute("countSprints", countSprints);
       model.addAttribute("countWorkers", countWorkers);
@@ -352,5 +366,4 @@ public class ProjectController {
 
     return "project/show_project";
   }
-
 }

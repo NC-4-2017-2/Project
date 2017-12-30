@@ -3,7 +3,11 @@
          pageEncoding="UTF-8" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        p {
+            color: red;
+        }
+    </style>
     <title>Choose sprints size</title>
 </head>
 <body>
@@ -18,6 +22,7 @@
         <td><input type="number" name="countWorkers"></td>
     </tr>
     <br>
+    <%@include file="../errors/errorMap.jsp" %>
     <tr>
         <input type="submit" value="Next"/></td>
     </tr>

@@ -41,7 +41,7 @@ public class ProjectDAOImpl implements ProjectDAO {
       for (Sprint sprint : sprints) {
         insertSprint(sprint, currentProject.getProjectId());
       }
-      for(WorkPeriod workPeriod : workPeriods) {
+      for (WorkPeriod workPeriod : workPeriods) {
         addUser(currentProject.getProjectId(), workPeriod.getUserId());
       }
     } catch (Exception e) {
@@ -73,6 +73,14 @@ public class ProjectDAOImpl implements ProjectDAO {
     addUsersPMSprintToProject(project);
 
     return project;
+  }
+
+  @Override
+  public Integer findProjectByNameIfExist(String name) {
+    logger.info("Entering findProjectByNameIfExist(name=" + name + ")");
+    return template
+        .queryForObject(FIND_PROJECT_BY_NAME_IF_EXIST, new Object[]{name},
+            Integer.class);
   }
 
   private void addUsersPMSprintToProject(Project project) {

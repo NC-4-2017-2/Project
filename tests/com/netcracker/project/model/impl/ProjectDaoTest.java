@@ -76,6 +76,7 @@ public class ProjectDaoTest {
     assertEquals("0", result.toString());
 
   }
+
   @Test
   public void findProjectByDateTest() {
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -100,7 +101,8 @@ public class ProjectDaoTest {
   }
 
   @Test
-  public void createProjectTest() throws InvocationTargetException, ParseException {
+  public void createProjectTest()
+      throws InvocationTargetException, ParseException {
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     Date start = format.parse("2014-11-13");
@@ -164,7 +166,8 @@ public class ProjectDaoTest {
 
   @Test
   public void findAllOpenedProjects() {
-    Collection<String> projectNameCollection = projectDAO.findAllOpenedProjects();
+    Collection<String> projectNameCollection = projectDAO
+        .findAllOpenedProjects();
     assertEquals("[PROJECT1, PROJECT2]", projectNameCollection.toString());
   }
 
@@ -295,18 +298,30 @@ public class ProjectDaoTest {
 
   @Test
   public void findProjectByStartDate() {
-    Collection<Project> result = projectDAO.findProjectByStartDate(converter.convertStringToDateFromJSP("2012-01-01"),
+    Collection<Project> result = projectDAO.findProjectByStartDate(
+        converter.convertStringToDateFromJSP("2012-01-01"),
         converter.convertStringToDateFromJSP("2018-01-01"));
-    assertEquals("[Project{projectId=1012, name='qwe2', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109},"
-        + " Project{projectId=1014, name='qwe3', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=110},"
-        + " Project{projectId=1010, name='qwe', startDate=2017-01-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109},"
-        + " Project{projectId=1017, name='qwe4', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109}]", result.toString());
+    assertEquals(
+        "[Project{projectId=1012, name='qwe2', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109},"
+            + " Project{projectId=1014, name='qwe3', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=110},"
+            + " Project{projectId=1010, name='qwe', startDate=2017-01-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109},"
+            + " Project{projectId=1017, name='qwe4', startDate=2017-02-20, endDate=2018-02-20, projectStatus=OPENED, projectManagerId=109}]",
+        result.toString());
   }
 
   @Test
   public void findIfProjectExists() {
     Integer result = projectDAO.findIfProjectExists(BigInteger.valueOf(4));
     assertEquals("1", result.toString());
+  }
+
+  @Test
+  public void findSprintBySprintId() {
+    Sprint result = projectDAO
+        .findSprintBySprintId(BigInteger.valueOf(1028));
+    assertEquals("Sprint{sprintId=1028, name='OP', "
+        + "startDate=2017-02-20, plannedEndDate=2018-02-20, "
+        + "endDate=2018-02-20, status=OPENED}", result.toString());
   }
 }
 

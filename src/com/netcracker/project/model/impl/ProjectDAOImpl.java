@@ -86,7 +86,9 @@ public class ProjectDAOImpl implements ProjectDAO {
   @Override
   public Integer findIfProjectExists(BigInteger projectId) {
     logger.info("Entering findIfProjectExists(projectId=" + projectId + ")");
-    return template.queryForObject(FIND_PROJECT_BY_ID_IF_EXIST, new Object[]{projectId}, Integer.class);
+    return template
+        .queryForObject(FIND_PROJECT_BY_ID_IF_EXIST, new Object[]{projectId},
+            Integer.class);
   }
 
   private void addUsersPMSprintToProject(Project project) {
@@ -211,6 +213,14 @@ public class ProjectDAOImpl implements ProjectDAO {
   }
 
   @Override
+  public Sprint findSprintBySprintId(BigInteger sprintId) {
+    logger.info("Entering findSprintBySprintId(sprintId=" + sprintId + ")");
+    return template
+        .queryForObject(FIND_SPRINT_BY_SPRINT_ID, new Object[]{sprintId},
+            new SprintMapper());
+  }
+
+  @Override
   public void createSprint(Sprint sprint, BigInteger projectId) {
     logger.info("Entering createSprint(sprint=" + sprint + "," + " projectId="
         + projectId + ")");
@@ -280,7 +290,9 @@ public class ProjectDAOImpl implements ProjectDAO {
     logger.info(
         "Entering findProjectByStartDate(startDate=" + startDate + ","
             + " endDate=" + endDate + ")");
-    return template.query(FIND_PROJECT_BY_START_DATE, new Object[]{startDate, endDate}, new ProjectMapper());
+    return template
+        .query(FIND_PROJECT_BY_START_DATE, new Object[]{startDate, endDate},
+            new ProjectMapper());
   }
 
   private Collection<BigInteger> getAllTaskIdByProject(BigInteger projectId) {

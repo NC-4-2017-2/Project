@@ -10,33 +10,36 @@
     <title>DeleteFromProject</title>
 </head>
 <body>
-    <table border="0">
-        <c:forEach items="${userList}" var="user">
-            <tr>
-                <td>Last name: </td>
-                <td>${user.lastName}</td>
-            </tr>
-            <tr>
-                <td>First name: </td>
-                <td>${user.firstName}</td>
-            </tr>
-            <tr>
-                <td>Email: </td>
-                <td>${user.email}</td>
-            </tr>
-            <tr>
-                <td>Birth date: </td>
-                <td>${user.dateOfBirth}</td>
-            </tr>
-            <tr>
-                <td>User position: </td>
-                <td>${user.jobTitle.name()}</td>
-            </tr>
-            <form action="/project/deleteUserFromProject/project/${projectId}/user/${user.userId}" method="post" >
+<table border="0">
+    <c:forEach items="${userList}" var="user">
+        <tr>
+            <td>Last name:</td>
+            <td>${user.lastName}</td>
+        </tr>
+        <tr>
+            <td>First name:</td>
+            <td>${user.firstName}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>${user.email}</td>
+        </tr>
+        <tr>
+            <td>Birth date:</td>
+            <td>${user.dateOfBirth}</td>
+        </tr>
+        <tr>
+            <td>User position:</td>
+            <td>${user.jobTitle.name()}</td>
+        </tr>
+        <tr>
+            <form action="/project/deleteUserFromProject/project/${projectId}/user/${user.userId}"
+                  method="post">
                 <button type="submit">Delete</button>
             </form>
-        </c:forEach>
-    </table>
+        </tr>
+    </c:forEach>
+</table>
 <%@include file="../errors/errorMap.jsp" %>
 </body>
 </html>

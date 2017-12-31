@@ -46,6 +46,18 @@ public class Sprint {
     return status;
   }
 
+  @Override
+  public String toString() {
+    return "Sprint{" +
+        "sprintId=" + sprintId +
+        ", name='" + name + '\'' +
+        ", startDate=" + startDate +
+        ", plannedEndDate=" + plannedEndDate +
+        ", endDate=" + endDate +
+        ", status=" + status +
+        '}';
+  }
+
   public static class SprintBuilder {
 
     private BigInteger sprintId;

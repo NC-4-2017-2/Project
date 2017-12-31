@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,11 +44,13 @@ public class ProjectController {
   @Autowired
   private DateConverterService converter;
 
+  @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/createProject")
   public String createProject() {
     return "project/createProject";
   }
 
+  @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/createProject", params = {"countSprints",
       "countWorkers"},
       method = RequestMethod.GET)
@@ -83,6 +86,7 @@ public class ProjectController {
     return "project/createProjectForm";
   }
 
+  @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/createProject/{countSprints}/{countWorkers}", method = RequestMethod.POST)
   public String createProjectPost(
       @PathVariable("countSprints") String countSprints,
@@ -262,11 +266,13 @@ public class ProjectController {
     return "response_status/success";
   }
 
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "/findProjectByStartDate", method = RequestMethod.GET)
   public String findProjectByStartDate() {
     return "project/findProjectByStartDate";
   }
 
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "/findProjectByStartDate", params = {"startDate",
       "endDate"}, method = RequestMethod.GET)
   public String findProjectPerPeriodDate(
@@ -287,6 +293,7 @@ public class ProjectController {
     return "project/viewProject";
   }
 
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "/showProject/{id}", method = RequestMethod.GET)
   public String showProject(
       @PathVariable("id") String id,
@@ -312,6 +319,7 @@ public class ProjectController {
     return "project/showProject";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/showProjectUsersToDelete/{id}", method = RequestMethod.GET)
   public String getProjectUsersToDelete(
       @PathVariable("id") String id,
@@ -331,6 +339,7 @@ public class ProjectController {
     return "project/deleteUserFromProject";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/deleteUserFromProject/project/{projectId}/user/{userId}", method = RequestMethod.POST)
   public String deleteUserFromProject(
       @PathVariable("projectId") String projectId,
@@ -393,6 +402,7 @@ public class ProjectController {
     return "response_status/success";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/userToAdd/{projectId}", method = RequestMethod.GET)
   public String getProjectUsersToAdd(
       @PathVariable("projectId") String projectId,
@@ -404,10 +414,11 @@ public class ProjectController {
       return "project/showProject";
     }
     BigInteger validProjectId = new BigInteger(projectId);
-    model.addAttribute("projectId", projectId);
+    model.addAttribute("projectId", validProjectId);
     return "project/addUser";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/addUser/{projectId}", method = RequestMethod.POST)
   public String addUserToProject(
       @PathVariable("projectId") String projectId,
@@ -473,8 +484,9 @@ public class ProjectController {
     return "response_status/success";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/closeProject/{projectId}", method = RequestMethod.POST)
-  public String closerProject(@PathVariable("projectId") String projectId,
+  public String closeProject(@PathVariable("projectId") String projectId,
       Model model) {
     ProjectValidator validator = new ProjectValidator();
 
@@ -504,10 +516,72 @@ public class ProjectController {
               validProjectId);
       userDAO.updateWorkingPeriodStatusByUserId(user.getUserId(),
           workPeriod.getProjectId(), WorkPeriodStatus.FIRED.getId());
-
     }
 
     projectDAO.updateStatus(validProjectId, OCStatus.CLOSED);
+    Date date = new Date();
+    projectDAO.updateEndDate(validProjectId, date);
     return "response_status/success";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/viewSprints/{projectId}", method = RequestMethod.GET)
+  public String viewSprints(@PathVariable("projectId") String projectId,
+      Model model) {
+    ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = validator.validateInputId(projectId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/viewSprints";
+    }
+
+    BigInteger validProjectId = new BigInteger(projectId);
+    Collection<Sprint> sprints = projectDAO.getAllSprints(validProjectId);
+    if (sprints.isEmpty()) {
+      errorMap.put("SPRINTS_EXIST_ERROR", ErrorMessages.SPRINTS_EXIST_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "project/viewSprints";
+    }
+
+    model.addAttribute("sprintList", sprints);
+    return "project/viewSprints";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/showSprint/{sprintId}", method = RequestMethod.GET)
+  public String showSprints(@PathVariable("sprintId") String sprintId,
+      Model model) {
+    ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = validator.validateInputId(sprintId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/viewSprints";
+    }
+
+    BigInteger validSprintId = new BigInteger(sprintId);
+    Sprint sprint = projectDAO.findSprintBySprintId(validSprintId);
+    model.addAttribute("sprint", sprint);
+    return "project/showSprint";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/closeSprint/{sprintId}", method = RequestMethod.POST)
+  public String closeSprint(@PathVariable("sprintId") String sprintId,
+      Model model) {
+    ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = validator.validateInputId(sprintId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/showSprint";
+    }
+    BigInteger validSprintId = new BigInteger(sprintId);
+
+    Date date = new Date();
+    projectDAO.updateSprintEndDate(validSprintId, date);
+    projectDAO.updateSprintStatus(validSprintId, OCStatus.CLOSED);
+
+    Sprint sprint = projectDAO.findSprintBySprintId(validSprintId);
+    model.addAttribute("sprint", sprint);
+    return "project/showSprint";
   }
 }

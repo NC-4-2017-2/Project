@@ -43,6 +43,8 @@
 <form action="/project/closeProject/${project.projectId}" method="post">
     <button type="submit">Close project</button>
 </form>
-
+<form action="/project/viewSprints/${project.projectId}">
+    <button type="submit">Show sprint list</button>
+</form>
 </body>
 </html>

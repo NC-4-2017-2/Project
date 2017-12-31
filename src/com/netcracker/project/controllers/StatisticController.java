@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
@@ -49,12 +50,14 @@ public class StatisticController {
     logger.info("projectSprintStatLineChart() method. ");
     String userLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(userLogin);
-    if (currentUser.getProjectStatus().name()
-        .equals(ProjectStatus.TRANSIT.name())) {
-      model.addAttribute("VIEW_SPRINT_TRANSIT_PM_ERROR",
-          ErrorMessages.VIEW_SPRINT_TRANSIT_PM_ERROR);
+    StatisticValidator validator = new StatisticValidator();
+    Map<String, String> errorMap = validator
+        .validateProjectManager(currentUser);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
       return "statistic/viewSprintStat";
     }
+
     BigInteger projectId = projectDAO
         .findProjectIdByPMLogin(userLogin);
 
@@ -102,10 +105,9 @@ public class StatisticController {
     String userLogin = principal.getName();
 
     User currentUser = userDAO.findUserByLogin(userLogin);
-    if (currentUser.getProjectStatus().name()
-        .equals(ProjectStatus.TRANSIT.name())) {
-      model.addAttribute("VIEW_SPRINT_TRANSIT_PM_ERROR",
-          ErrorMessages.VIEW_SPRINT_TRANSIT_PM_ERROR);
+    errorMap = validator.validateProjectManager(currentUser);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
       return "statistic/findVacationProjectStatByPeriod";
     }
 
@@ -248,11 +250,12 @@ public class StatisticController {
   public String workPeriodByProjectId(Model model, Principal principal) {
     String userLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(userLogin);
+    StatisticValidator validator = new StatisticValidator();
 
-    if (currentUser.getProjectStatus().name()
-        .equals(ProjectStatus.TRANSIT.name())) {
-      model.addAttribute("VIEW_SPRINT_TRANSIT_PM_ERROR",
-          ErrorMessages.VIEW_SPRINT_TRANSIT_PM_ERROR);
+    Map<String, String> errorMap = validator
+        .validateProjectManager(currentUser);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
       return "statistic/viewWorkersProjectStat";
     }
 
@@ -292,10 +295,9 @@ public class StatisticController {
     String userLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(userLogin);
 
-    if (currentUser.getProjectStatus().name()
-        .equals(ProjectStatus.TRANSIT.name())) {
-      model.addAttribute("VIEW_SPRINT_TRANSIT_PM_ERROR",
-          ErrorMessages.VIEW_SPRINT_TRANSIT_PM_ERROR);
+    errorMap = validator.validateProjectManager(currentUser);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
       return "statistic/viewWorkersProjectStat";
     }
     BigInteger projectId = projectDAO
@@ -314,7 +316,7 @@ public class StatisticController {
   public String findOwnTaskStatByPeriod() {
     return "statistic/findOwnTaskStatByPeriod";
   }
-  //TODO add data validation
+
   @RequestMapping(value = "/viewOwnTaskStatistic", params = {"startDate",
       "endDate"}, method = RequestMethod.GET)
   public String viewOwnTaskStatistic(
@@ -322,12 +324,21 @@ public class StatisticController {
       @RequestParam("endDate") String endDate,
       Principal principal, Model model
   ) {
+    StatisticValidator validator = new StatisticValidator();
+    Map<String, String> errorMap = validator
+        .validateDates(startDate, endDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "statistic/findOwnTaskStatByPeriod";
+    }
+
     String userLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(userLogin);
     UserTaskStatistic userTasks = statisticService
         .getTaskCountByUserIdPieChart(currentUser.getUserId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
+
     model.addAttribute("critical", userTasks.getCritical());
     model.addAttribute("high", userTasks.getHigh());
     model.addAttribute("normal", userTasks.getNormal());
@@ -347,6 +358,14 @@ public class StatisticController {
       @RequestParam("endDate") String endDate,
       Model model, Principal principal
   ) {
+    StatisticValidator validator = new StatisticValidator();
+    Map<String, String> errorMap = validator
+        .validateDates(startDate, endDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "statistic/findOwnHoursStatByPeriod";
+    }
+
     String userLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(userLogin);
     List<WorkingHoursStatistic> workingHoursStatisticList = statisticService

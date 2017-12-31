@@ -6,6 +6,7 @@
 <script type="text/javascript" src="${ctx}/resources/js/highcharts.js"></script>
 <script type="text/javascript"
         src="${ctx}/resources/js/jquery-2.1.4.js"></script>
+
 <script type="text/javascript">
   jQuery(document).ready(function () {
     var options = {
@@ -73,9 +74,19 @@
   });
 </script>
 <head>
+    <style>
+        p {
+            color: red;
+        }
+    </style>
     <title>SprintStatistic</title>
 </head>
 <body>
-<div id="container" style="width: 600px; height: 400px; margin: 0 auto"></div>
+<c:if test="${errorMap eq null}">
+    <div id="container"
+         style="width: 600px; height: 400px; margin: 0 auto"></div>
+</c:if>
+
+<%@include file="../errors/errorMap.jsp" %>
 </body>
 </html>

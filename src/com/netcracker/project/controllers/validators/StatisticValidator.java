@@ -1,6 +1,8 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.entity.User;
+import com.netcracker.project.model.enums.ProjectStatus;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,5 +26,14 @@ public class StatisticValidator extends AbstractValidator {
     Pattern p = Pattern.compile(RegexPatterns.NAME_PATTERN);
     Matcher m = p.matcher(name);
     return m.matches();
+  }
+
+  public Map<String, String> validateProjectManager(User user) {
+    if (user.getProjectStatus().name()
+        .equals(ProjectStatus.TRANSIT.name())) {
+      setErrorToMap("VIEW_SPRINT_TRANSIT_PM_ERROR",
+          ErrorMessages.VIEW_SPRINT_TRANSIT_PM_ERROR);
+    }
+    return getErrorMap();
   }
 }

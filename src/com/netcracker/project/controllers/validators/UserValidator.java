@@ -20,9 +20,16 @@ public class UserValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  public Map<String, String> validateExistence(Integer projectExistence) {
-    if (projectExistence == 0) {
+  public Map<String, String> validateUserExistence(Integer existence) {
+    if (existence == 0) {
       setErrorToMap("USER_ERROR", ErrorMessages.USER_ERROR);
+    }
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateWorkPeriodExistence(Integer existence) {
+    if (existence == 0) {
+      setErrorToMap("WORK_PERIOD_ERROR", ErrorMessages.WORK_PERIOD_ERROR);
     }
     return getErrorMap();
   }

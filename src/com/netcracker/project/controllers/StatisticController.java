@@ -9,13 +9,11 @@ import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.UserTaskStatistic;
 import com.netcracker.project.model.entity.VacationStatistic;
 import com.netcracker.project.model.entity.WorkPeriodStatistic;
-import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
@@ -150,13 +148,13 @@ public class StatisticController {
       return "statistic/findUserTaskByFirstNameAndLastName";
     }
 
-    errorMap = validator.validateName(firstName);
+    errorMap = validator.validateNameStatistic(firstName);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "statistic/findUserTaskByFirstNameAndLastName";
     }
 
-    errorMap = validator.validateName(lastName);
+    errorMap = validator.validateNameStatistic(lastName);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "statistic/findUserTaskByFirstNameAndLastName";
@@ -212,13 +210,13 @@ public class StatisticController {
       return "statistic/findUserHoursStat";
     }
 
-    errorMap = validator.validateName(firstName);
+    errorMap = validator.validateNameStatistic(firstName);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "statistic/findUserHoursStat";
     }
 
-    errorMap = validator.validateName(lastName);
+    errorMap = validator.validateNameStatistic(lastName);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "statistic/findUserHoursStat";

@@ -79,6 +79,13 @@ abstract class AbstractValidator {
     }
   }
 
+   void validateAbstractName(String name) {
+    if (!checkName(name)) {
+      errorMap.put("USER_FIRST_OR_LAST_NAME_ERROR",
+          ErrorMessages.USER_FIRST_OR_LAST_NAME_ERROR);
+    }
+  }
+
   Map<String, String> getErrorMap() {
     return this.errorMap;
   }
@@ -127,4 +134,9 @@ abstract class AbstractValidator {
     return m.matches();
   }
 
+  private boolean checkName(String name) {
+    Pattern p = Pattern.compile(RegexPatterns.NAME_PATTERN);
+    Matcher m = p.matcher(name);
+    return m.matches();
+  }
 }

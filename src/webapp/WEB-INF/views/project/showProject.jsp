@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <style>
@@ -33,11 +34,15 @@
 </table>
 <%@include file="../errors/errorMap.jsp" %>
 
-<a href="">Add users</a>
+<form action="/project/userToAdd/${project.projectId}" >
+    <button type="submit">Add users</button>
+</form>
 <form action="/project/showProjectUsersToDelete/${project.projectId}" >
     <button type="submit">Delete users</button>
 </form>
-<a href="">Close project</a>
+<form action="/project/closeProject/${project.projectId}" method="post">
+    <button type="submit">Add users</button>
+</form>
 
 </body>
 </html>

@@ -56,36 +56,46 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public User findUserByUserId(BigInteger id) {
     logger.info("Entering findUserByUserId(" + id + ")");
-    return template.queryForObject(FIND_USER_BY_USER_ID, new Object[]{id}, new UserMapper());
+    return template.queryForObject(FIND_USER_BY_USER_ID, new Object[]{id},
+        new UserMapper());
   }
 
   @Override
   public User findUserByLogin(String login) {
     logger.info("Entering findUserByLogin(" + login + ")");
-    return template.queryForObject(FIND_USER_BY_LOGIN, new Object[]{login}, new UserMapper());
+    return template.queryForObject(FIND_USER_BY_LOGIN, new Object[]{login},
+        new UserMapper());
   }
 
   @Override
-  public Collection<User> findUserByLastNameAndFirstName(String lastName, String firstName) {
-    logger.info("Entering findUserByFirstNameAndLastName(lastName=" + lastName + "," + " firstName="
-        + firstName + ")");
+  public Collection<User> findUserByLastNameAndFirstName(String lastName,
+      String firstName) {
+    logger.info(
+        "Entering findUserByFirstNameAndLastName(lastName=" + lastName + ","
+            + " firstName="
+            + firstName + ")");
     return template
-        .query(FIND_USER_BY_LAST_NAME_AND_FIRST_NAME, new Object[]{lastName, firstName},
+        .query(FIND_USER_BY_LAST_NAME_AND_FIRST_NAME,
+            new Object[]{lastName, firstName},
             new UserMapper());
   }
 
   @Override
   public Collection<User> findUserByProjectId(BigInteger projectId) {
     logger.info("Entering findUserByProjectId(" + projectId + ")");
-    return template.query(FIND_USER_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+    return template.query(FIND_USER_BY_PROJECT_ID, new Object[]{projectId},
+        new UserMapper());
   }
 
   @Override
   public Collection<User> findUsersByJobTitleAndProjectStatus(Integer jobTitle,
       Integer projectStatus) {
-    logger.info("Entering findUsersByJobTitleAndProjectStatus(jobTitle=" + jobTitle + "," + " projectStatus="
-        + projectStatus + ")");
-    return template.query(FIND_USERS_BY_JOB_TITLE_AND_PROJECT_STATUS, new Object[]{jobTitle, projectStatus}, new UserMapper());
+    logger.info(
+        "Entering findUsersByJobTitleAndProjectStatus(jobTitle=" + jobTitle
+            + "," + " projectStatus="
+            + projectStatus + ")");
+    return template.query(FIND_USERS_BY_JOB_TITLE_AND_PROJECT_STATUS,
+        new Object[]{jobTitle, projectStatus}, new UserMapper());
   }
 
   @Deprecated
@@ -105,19 +115,23 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public void updatePhoneNumber(BigInteger id, String phoneNumber) {
-    logger.info("Entering updatePhoneNumber(id=" + id + "," + " phoneNumber=" + phoneNumber + ")");
+    logger.info("Entering updatePhoneNumber(id=" + id + "," + " phoneNumber="
+        + phoneNumber + ")");
     template.update(UPDATE_PHONE_NUMBER, phoneNumber, id);
   }
 
   @Override
   public void updateEmail(BigInteger id, String email) {
-    logger.info("Entering updateEmail(id=" + id + "," + " email=" + email + ")");
+    logger
+        .info("Entering updateEmail(id=" + id + "," + " email=" + email + ")");
     template.update(UPDATE_EMAIL, email, id);
   }
 
   @Override
   public void updatePassword(BigInteger id, String password) {
-    logger.info("Entering updatePassword(id=" + id + "," + " password=" + password + ")");
+    logger.info(
+        "Entering updatePassword(id=" + id + "," + " password=" + password
+            + ")");
     template.update(UPDATE_PASSWORD, password, id);
   }
 
@@ -128,50 +142,63 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public void updateProjectStatus(BigInteger id, Integer status) {
-    logger.info("Entering updateProjectStatus(id=" + id + "," + " status=" + status + ")");
+    logger.info(
+        "Entering updateProjectStatus(id=" + id + "," + " status=" + status
+            + ")");
     template.update(UPDATE_USER_PROJECT_STATUS, status, id);
   }
 
   @Override
   public Integer findIfPMExists(BigInteger id) {
     logger.info("Entering findIfPMExists(id=" + id + ")");
-    return template.queryForObject(FIND_PM_IF_EXISTS, new Object[]{id}, Integer.class);
+    return template
+        .queryForObject(FIND_PM_IF_EXISTS, new Object[]{id}, Integer.class);
   }
 
   @Override
   public Integer findIfSEExists(BigInteger id) {
     logger.info("Entering findIfSEExists(id=" + id + ")");
-    return template.queryForObject(FIND_SE_IF_EXISTS, new Object[]{id}, Integer.class);
+    return template
+        .queryForObject(FIND_SE_IF_EXISTS, new Object[]{id}, Integer.class);
   }
 
   @Override
   public Integer findHiredUserIfExistsByLastFirstNameAndJobTitle(
       String lastName, String firstName, Integer jobTitle) {
     logger.info(
-        "Entering findHiredUserIfExistsByLastFirstNameAndJobTitle(lastName=" + lastName + "," + " firstName=" + firstName + "  jobTitle="
+        "Entering findHiredUserIfExistsByLastFirstNameAndJobTitle(lastName="
+            + lastName + "," + " firstName=" + firstName + "  jobTitle="
             + jobTitle + ")");
-    return template.queryForObject(FIND_HIRED_USER_IF_EXISTS_BY_LAST_FIRST_NAME_AND_JOB_TITLE, new Object[]{lastName, firstName, jobTitle}, Integer.class);
+    return template.queryForObject(
+        FIND_HIRED_USER_IF_EXISTS_BY_LAST_FIRST_NAME_AND_JOB_TITLE,
+        new Object[]{lastName, firstName, jobTitle}, Integer.class);
   }
 
   @Override
   public Collection<WorkPeriod> findWorkPeriodsByUserId(BigInteger id) {
     logger.info("Entering findWorkPeriodsByUserId(id=" + id + ")");
-    return template.query(FIND_WORK_PERIOD_BY_USER_ID, new Object[]{id}, new WorkPeriodMapper());
+    return template.query(FIND_WORK_PERIOD_BY_USER_ID, new Object[]{id},
+        new WorkPeriodMapper());
   }
 
   @Override
   public Collection<WorkPeriod> findWorkPeriodsByProjectId(BigInteger id) {
     logger.info("Entering findWorkPeriodsByProjectId(id=" + id + ")");
-    return template.query(FIND_WORK_PERIOD_BY_PROJECT_ID, new Object[]{id}, new WorkPeriodMapper());
+    return template.query(FIND_WORK_PERIOD_BY_PROJECT_ID, new Object[]{id},
+        new WorkPeriodMapper());
   }
 
   @Override
-  public Collection<WorkPeriod> findWorkPeriodByUserIdAndProjectId(BigInteger userId,
+  public Collection<WorkPeriod> findWorkPeriodByUserIdAndProjectId(
+      BigInteger userId,
       BigInteger projectId) {
-    logger.info("Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId="
-        + projectId + ")");
+    logger.info(
+        "Entering findWorkPeriodByUserIdAndProjectId(userId=" + userId + ","
+            + " projectId="
+            + projectId + ")");
     return template
-        .query(FIND_WORK_PERIOD_BY_USER_ID_AND_PROJECT_ID, new Object[]{userId, projectId},
+        .query(FIND_WORK_PERIOD_BY_USER_ID_AND_PROJECT_ID,
+            new Object[]{userId, projectId},
             new WorkPeriodMapper());
   }
 
@@ -179,36 +206,47 @@ public class UserDAOImpl implements UserDAO {
   public Collection<WorkPeriod> findWorkPeriodByProjectIdAndStatus(
       BigInteger projectId, Integer status) {
     logger.info(
-        "Entering findWorkPeriodByProjectIdAndStatus(projectId=" + projectId + "," + " status="
+        "Entering findWorkPeriodByProjectIdAndStatus(projectId=" + projectId
+            + "," + " status="
             + status + ")");
     return template
-        .query(FIND_WORKING_PERIOD_BY_PROJECT_ID_AND_STATUS, new Object[]{status, projectId},
+        .query(FIND_WORKING_PERIOD_BY_PROJECT_ID_AND_STATUS,
+            new Object[]{status, projectId},
             new WorkPeriodMapper());
   }
 
   @Override
   public void updateWorkingPeriodEndDateByUserId(WorkPeriod workPeriod) {
-    logger.info("Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId() + ","
-        + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod
-        + ")");
+    logger.info(
+        "Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId()
+            + ","
+            + " projectId=" + workPeriod.getProjectId() + ","
+            + " UserDAO.WorkPeriod=" + workPeriod
+            + ")");
     template
-        .update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate(), workPeriod.getUserId(),
+        .update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate(),
+            workPeriod.getUserId(),
             workPeriod.getProjectId());
   }
 
   @Override
   public void updateWorkingPeriodStatusByUserId(WorkPeriod workPeriod) {
-    logger.info("Entering updateWorkingPeriodStatusByUserId(userId=" + workPeriod.getUserId() + ","
-        + " projectId=" + workPeriod.getProjectId() + "," + " UserDAO.WorkPeriod=" + workPeriod + ")");
-    template.update(UPDATE_WORKING_PERIOD_STATUS, workPeriod.getWorkPeriodStatus().getId(),
+    logger.info(
+        "Entering updateWorkingPeriodStatusByUserId(userId=" + workPeriod
+            .getUserId() + ","
+            + " projectId=" + workPeriod.getProjectId() + ","
+            + " UserDAO.WorkPeriod=" + workPeriod + ")");
+    template.update(UPDATE_WORKING_PERIOD_STATUS,
+        workPeriod.getWorkPeriodStatus().getId(),
         workPeriod.getUserId(), workPeriod.getProjectId());
   }
 
   @Override
   public void updateWorkingPeriodStatusByUserId(BigInteger userId,
       BigInteger projectId, Integer status) {
-    logger.info("Entering updateWorkingPeriodStatusByUserId(userId=" + userId + ","
-        + " projectId=" + projectId + "," + " status=" + status + ")");
+    logger.info(
+        "Entering updateWorkingPeriodStatusByUserId(userId=" + userId + ","
+            + " projectId=" + projectId + "," + " status=" + status + ")");
     template.update(UPDATE_WORKING_PERIOD_STATUS, status, userId, projectId);
   }
 
@@ -229,8 +267,18 @@ public class UserDAOImpl implements UserDAO {
   public WorkPeriod findWorkingWorkPeriodByUserIdAndProjectId(BigInteger userId,
       BigInteger projectId) {
     logger.info(
-        "Entering findWorkingWorkPeriodByUserIdAndProjectId(userId=" + userId + "," + " projectId="
+        "Entering findWorkingWorkPeriodByUserIdAndProjectId(userId=" + userId
+            + "," + " projectId="
             + projectId + ")");
-    return template.queryForObject(FIND_WORKING_WORK_PERIOD_BY_USER_ID_AND_PROJECT_ID, new Object[]{userId, projectId}, new WorkPeriodMapper());
+    return template
+        .queryForObject(FIND_WORKING_WORK_PERIOD_BY_USER_ID_AND_PROJECT_ID,
+            new Object[]{userId, projectId}, new WorkPeriodMapper());
+  }
+
+  @Override
+  public Integer findWorkingWorkPeriodIfExist(BigInteger userId,
+      BigInteger projectId) {
+    return template.queryForObject(FIND_WORKING_WORK_PERIOD_IF_EXIST,
+        new Object[]{userId, projectId}, Integer.class);
   }
 }

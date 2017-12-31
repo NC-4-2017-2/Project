@@ -228,6 +228,22 @@ public class UsersDaoTest {
   }
 
   @Test
+  public void findWOrkPeriodIfExistWithCorrectParameters(){
+    Integer result = userDao
+        .findWorkingWorkPeriodIfExist(BigInteger.valueOf(3),
+            BigInteger.valueOf(4));
+    assertEquals(new Long(1), new Long(result));
+  }
+
+  @Test
+  public void findWOrkPeriodIfExistWithWrongParameters(){
+    Integer result = userDao
+        .findWorkingWorkPeriodIfExist(BigInteger.valueOf(3),
+            BigInteger.valueOf(10));
+    assertEquals(new Long(0), new Long(result));
+  }
+
+  @Test
   public void deleteUser() {
     BigInteger id = BigInteger.valueOf(1001);
 

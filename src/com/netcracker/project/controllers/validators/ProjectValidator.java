@@ -26,4 +26,10 @@ public class ProjectValidator extends AbstractValidator {
     }
     return getErrorMap();
   }
+
+  public Map<String, String> validateUserName(String firstName, String lastName) {
+    validateAbstractName(firstName);
+    validateAbstractName(lastName);
+    return getErrorMap();
+  }
 }

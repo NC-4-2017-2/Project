@@ -10,7 +10,9 @@
     <title>Find User</title>
 </head>
 <body>
-<form action="/statistic/viewOwnHoursStat">
+<form action="/statistic/viewUserHoursStat">
+    Last name: <input type="text" name="lastName"><br>
+    First name: <input type="text" name="firstName"><br>
     Start date: <input type="date" name="startDate"><br>
     End date: <input type="date" name="endDate"><br>
     <%@include file="../errors/errorMap.jsp" %>

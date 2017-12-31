@@ -41,7 +41,7 @@ public interface ProjectDAO {
 
   void updatePM(BigInteger projectId, BigInteger userId);
 
-  void addUser(BigInteger userId, BigInteger projectId);
+  void addUser(BigInteger projectId, BigInteger userId);
 
   Collection<Sprint> getAllSprints(BigInteger projectID);
 

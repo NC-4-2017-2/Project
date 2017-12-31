@@ -2,10 +2,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
+    <style>
+        p {
+            color: red;
+        }
+    </style>
     <title>Add user</title>
 </head>
 <body>
-<form action="/statistic/addUser/${projectId}" method="post">
+<form action="/project/addUser/${projectId}" method="post">
     Last name: <input type="text" name="lastName"><br>
     First name: <input type="text" name="firstName"><br>
     Start date: <input type="date" name="startDate"><br>

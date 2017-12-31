@@ -41,7 +41,7 @@
     <button type="submit">Delete users</button>
 </form>
 <form action="/project/closeProject/${project.projectId}" method="post">
-    <button type="submit">Add users</button>
+    <button type="submit">Close project</button>
 </form>
 
 </body>

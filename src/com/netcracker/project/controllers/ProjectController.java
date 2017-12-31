@@ -457,7 +457,7 @@ public class ProjectController {
               + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
       model.addAttribute("errorMap", errorMap);
     }
-    projectDAO.addUser(user.getUserId(), validProjectId);
+    projectDAO.addUser(validProjectId, user.getUserId());
     userDAO
         .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());
 

@@ -41,7 +41,6 @@ public class StatisticController {
   private static final Logger logger = Logger.getLogger(StatisticService.class);
   private DateConverterService converter = new DateConverterService();
 
-
   @Secured({"ROLE_PM"})
   @RequestMapping(value = "/viewSprintStat", method = RequestMethod.GET)
   public String projectSprintStatLineChart(Model model, Principal principal) {

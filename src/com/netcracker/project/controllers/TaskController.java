@@ -14,9 +14,9 @@ import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -51,22 +51,35 @@ public class TaskController {
       @RequestParam("priority") String priority,
       @RequestParam("status") String status,
       @RequestParam("description") String description,
-      @RequestParam("reopenCounter") Integer reopenCounter,
       @RequestParam("comments") String comments,
-      @RequestParam("authorNames") List authorId,
-      @RequestParam("userNames") List userId,
+      @RequestParam("user") BigInteger userId,
       @RequestParam("projectNames") String projectName,
-      Model model
-  ) {
+      Model model, Principal principal) {
 
     logger.info("begin work with process creation:");
     Project project = projectDAO.findProjectByName(projectName);
 
-    Map<String, String> errorMapCreate = new TaskValidator()
-        .validationCreate(name, type, startDate, plannedEndDate, priority, status, description,
-            comments, authorId.toString(), userId.toString(), projectName);
+    Map<String, String> errorMap = new HashMap<>();
+    String login = principal.getName();
+    User curUser = userDAO.findUserByLogin(login);
 
-    if (!errorMapCreate.isEmpty()){
+    errorMap = new TaskValidator().validateInputId(userId.toString());
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/create";
+    }
+
+    BigInteger projectId = null;
+
+    if (curUser.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      projectId = projectDAO.findProjectIdByPMLogin(login);
+    } else {
+      projectId = projectDAO.findProjectIdByUserLogin(login);
+    }
+
+    errorMap =  new TaskValidator().validationCreate(name, type, startDate, plannedEndDate, priority, status, description,
+        comments, userId.toString(), projectName);
+    if (!errorMap.isEmpty()){
       model.addAttribute("name", name);
       model.addAttribute("taskType", type);
       model.addAttribute("startDate", startDate);
@@ -75,47 +88,54 @@ public class TaskController {
       model.addAttribute("status",  status);
       model.addAttribute("description", description);
       model.addAttribute("comments", comments);
-      Map<String, String> authorNames = userDAO.getAllUserName();
-      model.addAttribute("authorNames", authorNames);
-      Map<String, String> userNames = userDAO.getAllUserName();
-      model.addAttribute("userNames", userNames);
+      Collection<User> user = userDAO.findUserByProjectId(projectId);
+      model.addAttribute("userList", user);
       Collection<String> projects = projectDAO.findAllOpenedProjects();
       model.addAttribute("projectNamesList", projects);
+      model.addAttribute("errorMap", errorMap);
 
-      model.addAttribute("errorMap", errorMapCreate);
       return "task/create";
     }
 
-    Task createTask = new Task.TaskBuilder()
-        .name(name)
-        .taskType(TaskType.valueOf(type))
-        .startDate(converter.convertStringToDateFromJSP(startDate))
-        .plannedEndDate(converter.convertStringToDateFromJSP(plannedEndDate))
-        .priority(TaskPriority.valueOf(priority))
-        .status(TaskStatus.valueOf(status))
-        .description(description)
-        .reopenCounter(reopenCounter)
-        .comments(comments)
-        .authorId(new BigInteger(authorId.get(0).toString()))
-        .userId(new BigInteger(userId.get(0).toString()))
-        .projectId(project.getProjectId())
-        .build();
+      Task createTask = new Task.TaskBuilder()
+          .name(name)
+          .taskType(TaskType.valueOf(type))
+          .startDate(converter.convertStringToDateFromJSP(startDate))
+          .plannedEndDate(converter.convertStringToDateFromJSP(plannedEndDate))
+          .priority(TaskPriority.valueOf(priority))
+          .status(TaskStatus.valueOf(status))
+          .description(description)
+          .comments(comments)
+          .authorId(curUser.getUserId())
+          .userId(userId)
+          .projectId(project.getProjectId())
+          .build();
 
-    logger.info("createTask request from DB. Task name: " + name);
-    taskDAO.createTask(createTask);
-    return "response_status/success";
+      logger.info("createTask request from DB. Task name: " + name);
+      taskDAO.createTask(createTask);
+      return "response_status/success";
+
   }
 
-
   @RequestMapping(value = "/create", method = RequestMethod.GET)
-  public String createTaskWithGetParams(Model model) {
+  public String createTaskWithGetParams(Model model, Principal principal) {
     logger.info("createTask with get params.: ");
 
-    Map<String, String> authorNames = userDAO.getAllUserName();
-    Map<String, String> userNames = userDAO.getAllUserName();
+    String userLogin = principal.getName();
+    User user = userDAO.findUserByLogin(userLogin);
+    BigInteger projectId = null;
+
+    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      projectId = projectDAO.findProjectIdByPMLogin(userLogin);
+    } else {
+      projectId = projectDAO.findProjectIdByUserLogin(userLogin);
+    }
+
+    Collection<User> users = userDAO.findUserByProjectId(projectId);
     Collection<String> projects = projectDAO.findAllOpenedProjects();
-    model.addAttribute("authorNames", authorNames);
-    model.addAttribute("userNames", userNames);
+
+    model.addAttribute("userList", users);
+    model.addAttribute("authorId", user.getUserId());
     model.addAttribute("projectNamesList", projects);
 
     return "task/create";
@@ -134,23 +154,37 @@ public class TaskController {
       @RequestParam("description") String description,
       @RequestParam("reopenCounter") Integer reopenCounter,
       @RequestParam("comments") String comments,
-      @RequestParam("authorNames") List authorId,
-      @RequestParam("userNames") List userId,
-      @RequestParam("projectNames") String projectName, Model model) {
+      @RequestParam("user") BigInteger userId,
+      @RequestParam("projectNames") String projectName, Model model, Principal principal) {
     logger.info("begin work updating process:");
     Project project = projectDAO.findProjectByName(projectName);
+    Map<String, String> errorMap = new HashMap<>();
+    String login = principal.getName();
+    User curUser = userDAO.findUserByLogin(login);
 
-    Map<String, String> errorMap = new TaskValidator()
+    errorMap = new TaskValidator().validateInputId(userId.toString());
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/edit";
+    }
+
+    BigInteger projectId = null;
+
+    if (curUser.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      projectId = projectDAO.findProjectIdByPMLogin(login);
+    } else {
+      projectId = projectDAO.findProjectIdByUserLogin(login);
+    }
+
+   errorMap = new TaskValidator()
         .validationUpdate(name, type, startDate, plannedEndDate, priority, status, description,
-            comments, authorId.toString(), userId.toString(), projectName);
+            comments, userId.toString(), projectName);
 
     if (!errorMap.isEmpty()){
       Collection<Task> taskCollection = taskDAO.findTaskByTaskId(id);
       model.addAttribute("modelTask", taskCollection);
-      Map<String, String> authorNames = userDAO.getAllUserName();
-      model.addAttribute("authorNames", authorNames);
-      Map<String, String> userNames = userDAO.getAllUserName();
-      model.addAttribute("userNames", userNames);
+      Collection<User> user = userDAO.findUserByProjectId(projectId);
+      model.addAttribute("userList", user);
       Collection<String> projects = projectDAO.findAllOpenedProjects();
       model.addAttribute("projectNamesList", projects);
 
@@ -170,8 +204,8 @@ public class TaskController {
         .description(description)
         .reopenCounter(reopenCounter)
         .comments(comments)
-        .authorId(new BigInteger(authorId.get(0).toString()))
-        .userId(new BigInteger(userId.get(0).toString()))
+        .authorId(curUser.getUserId())
+        .userId(userId)
         .projectId(project.getProjectId())
         .build();
 
@@ -191,15 +225,25 @@ public class TaskController {
   }
 
   @RequestMapping(value = "/edit={taskId}", method = RequestMethod.GET)
-  public String editTaskWithGetParams(@PathVariable("taskId") BigInteger taskId, Model model) {
+  public String editTaskWithGetParams(@PathVariable("taskId") BigInteger taskId, Model model, Principal principal) {
     logger.info("editTaskWithGetParams method. taskId" + taskId);
+
+    String userLogin = principal.getName();
+    User user = userDAO.findUserByLogin(userLogin);
+    BigInteger projectId = null;
+
+    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      projectId = projectDAO.findProjectIdByPMLogin(userLogin);
+    } else {
+      projectId = projectDAO.findProjectIdByUserLogin(userLogin);
+    }
+
+    Collection<User> users = userDAO.findUserByProjectId(projectId);
     Collection<Task> taskCollection = taskDAO.findTaskByTaskId(taskId);
-    Map<String, String> authorNames = userDAO.getAllUserName();
-    Map<String, String> userNames = userDAO.getAllUserName();
     Collection<String> projects = projectDAO.findAllOpenedProjects();
 
-    model.addAttribute("authorNames", authorNames);
-    model.addAttribute("userNames", userNames);
+    model.addAttribute("userList", users);
+    model.addAttribute("authorId", user.getUserId());
     model.addAttribute("projectNamesList", projects);
     model.addAttribute("modelTask", taskCollection);
     return "task/edit";
@@ -211,40 +255,82 @@ public class TaskController {
     return "task/findTaskByPriority";
   }
 
+  @RequestMapping(value = "findTaskByStatus", method = RequestMethod.GET)
+  public String findTaskByStatus(){
+    return "task/findTaskByStatus";
+  }
+
   @RequestMapping(value = "findTaskByUserId", method = RequestMethod.GET)
   public String findTaskByUserId(){
     return "task/findTaskByUserId";
   }
 
+
+
   @RequestMapping(value = "findTaskByPriority", params = "priority", method = RequestMethod.GET)
-  public String showTaskListWithPriority(@RequestParam(value = "priority") TaskPriority priority, Model model, Principal principal){
-//    Map<String, String> errorMap = new TaskValidator().validationFindTask(priority);
-//    if (errorMap.isEmpty()){
-//      model.addAttribute("errorMap", errorMap);
-//      return  "task/findTask";
-//    }
+  public String showTaskListWithPriority(@RequestParam(value = "priority") String priority, Model model, Principal principal){
+
+    Map<String, String> errorMap = new TaskValidator().validationFindTaskByPriority(priority);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/findTaskByStatus";
+    }
 
     String loginUser = principal.getName();
     User user = userDAO.findUserByLogin(loginUser);
-    Collection<Task> tasks = null;
-    if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)){
-      tasks = taskDAO.findTaskByUserIdAndPriority(user.getUserId(), priority.getId());
-    }
+
+    Collection<Task> tasks = taskDAO.findTaskByUserIdAndPriority(user.getUserId(),TaskPriority.valueOf(priority).getId());
+
     model.addAttribute("taskList", tasks);
     return "task/showTaskListWithPriority";
   }
 
 
-  @RequestMapping(value = "findTaskByUserId", params = "userId", method = RequestMethod.GET)
-  public String showTaskListWithUserId(@RequestParam(value = "userId") BigInteger userId, Model model, Principal principal){
+  @RequestMapping(value = "findTaskByStatus", params = "status", method = RequestMethod.GET)
+
+  public String showTaskListWithStatus(@RequestParam(value = "status") String status, Model model, Principal principal){
+
+    Map<String, String> errorMap = new TaskValidator().validationFindTaskByStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/findTaskByStatus";
+    }
 
     String loginUser = principal.getName();
     User user = userDAO.findUserByLogin(loginUser);
-    Collection<Task> tasksUser = null;
-    if (user.getJobTitle().equals(JobTitle.SOFTWARE_ENGINEER)){
-      tasksUser = taskDAO.findTaskByUserId(user.getUserId());
+
+    Collection<Task> tasks = taskDAO.findTaskByUserIdAndStatus(user.getUserId(), TaskStatus.valueOf(status).getId());
+
+    model.addAttribute("taskList", tasks);
+
+    return "task/showTaskListWithStatus";
+  }
+
+
+  @RequestMapping(value = "findTaskByUserId", params = {"status", "startDate", "endDate"}, method = RequestMethod.GET)
+  public String showTaskListWithUser(@RequestParam("status") String status,
+                                     @RequestParam("startDate") String startDate,
+                                     @RequestParam("endDate") String endDate, Model model, Principal principal){
+
+    Map<String, String> errorMap = new HashMap<>();
+    TaskValidator validator = new TaskValidator();
+    errorMap = validator.validationFindTaskByStatus(status);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/findTaskByUserId";
     }
-    model.addAttribute("tasksUser", tasksUser);
+    errorMap = validator.validateBetweenDates(startDate, endDate);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/findTaskByUserId";
+    }
+
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Collection<Task> tasksPerPeriod = taskDAO.findTaskByUserAndStatusPerPeriod(currentUser.getUserId(), TaskStatus.valueOf(status).getId(),
+        converter.convertStringToDateFromJSP(startDate), converter.convertStringToDateFromJSP(endDate));
+
+    model.addAttribute("taskList", tasksPerPeriod);
+
     return "task/showTaskListWithUser";
   }
 

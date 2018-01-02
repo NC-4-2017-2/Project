@@ -84,23 +84,16 @@
                            value=${comments}></td>
             </tr>
             <tr>
-                <td>Author:</td>
-                <td>
-                    <select name="authorNames">
-                        <c:forEach items="${authorNames}" var="name">
-                            <option value="${name.key}">${name.value}</option>
-                        </c:forEach>
-                    </select>
-                </td>
+                <input type="hidden" name="authorId" value="${authorId}"/>
             </tr>
             <tr>
                 <td>User:</td>
                 <td>
-                    <select name="userNames">
-                        <c:forEach items="${userNames}" var="user">
-                            <option value="${user.key}">${user.value}</option>
+                    <select name="user">
+                        <c:forEach items="${userList}" var="user">
+                        <option value="${user.userId}"
+                                name="user">${user.firstName} ${user.lastName}</option>
                         </c:forEach>
-                    </select>
                 </td>
             </tr>
             <tr>

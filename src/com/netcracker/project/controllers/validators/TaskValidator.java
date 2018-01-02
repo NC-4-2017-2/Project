@@ -34,7 +34,7 @@ public class TaskValidator extends AbstractValidator {
 
   public Map<String, String> validationCreate(String name, String taskType, String startDate,
       String plannedEndDate, String priority, String status,
-      String description, String comment, String authorId, String userId, String project) {
+      String description, String comment, String userId, String project) {
 
     validateName(name);
     validateTaskType(taskType);
@@ -43,7 +43,6 @@ public class TaskValidator extends AbstractValidator {
     validateTaskStatus(status);
     validateDescription(description);
     validateComment(comment);
-    validateAuthorId(authorId);
     validateUserId(userId);
     validateProjects(project);
 
@@ -52,7 +51,7 @@ public class TaskValidator extends AbstractValidator {
 
   public Map<String, String> validationUpdate(String name, String taskType, String startDate,
       String plannedEndDate, String priority, String status,
-      String description, String comment, String authorId, String userId, String project) {
+      String description, String comment, String user, String project) {
 
     validateName(name);
     validateTaskType(taskType);
@@ -61,15 +60,29 @@ public class TaskValidator extends AbstractValidator {
     validateTaskStatus(status);
     validateDescription(description);
     validateComment(comment);
-    validateAuthorId(authorId);
-    validateUserId(userId);
+    validateUserId(user);
     validateProjects(project);
 
     return errorMap;
   }
 
-  public Map<String, String> validationFindTask(String priority) {
+  public Map<String, String> validationFindTaskByPriority(String priority) {
     validatePriority(priority);
+    return errorMap;
+  }
+
+  public Map<String, String> validationFindTaskByStatus(String status) {
+    validateTaskStatus(status);
+    return errorMap;
+  }
+
+  public Map<String, String> validateBetweenDates(String startDate, String endDate) {
+    validateStartEndDate(startDate, endDate);
+    return errorMap;
+  }
+
+  public Map<String, String> validateInputId(String id) {
+    validateId(id);
     return errorMap;
   }
 

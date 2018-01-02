@@ -244,4 +244,29 @@ public class TaskDAOImpl implements TaskDAO {
             + taskId);
     template.update(UPDATE_REOPEN_COUNTER, counter, taskId);
   }
+
+  @Override
+  public BigInteger findTaskIdByPMLogin(String pmLogin) {
+    logger.info("Entering findProjectIdByPMLogin(startDate=" + pmLogin + ")");
+    return template
+        .queryForObject(FIND_TASK_ID_BY_PM_LOGIN, new Object[]{pmLogin},
+            BigInteger.class);
+  }
+
+  @Override
+  public BigInteger findTaskIdByUserLogin(String pmLogin) {
+    logger.info("Entering findProjectIdByPMLogin(startDate=" + pmLogin + ")");
+    return template
+        .queryForObject(FIND_TASK_ID_BY_USER_LOGIN, new Object[]{pmLogin},
+            BigInteger.class);
+  }
+
+  @Override
+  public Collection<Task> findTaskByUserAndStatusPerPeriod(BigInteger userId,
+      Integer taskStatus, Date startDate, Date endDate) {
+    logger.info("Entering findTaskByUserAndStatusPerPeriod(userId=" + userId + ", " + "taskStatus="
+        + taskStatus + "startDate" + startDate +  "endDate" + endDate +")");
+    return template.query(FIND_TASK_ID_BY_USER_AND_STATUS_PER_PERIOD, new Object[]{userId, taskStatus, startDate, endDate},
+        new TaskMapper());
+  }
 }

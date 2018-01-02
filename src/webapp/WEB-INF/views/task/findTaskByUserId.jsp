@@ -6,18 +6,21 @@
 </head>
 <body>
 <form action="/task/findTaskByUserId">
-    Enter your id:<tr>
-    <td><input type="text" name="userId" size="20"
-               value=${task.getUserId()}></td>
-    </tr><br>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
-    <br>
+    Select task status:
+    <select name="status">
+        <option value="OPENED">OPENED</option>
+        <option value="CLOSED">CLOSED</option>
+        <option value="REOPENED">REOPENED</option>
+        <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
+    </select><br>
+
+    Start date: <input type="date" name="startDate"><br>
+    End date: <input type="date" name="endDate"><br>
+    <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Find">
 </form>
 
+
+    <br>
 </body>
 </html>

@@ -1,15 +1,22 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.VacationValidator;
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.VacationDAO;
 import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.Vacation;
+import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,57 +34,86 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/vacation")
 public class VacationController {
 
-  private static final Logger logger = Logger.getLogger(VacationController.class);
   @Autowired
   private VacationDAO vacationDAO;
   @Autowired
   private ProjectDAO projectDAO;
   @Autowired
   private UserDAO userDAO;
+
+  private static final Logger logger = Logger.getLogger(VacationController.class);
   private DateConverterService converter = new DateConverterService();
 
-  @RequestMapping(value = "/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/createVacation", method = RequestMethod.GET)
+  public String createVacationGet(Model model) {
+    return "vacation/createVacation";
+  }
+
+  @RequestMapping(value = "/createVacation", method = RequestMethod.POST)
   public String createVacationPost(
-      @RequestParam("userNames") List userId,
-      @RequestParam("projectName") String projectName,
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
-      @RequestParam("pmApproveStatus") Status pmApproveStatus,
-      @RequestParam("lmApproveStatus") Status lmApproveStatus) {
+      Principal principal,
+      Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    VacationValidator validator = new VacationValidator();
+    errorMap = validator.validateDates(startDate, endDate);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/createVacation";
+    }
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    if(currentUser.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
+      errorMap.put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/createVacation";
+    }
+    Status pmStatus = null;
+    Status lmStatus = null;
+    BigInteger projectId = null;
+    BigInteger pmApproveId = null;
+    BigInteger lmApproveId = null;
+    if(currentUser.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+      pmApproveId = currentUser.getUserId();
+      pmStatus = Status.APPROVED;
+      lmStatus = Status.WAITING_FOR_APPROVAL;
+      projectId = projectDAO.findProjectIdByPMLogin(principal.getName());
+    } else if(currentUser.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
+      projectId = projectDAO.findProjectIdByUserLogin(principal.getName());
+      pmApproveId = userDAO.findPMByProjectId(projectId).getUserId();
+      pmStatus = Status.WAITING_FOR_APPROVAL;
+      lmApproveId = currentUser.getUserId();
+      lmStatus = Status.APPROVED;
+    } else {
+      projectId = projectDAO.findProjectIdByUserLogin(principal.getName());
+      pmApproveId = userDAO.findPMByProjectId(projectId).getUserId();
+      pmStatus = Status.WAITING_FOR_APPROVAL;
+      lmStatus = Status.WAITING_FOR_APPROVAL;
+    }
 
-    logger.info("createVacationPost() method. Params: userId:" + userId
-        + "projectName: " + projectName
-        + "startDate: " + startDate
-        + "endDate: " + endDate
-        + "pmApproveStatus: " + pmApproveStatus
-        + "lmApproveStatus: " + lmApproveStatus);
-    Project project = projectDAO.findProjectByName(projectName);
-        //todo lm id
+    Integer projectLMExistence = userDAO.findIfLMExists(projectId);
+    if(projectLMExistence > 0) {
+      User lineManager = userDAO.findLMByProjectId(projectId);
+      lmApproveId = lineManager.getUserId();
+    } else {
+      lmApproveId = pmApproveId;
+      lmStatus = Status.APPROVED;
+    }
+
     Vacation vacation = new Vacation.VacationBuilder()
-        .userId(new BigInteger(userId.get(0).toString()))
-        .projectId(project.getProjectId())
+        .userId(currentUser.getUserId())
+        .projectId(projectId)
         .startDate(converter.convertStringToDateFromJSP(startDate))
         .endDate(converter.convertStringToDateFromJSP(endDate))
-        .pmStatus(pmApproveStatus)
-        .lmStatus(lmApproveStatus)
-        .pmId(project.getProjectManagerId())
+        .pmStatus(pmStatus)
+        .lmStatus(lmStatus)
+        .pmId(pmApproveId)
+        .lmId(lmApproveId)
         .build();
 
     vacationDAO.createVacation(vacation);
 
     return "response_status/success";
-  }
-
-  @RequestMapping(value = "/create", method = RequestMethod.GET)
-  public String createVacationGet(Model model) {
-    logger.info("createVacationGet() method");
-
-    Map<String, String> userNames = userDAO.getAllUserName();
-    Collection<String> projects = projectDAO.findAllOpenedProjects();
-    model.addAttribute("userNames", userNames);
-    model.addAttribute("projectNamesList", projects);
-
-    return "vacation/create";
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)

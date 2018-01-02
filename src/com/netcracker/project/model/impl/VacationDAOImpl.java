@@ -50,8 +50,6 @@ public class VacationDAOImpl implements VacationDAO {
     updateEndDate(vacation.getEndDate(), vacation.getVacationId());
     updatePmStatus(vacation.getPmStatus(), vacation.getVacationId());
     updateLmStatus(vacation.getLmStatus(), vacation.getVacationId());
-    updateProjectId(vacation.getProjectId(), vacation.getVacationId());
-    updateUserId(vacation.getUserId(), vacation.getVacationId());
   }
 
   @Override
@@ -93,6 +91,24 @@ public class VacationDAOImpl implements VacationDAO {
     logger.info(
         "Entering findVacationById(vacationId=" + id + ")");
     return template.queryForObject(FIND_VACATION_BY_ID, new Object[]{id}, new VacationMapper());
+  }
+
+  @Override
+  public Collection<Vacation> findVacationByPMIdAndPMStatus(BigInteger pmId,
+      Integer pmStatus) {
+    logger.info(
+        "Entering findVacationByPMIdAndPMStatus(pmId=" + pmId + "," + " pmStatus="
+            + pmStatus + ")");
+    return template.query(FIND_VACATION_BY_PM_ID_AND_STATUS, new Object[]{pmId, pmStatus}, new VacationMapper());
+  }
+
+  @Override
+  public Collection<Vacation> findVacationByLMIdAndLMStatus(BigInteger lmId,
+      Integer lmStatus) {
+    logger.info(
+        "Entering findVacationByLMIdAndLMStatus(lmId=" + lmId + "," + " lmStatus="
+            + lmStatus + ")");
+    return template.query(FIND_VACATION_BY_LM_ID_AND_STATUS, new Object[]{lmId, lmStatus}, new VacationMapper());
   }
 
   private void updateStartDate(Date startDate, BigInteger vacationId) {

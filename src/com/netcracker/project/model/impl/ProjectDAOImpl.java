@@ -323,4 +323,5 @@ public class ProjectDAOImpl implements ProjectDAO {
     return OCStatus.valueOf(template
         .queryForObject(GET_STATUS_BY_PROJECT_ID, String.class, projectId));
   }
+
 }

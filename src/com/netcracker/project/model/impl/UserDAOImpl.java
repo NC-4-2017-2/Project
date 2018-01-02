@@ -68,6 +68,18 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public User findPMByProjectId(BigInteger projectId) {
+    logger.info("Entering findPMByProjectId(" + projectId + ")");
+    return template.queryForObject(FIND_PM_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+  }
+
+  @Override
+  public User findLMByProjectId(BigInteger projectId) {
+    logger.info("Entering findLMByProjectId(" + projectId + ")");
+    return template.queryForObject(FIND_LM_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+  }
+
+  @Override
   public Collection<User> findUserByLastNameAndFirstName(String lastName,
       String firstName) {
     logger.info(
@@ -281,4 +293,11 @@ public class UserDAOImpl implements UserDAO {
     return template.queryForObject(FIND_WORKING_WORK_PERIOD_IF_EXIST,
         new Object[]{userId, projectId}, Integer.class);
   }
+
+  @Override
+  public Integer findIfLMExists(BigInteger projectId) {
+    logger.info("Entering findIfLMExists(projectId=" + projectId + ")");
+    return template.queryForObject(FIND_IF_LM_EXISTS_ON_PROJECT, new Object[]{projectId}, Integer.class);
+  }
+
 }

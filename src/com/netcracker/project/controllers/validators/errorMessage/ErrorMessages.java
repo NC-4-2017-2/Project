@@ -34,5 +34,6 @@ public interface  ErrorMessages {
   String PROJECT_ERROR = "Project doesn't exist!";
   String VIEW_SPRINT_TRANSIT_PM_ERROR = "You are currently does not have a project!";
   String USER_FIRST_OR_LAST_NAME_ERROR = "Please type correct name!";
-  String SPRINTS_EXIST_ERROR = "No sprints available for project";
+  String SPRINTS_EXIST_ERROR = "No sprints available for project!";
+  String USER_ON_TRANSIT_ERROR = "Can't create vacation while user is on transit!";
 }

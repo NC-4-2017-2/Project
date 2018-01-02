@@ -9,9 +9,11 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ProjectDAO {
 
+  @Transactional(rollbackFor = Exception.class)
   void createProject(Project project, Collection<Sprint> sprints,
       Collection<WorkPeriod> workPeriods);
 
@@ -43,7 +45,7 @@ public interface ProjectDAO {
 
   void addUser(BigInteger projectId, BigInteger userId);
 
-  Collection<Sprint> getAllSprints(BigInteger projectID);
+  Collection<Sprint> getAllSprints(BigInteger projectId);
 
   Sprint findSprintBySprintId(BigInteger sprintId);
 
@@ -143,7 +145,7 @@ public interface ProjectDAO {
           + " PM_ID.OBJECT_ID = PM_PROJECT_REF.REFERENCE AND "
           + " PR_STATUS_VALUE.ATTR_ID = 59 AND "
           + " PR_STATUS_VALUE.LIST_VALUE_ID = PR_STATUS.LIST_VALUE_ID";
-
+  
   String GET_SPRINTS = "SELECT "
       + " PROJECT_ID.OBJECT_ID, "
       + " SPRINT_ID.OBJECT_ID  AS " + EnumMapper.SPRINT_ID + ", "

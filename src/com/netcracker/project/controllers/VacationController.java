@@ -41,7 +41,8 @@ public class VacationController {
   @Autowired
   private UserDAO userDAO;
 
-  private static final Logger logger = Logger.getLogger(VacationController.class);
+  private static final Logger logger = Logger
+      .getLogger(VacationController.class);
   private DateConverterService converter = new DateConverterService();
 
   @RequestMapping(value = "/createVacation", method = RequestMethod.GET)
@@ -58,13 +59,15 @@ public class VacationController {
     Map<String, String> errorMap = new HashMap<>();
     VacationValidator validator = new VacationValidator();
     errorMap = validator.validateDates(startDate, endDate);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "vacation/createVacation";
     }
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    if(currentUser.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
-      errorMap.put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
+    if (currentUser.getProjectStatus().name()
+        .equals(ProjectStatus.TRANSIT.name())) {
+      errorMap
+          .put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "vacation/createVacation";
     }
@@ -73,12 +76,14 @@ public class VacationController {
     BigInteger projectId = null;
     BigInteger pmApproveId = null;
     BigInteger lmApproveId = null;
-    if(currentUser.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+    if (currentUser.getJobTitle().name()
+        .equals(JobTitle.PROJECT_MANAGER.name())) {
       pmApproveId = currentUser.getUserId();
       pmStatus = Status.APPROVED;
       lmStatus = Status.WAITING_FOR_APPROVAL;
       projectId = projectDAO.findProjectIdByPMLogin(principal.getName());
-    } else if(currentUser.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
+    } else if (currentUser.getJobTitle().name()
+        .equals(JobTitle.LINE_MANAGER.name())) {
       projectId = projectDAO.findProjectIdByUserLogin(principal.getName());
       pmApproveId = userDAO.findPMByProjectId(projectId).getUserId();
       pmStatus = Status.WAITING_FOR_APPROVAL;
@@ -92,7 +97,7 @@ public class VacationController {
     }
 
     Integer projectLMExistence = userDAO.findIfLMExists(projectId);
-    if(projectLMExistence > 0) {
+    if (projectLMExistence > 0) {
       User lineManager = userDAO.findLMByProjectId(projectId);
       lmApproveId = lineManager.getUserId();
     } else {
@@ -115,6 +120,82 @@ public class VacationController {
 
     return "response_status/success";
   }
+
+  @RequestMapping(value = "/findVacationByStatus", method = RequestMethod.GET)
+  public String findVacationByStatus() {
+    return "vacation/findVacationByStatus";
+  }
+
+  @RequestMapping(value = "/viewVacation", params = {"pmStatus",
+      "lmStatus"}, method = RequestMethod.GET)
+  public String viewUserVacation(
+      @RequestParam("pmStatus") String pmStatus,
+      @RequestParam("lmStatus") String lmStatus,
+      Model model, Principal principal) {
+    VacationValidator validator = new VacationValidator();
+    Map<String, String> errorMap = validator
+        .validateVacationStatus(pmStatus);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/findVacationByStatus";
+    }
+    errorMap = validator.validateVacationStatus(lmStatus);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/findVacationByStatus";
+    }
+
+    String userLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(userLogin);
+    Collection<Vacation> vacations = vacationDAO
+        .findVacationByUserIdAndPmAndLmStatus(currentUser.getUserId(),
+            Status.valueOf(pmStatus).getId(), Status.valueOf(lmStatus).getId());
+
+    model.addAttribute("vacationList", vacations);
+    return "vacation/viewVacation";
+  }
+
+  @RequestMapping(value = "/showVacation/{vacationId}", method = RequestMethod.GET)
+  public String showVacation(
+      @PathVariable("vacationId") String vacationId,
+      Model model, Principal principal) {
+    VacationValidator validator = new VacationValidator();
+    Map<String, String> errorMap = validator
+        .validateVacationId(vacationId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/viewVacation";
+    }
+    BigInteger validVacationId = new BigInteger(vacationId);
+
+    Vacation vacation = vacationDAO.findVacationById(validVacationId);
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+
+    if (!currentUser.getJobTitle().name()
+        .equals(JobTitle.PROJECT_MANAGER.name())
+        && !currentUser.getJobTitle().name()
+        .equals(JobTitle.LINE_MANAGER.name())
+        && !currentUser.getUserId().equals(vacation.getUserId())) {
+      errorMap.put("WRONG_USER_ERROR", ErrorMessages.WRONG_USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/viewVacation";
+    }
+
+    User author = userDAO.findUserByUserId(vacation.getUserId());
+    User lineManager = userDAO.findUserByUserId(vacation.getLmId());
+    User projectManager = userDAO.findUserByUserId(vacation.getPmId());
+    Project project = projectDAO
+        .findProjectByProjectId(vacation.getProjectId());
+
+    model.addAttribute("author", author);
+    model.addAttribute("lineManager", lineManager);
+    model.addAttribute("projectManager", projectManager);
+    model.addAttribute("project", project);
+    model.addAttribute("vacation", vacation);
+
+    return "vacation/showVacation";
+  }
+
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
   public String editVacationPost(
@@ -146,13 +227,15 @@ public class VacationController {
   }
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.GET)
-  public String editVacationFromPMGet(@PathVariable("id") BigInteger id, Model model) {
+  public String editVacationFromPMGet(@PathVariable("id") BigInteger id,
+      Model model) {
     logger.info("editVacationFromPMGet() method. Param: " + id);
 
     Vacation vacation = vacationDAO.findVacationById(id);
     Collection<String> projects = projectDAO.findAllOpenedProjects();
     Set<String> sortedProject = new LinkedHashSet<>();
-    sortedProject.add(projectDAO.findProjectByProjectId(vacation.getProjectId()).getName());
+    sortedProject.add(
+        projectDAO.findProjectByProjectId(vacation.getProjectId()).getName());
     sortedProject.addAll(projects);
 
     Map<String, String> userNames = userDAO.getAllUserName();
@@ -168,10 +251,13 @@ public class VacationController {
     return "vacation/edit_vacation_pm";
   }
 
+
   @RequestMapping(value = "/findVacationProject", params = "projectName", method = RequestMethod.GET)
-  public String findVacationList(@RequestParam("projectName") String projectName, Model model) {
+  public String findVacationList(
+      @RequestParam("projectName") String projectName, Model model) {
     Collection<Vacation> vacations = vacationDAO
-        .findVacationByProjectId(projectDAO.findProjectByName(projectName).getProjectId());
+        .findVacationByProjectId(
+            projectDAO.findProjectByName(projectName).getProjectId());
     model.addAttribute("vacationList", vacations);
     return "vacation/find_vacation_list";
   }
@@ -184,7 +270,8 @@ public class VacationController {
   }
 
   @RequestMapping(value = "/findVacationUser", params = "userId", method = RequestMethod.GET)
-  public String findVacationUserList(@RequestParam("userId") BigInteger userId, Model model) {
+  public String findVacationUserList(@RequestParam("userId") BigInteger userId,
+      Model model) {
     Collection<Vacation> vacations = vacationDAO.findVacationByUserId(userId);
     model.addAttribute("vacationList", vacations);
     return "vacation/find_vacation_list";
@@ -199,7 +286,8 @@ public class VacationController {
 
   @RequestMapping(value = "/findVacationUserPm", params = {"userId",
       "pmStatus"}, method = RequestMethod.GET)
-  public String findVacationUserPmList(@RequestParam("userId") BigInteger userId,
+  public String findVacationUserPmList(
+      @RequestParam("userId") BigInteger userId,
       @RequestParam("pmStatus") Status status,
       Model model) {
     Collection<Vacation> vacations = vacationDAO
@@ -217,7 +305,8 @@ public class VacationController {
 
   @RequestMapping(value = "/findVacationUserLm", params = {"userId",
       "lmStatus"}, method = RequestMethod.GET)
-  public String findVacationUserLmList(@RequestParam("userId") BigInteger userId,
+  public String findVacationUserLmList(
+      @RequestParam("userId") BigInteger userId,
       @RequestParam("lmStatus") Status status,
       Model model) {
     Collection<Vacation> vacations = vacationDAO
@@ -234,9 +323,11 @@ public class VacationController {
   }
 
   @RequestMapping(value = "/viewVacation/{vacationId}", method = RequestMethod.GET)
-  public String viewVacationByVacationId(@PathVariable("vacationId") BigInteger vacationId,
+  public String viewVacationByVacationId(
+      @PathVariable("vacationId") BigInteger vacationId,
       Model model) {
-    logger.info("viewVacationByVacationId() method. Params: projectId: " + vacationId);
+    logger.info(
+        "viewVacationByVacationId() method. Params: projectId: " + vacationId);
     Vacation vacation = vacationDAO.findVacationById(vacationId);
     model.addAttribute("vacation", vacation);
     return "vacation/show_vacation";

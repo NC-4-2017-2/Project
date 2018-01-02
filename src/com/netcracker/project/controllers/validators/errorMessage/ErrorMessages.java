@@ -36,4 +36,5 @@ public interface  ErrorMessages {
   String USER_FIRST_OR_LAST_NAME_ERROR = "Please type correct name!";
   String SPRINTS_EXIST_ERROR = "No sprints available for project!";
   String USER_ON_TRANSIT_ERROR = "Can't create vacation while user is on transit!";
+  String WRONG_USER_ERROR = "Wrong user!";
 }

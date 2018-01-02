@@ -68,16 +68,36 @@ public class VacationDAOImplTest {
 
   @Test
   public void findVacationByPMIdAndPMStatus() {
-    Collection<Vacation> result = vacationDAO.findVacationByPMIdAndPMStatus(BigInteger.valueOf(1), Status.APPROVED.getId());
-    assertEquals("[Vacation{vacationId=10, userId=2, projectId=4, startDate=2012-12-17, endDate=2012-12-27, pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=3},"
-        + " Vacation{vacationId=11, userId=3, projectId=4, startDate=2013-02-02, endDate=2013-02-27, pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=2}]",
+    Collection<Vacation> result = vacationDAO
+        .findVacationByPMIdAndPMStatus(BigInteger.valueOf(1),
+            Status.APPROVED.getId());
+    assertEquals(
+        "[Vacation{vacationId=10, userId=2, projectId=4, startDate=2012-12-17, endDate=2012-12-27, pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=3},"
+            + " Vacation{vacationId=11, userId=3, projectId=4, startDate=2013-02-02, endDate=2013-02-27, pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=2}]",
         result.toString());
   }
 
   @Test
   public void findVacationByLMIdAndLMStatus() {
-    Collection<Vacation> result = vacationDAO.findVacationByLMIdAndLMStatus(BigInteger.valueOf(2), Status.APPROVED.getId());
-    assertEquals("[Vacation{vacationId=11, userId=3, projectId=4, startDate=2013-02-02, endDate=2013-02-27, pmStatus=APPROVED, lmStatus=APPROVED, pmId=1, lmId=2}]",
+    Collection<Vacation> result = vacationDAO
+        .findVacationByLMIdAndLMStatus(BigInteger.valueOf(2),
+            Status.APPROVED.getId());
+    assertEquals(
+        "[Vacation{vacationId=11, userId=3, projectId=4, "
+            + "startDate=2013-02-02, endDate=2013-02-27, pmStatus=APPROVED, "
+            + "lmStatus=APPROVED, pmId=1, lmId=2}]",
+        result.toString());
+  }
+
+  @Test
+  public void findVacationByUserIdAndPmAndLmStatus() {
+    Collection<Vacation> result = vacationDAO
+        .findVacationByUserIdAndPmAndLmStatus(BigInteger.valueOf(2),
+            Status.APPROVED.getId(), Status.APPROVED.getId());
+    assertEquals(
+        "[Vacation{vacationId=10, userId=2, projectId=4, "
+            + "startDate=2012-12-17, endDate=2012-12-27, pmStatus=APPROVED, "
+            + "lmStatus=APPROVED, pmId=1, lmId=3}]",
         result.toString());
   }
 

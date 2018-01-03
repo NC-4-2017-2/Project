@@ -168,7 +168,7 @@ public class VacationController {
     }
     BigInteger validVacationId = new BigInteger(vacationId);
 
-    Vacation vacation = vacationDAO.findVacationById(validVacationId);
+    Vacation vacation = vacationDAO.findVacationByVacationId(validVacationId);
     User currentUser = userDAO.findUserByLogin(principal.getName());
 
     if (!currentUser.getJobTitle().name()
@@ -191,10 +191,73 @@ public class VacationController {
     model.addAttribute("lineManager", lineManager);
     model.addAttribute("projectManager", projectManager);
     model.addAttribute("project", project);
+    model.addAttribute("currentUser", currentUser);
     model.addAttribute("vacation", vacation);
 
     return "vacation/showVacation";
   }
+
+  @RequestMapping(value = "/updateAuthorVacation/{vacationId}", method = RequestMethod.GET)
+  public String updateAuthorVacation(
+      @PathVariable("vacationId") String vacationId,
+      Model model) {
+    VacationValidator validator = new VacationValidator();
+    Map<String, String> errorMap = validator
+        .validateVacationId(vacationId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/showVacation";
+    }
+    BigInteger validVacationId = new BigInteger(vacationId);
+    Vacation vacation = vacationDAO
+        .findVacationByVacationId(validVacationId);
+    if (vacation.getLmStatus().name().equals(Status.APPROVED.name())
+        && vacation.getPmStatus().name().equals(Status.APPROVED.name())) {
+      errorMap
+          .put("VACATION_MODIFY_ERROR", ErrorMessages.VACATION_MODIFY_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/showVacation";
+    }
+    model.addAttribute("vacation", vacation);
+
+    return "vacation/updateAuthorVacation";
+  }
+
+  @RequestMapping(value = "/updateAuthorVacation/{vacationId}", method = RequestMethod.POST)
+  public String updateAuthorVacationPost(
+      @PathVariable("vacationId") String vacationId,
+      @RequestParam("startDate") String startDate,
+      @RequestParam("endDate") String endDate,
+      Model model) {
+    VacationValidator validator = new VacationValidator();
+    Map<String, String> errorMap = validator
+        .validateVacationId(vacationId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/updateAuthorVacation";
+    }
+    errorMap = validator.validateDates(startDate, endDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/updateAuthorVacation";
+    }
+    BigInteger validVacationId = new BigInteger(vacationId);
+
+    Integer vacationExistence = vacationDAO
+        .findVacationIfExist(validVacationId);
+    if (vacationExistence != 1) {
+      errorMap.put("VACATION_EXIST_ERROR", ErrorMessages.VACATION_EXIST_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "vacation/updateAuthorVacation";
+    }
+    vacationDAO.updateVacationStartAndEndDate(validVacationId,
+        converter.convertStringToDateFromJSP(startDate),
+        converter.convertStringToDateFromJSP(endDate));
+    return "response_status/success";
+  }
+
+
+
 
 
   @RequestMapping(value = "/edit={id}", method = RequestMethod.POST)
@@ -231,7 +294,7 @@ public class VacationController {
       Model model) {
     logger.info("editVacationFromPMGet() method. Param: " + id);
 
-    Vacation vacation = vacationDAO.findVacationById(id);
+    Vacation vacation = vacationDAO.findVacationByVacationId(id);
     Collection<String> projects = projectDAO.findAllOpenedProjects();
     Set<String> sortedProject = new LinkedHashSet<>();
     sortedProject.add(
@@ -328,7 +391,7 @@ public class VacationController {
       Model model) {
     logger.info(
         "viewVacationByVacationId() method. Params: projectId: " + vacationId);
-    Vacation vacation = vacationDAO.findVacationById(vacationId);
+    Vacation vacation = vacationDAO.findVacationByVacationId(vacationId);
     model.addAttribute("vacation", vacation);
     return "vacation/show_vacation";
   }

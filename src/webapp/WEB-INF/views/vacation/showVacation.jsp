@@ -77,5 +77,10 @@
     </tr>
 </table>
 <%@include file="../errors/errorMap.jsp" %>
+<c:if test="${vacation.lmStatus ne 'APPROVED' && vacation.pmStatus ne 'APPROVED' && vacation.userId eq currentUser.userId}">
+    <form action="/vacation/updateAuthorVacation/${vacation.vacationId}">
+        <button type="submit">Update vacation</button>
+    </form>
+</c:if>
 </body>
 </html>

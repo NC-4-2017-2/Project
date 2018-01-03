@@ -37,4 +37,6 @@ public interface  ErrorMessages {
   String SPRINTS_EXIST_ERROR = "No sprints available for project!";
   String USER_ON_TRANSIT_ERROR = "Can't create vacation while user is on transit!";
   String WRONG_USER_ERROR = "Wrong user!";
+  String VACATION_MODIFY_ERROR = "Impossible to modify approved vacation!";
+  String VACATION_EXIST_ERROR = "Vacation does not exist!";
 }

@@ -101,4 +101,11 @@ public class VacationDAOImplTest {
         result.toString());
   }
 
+  @Test
+  public void findVacationIfExist() {
+    Integer result = vacationDAO
+        .findVacationIfExist(BigInteger.valueOf(10));
+    assertEquals("1", result.toString());
+  }
+
 }

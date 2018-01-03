@@ -44,13 +44,25 @@ public class VacationDAOImpl implements VacationDAO {
   @Transactional
   public void updateVacation(Vacation vacation) {
     logger.info(
-        "Entering updateVacation(id=" + vacation.getVacationId() + ","
+        "Entering updateVacation(vacationId=" + vacation.getVacationId() + ","
             + " vacation=" + vacation
             + ")");
     updateStartDate(vacation.getStartDate(), vacation.getVacationId());
     updateEndDate(vacation.getEndDate(), vacation.getVacationId());
     updatePmStatus(vacation.getPmStatus(), vacation.getVacationId());
     updateLmStatus(vacation.getLmStatus(), vacation.getVacationId());
+  }
+
+  @Transactional
+  @Override
+  public void updateVacationStartAndEndDate(BigInteger vacationId,
+      Date startDate, Date endDate) {
+    logger.info(
+        "Entering updateVacationStartAndEndDate(vacationId=" + vacationId + ","
+            + " startDate=" + startDate + ", endDate=" + endDate
+            + ")");
+    updateStartDate(startDate, vacationId);
+    updateEndDate(endDate, vacationId);
   }
 
   @Override
@@ -95,11 +107,18 @@ public class VacationDAOImpl implements VacationDAO {
   }
 
   @Override
-  public Vacation findVacationById(BigInteger id) {
+  public Vacation findVacationByVacationId(BigInteger id) {
     logger.info(
-        "Entering findVacationById(vacationId=" + id + ")");
+        "Entering findVacationByVacationId(vacationId=" + id + ")");
     return template.queryForObject(FIND_VACATION_BY_ID, new Object[]{id},
         new VacationMapper());
+  }
+
+  @Override
+  public Integer findVacationIfExist(BigInteger vacationId) {
+    return template
+        .queryForObject(FIND_VACATION_IF_EXIST, new Object[]{vacationId},
+            Integer.class);
   }
 
   @Override

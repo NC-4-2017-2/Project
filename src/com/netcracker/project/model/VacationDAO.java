@@ -13,6 +13,10 @@ public interface VacationDAO {
 
   void updateVacationStartAndEndDate(BigInteger vacationId, Date startDate, Date endDate);
 
+  void updatePmStatus(BigInteger vacationId, Integer status);
+
+  void updateLmStatus(BigInteger vacationId, Integer status);
+
   Collection<Vacation> findVacationByUserId(BigInteger userId);
 
   Collection<Vacation> findVacationByProjectId(BigInteger projectId);

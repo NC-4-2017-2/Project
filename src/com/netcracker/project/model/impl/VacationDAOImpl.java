@@ -49,8 +49,6 @@ public class VacationDAOImpl implements VacationDAO {
             + ")");
     updateStartDate(vacation.getStartDate(), vacation.getVacationId());
     updateEndDate(vacation.getEndDate(), vacation.getVacationId());
-    updatePmStatus(vacation.getPmStatus(), vacation.getVacationId());
-    updateLmStatus(vacation.getLmStatus(), vacation.getVacationId());
   }
 
   @Transactional
@@ -159,18 +157,20 @@ public class VacationDAOImpl implements VacationDAO {
     template.update(UPDATE_END_DATE, endDate, vacationId);
   }
 
-  private void updatePmStatus(Status status, BigInteger vacationId) {
+  @Override
+  public void updatePmStatus(BigInteger vacationId, Integer status) {
     logger.info(
         "Entering updatePmStatus(status=" + status + "," + " vacationId="
             + vacationId + ")");
-    template.update(UPDATE_PM_STATUS, status.getId(), vacationId);
+    template.update(UPDATE_PM_STATUS, status, vacationId);
   }
 
-  private void updateLmStatus(Status status, BigInteger vacationId) {
+  @Override
+  public void updateLmStatus(BigInteger vacationId, Integer status) {
     logger.info(
         "Entering updateLmStatus(status=" + status + "," + " vacationId="
             + vacationId + ")");
-    template.update(UPDATE_LM_STATUS, status.getId(), vacationId);
+    template.update(UPDATE_LM_STATUS, status, vacationId);
   }
 
   private void updateProjectId(BigInteger projectId, BigInteger vacationId) {

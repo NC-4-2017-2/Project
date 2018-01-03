@@ -82,5 +82,31 @@
         <button type="submit">Update vacation</button>
     </form>
 </c:if>
+<c:if test="${vacation.pmId ne vacation.lmId}">
+<c:if test="${currentUser.userId eq vacation.pmId}">
+    PM status:
+    <form action="/vacation/updateStatus/${vacation.vacationId}" method="post">
+        <button type="submit" name="status" value="APPROVED">Approve</button>
+        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+    </form>
+    <br>
+</c:if>
+<c:if test="${currentUser.userId eq vacation.lmId}">
+    LM status:
+    <form action="/vacation/updateStatus/${vacation.vacationId}" method="post">
+        <button type="submit" name="status" value="APPROVED">Approve</button>
+        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+    </form>
+    <br>
+</c:if>
+</c:if>
+<c:if test="${vacation.pmId eq vacation.lmId}">
+    PM and LM status:
+    <form action="/vacation/updateStatus/${vacation.vacationId}" method="post">
+        <button type="submit" name="status" value="APPROVED">Approve</button>
+        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+    </form>
+    <br>
+</c:if>
 </body>
 </html>

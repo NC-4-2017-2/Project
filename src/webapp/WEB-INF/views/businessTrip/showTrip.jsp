@@ -80,8 +80,7 @@
     </table>
     <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
         <button type="submit" name="status" value="APPROVED">Approve</button>
-        <button type="submit" name="status" value="DISAPPROVED">Disapprove
-        </button>
+        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
     </c:if>
     <%@include file="../errors/errorMap.jsp" %>
 </form>

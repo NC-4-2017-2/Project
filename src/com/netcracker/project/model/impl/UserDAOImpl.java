@@ -80,6 +80,14 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public Integer findUserByLoginIfExist(String login) {
+    logger.info("Entering findUserByLoginIfExist(login=" + login + ")");
+    return template
+        .queryForObject(FIND_USER_BY_LOGIN_IF_EXIST, new Object[]{login},
+            Integer.class);
+  }
+
+  @Override
   public Collection<User> findUserByLastNameAndFirstName(String lastName,
       String firstName) {
     logger.info(
@@ -159,6 +167,11 @@ public class UserDAOImpl implements UserDAO {
             + ")");
     template.update(UPDATE_USER_PROJECT_STATUS, status, id);
   }
+
+ /* public void updateUserRole(BigInteger id, Integer role) {
+    logger.info("Entering updateUserRole(id=" + id + "," + " role=" + role + ")");
+    template.update(UPDATE_USER_ROLE, role, id);
+  }*/
 
   @Override
   public Integer findIfPMExists(BigInteger id) {

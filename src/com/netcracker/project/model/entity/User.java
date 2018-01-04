@@ -17,7 +17,7 @@ public class User {
   private Date dateOfBirth;
   private Date hireDate;
   private String phoneNumber;
-  private String photo;
+  //private String photo;
   private JobTitle jobTitle;
   private String login;
   private String password;
@@ -34,7 +34,7 @@ public class User {
     this.dateOfBirth = builder.dateOfBirth;
     this.hireDate = builder.hireDate;
     this.phoneNumber = builder.phoneNumber;
-    this.photo = builder.photo;
+    //this.photo = builder.photo;
     this.jobTitle = builder.jobTitle;
     this.login = builder.login;
     this.password = builder.password;
@@ -92,9 +92,9 @@ public class User {
     return phoneNumber;
   }
 
-  public String getPhoto() {
+  /*public String getPhoto() {
     return photo;
-  }
+  }*/
 
   public JobTitle getJobTitle() {
     return jobTitle;
@@ -134,7 +134,7 @@ public class User {
     private Date dateOfBirth;
     private Date hireDate;
     private String phoneNumber;
-    private String photo;
+    //private String photo;
     private JobTitle jobTitle;
     private String login;
     private String password;
@@ -181,10 +181,10 @@ public class User {
       return this;
     }
 
-    public UserBuilder photo(String photo) {
+    /*public UserBuilder photo(String photo) {
       this.photo = photo;
       return this;
-    }
+    }*/
 
     public UserBuilder jobTitle(JobTitle jobTitle) {
       this.jobTitle = jobTitle;
@@ -236,7 +236,7 @@ public class User {
         ", dateOfBirth=" + dateOfBirth +
         ", hireDate=" + hireDate +
         ", phoneNumber='" + phoneNumber + '\'' +
-        ", photo='" + photo + '\'' +
+        //", photo='" + photo + '\'' +
         ", jobTitle=" + jobTitle +
         ", login='" + login + '\'' +
         ", password='" + password + '\'' +

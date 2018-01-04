@@ -20,6 +20,11 @@ public class UserValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateName(String name) {
+    validateAbstractName(name);
+    return getErrorMap();
+  }
+
   public Map<String, String> validateUserExistence(Integer existence) {
     if (existence == 0) {
       setErrorToMap("USER_ERROR", ErrorMessages.USER_ERROR);

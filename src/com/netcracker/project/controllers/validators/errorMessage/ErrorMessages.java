@@ -40,4 +40,6 @@ public interface  ErrorMessages {
   String WRONG_USER_ERROR = "Wrong user!";
   String VACATION_MODIFY_ERROR = "Impossible to modify approved vacation!";
   String VACATION_EXIST_ERROR = "Vacation does not exist!";
+  String LM_EXIST_ERROR = "LM already exist on project, choose another user";
+  String PM_EXIST_ERROR = "LM already exist on project, choose another user";
 }

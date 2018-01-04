@@ -17,6 +17,7 @@ import com.netcracker.project.model.enums.OCStatus;
 import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -453,6 +454,14 @@ public class ProjectController {
       errorMap.put("USER_ERROR", ErrorMessages.USER_ERROR);
       return "project/addUser";
     }
+    if (users.size() > 1) {
+      model.addAttribute("usersList", users);
+      model.addAttribute("projectId", projectId);
+      model.addAttribute("startDate", startDate);
+      model.addAttribute("endDate", endDate);
+
+      return "project/chooseUserToAdd";
+    }
 
     User user = null;
     Iterator<User> iterator = users.iterator();
@@ -467,7 +476,100 @@ public class ProjectController {
           user.getLastName() + " " + user.getFirstName() + " "
               + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
       model.addAttribute("errorMap", errorMap);
+      return "project/addUser";
     }
+
+    if (user.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
+      Integer lmExistence = userDAO.findIfLMExists(validProjectId);
+      if (lmExistence > 0) {
+        errorMap.put("LM_EXIST_ERROR", ErrorMessages.LM_EXIST_ERROR);
+        model.addAttribute("errorMap", errorMap);
+        return "project/addUser";
+      }
+    }
+
+    if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+      Integer pmExistence = userDAO.findIfLMExists(validProjectId);
+      if (pmExistence > 0) {
+        errorMap.put("PM_EXIST_ERROR", ErrorMessages.PM_EXIST_ERROR);
+        model.addAttribute("errorMap", errorMap);
+        return "project/addUser";
+      }
+    }
+
+    projectDAO.addUser(validProjectId, user.getUserId());
+    userDAO
+        .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());
+
+    WorkPeriod workPeriod = new WorkPeriodBuilder()
+        .userId(user.getUserId())
+        .projectId(validProjectId)
+        .startWorkDate(converter.convertStringToDateFromJSP(startDate))
+        .endWorkDate(converter.convertStringToDateFromJSP(endDate))
+        .workPeriodStatus(WorkPeriodStatus.WORKING)
+        .build();
+
+    userDAO.createWorkPeriod(workPeriod, validProjectId);
+    return "responseStatus/success";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/addUserFromDuplicate/{projectId}/{startDate}/{endDate}", method = RequestMethod.POST)
+  public String addDuplicateUserToProject(
+      @PathVariable("projectId") String projectId,
+      @PathVariable("startDate") String startDate,
+      @PathVariable("endDate") String endDate,
+      @RequestParam("user") String userId,
+      Model model) {
+    ProjectValidator validator = new ProjectValidator();
+
+    Map<String, String> errorMap = validator.validateInputId(projectId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/addUser";
+    }
+
+    errorMap = validator.validateDates(startDate, endDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/addUser";
+    }
+
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/addUser";
+    }
+    BigInteger validUserId = new BigInteger(userId);
+    BigInteger validProjectId = new BigInteger(projectId);
+    User user = userDAO.findUserByUserId(validUserId);
+
+    if (user.getProjectStatus().name().equals(ProjectStatus.WORKING.name())) {
+      errorMap.put("USER_PROJECT_STATUS_WORKING_ERROR",
+          user.getLastName() + " " + user.getFirstName() + " "
+              + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "project/addUser";
+    }
+
+    if (user.getJobTitle().equals(JobTitle.LINE_MANAGER)) {
+      Integer lmExistence = userDAO.findIfLMExists(validProjectId);
+      if (lmExistence > 0) {
+        errorMap.put("LM_EXIST_ERROR", ErrorMessages.LM_EXIST_ERROR);
+        model.addAttribute("errorMap", errorMap);
+        return "project/addUser";
+      }
+    }
+
+    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
+      Integer pmExistence = userDAO.findIfLMExists(validProjectId);
+      if (pmExistence > 0) {
+        errorMap.put("PM_EXIST_ERROR", ErrorMessages.PM_EXIST_ERROR);
+        model.addAttribute("errorMap", errorMap);
+        return "project/addUser";
+      }
+    }
+
     projectDAO.addUser(validProjectId, user.getUserId());
     userDAO
         .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());

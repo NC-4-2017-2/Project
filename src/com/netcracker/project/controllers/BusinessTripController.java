@@ -142,7 +142,7 @@ public class BusinessTripController {
         .build();
 
     businessTripDAO.createTrip(trip);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @RequestMapping(value = "/updateBusinessTrip/{id}", method = RequestMethod.GET)
@@ -217,7 +217,7 @@ public class BusinessTripController {
         .build();
 
     businessTripDAO.updateTrip(trip);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @RequestMapping(value = "/findTrip", method = RequestMethod.GET)

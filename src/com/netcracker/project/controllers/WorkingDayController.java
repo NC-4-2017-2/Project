@@ -383,7 +383,7 @@ public class WorkingDayController {
         return "workingDay/createWorkingDay";
       }
     }
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   private void createWorkingDay(

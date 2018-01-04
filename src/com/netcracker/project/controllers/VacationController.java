@@ -119,7 +119,7 @@ public class VacationController {
 
     vacationDAO.createVacation(vacation);
 
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @RequestMapping(value = "/findVacationByStatus", method = RequestMethod.GET)
@@ -254,7 +254,7 @@ public class VacationController {
     vacationDAO.updateVacationStartAndEndDate(validVacationId,
         converter.convertStringToDateFromJSP(startDate),
         converter.convertStringToDateFromJSP(endDate));
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM", "ROLE_LM"})
@@ -318,7 +318,7 @@ public class VacationController {
       }
     }
 
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM", "ROLE_LM"})

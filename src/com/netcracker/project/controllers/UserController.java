@@ -1,32 +1,18 @@
 package com.netcracker.project.controllers;
 
-import com.netcracker.project.controllers.validators.UserValidator;
-import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
-import com.netcracker.project.model.entity.WorkPeriod;
-import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodStatus;
 import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.UserRole;
 import com.netcracker.project.model.enums.UserStatus;
-import com.netcracker.project.services.EmailService;
 import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.EmailServiceImpl;
-import java.io.File;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -109,7 +95,7 @@ public class UserController {
     emailService.setMailSender(mailSender);
     emailService.sendEmail(returnedUser.getEmail(), "Use your pass",
                            returnedUser.getPassword());*/
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_ADMIN"})
@@ -135,7 +121,10 @@ public class UserController {
 
     BigInteger bigIntegerId = new BigInteger(userId);
     userDAO.updatePassword(bigIntegerId, password);
-    return "response_status/success";
+    return "responseStatus/success";
+    /*!!!Uncomment when the sequences are added!!!
+    //logger.info("createUser request from DB. User id: " + userId);
+    //userDAO.createUser(user);*/
   }
 
   @Secured({"ROLE_ADMIN"})
@@ -160,7 +149,7 @@ public class UserController {
         + "email: " + email);
     BigInteger bigIntegerId = new BigInteger(userId);
     userDAO.updateEmail(bigIntegerId, email);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @RequestMapping(value = "/updateUserPhoneNumber", method = RequestMethod.GET)
@@ -179,7 +168,7 @@ public class UserController {
     String currentUserLogin = principal.getName();
     User user = userDAO.findUserByLogin(currentUserLogin);
     userDAO.updatePhoneNumber(user.getUserId(), phoneNumber);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   /*@RequestMapping(value = "/updateUserProjectStatus", method = RequestMethod.GET)
@@ -198,8 +187,28 @@ public class UserController {
     String currentUserLogin = principal.getName();
     User user = userDAO.findUserByLogin(currentUserLogin);
     userDAO.updatePhoneNumber(user.getUserId(), phoneNumber);
-    return "response_status/success";
+    return "responseStatus/success";
   }*/
+//    return "responseStatus/success";
+//  }
+//
+//  @RequestMapping(value = "/edit_user/{userId}", method = RequestMethod.GET)
+//  public String editUserGet(@PathVariable("userId") Integer userId,
+//      Model model) {
+//    logger.info("editUserGet() method. userId: " + userId);
+//    User user = userDAO.findUserByUserId(BigInteger.valueOf(userId));
+//    model.addAttribute("userId", user.getUserId());
+//    model.addAttribute("firstName", user.getFirstName());
+//    model.addAttribute("lastName", user.getLastName());
+//    model.addAttribute("email", user.getEmail());
+//    model.addAttribute("phoneNumber", user.getPhoneNumber());
+//    model.addAttribute("photo", user.getPhoto());
+//    model.addAttribute("login", user.getLogin());
+//    model.addAttribute("password", user.getPassword());
+//    model.addAttribute("projectStatus", user.getProjectStatus());
+//
+//    return "project/edit_user";
+//  }
 
   @RequestMapping(value = "/findUserByLogin/{login}", method = RequestMethod.GET)
   public String findUserByLogin(Model model,
@@ -289,7 +298,7 @@ public class UserController {
       @RequestParam(value = "endWorkDate") Date endWorkDate,
       @RequestParam(value = "workPeriodStatus") WorkPeriodStatus workPeriodStatus) {
     // HERE'S AN QUESTION!!!
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM"})

@@ -263,7 +263,7 @@ public class ProjectController {
           ProjectStatus.WORKING.getId());
     }
 
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM", "ROLE_ADMIN"})
@@ -399,7 +399,7 @@ public class ProjectController {
         .findUserByProjectId(bigIntegerProjectId);
     model.addAttribute("projectId", bigIntegerProjectId);
     model.addAttribute("userList", userList);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM"})
@@ -481,7 +481,7 @@ public class ProjectController {
         .build();
 
     userDAO.createWorkPeriod(workPeriod, validProjectId);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM"})
@@ -521,7 +521,7 @@ public class ProjectController {
     projectDAO.updateStatus(validProjectId, OCStatus.CLOSED);
     Date date = new Date();
     projectDAO.updateEndDate(validProjectId, date);
-    return "response_status/success";
+    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM"})

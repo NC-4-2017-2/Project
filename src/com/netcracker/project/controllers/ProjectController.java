@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -45,9 +46,13 @@ public class ProjectController {
   @Autowired
   private DateConverterService converter;
 
+  private static final Logger logger = Logger
+      .getLogger(ProjectController.class);
+
   @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/createProject")
   public String createProject() {
+    logger.info("Entering createProject()");
     return "project/createProject";
   }
 
@@ -59,6 +64,7 @@ public class ProjectController {
       @RequestParam("countSprints") String sprintCount,
       @RequestParam("countWorkers") String workersCount,
       Model model) {
+    logger.info("Entering createSprints()");
     ProjectValidator validator = new ProjectValidator();
 
     Map<String, String> errorMap = validator
@@ -98,6 +104,7 @@ public class ProjectController {
       @RequestParam("pmId") String pmId,
       Model model,
       HttpServletRequest request) {
+    logger.info("Entering createProjectPost()");
     Collection<User> pmOnTransit = userDAO
         .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
             ProjectStatus.TRANSIT.getId());
@@ -270,6 +277,7 @@ public class ProjectController {
   @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "/findProjectByStartDate", method = RequestMethod.GET)
   public String findProjectByStartDate() {
+    logger.info("Entering findProjectByStartDate()");
     return "project/findProjectByStartDate";
   }
 
@@ -280,6 +288,7 @@ public class ProjectController {
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
       Model model) {
+    logger.info("Entering findProjectPerPeriodDate()");
     Map<String, String> errorMap = new HashMap<>();
     ProjectValidator validator = new ProjectValidator();
     errorMap = validator.validateDates(startDate, endDate);
@@ -299,6 +308,7 @@ public class ProjectController {
   public String showProject(
       @PathVariable("id") String id,
       Model model) {
+    logger.info("Entering showProject()");
     Map<String, String> errorMap = new HashMap<>();
     ProjectValidator validator = new ProjectValidator();
     errorMap = validator.validateInputId(id);
@@ -325,6 +335,7 @@ public class ProjectController {
   public String getProjectUsersToDelete(
       @PathVariable("id") String id,
       Model model) {
+    logger.info("Entering getProjectUsersToDelete()");
     Map<String, String> errorMap = new HashMap<>();
     ProjectValidator validator = new ProjectValidator();
     errorMap = validator.validateInputId(id);
@@ -346,6 +357,7 @@ public class ProjectController {
       @PathVariable("projectId") String projectId,
       @PathVariable("userId") String userId,
       Model model) {
+    logger.info("Entering deleteUserFromProject()");
     Map<String, String> errorMap = new HashMap<>();
     Map<String, String> existenceError = new HashMap<>();
     ProjectValidator projectValidator = new ProjectValidator();
@@ -408,6 +420,7 @@ public class ProjectController {
   public String getProjectUsersToAdd(
       @PathVariable("projectId") String projectId,
       Model model) {
+    logger.info("Entering getProjectUsersToAdd()");
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = validator.validateInputId(projectId);
     if (!errorMap.isEmpty()) {
@@ -428,6 +441,7 @@ public class ProjectController {
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
       Model model) {
+    logger.info("Entering addUserToProject()");
     ProjectValidator validator = new ProjectValidator();
 
     Map<String, String> errorMap = validator.validateInputId(projectId);
@@ -590,6 +604,7 @@ public class ProjectController {
   @RequestMapping(value = "/closeProject/{projectId}", method = RequestMethod.POST)
   public String closeProject(@PathVariable("projectId") String projectId,
       Model model) {
+    logger.info("Entering closeProject()");
     ProjectValidator validator = new ProjectValidator();
 
     Map<String, String> errorMap = validator.validateInputId(projectId);
@@ -630,6 +645,7 @@ public class ProjectController {
   @RequestMapping(value = "/viewSprints/{projectId}", method = RequestMethod.GET)
   public String viewSprints(@PathVariable("projectId") String projectId,
       Model model) {
+    logger.info("Entering viewSprints()");
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = validator.validateInputId(projectId);
     if (!errorMap.isEmpty()) {
@@ -653,6 +669,7 @@ public class ProjectController {
   @RequestMapping(value = "/showSprint/{sprintId}", method = RequestMethod.GET)
   public String showSprints(@PathVariable("sprintId") String sprintId,
       Model model) {
+    logger.info("Entering showSprints()");
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = validator.validateInputId(sprintId);
     if (!errorMap.isEmpty()) {
@@ -670,6 +687,7 @@ public class ProjectController {
   @RequestMapping(value = "/closeSprint/{sprintId}", method = RequestMethod.POST)
   public String closeSprint(@PathVariable("sprintId") String sprintId,
       Model model) {
+    logger.info("Entering closeSprint()");
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = validator.validateInputId(sprintId);
     if (!errorMap.isEmpty()) {

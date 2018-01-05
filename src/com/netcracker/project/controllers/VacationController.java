@@ -40,10 +40,12 @@ public class VacationController {
 
   private static final Logger logger = Logger
       .getLogger(VacationController.class);
+
   private DateConverterService converter = new DateConverterService();
 
   @RequestMapping(value = "/createVacation", method = RequestMethod.GET)
-  public String createVacationGet(Model model) {
+  public String createVacationGet() {
+    logger.info("Entering createVacationGet()");
     return "vacation/createVacation";
   }
 
@@ -53,6 +55,7 @@ public class VacationController {
       @RequestParam("endDate") String endDate,
       Principal principal,
       Model model) {
+    logger.info("Entering createVacationPost()");
     Map<String, String> errorMap = new HashMap<>();
     VacationValidator validator = new VacationValidator();
     errorMap = validator.validateDates(startDate, endDate);
@@ -120,6 +123,7 @@ public class VacationController {
 
   @RequestMapping(value = "/findVacationByStatus", method = RequestMethod.GET)
   public String findVacationByStatus() {
+    logger.info("Entering findVacationByStatus()");
     return "vacation/findVacationByStatus";
   }
 
@@ -128,7 +132,9 @@ public class VacationController {
   public String viewUserVacation(
       @RequestParam("pmStatus") String pmStatus,
       @RequestParam("lmStatus") String lmStatus,
-      Model model, Principal principal) {
+      Principal principal,
+      Model model) {
+    logger.info("Entering viewUserVacation()");
     VacationValidator validator = new VacationValidator();
     Map<String, String> errorMap = validator
         .validateVacationStatus(pmStatus);
@@ -155,7 +161,9 @@ public class VacationController {
   @RequestMapping(value = "/showVacation/{vacationId}", method = RequestMethod.GET)
   public String showVacation(
       @PathVariable("vacationId") String vacationId,
-      Model model, Principal principal) {
+      Principal principal,
+      Model model) {
+    logger.info("Entering showVacation()");
     VacationValidator validator = new VacationValidator();
     Map<String, String> errorMap = validator
         .validateVacationId(vacationId);
@@ -198,6 +206,7 @@ public class VacationController {
   public String updateAuthorVacation(
       @PathVariable("vacationId") String vacationId,
       Model model) {
+    logger.info("Entering updateAuthorVacation()");
     VacationValidator validator = new VacationValidator();
     Map<String, String> errorMap = validator
         .validateVacationId(vacationId);
@@ -226,6 +235,7 @@ public class VacationController {
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
       Model model) {
+    logger.info("Entering updateAuthorVacationPost()");
     VacationValidator validator = new VacationValidator();
     Map<String, String> errorMap = validator
         .validateVacationId(vacationId);
@@ -260,6 +270,7 @@ public class VacationController {
       @RequestParam("status") String status,
       Principal principal,
       Model model) {
+    logger.info("Entering updatePMStatus()");
     VacationValidator validator = new VacationValidator();
     Map<String, String> errorMap = validator
         .validateVacationId(vacationId);
@@ -320,6 +331,7 @@ public class VacationController {
   @Secured({"ROLE_PM", "ROLE_LM"})
   @RequestMapping(value = "/findVacationByManagerStatus", method = RequestMethod.GET)
   public String findVacationByManagerStatus() {
+    logger.info("Entering findVacationByManagerStatus()");
     return "vacation/findVacationByManagerStatus";
   }
 
@@ -329,6 +341,7 @@ public class VacationController {
       @RequestParam("status") String status,
       Principal principal,
       Model model) {
+    logger.info("Entering findVacationByManagerStatus()");
     VacationValidator validator = new VacationValidator();
     Map<String, String> errorMap = validator
         .validateVacationStatus(status);

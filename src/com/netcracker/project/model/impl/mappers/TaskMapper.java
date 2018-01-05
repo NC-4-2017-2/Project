@@ -1,6 +1,5 @@
 package com.netcracker.project.model.impl.mappers;
 
-import com.netcracker.project.model.TaskDAO;
 import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;

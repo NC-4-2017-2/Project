@@ -38,13 +38,15 @@ public class StatisticController {
   private UserDAO userDAO;
   @Autowired
   private ProjectDAO projectDAO;
+
   private static final Logger logger = Logger.getLogger(StatisticService.class);
+
   private DateConverterService converter = new DateConverterService();
 
   @Secured({"ROLE_PM"})
   @RequestMapping(value = "/viewSprintStat", method = RequestMethod.GET)
   public String projectSprintStatLineChart(Model model, Principal principal) {
-    logger.info("projectSprintStatLineChart() method. ");
+    logger.info("projectSprintStatLineChart() method");
     String userLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(userLogin);
     StatisticValidator validator = new StatisticValidator();
@@ -353,8 +355,7 @@ public class StatisticController {
   public String viewOwnHoursStat(
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
-      Model model, Principal principal
-  ) {
+      Model model, Principal principal) {
     StatisticValidator validator = new StatisticValidator();
     Map<String, String> errorMap = validator
         .validateDates(startDate, endDate);

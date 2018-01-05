@@ -16,6 +16,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -40,8 +41,12 @@ public class BusinessTripController {
   @Autowired
   private DateConverterService converter;
 
+  private static final Logger logger = Logger.getLogger(BusinessTripController.class);
+
+
   @RequestMapping(value = "/createBusinessTrip", method = RequestMethod.GET)
   public String createBusinessTripGet(Model model, Principal principal) {
+    logger.info("Entering createBusinessTripGet()");
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
     BigInteger projectId = null;
@@ -78,6 +83,7 @@ public class BusinessTripController {
       @RequestParam(value = "authorId") String authorId,
       @RequestParam(value = "country") String country,
       Model model, Principal principal) {
+    logger.info("Entering createBusinessTripPost()");
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(projectId);
@@ -148,6 +154,7 @@ public class BusinessTripController {
   @RequestMapping(value = "/updateBusinessTrip/{id}", method = RequestMethod.GET)
   public String updateBusinessTrip(Model model,
       @PathVariable(value = "id") String id) {
+    logger.info("Entering updateBusinessTrip()");
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(id);
@@ -180,6 +187,7 @@ public class BusinessTripController {
       @RequestParam(value = "country") String country,
       @RequestParam(value = "startDate") String startDate,
       @RequestParam(value = "endDate") String endDate) {
+    logger.info("Entering updateBusinessTrip()");
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(id);
@@ -222,6 +230,7 @@ public class BusinessTripController {
 
   @RequestMapping(value = "/findTrip", method = RequestMethod.GET)
   public String findTripByStatus() {
+    logger.info("Entering findTripByStatus()");
     return "businessTrip/findTrip";
   }
 
@@ -231,6 +240,7 @@ public class BusinessTripController {
       @RequestParam(value = "status") String status,
       Principal principal,
       Model model) {
+    logger.info("Entering showTripList()");
     Map<String, String> errorMap = new BusinessTripValidator()
         .validateBusinessTripStatus(status);
     if (!errorMap.isEmpty()) {
@@ -252,6 +262,7 @@ public class BusinessTripController {
   public String showTrip(
       @PathVariable(value = "businessTripId") String tripId,
       Model model, Principal principal) {
+    logger.info("Entering showTrip()");
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateInputId(tripId);
@@ -293,6 +304,7 @@ public class BusinessTripController {
 
   @RequestMapping(value = "/findTripByStatusPerPeriod", method = RequestMethod.GET)
   public String findTripStatusAndPerPeriod() {
+    logger.info("Entering findTripStatusAndPerPeriod()");
     return "businessTrip/findTripByStatusPerPeriod";
   }
 
@@ -304,6 +316,7 @@ public class BusinessTripController {
       @RequestParam(value = "endDate") String endDate,
       Principal principal,
       Model model) {
+    logger.info("Entering findTripStatusAndPerPeriodGET()");
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateBusinessTripStatus(status);
@@ -328,6 +341,7 @@ public class BusinessTripController {
       @PathVariable(value = "id") String id,
       @RequestParam(value = "status") String status,
       Model model, Principal principal) {
+    logger.info("Entering updateTripStatus()");
     BusinessTripValidator validator = new BusinessTripValidator();
 
     Map<String, String> inputIdMap = validator.validateInputId(id);
@@ -384,6 +398,7 @@ public class BusinessTripController {
   @Secured({"ROLE_PM"})
   @RequestMapping(value = "/findPMTrip", method = RequestMethod.GET)
   public String findPMTrip() {
+    logger.info("Entering findPMTrip()");
     return "businessTrip/findPMTrip";
   }
 
@@ -392,6 +407,7 @@ public class BusinessTripController {
   public String viewPMWorkingDay(@RequestParam(value = "status") String status,
       Principal principal,
       Model model) {
+    logger.info("Entering viewPMWorkingDay()");
     User currentUser = userDAO.findUserByLogin(principal.getName());
     Collection<BusinessTrip> businessTrip = businessTripDAO
         .findTripByPMIdAndStatus(currentUser.getUserId(),

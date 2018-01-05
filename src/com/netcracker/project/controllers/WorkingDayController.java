@@ -18,6 +18,7 @@ import java.time.DayOfWeek;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -41,8 +42,12 @@ public class WorkingDayController {
   @Autowired
   private DateConverterService converter;
 
+  private static final Logger logger = Logger.getLogger(WorkingDayController.class);
+
+
   @RequestMapping(value = "/findWorkingDayPerPeriod", method = RequestMethod.GET)
   public String findWorkingDay() {
+    logger.info("Entering findWorkingDay()");
     return "workingDay/findWorkingDayPerPeriod";
   }
 
@@ -53,6 +58,7 @@ public class WorkingDayController {
       @RequestParam(value = "endDate") String endDate,
       Principal principal,
       Model model) {
+    logger.info("Entering viewWorkingDay()");
     WorkingDayValidator validator = new WorkingDayValidator();
     Map<String, String> errorMap = validator.validateFind(startDate, endDate);
     if (!errorMap.isEmpty()) {
@@ -71,6 +77,7 @@ public class WorkingDayController {
   @Secured({"ROLE_PM"})
   @RequestMapping(value = "/findPMWorkingDay", method = RequestMethod.GET)
   public String findPMWorkingDay() {
+    logger.info("Entering findPMWorkingDay()");
     return "workingDay/findPMWorkingDay";
   }
 
@@ -79,6 +86,7 @@ public class WorkingDayController {
   public String viewPMWorkingDay(@RequestParam(value = "status") String status,
       Principal principal,
       Model model) {
+    logger.info("Entering viewPMWorkingDay()");
     Map<String, String> errorMap = new HashMap<>();
     errorMap = new WorkingDayValidator().validateWorkingDayStatus(status);
     if (!errorMap.isEmpty()) {
@@ -100,6 +108,7 @@ public class WorkingDayController {
       @RequestParam(value = "status") String status,
       Model model,
       Principal principal) {
+    logger.info("Entering showUpdatePMWorkingDayStatus()");
     WorkingDayValidator validator = new WorkingDayValidator();
     Map<String, String> errorMap = validator.validateInputId(id);
     if (!errorMap.isEmpty()) {
@@ -145,6 +154,7 @@ public class WorkingDayController {
   public String showWorkingDay(@PathVariable(value = "id") String id,
       Principal principal,
       Model model) {
+    logger.info("Entering showWorkingDay()");
     WorkingDayValidator validator = new WorkingDayValidator();
     Map<String, String> errorMap = validator.validateInputId(id);
     if (!errorMap.isEmpty()) {
@@ -174,6 +184,7 @@ public class WorkingDayController {
 
   @RequestMapping(value = "/findUserWorkingDayByStatus", method = RequestMethod.GET)
   public String findWorkingDayByUserIdAndStatus() {
+    logger.info("Entering findWorkingDayByUserIdAndStatus()");
     return "workingDay/findWorkingDayByStatus";
   }
 
@@ -182,6 +193,7 @@ public class WorkingDayController {
       @RequestParam(value = "status") String status,
       Principal principal,
       Model model) {
+    logger.info("Entering viewWorkingDayByStatus()");
     Map<String, String> errorMap = new HashMap<>();
     errorMap = new WorkingDayValidator().validateWorkingDayStatus(status);
     if (!errorMap.isEmpty()) {
@@ -198,6 +210,7 @@ public class WorkingDayController {
 
   @RequestMapping(value = "/createWorkingDay", method = RequestMethod.GET)
   public String createWorkingDays() {
+    logger.info("Entering createWorkingDays()");
     return "workingDay/createWorkingDay";
   }
 
@@ -219,6 +232,7 @@ public class WorkingDayController {
       @RequestParam(value = "sundayEndTime") String sundayEndTime,
       Principal principal,
       Model model) {
+    logger.info("Entering createWorkingDayPost()");
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
     BigInteger projectId;

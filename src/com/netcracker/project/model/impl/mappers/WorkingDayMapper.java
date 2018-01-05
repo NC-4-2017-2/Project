@@ -2,15 +2,12 @@ package com.netcracker.project.model.impl.mappers;
 
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.model.entity.WorkingDay;
-import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 public class WorkingDayMapper implements RowMapper<WorkingDay> {
-
-  private DateConverterService converter = new DateConverterService();
 
   @Override
   public WorkingDay mapRow(ResultSet rs, int rowNum) throws SQLException {

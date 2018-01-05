@@ -17,7 +17,6 @@ import com.netcracker.project.model.enums.OCStatus;
 import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;

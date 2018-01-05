@@ -41,7 +41,8 @@ public class BusinessTripController {
   @Autowired
   private DateConverterService converter;
 
-  private static final Logger logger = Logger.getLogger(BusinessTripController.class);
+  private static final Logger logger = Logger
+      .getLogger(BusinessTripController.class);
 
 
   @RequestMapping(value = "/createBusinessTrip", method = RequestMethod.GET)
@@ -320,18 +321,21 @@ public class BusinessTripController {
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
     errorMap = validator.validateBusinessTripStatus(status);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/findTripByStatusPerPeriod";
     }
     errorMap = validator.validateBetweenDates(startDate, endDate);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/findTripByStatusPerPeriod";
     }
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    Collection<BusinessTrip> businessTrips = businessTripDAO.findTripByUserIdAndStatusAndPerPeriod(currentUser.getUserId(),
-        converter.convertStringToDateFromJSP(startDate), converter.convertStringToDateFromJSP(endDate), Status.valueOf(status).getId());
+    Collection<BusinessTrip> businessTrips = businessTripDAO
+        .findTripByUserIdAndStatusAndPerPeriod(currentUser.getUserId(),
+            converter.convertStringToDateFromJSP(startDate),
+            converter.convertStringToDateFromJSP(endDate),
+            Status.valueOf(status).getId());
     return "businessTrip/showTrip";
   }
 

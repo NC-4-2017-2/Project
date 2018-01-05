@@ -42,4 +42,5 @@ public interface  ErrorMessages {
   String VACATION_EXIST_ERROR = "Vacation does not exist!";
   String LM_EXIST_ERROR = "LM already exist on project, choose another user";
   String PM_EXIST_ERROR = "LM already exist on project, choose another user";
+  String TASK_ERROR = "Task does not exist!";;
 }

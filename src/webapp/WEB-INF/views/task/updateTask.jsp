@@ -13,23 +13,21 @@
 </head>
 <body>
 <div align="center">
-    <form action="/task/edit={taskId}" method="post"
+    <form action="/task/updateTask/{taskId}" method="post"
           commandName=taskForm">
         <table border="0">
-            <form modelAttribute="modelTask" >
-                <c:forEach var="task" items="${modelTask}">
                 <tr>
                 <tr>
                     <h2>Updating task</h2></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="taskId" size="20" hidden = false
-                               value=${task.getTaskId()}></td>
+                               value=${task.taskId}></td>
                 </tr>
                 <tr>
                     <td>Task Name:</td>
                     <td><input type="text" name="name" size="20"
-                               value=${task.getName()}></td>
+                               value=${task.name}></td>
                 </tr>
                 <tr>
                     <td>Task Type:</td>
@@ -41,17 +39,17 @@
                 <tr>
                     <td>StartDate:</td>
                     <td><input type="date" name="startDate"
-                               value="${task.getStartDate()}" ></td>
+                               value="${task.startDate}" ></td>
                 </tr>
                 <tr>
                     <td><input type="date" name="endDate" size="20" hidden = false
-                               value=${task.getEndDate()}></td>
+                               value=${task.endDate}></td>
                 </tr>
                 <tr>
                 <tr>
                     <td>PlannedEndDate:</td>
                     <td><input type="date" name="plannedEndDate" size="20"
-                               value=${task.getPlannedEndDate()}></td>
+                               value=${task.plannedEndDate}></td>
                 </tr>
                 <tr>
                     <td>Priority:</td>
@@ -76,28 +74,24 @@
                 <tr>
                     <td>Description task:</td>
                     <td><input type="text" name="description" size="70"
-                               value=${task.getDescription()}></td>
+                               value=${task.description}></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="reopenCounter" size="20" hidden = false
-                               value=${task.getReopenCounter()}></td>
+                               value=${task.reopenCounter}></td>
                 </tr>
                 <tr>
                     <td>Comments:</td>
                     <td><input type="text" name="comments" size="70"
-                               value=${task.getComments()}></td>
-                </tr>
+                               value=${task.comments}></td>
                     <tr>
-                        <input type="hidden" name="authorId" value="${authorId}"/>
+                        <td>User last name:</td>
+                        <td><input type="text" name="lastName" value=${taskUser.lastName}>
+                        </td>
                     </tr>
                     <tr>
-                        <td>User:</td>
-                        <td>
-                            <select name="user">
-                                <c:forEach items="${userList}" var="user">
-                                <option value="${user.userId}"
-                                        name="user">${user.firstName} ${user.lastName}</option>
-                                </c:forEach>
+                        <td>User first name:</td>
+                        <td><input type="text" name="firstName" value=${taskUser.firstName}>
                         </td>
                     </tr>
                     <tr>
@@ -110,9 +104,6 @@
                             </select>
                         </td>
                     </tr>
-
-                    </c:forEach>
-            </form>
         </table>
 
         <%@include file="../errors/errorMap.jsp" %>

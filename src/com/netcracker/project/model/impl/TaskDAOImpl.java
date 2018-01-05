@@ -185,9 +185,9 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
-  public Collection<Task> findTaskByTaskId(BigInteger taskId) {
+  public Task findTaskByTaskId(BigInteger taskId) {
     logger.info("Entering findTaskByTaskId. taskId=" + taskId + ")");
-    return template.query(FIND_TASK_BY_TASK_ID, new Object[]{taskId},
+    return template.queryForObject(FIND_TASK_BY_TASK_ID, new Object[]{taskId},
         new TaskMapper());
   }
 
@@ -212,6 +212,13 @@ public class TaskDAOImpl implements TaskDAO {
         new TaskMapper());
   }
 
+  @Override
+  public Integer findIfTaskExists(BigInteger id) {
+    logger.info("Entering findIfTaskExists(id=" + id + ")");
+    return template
+        .queryForObject(FIND_TASK_IF_EXIST, new Object[]{id},
+            Integer.class);
+  }
 
   @Override
   public Collection<Task> findTaskByUserIdAndStatus(BigInteger userId, Integer taskStatus) {

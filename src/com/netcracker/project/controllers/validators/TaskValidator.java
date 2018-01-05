@@ -1,5 +1,6 @@
 package com.netcracker.project.controllers.validators;
 
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
@@ -32,7 +33,7 @@ public class TaskValidator extends AbstractValidator {
 
   public Map<String, String> validationUpdate(String name, String taskType, String startDate,
       String plannedEndDate, String priority, String status,
-      String description, String comment, String user, String project) {
+      String description, String comment, String project) {
 
     validateName(name);
     validateTaskType(taskType);
@@ -41,7 +42,6 @@ public class TaskValidator extends AbstractValidator {
     validateTaskStatus(status);
     validateDescription(description);
     validateComment(comment);
-    validateUserId(user);
     validateProjects(project);
 
     return getErrorMap();
@@ -131,14 +131,6 @@ public class TaskValidator extends AbstractValidator {
     }
   }
 
-  private void validateAuthorId(String authorId){
-    if (authorId.isEmpty() || authorId == null){
-      setErrorToMap("author_error","User is null");
-    }
-    if (!checkString(authorId.toString())){
-      setErrorToMap("author_error","User is incorrect");
-    }
-  }
 
   private void validateUserId(String userId){
     if (userId.isEmpty() || userId == null){
@@ -156,6 +148,13 @@ public class TaskValidator extends AbstractValidator {
     if (!checkString(projectName.toString())){
       setErrorToMap("projectName_error","Project name is incorrect");
     }
+  }
+
+  public Map<String, String> validateExistence(Integer taskExistence) {
+    if (taskExistence == 0) {
+      setErrorToMap("TASK_ERROR", ErrorMessages.TASK_ERROR);
+    }
+    return getErrorMap();
   }
 
   private boolean checkStartDate(String startDate) {

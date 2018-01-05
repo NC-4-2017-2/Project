@@ -48,9 +48,7 @@ public class TaskController {
   @RequestMapping(value = "/createTask", method = RequestMethod.GET)
   public String createTaskWithUsers(Model model) {
     logger.info("createTask with get params.: ");
-
     Collection<String> projects = projectDAO.findAllOpenedProjects();
-
     model.addAttribute("projectNamesList", projects);
     return "task/createTask";
   }
@@ -148,9 +146,9 @@ public class TaskController {
     return "responseStatus/success";
   }
 
-  @RequestMapping(value = "/edit={taskId}", method = RequestMethod.POST)
-  public String editTask(
-      @RequestParam("taskId") BigInteger id,
+  @RequestMapping(value = "/updateTask/{taskId}", method = RequestMethod.POST)
+  public String updateTask(
+      @RequestParam("taskId") String id,
       @RequestParam("name") String name,
       @RequestParam("taskType") String type,
       @RequestParam("startDate") String startDate,
@@ -161,48 +159,81 @@ public class TaskController {
       @RequestParam("description") String description,
       @RequestParam("reopenCounter") Integer reopenCounter,
       @RequestParam("comments") String comments,
-      @RequestParam("user") BigInteger userId,
+      @RequestParam("lastName") String lastName,
+      @RequestParam("firstName") String firstName,
       @RequestParam("projectNames") String projectName, Model model,
       Principal principal) {
     logger.info("begin work updating process:");
-    Project project = projectDAO.findProjectByName(projectName);
+
+    logger.info("begin work with process creation:");
+    TaskValidator validator = new TaskValidator();
     Map<String, String> errorMap = new HashMap<>();
-    String login = principal.getName();
-    User curUser = userDAO.findUserByLogin(login);
+    Collection<String> projects = projectDAO.findAllOpenedProjects();
 
-    errorMap = new TaskValidator().validateInputId(userId.toString());
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "task/edit";
-    }
+    errorMap = validator.validationUpdate(name, type, startDate,
+         plannedEndDate, priority, status,
+         description, comments, projectName);
 
-    BigInteger projectId = null;
-
-    if (curUser.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
-      projectId = projectDAO.findProjectIdByPMLogin(login);
-    } else {
-      projectId = projectDAO.findProjectIdByUserLogin(login);
-    }
-
-    errorMap = new TaskValidator()
-        .validationUpdate(name, type, startDate, plannedEndDate, priority,
-            status, description,
-            comments, userId.toString(), projectName);
 
     if (!errorMap.isEmpty()) {
-      Collection<Task> taskCollection = taskDAO.findTaskByTaskId(id);
-      model.addAttribute("modelTask", taskCollection);
-      Collection<User> user = userDAO.findUserByProjectId(projectId);
-      model.addAttribute("userList", user);
-      Collection<String> projects = projectDAO.findAllOpenedProjects();
+      model.addAttribute("name", name);
+      model.addAttribute("taskType", type);
+      model.addAttribute("startDate", startDate);
+      model.addAttribute("plannedEndDate", plannedEndDate);
+      model.addAttribute("priority", priority);
+      model.addAttribute("status", status);
+      model.addAttribute("description", description);
+      model.addAttribute("comments", comments);
       model.addAttribute("projectNamesList", projects);
-
       model.addAttribute("errorMap", errorMap);
-      return "task/edit";
+      return "task/updateTask";
     }
+
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/updateTask";
+    }
+    BigInteger validTaskId = new BigInteger(id);
+
+    Integer existenceProject = projectDAO
+        .findProjectByNameIfExist(projectName);
+    if (existenceProject != 1) {
+      errorMap.put("PROJECT_EXIST_ERROR", ErrorMessages.PROJECT_EXIST_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "task/updateTask";
+    }
+
+    errorMap = validator.validateLastNameAndFirstName(lastName, firstName);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap",
+          lastName + " " + firstName + " " + errorMap);
+      return "task/updateTask";
+    }
+    Collection<User> users = userDAO
+        .findUserByLastNameAndFirstName(lastName, firstName);
+
+    User user = null;
+    if (users.isEmpty()) {
+      errorMap
+          .put("USER_ERROR", lastName + " " +
+              firstName + " "
+              + ErrorMessages.USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "task/updateTask";
+    }
+    if (users.size() >= 1) {
+      Iterator<User> userIterator = users.iterator();
+      while (userIterator.hasNext()) {
+        user = userIterator.next();
+      }
+    }
+
+    Project updationProject = projectDAO.findProjectByName(projectName);
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+
 
     Task updatingTask = new Task.TaskBuilder()
-        .taskId(id)
+        .taskId(validTaskId)
         .name(name)
         .taskType(TaskType.valueOf(type))
         .startDate(converter.convertStringToDateFromJSP(startDate))
@@ -211,14 +242,14 @@ public class TaskController {
         .priority(TaskPriority.valueOf(priority))
         .status(TaskStatus.valueOf(status))
         .description(description)
-        .reopenCounter(reopenCounter)
+        .reopenCounter(0)
         .comments(comments)
-        .authorId(curUser.getUserId())
-        .userId(userId)
-        .projectId(project.getProjectId())
+        .authorId(currentUser.getUserId())
+        .userId(user.getUserId())
+        .projectId(updationProject.getProjectId())
         .build();
 
-    if (TaskStatus.valueOf(status).getId() == 2) {
+    if (TaskStatus.valueOf(status).getId() == 2 || TaskStatus.valueOf(status).getId() == 3) {
       reopenCounter++;
       taskDAO.updateReopenCounter(reopenCounter, updatingTask.getTaskId());
     }
@@ -233,31 +264,72 @@ public class TaskController {
     return "responseStatus/success";
   }
 
-  @RequestMapping(value = "/edit={taskId}", method = RequestMethod.GET)
-  public String editTaskWithGetParams(@PathVariable("taskId") BigInteger taskId,
+  @RequestMapping(value = "/updateTask/{taskId}", method = RequestMethod.GET)
+  public String updateTaskWithGetParams(@PathVariable("taskId") BigInteger taskId,
       Model model, Principal principal) {
     logger.info("editTaskWithGetParams method. taskId" + taskId);
 
-    String userLogin = principal.getName();
-    User user = userDAO.findUserByLogin(userLogin);
-    BigInteger projectId = null;
+    Task task = taskDAO.findTaskByTaskId(taskId);
+    User taskUser = userDAO.findUserByUserId(task.getUserId());
+    Collection<String> projects = projectDAO.findAllOpenedProjects();
+    model.addAttribute("task", task);
+    model.addAttribute("taskId", task.getTaskId());
+    model.addAttribute("name", task.getName());
+    model.addAttribute("type", task.getTaskType());
+    model.addAttribute("startDate", task.getStartDate());
+    model.addAttribute("endDate", task.getEndDate());
+    model.addAttribute("plannedEndDate", task.getPlannedEndDate());
+    model.addAttribute("priority", task.getPriority());
+    model.addAttribute("status", task.getStatus());
+    model.addAttribute("description", task.getDescription());
+    model.addAttribute("reopenCounter", task.getReopenCounter());
+    model.addAttribute("comments", task.getComments());
+    model.addAttribute("taskUser", taskUser);
+    model.addAttribute("projectNamesList", projects);
 
-    if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
-      projectId = projectDAO.findProjectIdByPMLogin(userLogin);
-    } else {
-      projectId = projectDAO.findProjectIdByUserLogin(userLogin);
+    return "task/updateTask";
+
+  }
+
+  @RequestMapping(value = "/showTask/{taskId}", method = RequestMethod.GET)
+  public String showTask(@PathVariable("taskId") String taskId,
+                         Model model, Principal principal){
+    TaskValidator validator = new TaskValidator();
+    Map<String, String> errorMap = validator.validateInputId(taskId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/showTask";
+    }
+    BigInteger validTaskId = new BigInteger(taskId);
+
+    Integer taskExistence = taskDAO.findIfTaskExists(validTaskId);
+    Map<String, String> existenceError = validator.validateExistence(taskExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "task/showTask";
     }
 
-    Collection<User> users = userDAO.findUserByProjectId(projectId);
-    Collection<Task> taskCollection = taskDAO.findTaskByTaskId(taskId);
-    Collection<String> projects = projectDAO.findAllOpenedProjects();
+    Task task = taskDAO.findTaskByTaskId(validTaskId);
+    User taskAuthor = userDAO.findUserByUserId(task.getAuthorId());
+    User taskUser = userDAO.findUserByUserId(task.getUserId());
+    Project project = projectDAO.findProjectByProjectId(task.getProjectId());
+    model.addAttribute("task", task);
+    model.addAttribute("taskId", task.getTaskId());
+    model.addAttribute("name", task.getName());
+    model.addAttribute("type", task.getTaskType());
+    model.addAttribute("startDate", task.getStartDate());
+    model.addAttribute("endDate", task.getEndDate());
+    model.addAttribute("plannedEndDate", task.getPlannedEndDate());
+    model.addAttribute("priority", task.getPriority());
+    model.addAttribute("status", task.getStatus());
+    model.addAttribute("description", task.getDescription());
+    model.addAttribute("reopenCounter", task.getReopenCounter());
+    model.addAttribute("comments", task.getComments());
+    model.addAttribute("taskAuthor", taskAuthor);
+    model.addAttribute("taskUser", taskUser);
+    model.addAttribute("project", project);
 
-    model.addAttribute("userList", users);
-    model.addAttribute("authorId", user.getUserId());
-    model.addAttribute("projectNamesList", projects);
-    model.addAttribute("modelTask", taskCollection);
-    return "task/edit";
-
+    return "task/showTask";
   }
 
   @RequestMapping(value = "findTaskByPriority", method = RequestMethod.GET)
@@ -310,7 +382,7 @@ public class TaskController {
         .validationFindTaskByStatus(status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "businessTrip/findTaskByStatus";
+      return "task/showTaskListWithStatus";
     }
 
     String loginUser = principal.getName();
@@ -355,15 +427,6 @@ public class TaskController {
     model.addAttribute("taskList", tasksPerPeriod);
 
     return "task/showTaskListWithUser";
-  }
-
-  @RequestMapping(value = "showTask/{taskId}", method = RequestMethod.GET)
-  public String showTask(@PathVariable(value = "taskId") Integer taskId,
-      Model model) {
-    Collection<Task> tasksWithPriority = taskDAO
-        .findTaskByTaskId(BigInteger.valueOf(taskId));
-    model.addAttribute("modelTask", tasksWithPriority);
-    return "task/showTask";
   }
 
 }

@@ -9,7 +9,7 @@
             color: red;
         }
     </style>
-    <title>CreateBusinessTrip</title>
+    <title>Create business trip</title>
 </head>
 <body>
 <form action="/businessTrip/createBusinessTrip/projectId/${projectId}/pmId/${pmId}"

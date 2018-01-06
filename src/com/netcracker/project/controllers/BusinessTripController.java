@@ -44,7 +44,6 @@ public class BusinessTripController {
   private static final Logger logger = Logger
       .getLogger(BusinessTripController.class);
 
-
   @RequestMapping(value = "/createBusinessTrip", method = RequestMethod.GET)
   public String createBusinessTripGet(Model model, Principal principal) {
     logger.info("Entering createBusinessTripGet()");

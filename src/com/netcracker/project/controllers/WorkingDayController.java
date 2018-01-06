@@ -45,7 +45,6 @@ public class WorkingDayController {
   private static final Logger logger = Logger
       .getLogger(WorkingDayController.class);
 
-
   @RequestMapping(value = "/findWorkingDayPerPeriod", method = RequestMethod.GET)
   public String findWorkingDay() {
     logger.info("Entering findWorkingDay()");

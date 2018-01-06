@@ -32,6 +32,7 @@
 </tbody>
 <%@include file="../errors/errorMap.jsp" %>
 
+
 <form action="/task/updateTask/${task.taskId}">
     <button type="submit">Edit task</button>
 </form>

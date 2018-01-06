@@ -8,7 +8,6 @@ import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Task.TaskBuilder;
 import com.netcracker.project.model.entity.User;
-import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
@@ -249,12 +248,12 @@ public class TaskController {
         .projectId(updationProject.getProjectId())
         .build();
 
-    if (TaskStatus.valueOf(status).getId() == 2 || TaskStatus.valueOf(status).getId() == 3) {
+    if (TaskStatus.valueOf(status).equals(TaskStatus.REOPENED) || TaskStatus.valueOf(status).equals(TaskStatus.READY_FOR_TESTING)) {
       reopenCounter++;
       taskDAO.updateReopenCounter(reopenCounter, updatingTask.getTaskId());
     }
 
-    if (TaskStatus.valueOf(status).getId() == 1) {
+    if (TaskStatus.valueOf(status).equals(TaskStatus.CLOSED)) {
       Date date = new Date();
       taskDAO.updateEndDate(date, updatingTask.getTaskId());
     }
@@ -266,7 +265,7 @@ public class TaskController {
 
   @RequestMapping(value = "/updateTask/{taskId}", method = RequestMethod.GET)
   public String updateTaskWithGetParams(@PathVariable("taskId") BigInteger taskId,
-      Model model, Principal principal) {
+      Model model) {
     logger.info("editTaskWithGetParams method. taskId" + taskId);
 
     Task task = taskDAO.findTaskByTaskId(taskId);
@@ -342,9 +341,14 @@ public class TaskController {
     return "task/findTaskByStatus";
   }
 
-  @RequestMapping(value = "findTaskByUserId", method = RequestMethod.GET)
-  public String findTaskByUserId() {
-    return "task/findTaskByUserId";
+  @RequestMapping(value = "findTaskPerPeriodAndStatus", method = RequestMethod.GET)
+  public String findTaskPerPeriodAndStatus() {
+    return "task/findTaskPerPeriodAndStatus";
+  }
+
+  @RequestMapping(value = "findTaskByFirstAndLastName", method = RequestMethod.GET)
+  public String findTaskByFirstAndLastName() {
+    return "task/findTaskByFirstAndLastName";
   }
 
 
@@ -357,7 +361,7 @@ public class TaskController {
         .validationFindTaskByPriority(priority);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "businessTrip/findTaskByStatus";
+      return "task/findTaskByStatus";
     }
 
     String loginUser = principal.getName();
@@ -397,9 +401,9 @@ public class TaskController {
   }
 
 
-  @RequestMapping(value = "findTaskByUserId", params = {"status", "startDate",
+  @RequestMapping(value = "findTaskPerPeriodAndStatus", params = {"status", "startDate",
       "endDate"}, method = RequestMethod.GET)
-  public String showTaskListWithUser(@RequestParam("status") String status,
+  public String showTaskListWithPeriods(@RequestParam("status") String status,
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate, Model model,
       Principal principal) {
@@ -409,24 +413,60 @@ public class TaskController {
     errorMap = validator.validationFindTaskByStatus(status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "task/findTaskByUserId";
+      return "task/findTaskPerPeriodAndStatus";
     }
     errorMap = validator.validateBetweenDates(startDate, endDate);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "task/findTaskByUserId";
+      return "task/findTaskPerPeriodAndStatus";
     }
 
-    User currentUser = userDAO.findUserByLogin(principal.getName());
+    String loginUser = principal.getName();
+    User user = userDAO.findUserByLogin(loginUser);
     Collection<Task> tasksPerPeriod = taskDAO
-        .findTaskByUserAndStatusPerPeriod(currentUser.getUserId(),
+        .findTaskByUserAndStatusPerPeriod(user.getUserId(),
             TaskStatus.valueOf(status).getId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
 
     model.addAttribute("taskList", tasksPerPeriod);
 
-    return "task/showTaskListWithUser";
+    return "task/showTaskListPerPeriod";
+  }
+
+  @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName"}, method = RequestMethod.GET)
+  public String showTaskListWithUsers(
+      @RequestParam("lastName") String lastName,
+      @RequestParam("firstName") String firstName, Model model,
+      Principal principal) {
+
+    Map<String, String> errorMap = new TaskValidator().validateLastNameAndFirstName(lastName, firstName);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/findTaskByFirstAndLastName";
+    }
+
+    Collection<User> users = userDAO.findUserByLastNameAndFirstName(lastName, firstName);
+    User user = null;
+    if (users.isEmpty()) {
+      errorMap
+          .put("USER_ERROR", lastName + " " +
+              firstName + " "
+              + ErrorMessages.USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "task/findTaskByFirstAndLastName";
+    }
+    if (users.size() >= 1) {
+      Iterator<User> userIterator = users.iterator();
+      while (userIterator.hasNext()) {
+        user = userIterator.next();
+      }
+    }
+    Collection<Task> tasks = taskDAO.findTaskByUserId(user.getUserId());
+
+    model.addAttribute("taskList", tasks);
+
+    return "task/showTaskListWithUsers";
   }
 
 }

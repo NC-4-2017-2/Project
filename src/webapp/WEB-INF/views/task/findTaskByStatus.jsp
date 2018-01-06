@@ -4,6 +4,11 @@
 <head>
     <title>Status your task</title>
 </head>
+<style>
+    p {
+        color: red;
+    }
+</style>
 <body>
 <form action="/task/findTaskByStatus">
     Select task status:
@@ -13,11 +18,7 @@
     <option value="REOPENED">REOPENED</option>
     <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
 </select><br>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
+    <%@include file="../errors/errorMap.jsp" %>
     <br>
     <input type="submit" value="Find">
 </form>

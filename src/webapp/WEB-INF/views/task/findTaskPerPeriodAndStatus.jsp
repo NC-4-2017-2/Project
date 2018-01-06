@@ -4,8 +4,13 @@
 <head>
     <title>Find task by your id</title>
 </head>
+<style>
+    p {
+        color: red;
+    }
+</style>
 <body>
-<form action="/task/findTaskByUserId">
+<form action="/task/findTaskPerPeriodAndStatus">
     Select task status:
     <select name="status">
         <option value="OPENED">OPENED</option>
@@ -16,6 +21,8 @@
 
     Start date: <input type="date" name="startDate"><br>
     End date: <input type="date" name="endDate"><br>
+
+
     <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Find">
 </form>

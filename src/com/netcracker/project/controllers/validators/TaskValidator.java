@@ -64,7 +64,7 @@ public class TaskValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  public Map<String, String> validationFindTaskByLFName(Task task) {
+  public Map<String, String> validationEntityTask(Task task) {
     validateTask(task);
     return getErrorMap();
   }

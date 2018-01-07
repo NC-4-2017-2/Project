@@ -14,5 +14,6 @@
     <a href="/task/showTask/${task.taskId}">Task${task.taskId}</a>
     </br>
 </c:forEach>
+<%@include file="../errors/errorMap.jsp" %>
 </body>
 </html>

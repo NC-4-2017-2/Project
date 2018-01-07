@@ -384,6 +384,23 @@ public class TaskController {
         .findTaskByUserIdAndPriority(user.getUserId(),
             TaskPriority.valueOf(priority).getId());
 
+
+    Task task = null;
+    if (tasks.size() >= 1) {
+      Iterator<Task> taskIterator = tasks.iterator();
+      while (taskIterator.hasNext()) {
+        task = taskIterator.next();
+      }
+    }
+
+    if (tasks.isEmpty()){
+      Map<String, String> error = new TaskValidator().validationEntityTask(task);
+      if (!error.isEmpty()) {
+        model.addAttribute("errorMap", error);
+        return "task/showTaskListWithUsers";
+      }
+    }
+
     model.addAttribute("taskList", tasks);
     return "task/showTaskListWithPriority";
   }
@@ -407,6 +424,22 @@ public class TaskController {
 
     Collection<Task> tasks = taskDAO.findTaskByUserIdAndStatus(user.getUserId(),
         TaskStatus.valueOf(status).getId());
+
+    Task task = null;
+    if (tasks.size() >= 1) {
+      Iterator<Task> taskIterator = tasks.iterator();
+      while (taskIterator.hasNext()) {
+        task = taskIterator.next();
+      }
+    }
+
+    if (tasks.isEmpty()){
+      Map<String, String> error = new TaskValidator().validationEntityTask(task);
+      if (!error.isEmpty()) {
+        model.addAttribute("errorMap", error);
+        return "task/showTaskListWithUsers";
+      }
+    }
 
     model.addAttribute("taskList", tasks);
 
@@ -441,6 +474,22 @@ public class TaskController {
             TaskStatus.valueOf(status).getId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
+
+    Task task = null;
+    if (tasksPerPeriod.size() >= 1) {
+      Iterator<Task> taskIterator = tasksPerPeriod.iterator();
+      while (taskIterator.hasNext()) {
+        task = taskIterator.next();
+      }
+    }
+
+    if (tasksPerPeriod.isEmpty()){
+      Map<String, String> error = new TaskValidator().validationEntityTask(task);
+      if (!error.isEmpty()) {
+        model.addAttribute("errorMap", error);
+        return "task/showTaskListWithUsers";
+      }
+    }
 
     model.addAttribute("taskList", tasksPerPeriod);
 
@@ -487,7 +536,7 @@ public class TaskController {
     }
 
     if (tasks.isEmpty()){
-        Map<String, String> existenceError = new TaskValidator().validationFindTaskByLFName(task);
+        Map<String, String> existenceError = new TaskValidator().validationEntityTask(task);
         if (!existenceError.isEmpty()) {
           model.addAttribute("errorMap", existenceError);
           return "task/showTaskListWithUsers";

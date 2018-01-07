@@ -60,6 +60,7 @@
                         <option value="LOW">LOW</option>
                     </select></td>
                 </tr>
+                <c:if test="${taskUser.userId eq curUser.userId or curUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
                 <tr>
                     <td>Status:</td>
                     <td>
@@ -71,6 +72,7 @@
                         </select>
                     </td>
                 </tr>
+                </c:if>
                 <tr>
                     <td>Description task:</td>
                     <td><input type="text" name="description" size="70"
@@ -109,7 +111,9 @@
         <%@include file="../errors/errorMap.jsp" %>
 
         <tr>
+            <c:if test="${taskUser.userId eq curUser.userId or curUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
             <td><input type="submit" value="Update" size="40" width="40"/></td>
+            </c:if>
         </tr>
         </table>
     </form>

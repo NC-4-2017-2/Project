@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -227,6 +228,8 @@ public class TaskController {
       }
     }
 
+    Collection<Task> tasks = taskDAO.findTaskByUserId(user.getUserId());
+
     Project updationProject = projectDAO.findProjectByName(projectName);
     User currentUser = userDAO.findUserByLogin(principal.getName());
 
@@ -265,8 +268,11 @@ public class TaskController {
 
   @RequestMapping(value = "/updateTask/{taskId}", method = RequestMethod.GET)
   public String updateTaskWithGetParams(@PathVariable("taskId") BigInteger taskId,
-      Model model) {
+      Model model, Principal principal) {
     logger.info("editTaskWithGetParams method. taskId" + taskId);
+
+    String currentUserLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(currentUserLogin);
 
     Task task = taskDAO.findTaskByTaskId(taskId);
     User taskUser = userDAO.findUserByUserId(task.getUserId());
@@ -285,6 +291,7 @@ public class TaskController {
     model.addAttribute("comments", task.getComments());
     model.addAttribute("taskUser", taskUser);
     model.addAttribute("projectNamesList", projects);
+    model.addAttribute("curUser", currentUser);
 
     return "task/updateTask";
 
@@ -308,6 +315,9 @@ public class TaskController {
       return "task/showTask";
     }
 
+    String currentUserLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(currentUserLogin);
+
     Task task = taskDAO.findTaskByTaskId(validTaskId);
     User taskAuthor = userDAO.findUserByUserId(task.getAuthorId());
     User taskUser = userDAO.findUserByUserId(task.getUserId());
@@ -327,6 +337,7 @@ public class TaskController {
     model.addAttribute("taskAuthor", taskAuthor);
     model.addAttribute("taskUser", taskUser);
     model.addAttribute("project", project);
+    model.addAttribute("curUser", currentUser);
 
     return "task/showTask";
   }
@@ -346,6 +357,7 @@ public class TaskController {
     return "task/findTaskPerPeriodAndStatus";
   }
 
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "findTaskByFirstAndLastName", method = RequestMethod.GET)
   public String findTaskByFirstAndLastName() {
     return "task/findTaskByFirstAndLastName";
@@ -434,6 +446,7 @@ public class TaskController {
     return "task/showTaskListPerPeriod";
   }
 
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName"}, method = RequestMethod.GET)
   public String showTaskListWithUsers(
       @RequestParam("lastName") String lastName,

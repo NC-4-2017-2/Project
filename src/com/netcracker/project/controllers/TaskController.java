@@ -45,6 +45,7 @@ public class TaskController {
   @Autowired
   private ProjectDAO projectDAO;
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/createTask", method = RequestMethod.GET)
   public String createTaskWithUsers(Model model) {
     logger.info("createTask with get params.: ");
@@ -53,6 +54,7 @@ public class TaskController {
     return "task/createTask";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/createTask", method = RequestMethod.POST)
   public String createTask(
       @RequestParam("name") String name,
@@ -228,7 +230,6 @@ public class TaskController {
       }
     }
 
-    Collection<Task> tasks = taskDAO.findTaskByUserId(user.getUserId());
 
     Project updationProject = projectDAO.findProjectByName(projectName);
     User currentUser = userDAO.findUserByLogin(principal.getName());
@@ -357,7 +358,7 @@ public class TaskController {
     return "task/findTaskPerPeriodAndStatus";
   }
 
-  @Secured({"ROLE_PM", "ROLE_ADMIN"})
+
   @RequestMapping(value = "findTaskByFirstAndLastName", method = RequestMethod.GET)
   public String findTaskByFirstAndLastName() {
     return "task/findTaskByFirstAndLastName";
@@ -446,7 +447,6 @@ public class TaskController {
     return "task/showTaskListPerPeriod";
   }
 
-  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName"}, method = RequestMethod.GET)
   public String showTaskListWithUsers(
       @RequestParam("lastName") String lastName,
@@ -460,15 +460,16 @@ public class TaskController {
     }
 
     Collection<User> users = userDAO.findUserByLastNameAndFirstName(lastName, firstName);
-    User user = null;
+
     if (users.isEmpty()) {
-      errorMap
-          .put("USER_ERROR", lastName + " " +
+      errorMap.put("USER_ERROR", lastName + " " +
               firstName + " "
               + ErrorMessages.USER_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "task/findTaskByFirstAndLastName";
     }
+
+    User user = null;
     if (users.size() >= 1) {
       Iterator<User> userIterator = users.iterator();
       while (userIterator.hasNext()) {
@@ -476,6 +477,22 @@ public class TaskController {
       }
     }
     Collection<Task> tasks = taskDAO.findTaskByUserId(user.getUserId());
+
+    Task task = null;
+    if (tasks.size() >= 1) {
+      Iterator<Task> taskIterator = tasks.iterator();
+      while (taskIterator.hasNext()) {
+        task = taskIterator.next();
+      }
+    }
+
+    if (tasks.isEmpty()){
+        Map<String, String> existenceError = new TaskValidator().validationFindTaskByLFName(task);
+        if (!existenceError.isEmpty()) {
+          model.addAttribute("errorMap", existenceError);
+          return "task/showTaskListWithUsers";
+        }
+    }
 
     model.addAttribute("taskList", tasks);
 

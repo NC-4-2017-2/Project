@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
 import com.netcracker.project.model.enums.TaskType;
@@ -63,9 +64,20 @@ public class TaskValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validationFindTaskByLFName(Task task) {
+    validateTask(task);
+    return getErrorMap();
+  }
+
   public Map<String, String> validateBetweenDates(String startDate, String endDate) {
     validateStartEndDate(startDate, endDate);
     return getErrorMap();
+  }
+
+  public void validateTask(Task task){
+    if (task == null){
+      setErrorToMap("existence_error", "You haven't task!");
+    }
   }
 
   public Map<String, String> validateInputId(String id) {
@@ -167,13 +179,6 @@ public class TaskValidator extends AbstractValidator {
   }
 
 
-  private boolean checkPlannedEndDate(String plannedEndDate){
-    if (!checkDate(plannedEndDate)){
-      setErrorToMap("planned_end_date_error", "Wrong planned end date format");
-      return false;
-    }
-    return true;
-  }
 
   private boolean taskStatusCheck(String taskStatus){
     for (TaskStatus statuses: TaskStatus.values()){

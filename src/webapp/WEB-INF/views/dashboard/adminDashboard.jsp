@@ -13,64 +13,26 @@
 <%@include file="../errors/errorMap.jsp" %>
 
 <div class="col-sm-9">
-    <h4>Working hours</h4>
-    <div class="row">
-        <div class="well col-sm-4">
-            <h4>Table working hours</h4>
-            <%@include file="../workingDay/createWorkingDayForm.jsp" %>
-        </div>
-
-        <div class="well col-sm-4">
-            <h4>Find working hours by status</h4>
-            <%@include file="../workingDay/findPMWorkingDayForm.jsp" %>
-        </div>
+    <div class="well">
+        <h4>Table working hours</h4>
+        <%@include file="../workingDay/createWorkingDayForm.jsp" %>
     </div>
     <div class="row">
         <div class="col-sm-3">
-            <h4>Vacations</h4>
             <div class="well">
                 <h4>Create vacation on me</h4>
                 <%@include file="../vacation/createVacationForm.jsp" %>
             </div>
         </div>
-
-        <%--<div class="col-sm-3">--%>
-            <%--<h4>Projects</h4>--%>
-            <%--<div class="well">--%>
-                <%--<h4>Current project</h4>--%>
-                <%--<%@include file="../project/showProjectForm.jsp" %>--%>
-
-                <%--<form action="/project/showProject/${project.projectId}">--%>
-                    <%--<button type="submit">More info</button>--%>
-                <%--</form>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-
         <div class="col-sm-3">
-            <h4>Business trips</h4>
             <div class="well">
-                <h4>Create business trip</h4>
-                <form action="/businessTrip/createBusinessTrip">
-                    <button type="submit">Create</button>
-                </form>
-                <h4>Show trips by status</h4>
-                <%@include file="../businessTrip/findPMTripForm.jsp" %>
+                <h4>Create new user in system</h4>
             </div>
         </div>
         <div class="col-sm-3">
-            <h4>Projects</h4>
             <div class="well">
-                <h4>Find projects by period</h4>
-                <%@include file="../project/findProjectByStartDateForm.jsp" %>
-
-                <h4>Current project</h4>
-                <%@include file="../project/showProjectForm.jsp" %>
-
-                <form action="/project/showProject/${project.projectId}">
-                    <button type="submit">More info</button>
-                </form>
-
-            </div>
+                <h4>Create project</h4>
+                <%@include file="../project/createProjectDashboardForm.jsp" %>
             </div>
         </div>
         <div class="col-sm-3">

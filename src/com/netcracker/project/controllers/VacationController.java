@@ -9,7 +9,6 @@ import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.Vacation;
 import com.netcracker.project.model.enums.JobTitle;
-import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
@@ -56,21 +55,17 @@ public class VacationController {
       Principal principal,
       Model model) {
     logger.info("Entering createVacationPost()");
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+
     Map<String, String> errorMap = new HashMap<>();
     VacationValidator validator = new VacationValidator();
-    errorMap = validator.validateDates(startDate, endDate);
+    errorMap = validator
+        .validateCreateVacation(startDate, endDate, currentUser);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "vacation/createVacation";
     }
-    User currentUser = userDAO.findUserByLogin(principal.getName());
-    if (currentUser.getProjectStatus().name()
-        .equals(ProjectStatus.TRANSIT.name())) {
-      errorMap
-          .put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
-      model.addAttribute("errorMap", errorMap);
-      return "vacation/createVacation";
-    }
+
     Status pmStatus = null;
     Status lmStatus = null;
     BigInteger projectId = null;
@@ -136,13 +131,8 @@ public class VacationController {
       Model model) {
     logger.info("Entering viewUserVacation()");
     VacationValidator validator = new VacationValidator();
-    Map<String, String> errorMap = validator
-        .validateVacationStatus(pmStatus);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "vacation/findVacationByStatus";
-    }
-    errorMap = validator.validateVacationStatus(lmStatus);
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validatePmAndLmStatus(pmStatus, lmStatus);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "vacation/findVacationByStatus";
@@ -165,7 +155,9 @@ public class VacationController {
       Model model) {
     logger.info("Entering showVacation()");
     VacationValidator validator = new VacationValidator();
-    Map<String, String> errorMap = validator
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator
         .validateVacationId(vacationId);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
@@ -174,7 +166,6 @@ public class VacationController {
     BigInteger validVacationId = new BigInteger(vacationId);
 
     Vacation vacation = vacationDAO.findVacationByVacationId(validVacationId);
-    User currentUser = userDAO.findUserByLogin(principal.getName());
 
     if (!currentUser.getJobTitle().name()
         .equals(JobTitle.PROJECT_MANAGER.name())
@@ -237,13 +228,8 @@ public class VacationController {
       Model model) {
     logger.info("Entering updateAuthorVacationPost()");
     VacationValidator validator = new VacationValidator();
-    Map<String, String> errorMap = validator
-        .validateVacationId(vacationId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "vacation/updateAuthorVacation";
-    }
-    errorMap = validator.validateDates(startDate, endDate);
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateUpdateAuthor(vacationId, startDate, endDate);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "vacation/updateAuthorVacation";
@@ -257,6 +243,10 @@ public class VacationController {
       model.addAttribute("errorMap", errorMap);
       return "vacation/updateAuthorVacation";
     }
+    vacationDAO
+        .updatePmStatus(validVacationId, Status.WAITING_FOR_APPROVAL.getId());
+    vacationDAO
+        .updateLmStatus(validVacationId, Status.WAITING_FOR_APPROVAL.getId());
     vacationDAO.updateVacationStartAndEndDate(validVacationId,
         converter.convertStringToDateFromJSP(startDate),
         converter.convertStringToDateFromJSP(endDate));
@@ -272,19 +262,14 @@ public class VacationController {
       Model model) {
     logger.info("Entering updatePMStatus()");
     VacationValidator validator = new VacationValidator();
-    Map<String, String> errorMap = validator
-        .validateVacationId(vacationId);
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateVacationIdAndStatus(vacationId, status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "vacation/showVacation";
     }
-    BigInteger validVacationId = new BigInteger(vacationId);
 
-    errorMap = validator.validateVacationStatus(status);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "vacation/showVacation";
-    }
+    BigInteger validVacationId = new BigInteger(vacationId);
     Integer vacationExistence = vacationDAO
         .findVacationIfExist(validVacationId);
     if (vacationExistence != 1) {
@@ -352,26 +337,21 @@ public class VacationController {
 
     User currentUser = userDAO.findUserByLogin(principal.getName());
     Collection<Vacation> vacations = null;
-
     if (currentUser.getJobTitle().name()
         .equals(JobTitle.PROJECT_MANAGER.name())) {
       vacations = vacationDAO
           .findVacationByPMIdAndPMStatus(currentUser.getUserId(),
               Status.valueOf(status).getId());
     }
-
     if (currentUser.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
       vacations = vacationDAO
           .findVacationByLMIdAndLMStatus(currentUser.getUserId(),
               Status.valueOf(status).getId());
     }
-
     if (vacations != null) {
       model.addAttribute("vacationList", vacations);
       return "vacation/viewVacation";
     }
-
     return "vacation/viewVacation";
   }
-
 }

@@ -22,6 +22,18 @@
         <td><input type="text" name="firstName">
         </td>
     </tr>
+    <tr>
+            <td>Status:</td>
+        <td>
+          <select name="status">
+            <option value="OPENED">OPENED</option>
+            <option value="CLOSED">CLOSED</option>
+            <option value="REOPENED">REOPENED</option>
+            <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
+          </select>
+       </td>
+    </tr>
+
     </table>
     <%@include file="../errors/errorMap.jsp" %>
     <br>

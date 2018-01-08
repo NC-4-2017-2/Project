@@ -348,10 +348,7 @@ public class TaskController {
     return "task/findTaskByPriority";
   }
 
-  @RequestMapping(value = "findTaskByStatus", method = RequestMethod.GET)
-  public String findTaskByStatus() {
-    return "task/findTaskByStatus";
-  }
+
 
   @RequestMapping(value = "findTaskPerPeriodAndStatus", method = RequestMethod.GET)
   public String findTaskPerPeriodAndStatus() {
@@ -364,6 +361,12 @@ public class TaskController {
     return "task/findTaskByFirstAndLastName";
   }
 
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "findPMTask", method = RequestMethod.GET)
+  public String findPMTask() {
+    return "task/findPMTask";
+  }
+
 
   @RequestMapping(value = "findTaskByPriority", params = "priority", method = RequestMethod.GET)
   public String showTaskListWithPriority(
@@ -374,7 +377,7 @@ public class TaskController {
         .validationFindTaskByPriority(priority);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "task/findTaskByStatus";
+      return "task/findPMTask";
     }
 
     String loginUser = principal.getName();
@@ -397,53 +400,12 @@ public class TaskController {
       Map<String, String> error = new TaskValidator().validationEntityTask(task);
       if (!error.isEmpty()) {
         model.addAttribute("errorMap", error);
-        return "task/showTaskListWithUsers";
+        return "task/showTaskListWithPriority";
       }
     }
 
     model.addAttribute("taskList", tasks);
     return "task/showTaskListWithPriority";
-  }
-
-
-  @RequestMapping(value = "findTaskByStatus", params = "status", method = RequestMethod.GET)
-
-  public String showTaskListWithStatus(
-      @RequestParam(value = "status") String status, Model model,
-      Principal principal) {
-
-    Map<String, String> errorMap = new TaskValidator()
-        .validationFindTaskByStatus(status);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "task/showTaskListWithStatus";
-    }
-
-    String loginUser = principal.getName();
-    User user = userDAO.findUserByLogin(loginUser);
-
-    Collection<Task> tasks = taskDAO.findTaskByUserIdAndStatus(user.getUserId(),
-        TaskStatus.valueOf(status).getId());
-
-    Task task = null;
-    if (tasks.size() >= 1) {
-      Iterator<Task> taskIterator = tasks.iterator();
-      while (taskIterator.hasNext()) {
-        task = taskIterator.next();
-      }
-    }
-
-    if (tasks.isEmpty()){
-      Map<String, String> error = new TaskValidator().validationEntityTask(task);
-      if (!error.isEmpty()) {
-        model.addAttribute("errorMap", error);
-        return "task/showTaskListWithUsers";
-      }
-    }
-
-    model.addAttribute("taskList", tasks);
-
-    return "task/showTaskListWithStatus";
   }
 
 
@@ -487,7 +449,7 @@ public class TaskController {
       Map<String, String> error = new TaskValidator().validationEntityTask(task);
       if (!error.isEmpty()) {
         model.addAttribute("errorMap", error);
-        return "task/showTaskListWithUsers";
+        return "task/showTaskListPerPeriod";
       }
     }
 
@@ -496,10 +458,11 @@ public class TaskController {
     return "task/showTaskListPerPeriod";
   }
 
-  @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName"}, method = RequestMethod.GET)
+  @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName", "status"}, method = RequestMethod.GET)
   public String showTaskListWithUsers(
       @RequestParam("lastName") String lastName,
-      @RequestParam("firstName") String firstName, Model model,
+      @RequestParam("firstName") String firstName,
+      @RequestParam("status") String status, Model model,
       Principal principal) {
 
     Map<String, String> errorMap = new TaskValidator().validateLastNameAndFirstName(lastName, firstName);
@@ -525,7 +488,14 @@ public class TaskController {
         user = userIterator.next();
       }
     }
-    Collection<Task> tasks = taskDAO.findTaskByUserId(user.getUserId());
+    Collection<Task> tasks = taskDAO.findTaskByUserIdAndStatus(user.getUserId(), TaskStatus.valueOf(status).getId());
+
+    errorMap = new TaskValidator()
+        .validationFindTaskByStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/showTaskListWithUsers";
+    }
 
     Task task = null;
     if (tasks.size() >= 1) {
@@ -546,6 +516,46 @@ public class TaskController {
     model.addAttribute("taskList", tasks);
 
     return "task/showTaskListWithUsers";
+  }
+
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "findPMTask", params = "status", method = RequestMethod.GET)
+  public String showTaskForPM(
+      @RequestParam(value = "status") String status, Model model,
+      Principal principal) {
+
+    Map<String, String> errorMap = new TaskValidator().validationFindTaskByStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/showPMTaskList";
+    }
+
+    String loginUser = principal.getName();
+    User user = userDAO.findUserByLogin(loginUser);
+
+    Collection<Task> tasks = taskDAO.findTaskByUserIdAndStatus(user.getUserId(),
+        TaskStatus.valueOf(status).getId());
+
+    Task task = null;
+    if (tasks.size() >= 1) {
+      Iterator<Task> taskIterator = tasks.iterator();
+      while (taskIterator.hasNext()) {
+        task = taskIterator.next();
+      }
+    }
+
+    if (tasks.isEmpty()){
+      Map<String, String> error = new TaskValidator().validationEntityTask(task);
+      if (!error.isEmpty()) {
+        model.addAttribute("errorMap", error);
+        return "task/showPMTaskList";
+      }
+    }
+
+    model.addAttribute("taskList", tasks);
+
+    return "task/showPMTaskList";
   }
 
 }

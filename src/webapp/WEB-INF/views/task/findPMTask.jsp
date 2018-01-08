@@ -10,7 +10,8 @@
     }
 </style>
 <body>
-<form action="/task/findTaskByStatus">
+<form action="/task/findPMTask">
+
     Select task status:
     <select name="status">
     <option value="OPENED">OPENED</option>

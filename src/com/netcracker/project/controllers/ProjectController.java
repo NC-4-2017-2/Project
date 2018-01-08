@@ -65,15 +65,9 @@ public class ProjectController {
       Model model) {
     logger.info("Entering createSprints()");
     ProjectValidator validator = new ProjectValidator();
-
+    validator.validateSprintsAndWorkers(sprintCount, workersCount);
     Map<String, String> errorMap = validator
-        .validateInteger(sprintCount);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/createProject";
-    }
-
-    errorMap = validator.validateInteger(workersCount);
+        .validateSprintsAndWorkers(sprintCount, workersCount);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "project/createProject";
@@ -110,21 +104,13 @@ public class ProjectController {
 
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = new HashMap<>();
-
     Integer existenceProject = projectDAO
         .findProjectByNameIfExist(projectName);
-    if (existenceProject >= 1) {
-      model.addAttribute("countSprints", countSprints);
-      model.addAttribute("countWorkers", countWorkers);
-      errorMap.put("PROJECT_EXIST_ERROR",
-          projectName + " " + ErrorMessages.PROJECT_EXIST_ERROR);
-      model.addAttribute("pmOnTransitList", pmOnTransit);
-      model.addAttribute("errorMap", errorMap);
 
-      return "project/createProjectForm";
-    }
+    errorMap = validator
+        .validateCreateProject(existenceProject, countSprints, countWorkers,
+            projectStartDate, projectEndDate, pmId);
 
-    errorMap = validator.validateInteger(countSprints);
     if (!errorMap.isEmpty()) {
       model.addAttribute("pmOnTransitList", pmOnTransit);
       model.addAttribute("countSprints", countSprints);
@@ -134,30 +120,9 @@ public class ProjectController {
     }
 
     Integer countSprintsInteger = new Integer(countSprints);
-
-    errorMap = validator.validateInteger(countWorkers);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("countSprints", countSprints);
-      model.addAttribute("countWorkers", countWorkers);
-      model.addAttribute("pmOnTransitList", pmOnTransit);
-      model.addAttribute("errorMap", errorMap);
-      return "project/createProjectForm";
-    }
-
     Integer countWorkersInteger = new Integer(countWorkers);
 
-    errorMap = validator
-        .validateDates(projectStartDate, projectEndDate);
     Collection<Sprint> sprints = new ArrayList<>();
-
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("pmOnTransitList", pmOnTransit);
-      model.addAttribute("errorMap", errorMap);
-      model.addAttribute("countSprints", countSprints);
-      model.addAttribute("countWorkers", countWorkers);
-      return "project/createProjectForm";
-    }
-
     Date startDate = converter.convertStringToDateFromJSP(projectStartDate);
     Date endDate = converter.convertStringToDateFromJSP(projectEndDate);
 
@@ -208,6 +173,7 @@ public class ProjectController {
         model.addAttribute("pmOnTransitList", pmOnTransit);
         return "project/createProjectForm";
       }
+
       if (users.size() >= 1) {
         Iterator<User> iterator = users.iterator();
         while (iterator.hasNext()) {
@@ -251,25 +217,33 @@ public class ProjectController {
           .build());
     }
 
-    BigInteger pmIdBigInteger = new BigInteger(pmId);
-
+    BigInteger validPMId = new BigInteger(pmId);
     Project project = new ProjectBuilder()
         .name(projectName)
         .startDate(startDate)
         .endDate(endDate)
-        .projectManagerId(pmIdBigInteger)
+        .projectManagerId(validPMId)
         .projectStatus(OCStatus.OPENED)
         .build();
-
     projectDAO.createProject(project, sprints, workPeriods);
-    userDAO.updateProjectStatus(pmIdBigInteger, ProjectStatus.WORKING.getId());
+
     Project currentProject = projectDAO.findProjectByName(projectName);
+    WorkPeriod pmWorkPeriod = new WorkPeriodBuilder()
+        .startWorkDate(startDate)
+        .endWorkDate(endDate)
+        .userId(validPMId)
+        .workPeriodStatus(WorkPeriodStatus.WORKING)
+        .build();
+    userDAO.createWorkPeriod(pmWorkPeriod, currentProject.getProjectId());
+    userDAO.updateProjectStatus(pmWorkPeriod.getUserId(),
+        ProjectStatus.WORKING.getId());
+
+    userDAO.updateProjectStatus(validPMId, ProjectStatus.WORKING.getId());
     for (WorkPeriod period : workPeriods) {
       userDAO.createWorkPeriod(period, currentProject.getProjectId());
       userDAO.updateProjectStatus(period.getUserId(),
           ProjectStatus.WORKING.getId());
     }
-
     return "responseStatus/success";
   }
 
@@ -290,6 +264,7 @@ public class ProjectController {
     logger.info("Entering findProjectPerPeriodDate()");
     Map<String, String> errorMap = new HashMap<>();
     ProjectValidator validator = new ProjectValidator();
+
     errorMap = validator.validateDates(startDate, endDate);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
@@ -359,39 +334,30 @@ public class ProjectController {
     logger.info("Entering deleteUserFromProject()");
     Map<String, String> errorMap = new HashMap<>();
     Map<String, String> existenceError = new HashMap<>();
-    ProjectValidator projectValidator = new ProjectValidator();
-    errorMap = projectValidator.validateInputId(projectId);
+    ProjectValidator validator = new ProjectValidator();
+    errorMap = validator.validateDeleteUser(projectId, userId);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "project/deleteUserFromProject";
     }
-    BigInteger bigIntegerProjectId = new BigInteger(projectId);
 
+    BigInteger validProjectId = new BigInteger(projectId);
+    BigInteger validUserId = new BigInteger(userId);
     Integer projectExistence = projectDAO
-        .findIfProjectExists(bigIntegerProjectId);
-    projectValidator.validateExistence(projectExistence);
-    if (!existenceError.isEmpty()) {
+        .findIfProjectExists(validProjectId);
+    Integer userExistence = userDAO.findIfSEExists(validUserId);
+
+    errorMap = validator
+        .validateProjectAndUserExistence(projectExistence, userExistence);
+
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", existenceError);
       return "project/deleteUserFromProject";
     }
 
     UserValidator userValidator = new UserValidator();
-    errorMap = userValidator.validateInputId(userId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/deleteUserFromProject";
-    }
-
-    BigInteger bigIntegerUserId = new BigInteger(userId);
-    Integer userExistence = userDAO.findIfSEExists(bigIntegerUserId);
-    existenceError = userValidator
-        .validateUserExistence(userExistence);
-    if (!existenceError.isEmpty()) {
-      model.addAttribute("errorMap", existenceError);
-      return "project/deleteUserFromProject";
-    }
     Integer workPeriodExistence = userDAO
-        .findWorkingWorkPeriodIfExist(bigIntegerUserId, bigIntegerProjectId);
+        .findWorkingWorkPeriodIfExist(validUserId, validProjectId);
     existenceError = userValidator
         .validateWorkPeriodExistence(workPeriodExistence);
     if (!existenceError.isEmpty()) {
@@ -399,17 +365,17 @@ public class ProjectController {
       return "project/deleteUserFromProject";
     }
 
-    projectDAO.deleteUserByUserId(bigIntegerUserId, bigIntegerProjectId);
+    projectDAO.deleteUserByUserId(validUserId, validProjectId);
     userDAO
-        .updateProjectStatus(bigIntegerUserId, ProjectStatus.TRANSIT.getId());
+        .updateProjectStatus(validUserId, ProjectStatus.TRANSIT.getId());
     WorkPeriod workPeriod = userDAO
-        .findWorkingWorkPeriodByUserIdAndProjectId(bigIntegerUserId,
-            bigIntegerProjectId);
+        .findWorkingWorkPeriodByUserIdAndProjectId(validUserId,
+            validProjectId);
     userDAO.updateWorkingPeriodStatusByUserId(workPeriod.getUserId(),
         workPeriod.getProjectId(), WorkPeriodStatus.FIRED.getId());
     Collection<User> userList = userDAO
-        .findUserByProjectId(bigIntegerProjectId);
-    model.addAttribute("projectId", bigIntegerProjectId);
+        .findUserByProjectId(validProjectId);
+    model.addAttribute("projectId", validProjectId);
     model.addAttribute("userList", userList);
     return "responseStatus/success";
   }
@@ -442,20 +408,10 @@ public class ProjectController {
       Model model) {
     logger.info("Entering addUserToProject()");
     ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = new HashMap<>();
 
-    Map<String, String> errorMap = validator.validateInputId(projectId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/addUser";
-    }
-
-    errorMap = validator.validateUserName(firstName, lastName);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/addUser";
-    }
-
-    errorMap = validator.validateDates(startDate, endDate);
+    errorMap = validator
+        .validateAddingUser(projectId, firstName, lastName, startDate, endDate);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "project/addUser";
@@ -465,6 +421,7 @@ public class ProjectController {
         .findUserByLastNameAndFirstName(lastName, firstName);
     if (users.isEmpty()) {
       errorMap.put("USER_ERROR", ErrorMessages.USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
       return "project/addUser";
     }
     if (users.size() > 1) {
@@ -484,45 +441,47 @@ public class ProjectController {
 
     BigInteger validProjectId = new BigInteger(projectId);
 
-    if (user.getProjectStatus().name().equals(ProjectStatus.WORKING.name())) {
-      errorMap.put("USER_PROJECT_STATUS_WORKING_ERROR",
-          user.getLastName() + " " + user.getFirstName() + " "
-              + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
-      model.addAttribute("errorMap", errorMap);
-      return "project/addUser";
-    }
-
-    if (user.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
-      Integer lmExistence = userDAO.findIfLMExists(validProjectId);
-      if (lmExistence > 0) {
-        errorMap.put("LM_EXIST_ERROR", ErrorMessages.LM_EXIST_ERROR);
+    if (user != null) {
+      if (user.getProjectStatus().name().equals(ProjectStatus.WORKING.name())) {
+        errorMap.put("USER_PROJECT_STATUS_WORKING_ERROR",
+            user.getLastName() + " " + user.getFirstName() + " "
+                + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
         model.addAttribute("errorMap", errorMap);
         return "project/addUser";
       }
-    }
 
-    if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
-      Integer pmExistence = userDAO.findIfLMExists(validProjectId);
-      if (pmExistence > 0) {
-        errorMap.put("PM_EXIST_ERROR", ErrorMessages.PM_EXIST_ERROR);
-        model.addAttribute("errorMap", errorMap);
-        return "project/addUser";
+      if (user.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
+        Integer lmExistence = userDAO.findIfLMExists(validProjectId);
+        if (lmExistence > 0) {
+          errorMap.put("LM_EXIST_ERROR", ErrorMessages.LM_EXIST_ERROR);
+          model.addAttribute("errorMap", errorMap);
+          return "project/addUser";
+        }
       }
+
+      if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+        Integer pmExistence = userDAO.findIfLMExists(validProjectId);
+        if (pmExistence > 0) {
+          errorMap.put("PM_EXIST_ERROR", ErrorMessages.PM_EXIST_ERROR);
+          model.addAttribute("errorMap", errorMap);
+          return "project/addUser";
+        }
+      }
+
+      projectDAO.addUser(validProjectId, user.getUserId());
+      userDAO
+          .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());
+
+      WorkPeriod workPeriod = new WorkPeriodBuilder()
+          .userId(user.getUserId())
+          .projectId(validProjectId)
+          .startWorkDate(converter.convertStringToDateFromJSP(startDate))
+          .endWorkDate(converter.convertStringToDateFromJSP(endDate))
+          .workPeriodStatus(WorkPeriodStatus.WORKING)
+          .build();
+
+      userDAO.createWorkPeriod(workPeriod, validProjectId);
     }
-
-    projectDAO.addUser(validProjectId, user.getUserId());
-    userDAO
-        .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());
-
-    WorkPeriod workPeriod = new WorkPeriodBuilder()
-        .userId(user.getUserId())
-        .projectId(validProjectId)
-        .startWorkDate(converter.convertStringToDateFromJSP(startDate))
-        .endWorkDate(converter.convertStringToDateFromJSP(endDate))
-        .workPeriodStatus(WorkPeriodStatus.WORKING)
-        .build();
-
-    userDAO.createWorkPeriod(workPeriod, validProjectId);
     return "responseStatus/success";
   }
 
@@ -535,24 +494,15 @@ public class ProjectController {
       @RequestParam("user") String userId,
       Model model) {
     ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = new HashMap<>();
 
-    Map<String, String> errorMap = validator.validateInputId(projectId);
+    errorMap = validator
+        .validateAddingUserFromDuplicate(projectId, startDate, endDate, userId);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "project/addUser";
     }
 
-    errorMap = validator.validateDates(startDate, endDate);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/addUser";
-    }
-
-    errorMap = validator.validateInputId(userId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/addUser";
-    }
     BigInteger validUserId = new BigInteger(userId);
     BigInteger validProjectId = new BigInteger(projectId);
     User user = userDAO.findUserByUserId(validUserId);
@@ -633,7 +583,18 @@ public class ProjectController {
       userDAO.updateWorkingPeriodStatusByUserId(user.getUserId(),
           workPeriod.getProjectId(), WorkPeriodStatus.FIRED.getId());
     }
-
+    Project project = projectDAO
+        .findProjectByProjectId(validProjectId);
+    BigInteger projectManagerId = project.getProjectManagerId();
+//    projectDAO.deleteUserByUserId(projectManagerId, validProjectId);
+    userDAO
+        .updateProjectStatus(projectManagerId, ProjectStatus.TRANSIT.getId());
+    WorkPeriod pMWorkPeriod = userDAO
+        .findWorkingWorkPeriodByUserIdAndProjectId(projectManagerId,
+            validProjectId);
+    userDAO.updateWorkingPeriodStatusByUserId(projectManagerId,
+        pMWorkPeriod.getProjectId(),
+        WorkPeriodStatus.FIRED.getId());
     projectDAO.updateStatus(validProjectId, OCStatus.CLOSED);
     Date date = new Date();
     projectDAO.updateEndDate(validProjectId, date);

@@ -10,7 +10,8 @@
     <title>Create project form</title>
 </head>
 <body>
-<form action="/project/createProject/${countSprints}/${countWorkers}" method="post">
+<form action="/project/createProject/${countSprints}/${countWorkers}"
+      method="post">
     <table border="0">
         <tr>
             <th>
@@ -55,96 +56,100 @@
         </tr>
     </table>
     <table border="0">
-        <tr>
-            <th>
-                Sprints
-            </th>
-        </tr>
-        <c:forEach begin="1" end="${countSprints}" varStatus="sprint">
+        <c:if test="${countSprints > 0}">
             <tr>
-                <td>
-                    Sprint ${sprint.count}
-                </td>
+                <th>
+                    Sprints
+                </th>
             </tr>
-            <tr>
-                <td>
-                    Sprint name:
-                </td>
-                <td>
-                    <input type="text"
-                           name="sprintName${sprint.count - 1}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Start date:
-                </td>
-                <td>
-                    <input type="date"
-                           name="startDate${sprint.count - 1}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    End date:
-                </td>
-                <td>
-                    <input type="date"
-                           name="planedEndDate${sprint.count - 1}">
-                </td>
-            </tr>
-            <br><br>
-        </c:forEach>
+            <c:forEach begin="1" end="${countSprints}" varStatus="sprint">
+                <tr>
+                    <td>
+                        Sprint ${sprint.count}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Sprint name:
+                    </td>
+                    <td>
+                        <input type="text"
+                               name="sprintName${sprint.count - 1}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Start date:
+                    </td>
+                    <td>
+                        <input type="date"
+                               name="startDate${sprint.count - 1}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        End date:
+                    </td>
+                    <td>
+                        <input type="date"
+                               name="planedEndDate${sprint.count - 1}">
+                    </td>
+                </tr>
+                <br><br>
+            </c:forEach>
+        </c:if>
     </table>
     <table border="0">
-        <tr>
-            <th>
-                Workers
-            </th>
-        </tr>
-        <c:forEach begin="1" end="${countWorkers}" varStatus="worker">
+        <c:if test="${countWorkers > 0}">
             <tr>
-                <td>
-                    Worker ${worker.count}
-                </td>
+                <th>
+                    Workers
+                </th>
             </tr>
-            <tr>
-                <td>
-                    User first name:
-                </td>
-                <td>
-                    <input type="text"
-                           name="userFirstName${worker.count - 1}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    User last name:
-                </td>
-                <td>
-                    <input type="text"
-                           name="userLastName${worker.count - 1}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Start date:
-                </td>
-                <td>
-                    <input type="date"
-                           name="startDate${worker.count - 1}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    End date:
-                </td>
-                <td>
-                    <input type="date" name="endDate${worker.count - 1}">
-                </td>
-            </tr>
-            <br><br>
-        </c:forEach>
+            <c:forEach begin="1" end="${countWorkers}" varStatus="worker">
+                <tr>
+                    <td>
+                        Worker ${worker.count}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        User first name:
+                    </td>
+                    <td>
+                        <input type="text"
+                               name="userFirstName${worker.count - 1}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        User last name:
+                    </td>
+                    <td>
+                        <input type="text"
+                               name="userLastName${worker.count - 1}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Start date:
+                    </td>
+                    <td>
+                        <input type="date"
+                               name="startDate${worker.count - 1}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        End date:
+                    </td>
+                    <td>
+                        <input type="date" name="endDate${worker.count - 1}">
+                    </td>
+                </tr>
+                <br><br>
+            </c:forEach>
+        </c:if>
     </table>
     <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Create"/></td>

@@ -33,10 +33,12 @@
             <td>${user.jobTitle.name()}</td>
         </tr>
         <tr>
-            <form action="/project/deleteUserFromProject/project/${projectId}/user/${user.userId}"
-                  method="post">
-                <button type="submit">Delete</button>
-            </form>
+            <td>
+                <form action="/project/deleteUserFromProject/project/${projectId}/user/${user.userId}"
+                      method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>

@@ -120,7 +120,7 @@
 <%@include file="../errors/errorMap.jsp" %>
 
 <div class="col-sm-9">
-    <div class="well">
+    <div class="well col-sm-4">
         <h4>Table working hours</h4>
         <%@include file="../workingDay/createWorkingDayForm.jsp" %>
     </div>

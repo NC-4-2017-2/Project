@@ -61,9 +61,12 @@ public class DashboardController {
     if (request.isUserInRole("ROLE_ADMIN")) {
       return "dashboard/adminDashboard";
     }
-    if(currentUser.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
-      if(!currentUser.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
-        BigInteger projectId = projectDAO.findProjectIdByPMLogin(principal.getName());
+    if (currentUser.getJobTitle().name()
+        .equals(JobTitle.PROJECT_MANAGER.name())) {
+      if (!currentUser.getProjectStatus().name()
+          .equals(ProjectStatus.TRANSIT.name())) {
+        BigInteger projectId = projectDAO
+            .findProjectIdByPMLogin(principal.getName());
         Project pmCurrentProject = projectDAO.findProjectByProjectId(projectId);
         model.addAttribute("project", pmCurrentProject);
       }

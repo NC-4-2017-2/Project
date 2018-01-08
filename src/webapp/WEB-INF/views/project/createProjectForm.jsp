@@ -114,20 +114,20 @@
                 </tr>
                 <tr>
                     <td>
-                        User first name:
-                    </td>
-                    <td>
-                        <input type="text"
-                               name="userFirstName${worker.count - 1}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
                         User last name:
                     </td>
                     <td>
                         <input type="text"
                                name="userLastName${worker.count - 1}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        User first name:
+                    </td>
+                    <td>
+                        <input type="text"
+                               name="userFirstName${worker.count - 1}">
                     </td>
                 </tr>
                 <tr>

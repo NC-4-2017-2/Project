@@ -12,39 +12,41 @@
 <body>
 <table border="0">
     <tr>
-        <td>Name: </td>
+        <td>Name:</td>
         <td>${project.name}</td>
     </tr>
     <tr>
-        <td>Start date: </td>
+        <td>Start date:</td>
         <td>${project.startDate}</td>
     </tr>
     <tr>
-        <td>End date: </td>
+        <td>End date:</td>
         <td>${project.endDate}</td>
     </tr>
     <tr>
-        <td>PM Id: </td>
-        <td>${project.projectManagerId}</td>
+        <td>PM:</td>
+        <td>${projectManager.lastName} ${projectManager.firstName}</td>
     </tr>
     <tr>
-        <td>Project status: </td>
+        <td>Project status:</td>
         <td>${project.projectStatus}</td>
     </tr>
 </table>
 <%@include file="../errors/errorMap.jsp" %>
 
-<form action="/project/userToAdd/${project.projectId}" >
-    <button type="submit">Add users</button>
-</form>
-<form action="/project/showProjectUsersToDelete/${project.projectId}" >
-    <button type="submit">Delete users</button>
-</form>
-<form action="/project/closeProject/${project.projectId}" method="post">
-    <button type="submit">Close project</button>
-</form>
-<form action="/project/viewSprints/${project.projectId}">
-    <button type="submit">Show sprint list</button>
-</form>
+<c:if test="${currentUser.userId eq projectManager.userId && project.projectStatus ne 'CLOSED'}">
+    <form action="/project/showProjectUsersToDelete/${project.projectId}">
+        <button type="submit">Show users</button>
+    </form>
+    <form action="/project/userToAdd/${project.projectId}">
+        <button type="submit">Add users</button>
+    </form>
+    <form action="/project/closeProject/${project.projectId}" method="post">
+        <button type="submit">Close project</button>
+    </form>
+    <form action="/project/viewSprints/${project.projectId}">
+        <button type="submit">Show sprint list</button>
+    </form>
+</c:if>
 </body>
 </html>

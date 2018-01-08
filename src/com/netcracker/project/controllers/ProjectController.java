@@ -17,6 +17,7 @@ import com.netcracker.project.model.enums.OCStatus;
 import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -281,6 +282,7 @@ public class ProjectController {
   @RequestMapping(value = "/showProject/{id}", method = RequestMethod.GET)
   public String showProject(
       @PathVariable("id") String id,
+      Principal principal,
       Model model) {
     logger.info("Entering showProject()");
     Map<String, String> errorMap = new HashMap<>();
@@ -299,7 +301,14 @@ public class ProjectController {
       model.addAttribute("errorMap", existenceError);
       return "project/showProject";
     }
+
     Project project = projectDAO.findProjectByProjectId(bigIntegerProjectId);
+
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    User projectManager = userDAO.findUserByUserId(project.getProjectManagerId());
+
+    model.addAttribute("currentUser", currentUser);
+    model.addAttribute("projectManager", projectManager);
     model.addAttribute("project", project);
     return "project/showProject";
   }

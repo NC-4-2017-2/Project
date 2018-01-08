@@ -33,6 +33,7 @@ public interface  ErrorMessages {
   String PROJECT_EXIST_ERROR = "Project already exists, please choose another name!";
   String USER_PROJECT_STATUS_WORKING_ERROR = "is currently working!";
   String PROJECT_ERROR = "Project doesn't exist!";
+  String PROJECT_NAME_ERROR = "Project name already exist!";
   String VIEW_SPRINT_TRANSIT_PM_ERROR = "You are currently does not have a project!";
   String USER_FIRST_OR_LAST_NAME_ERROR = "Please type correct name!";
   String SPRINTS_EXIST_ERROR = "No sprints available for project!";

@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +25,12 @@ public class DashboardController {
   private ProjectDAO projectDAO;
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public String createVacationGet(Model model,
+  public String dashBoardGet(Model model,
       Principal principal,
       HttpServletRequest request) {
+    String userName = principal.getName();
     if (request.isUserInRole("ROLE_ADMIN")) {
+      model.addAttribute("userName", userName);
       return "dashboard/adminDashboard";
     }
     User currentUser = userDAO.findUserByLogin(principal.getName());
@@ -37,10 +38,12 @@ public class DashboardController {
       if(!currentUser.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
         BigInteger projectId = projectDAO.findProjectIdByPMLogin(principal.getName());
         Project pmCurrentProject = projectDAO.findProjectByProjectId(projectId);
+        model.addAttribute("userName", userName);
         model.addAttribute("project", pmCurrentProject);
       }
       return "dashboard/PMDashboard";
     }
+    model.addAttribute("userName", userName);
     return "dashboard/dashboard";
   }
 

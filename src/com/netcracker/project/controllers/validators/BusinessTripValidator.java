@@ -1,7 +1,9 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.services.impl.ListCountry;
+import java.util.Date;
 import java.util.Map;
 import org.springframework.util.StringUtils;
 
@@ -38,7 +40,8 @@ public class BusinessTripValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  public Map<String, String> validateBetweenDates(String startDate, String endDate) {
+  public Map<String, String> validateBetweenDates(String startDate,
+      String endDate) {
     validateStartEndDate(startDate, endDate);
     return getErrorMap();
   }
@@ -65,4 +68,23 @@ public class BusinessTripValidator extends AbstractValidator {
         ErrorMessages.COUNTRY_EXISTENCE_ERROR);
   }
 
+  public Map<String, String> validateCreateId(String projectId, String userId,
+      String authorId, String pmId) {
+    validateId(projectId);
+    validateId(userId);
+    validateId(authorId);
+    validateId(pmId);
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateProjectAndTripDates(Project project,
+      Date startDate, Date endDate) {
+    if (project.getStartDate().compareTo(startDate) == 1) {
+      setErrorToMap("TRIP_START_DATE_ERROR", ErrorMessages.TRIP_START_DATE_ERROR);
+    }
+    if (project.getEndDate().compareTo(endDate) == -1) {
+      setErrorToMap("TRIP_END_DATE_ERROR", ErrorMessages.TRIP_END_DATE_ERROR);
+    }
+    return getErrorMap();
+  }
 }

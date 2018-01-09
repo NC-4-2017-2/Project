@@ -14,6 +14,7 @@ import com.netcracker.project.services.impl.ListCountry;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -86,38 +87,47 @@ public class BusinessTripController {
     logger.info("Entering createBusinessTripPost()");
     Map<String, String> errorMap = new HashMap<>();
     BusinessTripValidator validator = new BusinessTripValidator();
-    errorMap = validator.validateInputId(projectId);
+    errorMap = validator.validateCreateId(projectId, userId, authorId, pmId);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "businessTrip/createBusinessTrip";
     }
-    errorMap = validator.validateInputId(userId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "businessTrip/createBusinessTrip";
-    }
-    errorMap = validator.validateInputId(authorId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "businessTrip/createBusinessTrip";
-    }
-    errorMap = validator.validateInputId(pmId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "businessTrip/createBusinessTrip";
-    }
-    BigInteger projectBigIntegerId = new BigInteger(projectId);
-    BigInteger pmBigIntegerId = new BigInteger(pmId);
-    BigInteger userBigIntegerId = new BigInteger(userId);
-    BigInteger authorBigIntegerId = new BigInteger(authorId);
 
-    Collection<User> users = userDAO.findUserByProjectId(projectBigIntegerId);
+    BigInteger validProjectId = new BigInteger(projectId);
+    BigInteger validPmId = new BigInteger(pmId);
+    BigInteger validUserId = new BigInteger(userId);
+    BigInteger validAuthorId = new BigInteger(authorId);
+
+    Integer existsProject = projectDAO.findIfProjectExists(validProjectId);
+    errorMap = validator.validateExistence(existsProject);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/createBusinessTrip";
+    }
+
+    Collection<User> users = userDAO.findUserByProjectId(validProjectId);
     errorMap = new BusinessTripValidator()
         .validateCreate(country, startDate, endDate);
-
     if (!errorMap.isEmpty()) {
-      model.addAttribute("projectId", projectBigIntegerId);
-      model.addAttribute("pmId", pmBigIntegerId);
+      model.addAttribute("projectId", validProjectId);
+      model.addAttribute("pmId", validPmId);
+      model.addAttribute("authorId", authorId);
+      model.addAttribute("userList", users);
+      model.addAttribute("countryList", countries.getCountriesNames());
+      model.addAttribute("tripCountry", country);
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/createBusinessTrip";
+    }
+
+    Project project = projectDAO
+        .findProjectByProjectId(validProjectId);
+    Date validStartDate = converter.convertStringToDateFromJSP(startDate);
+    Date validEndDate = converter.convertStringToDateFromJSP(endDate);
+
+    errorMap = validator.validateProjectAndTripDates(project, validStartDate, validEndDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("pmId", validPmId);
+      model.addAttribute("projectId", validProjectId);
       model.addAttribute("authorId", authorId);
       model.addAttribute("userList", users);
       model.addAttribute("countryList", countries.getCountriesNames());
@@ -137,13 +147,13 @@ public class BusinessTripController {
     }
 
     BusinessTrip trip = new BusinessTrip.BusinessTripBuilder()
-        .authorId(authorBigIntegerId)
-        .projectId(projectBigIntegerId)
-        .userId(userBigIntegerId)
-        .pmId(pmBigIntegerId)
+        .authorId(validAuthorId)
+        .projectId(validProjectId)
+        .userId(validUserId)
+        .pmId(validPmId)
         .country(country)
-        .startDate(converter.convertStringToDateFromJSP(startDate))
-        .endDate(converter.convertStringToDateFromJSP(endDate))
+        .startDate(validStartDate)
+        .endDate(validEndDate)
         .status(status)
         .build();
 

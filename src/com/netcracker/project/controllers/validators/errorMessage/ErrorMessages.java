@@ -49,4 +49,6 @@ public interface  ErrorMessages {
   String SPRINT_END_DATE_ERROR = "Sprint end date can't be greater than project end date!";
   String SPRINT_NAME_EXISTENCE_ERROR = "This sprint name is already in use!";
   String NEW_OLD_SPRINT_START_DATE_ERROR = "New sprint start date can't be less than previous sprint end date!";
+  String TRIP_START_DATE_ERROR = "Trip start date can't be less than project start date!";
+  String TRIP_END_DATE_ERROR = "Trip end date can't be greater than project end date!";
 }

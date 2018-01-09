@@ -8,6 +8,7 @@ import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Project.ProjectBuilder;
 import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.Sprint.SprintBuilder;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkPeriod;
 import com.netcracker.project.model.entity.WorkPeriod.WorkPeriodBuilder;
@@ -171,7 +172,8 @@ public class ProjectController {
     Project project = projectDAO.findProjectByProjectId(bigIntegerProjectId);
 
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    User projectManager = userDAO.findUserByUserId(project.getProjectManagerId());
+    User projectManager = userDAO
+        .findUserByUserId(project.getProjectManagerId());
 
     model.addAttribute("currentUser", currentUser);
     model.addAttribute("projectManager", projectManager);
@@ -472,6 +474,88 @@ public class ProjectController {
     projectDAO.updateStatus(validProjectId, OCStatus.CLOSED);
     Date date = new Date();
     projectDAO.updateEndDate(validProjectId, date);
+    return "responseStatus/success";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/createSprint/{projectId}", method = RequestMethod.GET)
+  public String createSprintGet(@PathVariable("projectId") String projectId,
+      Principal principal,
+      Model model) {
+    ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = validator.validateInputId(projectId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+    BigInteger validProjectId = new BigInteger(projectId);
+
+    Project project = projectDAO.findProjectByProjectId(validProjectId);
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+
+    if (!currentUser.getUserId().equals(project.getProjectManagerId())
+        && project.getProjectStatus().name().equals(OCStatus.CLOSED.name())) {
+      errorMap.put("PROJECT_ACCESS_ERROR", ErrorMessages.PROJECT_ACCESS_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+
+    model.addAttribute("projectId", validProjectId);
+    return "project/createSprint";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "/createSprint/{projectId}", method = RequestMethod.POST)
+  public String createSprintPost(@PathVariable("projectId") String projectId,
+      @RequestParam("sprintName") String sprintName,
+      @RequestParam("startDate") String startDate,
+      @RequestParam("plannedEndDate") String plannedEndDate,
+      Model model) {
+    ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = validator.validateInputId(projectId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+
+    BigInteger validProjectId = new BigInteger(projectId);
+    Project project = projectDAO.findProjectByProjectId(validProjectId);
+    Integer projectExistence = projectDAO.findIfProjectExists(validProjectId);
+
+    errorMap = validator.validateExistence(projectExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+
+    errorMap = validator.validateDates(startDate, plannedEndDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+
+    Sprint sprint = new SprintBuilder()
+        .name(sprintName)
+        .startDate(converter.convertStringToDateFromJSP(startDate))
+        .endDate(converter.convertStringToDateFromJSP(plannedEndDate))
+        .plannedEndDate(converter.convertStringToDateFromJSP(plannedEndDate))
+        .build();
+
+    Collection<Sprint> sprints = projectDAO.getAllSprints(validProjectId);
+
+    errorMap = validator.validateProjectSprintDates(project, sprints, sprint);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+
+    errorMap = validator.validateSprintName(sprints, sprintName);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/createSprint";
+    }
+
+    projectDAO.createSprint(sprint, validProjectId);
     return "responseStatus/success";
   }
 

@@ -43,5 +43,10 @@ public interface  ErrorMessages {
   String VACATION_EXIST_ERROR = "Vacation does not exist!";
   String LM_EXIST_ERROR = "LM already exist on project, choose another user";
   String PM_EXIST_ERROR = "LM already exist on project, choose another user";
-  String TASK_ERROR = "Task does not exist!";;
+  String TASK_ERROR = "Task does not exist!";
+  String PROJECT_ACCESS_ERROR = "Can't get information about this project!";
+  String SPRINT_START_DATE_ERROR = "Sprint start date can't be less than project start date!";
+  String SPRINT_END_DATE_ERROR = "Sprint end date can't be greater than project end date!";
+  String SPRINT_NAME_EXISTENCE_ERROR = "This sprint name is already in use!";
+  String NEW_OLD_SPRINT_START_DATE_ERROR = "New sprint start date can't be less than previous sprint end date!";
 }

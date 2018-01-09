@@ -1,9 +1,13 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.entity.Project;
+import com.netcracker.project.model.entity.Sprint;
+import java.util.Collection;
 import java.util.Map;
 
 public class ProjectValidator extends AbstractValidator {
+
   public Map<String, String> validateDates(String start, String end) {
     validateStartEndDate(start, end);
     return getErrorMap();
@@ -15,7 +19,9 @@ public class ProjectValidator extends AbstractValidator {
   }
 
   public Map<String, String> validateExistence(Integer projectExistence) {
-
+    if (projectExistence == 0) {
+      setErrorToMap("PROJECT_ERROR", ErrorMessages.PROJECT_ERROR);
+    }
     return getErrorMap();
   }
 
@@ -74,4 +80,38 @@ public class ProjectValidator extends AbstractValidator {
     validateStartEndDate(startDate, endDate);
     return getErrorMap();
   }
+
+  public Map<String, String> validateProjectSprintDates(Project project,
+      Collection<Sprint> sprints,
+      Sprint sprint) {
+    if (project.getStartDate().compareTo(sprint.getStartDate()) == 1) {
+      setErrorToMap("SPRINT_START_DATE_ERROR",
+          ErrorMessages.SPRINT_START_DATE_ERROR);
+    }
+    if (project.getEndDate().compareTo(sprint.getPlannedEndDate()) == -1) {
+      setErrorToMap("SPRINT_END_DATE_ERROR",
+          ErrorMessages.SPRINT_END_DATE_ERROR);
+    }
+    for (Sprint oldSprint : sprints) {
+      if (oldSprint.getEndDate().compareTo(sprint.getStartDate()) == 1) {
+        setErrorToMap("NEW_OLD_SPRINT_START_DATE_ERROR",
+            ErrorMessages.NEW_OLD_SPRINT_START_DATE_ERROR);
+        return getErrorMap();
+      }
+    }
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateSprintName(Collection<Sprint> sprints,
+      String sprintName) {
+    for (Sprint sprint : sprints) {
+      if (sprint.getName().equals(sprintName)) {
+        setErrorToMap("SPRINT_NAME_EXISTENCE_ERROR",
+            ErrorMessages.SPRINT_NAME_EXISTENCE_ERROR);
+        return getErrorMap();
+      }
+    }
+    return getErrorMap();
+  }
+
 }

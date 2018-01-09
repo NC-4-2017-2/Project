@@ -27,15 +27,13 @@ public class ProjectValidator extends AbstractValidator {
   }
 
   public Map<String, String> validateCreateProject(
-      Integer existenceProject, String sprints, String workers,
+      Integer existenceProject,
       String startDate,
       String endDate, String id) {
 
     if (existenceProject > 0) {
       setErrorToMap("PROJECT_NAME_ERROR", ErrorMessages.PROJECT_NAME_ERROR);
     }
-    validateId(sprints);
-    validateId(workers);
     validateStartEndDate(startDate, endDate);
     validateId(id);
     return getErrorMap();

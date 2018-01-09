@@ -14,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ProjectDAO {
 
   @Transactional(rollbackFor = Exception.class)
-  void createProject(Project project, Collection<Sprint> sprints,
-      Collection<WorkPeriod> workPeriods);
+  void createProject(Project project);
 
   void insertProject(Project project);
 

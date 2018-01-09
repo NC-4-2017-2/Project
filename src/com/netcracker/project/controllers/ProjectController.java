@@ -18,13 +18,11 @@ import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -50,54 +48,26 @@ public class ProjectController {
       .getLogger(ProjectController.class);
 
   @Secured({"ROLE_ADMIN"})
-  @RequestMapping(value = "/createProject")
-  public String createProject() {
-    logger.info("Entering createProject()");
-    return "project/createProject";
-  }
-
-  @Secured({"ROLE_ADMIN"})
-  @RequestMapping(value = "/createProject", params = {"countSprints",
-      "countWorkers"},
-      method = RequestMethod.GET)
+  @RequestMapping(value = "/createProject", method = RequestMethod.GET)
   public String createSprints(
-      @RequestParam("countSprints") String sprintCount,
-      @RequestParam("countWorkers") String workersCount,
       Model model) {
     logger.info("Entering createSprints()");
-    ProjectValidator validator = new ProjectValidator();
-    validator.validateSprintsAndWorkers(sprintCount, workersCount);
-    Map<String, String> errorMap = validator
-        .validateSprintsAndWorkers(sprintCount, workersCount);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/createProject";
-    }
-
-    Integer sprintCountInt = new Integer(sprintCount);
-    Integer workersCountInt = new Integer(workersCount);
 
     Collection<User> pmOnTransit = userDAO
         .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
             ProjectStatus.TRANSIT.getId());
-
     model.addAttribute("pmOnTransitList", pmOnTransit);
-    model.addAttribute("countSprints", sprintCountInt);
-    model.addAttribute("countWorkers", workersCountInt);
-    return "project/createProjectForm";
+    return "project/createProject";
   }
 
   @Secured({"ROLE_ADMIN"})
-  @RequestMapping(value = "/createProject/{countSprints}/{countWorkers}", method = RequestMethod.POST)
+  @RequestMapping(value = "/createProject", method = RequestMethod.POST)
   public String createProjectPost(
-      @PathVariable("countSprints") String countSprints,
-      @PathVariable("countWorkers") String countWorkers,
       @RequestParam("projectName") String projectName,
       @RequestParam("projectStartDate") String projectStartDate,
       @RequestParam("projectEndDate") String projectEndDate,
       @RequestParam("pmId") String pmId,
-      Model model,
-      HttpServletRequest request) {
+      Model model) {
     logger.info("Entering createProjectPost()");
     Collection<User> pmOnTransit = userDAO
         .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
@@ -109,114 +79,15 @@ public class ProjectController {
         .findProjectByNameIfExist(projectName);
 
     errorMap = validator
-        .validateCreateProject(existenceProject, countSprints, countWorkers,
+        .validateCreateProject(existenceProject,
             projectStartDate, projectEndDate, pmId);
-
     if (!errorMap.isEmpty()) {
       model.addAttribute("pmOnTransitList", pmOnTransit);
-      model.addAttribute("countSprints", countSprints);
-      model.addAttribute("countWorkers", countWorkers);
       model.addAttribute("errorMap", errorMap);
-      return "project/createProjectForm";
+      return "project/createProject";
     }
-
-    Integer countSprintsInteger = new Integer(countSprints);
-    Integer countWorkersInteger = new Integer(countWorkers);
-
-    Collection<Sprint> sprints = new ArrayList<>();
     Date startDate = converter.convertStringToDateFromJSP(projectStartDate);
     Date endDate = converter.convertStringToDateFromJSP(projectEndDate);
-
-    for (int index = 0; index < countSprintsInteger; index++) {
-      String startDateParam = request.getParameter("startDate" + index);
-      String endDateParam = request.getParameter("planedEndDate" + index);
-
-      errorMap = validator
-          .validateDates(startDateParam, endDateParam);
-
-      if (!errorMap.isEmpty()) {
-        model.addAttribute("countSprints", countSprints);
-        model.addAttribute("pmOnTransitList", pmOnTransit);
-        model.addAttribute("countWorkers", countWorkers);
-        model.addAttribute("errorMap", errorMap);
-        return "project/createProjectForm";
-      }
-
-      Date startDateSprint = converter
-          .convertStringToDateFromJSP(startDateParam);
-      Date endDateSprint = converter.convertStringToDateFromJSP(endDateParam);
-
-      sprints.add(new Sprint.SprintBuilder()
-          .name(request.getParameter("sprintName" + index))
-          .startDate(startDateSprint)
-          .plannedEndDate(endDateSprint)
-          .build());
-    }
-
-    Collection<WorkPeriod> workPeriods = new ArrayList<>();
-
-    for (int i = 0; i < countWorkersInteger; i++) {
-
-      Collection<User> users = userDAO
-          .findUserByLastNameAndFirstName(
-              request.getParameter("userLastName" + i),
-              request.getParameter("userFirstName" + i));
-
-      User user = null;
-      if (users.size() == 0) {
-        errorMap
-            .put("USER_ERROR", request.getParameter("userLastName" + i) + " " +
-                request.getParameter("userFirstName" + i) + " "
-                + ErrorMessages.USER_ERROR);
-        model.addAttribute("countSprints", countSprints);
-        model.addAttribute("countWorkers", countWorkers);
-        model.addAttribute("errorMap", errorMap);
-        model.addAttribute("pmOnTransitList", pmOnTransit);
-        return "project/createProjectForm";
-      }
-
-      if (users.size() >= 1) {
-        Iterator<User> iterator = users.iterator();
-        while (iterator.hasNext()) {
-          user = iterator.next();
-          if (user.getProjectStatus().name()
-              .equals(ProjectStatus.WORKING.name())) {
-            errorMap.put("USER_PROJECT_STATUS_WORKING_ERROR",
-                user.getLastName() + " " +
-                    user.getFirstName() + " "
-                    + ErrorMessages.USER_PROJECT_STATUS_WORKING_ERROR);
-            model.addAttribute("pmOnTransitList", pmOnTransit);
-            model.addAttribute("countWorkers", countWorkers);
-            model.addAttribute("countSprints", countSprints);
-            model.addAttribute("errorMap", errorMap);
-            return "project/createProjectForm";
-          }
-        }
-      }
-
-      String startDateParam = request.getParameter("startDate" + i);
-      String endDateParam = request.getParameter("endDate" + i);
-
-      errorMap = validator
-          .validateDates(startDateParam, endDateParam);
-      if (!errorMap.isEmpty()) {
-        model.addAttribute("pmOnTransitList", pmOnTransit);
-        model.addAttribute("countWorkers", countWorkers);
-        model.addAttribute("countSprints", countSprints);
-        model.addAttribute("errorMap", errorMap);
-        return "project/createProjectForm";
-      }
-
-      Date startDateWP = converter.convertStringToDateFromJSP(startDateParam);
-      Date endDateWP = converter.convertStringToDateFromJSP(endDateParam);
-
-      workPeriods.add(new WorkPeriod.WorkPeriodBuilder()
-          .startWorkDate(startDateWP)
-          .endWorkDate(endDateWP)
-          .userId(user.getUserId())
-          .workPeriodStatus(WorkPeriodStatus.WORKING)
-          .build());
-    }
 
     BigInteger validPMId = new BigInteger(pmId);
     Project project = new ProjectBuilder()
@@ -226,7 +97,7 @@ public class ProjectController {
         .projectManagerId(validPMId)
         .projectStatus(OCStatus.OPENED)
         .build();
-    projectDAO.createProject(project, sprints, workPeriods);
+    projectDAO.createProject(project);
 
     Project currentProject = projectDAO.findProjectByName(projectName);
     WorkPeriod pmWorkPeriod = new WorkPeriodBuilder()
@@ -240,11 +111,6 @@ public class ProjectController {
         ProjectStatus.WORKING.getId());
 
     userDAO.updateProjectStatus(validPMId, ProjectStatus.WORKING.getId());
-    for (WorkPeriod period : workPeriods) {
-      userDAO.createWorkPeriod(period, currentProject.getProjectId());
-      userDAO.updateProjectStatus(period.getUserId(),
-          ProjectStatus.WORKING.getId());
-    }
     return "responseStatus/success";
   }
 
@@ -595,7 +461,6 @@ public class ProjectController {
     Project project = projectDAO
         .findProjectByProjectId(validProjectId);
     BigInteger projectManagerId = project.getProjectManagerId();
-//    projectDAO.deleteUserByUserId(projectManagerId, validProjectId);
     userDAO
         .updateProjectStatus(projectManagerId, ProjectStatus.TRANSIT.getId());
     WorkPeriod pMWorkPeriod = userDAO

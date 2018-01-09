@@ -33,21 +33,14 @@ public class ProjectDAOImpl implements ProjectDAO {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void createProject(Project project, Collection<Sprint> sprints,
-      Collection<WorkPeriod> workPeriods) {
-    try {
-      insertProject(project);
-      Project currentProject = findProjectByName(project.getName());
-      for (Sprint sprint : sprints) {
-        insertSprint(sprint, currentProject.getProjectId());
-      }
-      for (WorkPeriod workPeriod : workPeriods) {
-        addUser(currentProject.getProjectId(), workPeriod.getUserId());
-      }
-    } catch (Exception e) {
-      throw e;
-    }
-
+  public void createProject(Project project) {
+    logger.info("Entering createProject(project=" + project.getName() + ")");
+    template.update(CREATE_PROJECT, new Object[]{project.getProjectId(),
+        project.getName(),
+        project.getStartDate(),
+        project.getEndDate(),
+        project.getProjectStatus().getId(),
+        project.getProjectManagerId()});
   }
 
   @Override

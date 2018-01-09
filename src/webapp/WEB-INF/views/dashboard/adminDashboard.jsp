@@ -4,12 +4,14 @@
 <html>
 <head>
     <title>Dashboard</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
     <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
     <script type="text/javascript">
-      $(function() {
+      $(function () {
         var options1 = {
           chart: {
             type: 'pie'
@@ -28,7 +30,8 @@
                 enabled: true,
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                 style: {
-                  color: (Highcharts.theme && Highcharts.theme.contrastTextColor)
+                  color: (Highcharts.theme
+                  && Highcharts.theme.contrastTextColor)
                   || 'black'
                 }
               }
@@ -64,7 +67,8 @@
                 enabled: true,
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                 style: {
-                  color: (Highcharts.theme && Highcharts.theme.contrastTextColor)
+                  color: (Highcharts.theme
+                  && Highcharts.theme.contrastTextColor)
                   || 'black'
                 }
               }
@@ -146,7 +150,8 @@
             <div class="col-sm-6">
                 <div class="well">
                     <h4>User hours</h4>
-                    <div id="container1" style="width: 600px; height: 400px; margin: 0 auto"></div>
+                    <div id="container1"
+                         style="width: 600px; height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
         </c:if>
@@ -154,47 +159,12 @@
             <div class="col-sm-6">
                 <div class="well">
                     <h4>Task statistic</h4>
-                    <div id="container2" style="width: 600px; height: 400px; margin: 0 auto"></div>
+                    <div id="container2"
+                         style="width: 600px; height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
         </c:if>
     </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="well">
-                <p>Text</p>
-                <p>Text</p>
-                <p>Text</p>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="well">
-                <p>Text</p>
-                <p>Text</p>
-                <p>Text</p>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="well">
-                <p>Text</p>
-                <p>Text</p>
-                <p>Text</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="well">
-                <p>Text</p>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="well">
-                <p>Text</p>
-            </div>
-        </div>
-    </div>
 </div>
-
 </body>
 </html>

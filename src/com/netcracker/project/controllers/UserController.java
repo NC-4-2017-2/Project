@@ -214,7 +214,7 @@ public class UserController {
   public String findUserByLogin(Model model,
       @PathVariable("login") String login) {
     logger.info("findUserByLogin() method. Login: " + login);
-    //todo check user existance
+    //todo check user existence
     //Integer checkUserLogin = userDAO.findUserByLoginIfExist(login);
     User user = userDAO.findUserByLogin(login);
     model.addAttribute("user", user);

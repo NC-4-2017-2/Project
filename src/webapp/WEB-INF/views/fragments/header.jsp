@@ -1,13 +1,16 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <ul class="nav nav-pills" role="tablist">
-            <p class="navbar-text navbar-left"><a href="/" class="btn btn-info btn-lg">
-                <span class="glyphicon glyphicon-home"></span> Home</a></p>
-
-            <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">${userName}</a>
-                <a href="/logout" class="btn btn-info btn-lg">
-                    <span class="glyphicon glyphicon-log-out"></span> Log out</a>
-            </p>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">ERP System</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>${userName}</a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Log out</a></li>
         </ul>
     </div>
 </nav>

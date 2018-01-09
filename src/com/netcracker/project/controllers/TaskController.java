@@ -355,7 +355,6 @@ public class TaskController {
     return "task/findTaskPerPeriodAndStatus";
   }
 
-
   @RequestMapping(value = "findTaskByFirstAndLastName", method = RequestMethod.GET)
   public String findTaskByFirstAndLastName() {
     return "task/findTaskByFirstAndLastName";
@@ -367,7 +366,6 @@ public class TaskController {
     return "task/findPMTask";
   }
 
-
   @RequestMapping(value = "findTaskByPriority", params = "priority", method = RequestMethod.GET)
   public String showTaskListWithPriority(
       @RequestParam(value = "priority") String priority, Model model,
@@ -377,7 +375,7 @@ public class TaskController {
         .validationFindTaskByPriority(priority);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "task/findPMTask";
+      return "task/findTaskByPriority";
     }
 
     String loginUser = principal.getName();
@@ -400,18 +398,18 @@ public class TaskController {
       Map<String, String> error = new TaskValidator().validationEntityTask(task);
       if (!error.isEmpty()) {
         model.addAttribute("errorMap", error);
-        return "task/showTaskListWithPriority";
+        return "task/viewTask";
       }
     }
 
     model.addAttribute("taskList", tasks);
-    return "task/showTaskListWithPriority";
+    return "task/viewTask";
   }
 
 
   @RequestMapping(value = "findTaskPerPeriodAndStatus", params = {"status", "startDate",
       "endDate"}, method = RequestMethod.GET)
-  public String showTaskListWithPeriods(@RequestParam("status") String status,
+  public String findTaskListWithPeriods(@RequestParam("status") String status,
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate, Model model,
       Principal principal) {
@@ -449,13 +447,13 @@ public class TaskController {
       Map<String, String> error = new TaskValidator().validationEntityTask(task);
       if (!error.isEmpty()) {
         model.addAttribute("errorMap", error);
-        return "task/showTaskListPerPeriod";
+        return "task/viewTask";
       }
     }
 
     model.addAttribute("taskList", tasksPerPeriod);
 
-    return "task/showTaskListPerPeriod";
+    return "task/viewTask";
   }
 
   @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName", "status"}, method = RequestMethod.GET)
@@ -494,7 +492,7 @@ public class TaskController {
         .validationFindTaskByStatus(status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "task/showTaskListWithUsers";
+      return "task/viewTask";
     }
 
     Task task = null;
@@ -509,13 +507,13 @@ public class TaskController {
         Map<String, String> existenceError = new TaskValidator().validationEntityTask(task);
         if (!existenceError.isEmpty()) {
           model.addAttribute("errorMap", existenceError);
-          return "task/showTaskListWithUsers";
+          return "task/viewTask";
         }
     }
 
     model.addAttribute("taskList", tasks);
 
-    return "task/showTaskListWithUsers";
+    return "task/viewTask";
   }
 
 
@@ -528,7 +526,7 @@ public class TaskController {
     Map<String, String> errorMap = new TaskValidator().validationFindTaskByStatus(status);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "task/showPMTaskList";
+      return "task/viewTask";
     }
 
     String loginUser = principal.getName();
@@ -549,13 +547,13 @@ public class TaskController {
       Map<String, String> error = new TaskValidator().validationEntityTask(task);
       if (!error.isEmpty()) {
         model.addAttribute("errorMap", error);
-        return "task/showPMTaskList";
+        return "task/viewTask";
       }
     }
 
     model.addAttribute("taskList", tasks);
 
-    return "task/showPMTaskList";
+    return "task/viewTask";
   }
 
 }

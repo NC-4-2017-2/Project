@@ -33,7 +33,6 @@ public class TaskDAOImpl implements TaskDAO {
   public void createTask(Task task) {
     logger.info("Entering createTask(task=" + task + ")");
     this.template.update(CREATE_TASK, new Object[]{
-        task.getTaskId(),
         task.getName(),
         task.getTaskType().getId(),
         task.getStartDate(),
@@ -61,7 +60,6 @@ public class TaskDAOImpl implements TaskDAO {
     updateTaskByTaskPriority(task.getPriority(), task.getTaskId());
     updateTaskByStatus(task.getStatus(), task.getTaskId());
     updateTaskByDescription(task.getDescription(), task.getTaskId());
-  //  updateTaskByReopenCounter(task.getReopenCounter(), task.getTaskId());
     updateTaskByComment(task.getComments(), task.getTaskId());
     updateTaskByTaskAuthor(task.getAuthorId(), task.getTaskId());
     updateTaskByUserId(task.getUserId(), task.getTaskId());

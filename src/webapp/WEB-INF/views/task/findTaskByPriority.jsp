@@ -12,12 +12,8 @@
     <option value="NORMAL">NORMAL</option>
     <option value="LOW">LOW</option>
 </select><br>
-    <p><c:if test="${not empty errorMap}">
-        <c:forEach items="${errorMap}" var="error">
-            ${error.value}<br>
-        </c:forEach>
-    </c:if></p>
-    <br>
+
+    <%@include file="../errors/errorMap.jsp" %>
     <input type="submit" value="Find">
 </form>
 

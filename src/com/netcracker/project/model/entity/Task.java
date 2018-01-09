@@ -63,11 +63,9 @@ public class Task {
     return taskId;
   }
 
-
   public String getName() {
     return name;
   }
-
 
   public Date getStartDate() {
     return startDate;

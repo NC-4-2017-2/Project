@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Set status for task selection</title>
+    <title>Show Task</title>
 </head>
 <style>
     p {

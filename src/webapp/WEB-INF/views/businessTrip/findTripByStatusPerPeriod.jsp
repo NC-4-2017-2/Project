@@ -2,25 +2,47 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
     <title>FindTripByStatusAndPeriod</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
 <form action="/businessTrip/viewTrip">
-    Choose status:<select name="status" required>
-    <option value="APPROVED">APPROVED</option>
-    <option value="DISAPPROVED">DISAPPROVED</option>
-    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
-</select><br>
-
-    Start date: <input type="date" name="startDate"><br>
-    End date: <input type="date" name="endDate"><br>
-    <%@include file="../errors/errorMap.jsp" %>
-    <input type="submit" value="Find">
+    <div class="col-lg-6">
+        <label for="status">Choose status:</label>
+        <div class="input-group">
+            <select name="status" id="status" required>
+                <option value="APPROVED">APPROVED</option>
+                <option value="DISAPPROVED">DISAPPROVED</option>
+                <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start date:</label>
+            <div class="input-group">
+                <input type="date" class="form-control" id="startDate"
+                       name="startDate" placeholder="Enter start date"
+                       required></div>
+        </div>
+        <div class="form-group">
+            <label for="endDate">Choose end date:</label>
+            <div class="input-group">
+                <input type="date" class="form-control" id="endDate"
+                       name="endDate" placeholder="Enter end date" required>
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-md" value="Find">
+        </div>
+        <%@include file="../errors/errorMap.jsp" %>
+    </div>
 </form>
 </body>
 </html>

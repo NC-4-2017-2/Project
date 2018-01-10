@@ -421,6 +421,14 @@ public class BusinessTripController {
       Principal principal,
       Model model) {
     logger.info("Entering viewPMWorkingDay()");
+    BusinessTripValidator validator = new BusinessTripValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateBusinessTripStatus(status);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "businessTrip/findPMTrip";
+    }
+
     User currentUser = userDAO.findUserByLogin(principal.getName());
     Collection<BusinessTrip> businessTrip = businessTripDAO
         .findTripByPMIdAndStatus(currentUser.getUserId(),

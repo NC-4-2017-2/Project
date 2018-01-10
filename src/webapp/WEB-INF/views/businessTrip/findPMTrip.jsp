@@ -2,17 +2,18 @@
 <html>
 <head>
     <title>Find PM Working Day</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
-<form action="/businessTrip/viewPMTrip">
-    Choose status:<select name="status" required>
-    <option value="APPROVED">APPROVED</option>
-    <option value="DISAPPROVED">DISAPPROVED</option>
-    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
-</select><br>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
+<div class="col-lg-6">
+    <%@include file="findPMTripForm.jsp" %>
     <%@include file="../errors/errorMap.jsp" %>
-
-    <input type="submit" value="Find">
-</form>
+</div>
 </body>
 </html>

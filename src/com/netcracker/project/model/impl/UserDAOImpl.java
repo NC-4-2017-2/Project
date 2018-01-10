@@ -8,6 +8,7 @@ import com.netcracker.project.model.impl.mappers.UserMapper;
 import com.netcracker.project.model.impl.mappers.WorkPeriodMapper;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -241,17 +242,17 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void updateWorkingPeriodEndDateByUserId(WorkPeriod workPeriod) {
+  public void updateWorkingPeriodEndDateByUserId(BigInteger userId, BigInteger projectId, Date date) {
     logger.info(
-        "Entering updateWorkingPeriodByUserId(userId=" + workPeriod.getUserId()
+        "Entering updateWorkingPeriodByUserId(userId=" + userId
             + ","
-            + " projectId=" + workPeriod.getProjectId() + ","
-            + " UserDAO.WorkPeriod=" + workPeriod
+            + " projectId=" + projectId + ","
+            + " date=" + date
             + ")");
     template
-        .update(UPDATE_WORKING_PERIOD_END_DATE, workPeriod.getEndWorkDate(),
-            workPeriod.getUserId(),
-            workPeriod.getProjectId());
+        .update(UPDATE_WORKING_PERIOD_END_DATE, date,
+            userId,
+            projectId);
   }
 
   @Override

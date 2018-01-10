@@ -165,7 +165,9 @@ public class UsersDaoTest {
         .projectId(BigInteger.valueOf(4))
         .endWorkDate(converter.convertStringToDateFromJSP("11.11.1986"))
         .build();
-    userDao.updateWorkingPeriodEndDateByUserId(workPeriod);
+    userDao.updateWorkingPeriodEndDateByUserId(BigInteger.valueOf(3),
+        BigInteger.valueOf(4),
+        converter.convertStringToDateFromJSP("1986-11-11"));
   }
 
   @Test
@@ -228,7 +230,7 @@ public class UsersDaoTest {
   }
 
   @Test
-  public void findWOrkPeriodIfExistWithCorrectParameters(){
+  public void findWOrkPeriodIfExistWithCorrectParameters() {
     Integer result = userDao
         .findWorkingWorkPeriodIfExist(BigInteger.valueOf(3),
             BigInteger.valueOf(4));
@@ -236,7 +238,7 @@ public class UsersDaoTest {
   }
 
   @Test
-  public void findWOrkPeriodIfExistWithWrongParameters(){
+  public void findWOrkPeriodIfExistWithWrongParameters() {
     Integer result = userDao
         .findWorkingWorkPeriodIfExist(BigInteger.valueOf(3),
             BigInteger.valueOf(10));

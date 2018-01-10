@@ -245,11 +245,11 @@ public class ProjectController {
     projectDAO.deleteUserByUserId(validUserId, validProjectId);
     userDAO
         .updateProjectStatus(validUserId, ProjectStatus.TRANSIT.getId());
-    WorkPeriod workPeriod = userDAO
-        .findWorkingWorkPeriodByUserIdAndProjectId(validUserId,
-            validProjectId);
-    userDAO.updateWorkingPeriodStatusByUserId(workPeriod.getUserId(),
-        workPeriod.getProjectId(), WorkPeriodStatus.FIRED.getId());
+    Date currentDate = new Date();
+    userDAO.updateWorkingPeriodEndDateByUserId(validUserId, validProjectId,
+        currentDate);
+    userDAO.updateWorkingPeriodStatusByUserId(validUserId,
+        validProjectId, WorkPeriodStatus.FIRED.getId());
     Collection<User> userList = userDAO
         .findUserByProjectId(validProjectId);
     model.addAttribute("projectId", validProjectId);
@@ -363,12 +363,12 @@ public class ProjectController {
   }
 
   @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/addUserFromDuplicate/{projectId}/{startDate}/{endDate}", method = RequestMethod.POST)
+  @RequestMapping(value = "/addUserFromDuplicate/{projectId}/{startDate}/{endDate}/{userId}", method = RequestMethod.POST)
   public String addDuplicateUserToProject(
       @PathVariable("projectId") String projectId,
       @PathVariable("startDate") String startDate,
       @PathVariable("endDate") String endDate,
-      @RequestParam("user") String userId,
+      @PathVariable("userId") String userId,
       Model model) {
     ProjectValidator validator = new ProjectValidator();
     Map<String, String> errorMap = new HashMap<>();

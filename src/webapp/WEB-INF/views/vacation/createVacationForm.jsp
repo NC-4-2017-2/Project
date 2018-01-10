@@ -1,7 +1,16 @@
 <form action="/vacation/createVacation" method="post">
-    Choose start date : <input type="date" name="startDate" required><br>
-    Choose end date : <input type="date" name="endDate" required><br>
-    <br>
-    <input type="submit" value="Create"/></td>
+    <div class="form-group">
+        <label for="startDate">Choose start date:</label>
+        <div class="input-group">
+            <input type="date" class="form-control" id="startDate"
+                   name="startDate" placeholder="Enter start date" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="endDate">Choose end date:</label>
+        <div class="input-group">
+            <input type="date" class="form-control" id="endDate" name="endDate"
+                   placeholder="Enter end date" required></div>
+    </div>
+    <input type="submit" class="btn btn-primary btn-md" value="Create"/>
 </form>
-

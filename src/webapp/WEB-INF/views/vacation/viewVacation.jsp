@@ -2,18 +2,35 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
-    <title>Vacation</title>
+    <title>Vacations</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
-<c:forEach items="${vacationList}" var="vacation">
-    <a href="/vacation/showVacation/${vacation.vacationId}">Vacation
-        - ${vacation.startDate}</a> <br>
-</c:forEach>
-<%@include file="../errors/errorMap.jsp" %>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
+<div class="col-lg-2">
+    <table class="table table-hover table-dark" border="3">
+        <thead>
+        <tr>
+            <th scope="col" style="text-align: center;">Vacations:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${vacationList}" var="vacation">
+            <tr>
+                <td>
+                    <a href="/vacation/showVacation/${vacation.vacationId}">Vacation
+                    - ${vacation.startDate}</a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <%@include file="../errors/errorMap.jsp" %>
+</div>
 </body>
 </html>

@@ -2,27 +2,38 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
-    <title>Find vacation</title>
+    <title>Find vacation by status</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
 <form action="/vacation/viewVacation">
-    Choose PM status:<select name="pmStatus" required>
-    <option value="APPROVED">APPROVED</option>
-    <option value="DISAPPROVED">DISAPPROVED</option>
-    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
-</select><br>
-    Choose LM status:<select name="lmStatus" required>
-        <option value="APPROVED">APPROVED</option>
-        <option value="DISAPPROVED">DISAPPROVED</option>
-        <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
-    </select><br>
+    <div class="form-group">
+        <label for="pmStatus">Choose PM status:</label>
+        <div class="input-group">
+            <select name="pmStatus" id="pmStatus" required>
+                <option value="APPROVED">APPROVED</option>
+                <option value="DISAPPROVED">DISAPPROVED</option>
+                <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
+            </select>
+        </div>
+        <br>
+        <label for="lmStatus">Choose LM status:</label>
+        <div class="input-group">
+            <select name="lmStatus" id="lmStatus" required>
+                <option value="APPROVED">APPROVED</option>
+                <option value="DISAPPROVED">DISAPPROVED</option>
+                <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
+            </select>
+        </div>
+    </div>
     <%@include file="../errors/errorMap.jsp" %>
-    <input type="submit" value="Find">
+    <input type="submit" class="btn btn-primary btn-md" value="Find">
 </form>
 </body>
 </html>

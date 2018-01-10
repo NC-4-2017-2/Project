@@ -2,100 +2,78 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
     <title>Vacation</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
-<table border="0">
+<jsp:include page="../fragments/header.jsp"></jsp:include>
+<div class="col-lg-4">
+<table class="table table-hover table-dark" border="3">
+    <thead>
     <tr>
-        <td>
-            User
-        </td>
-        <td>
-            ${author.lastName} ${author.firstName}
-        </td>
+        <th scope="col" colspan="2" style="text-align: center;">Vacation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">User:</th>
+        <td>${author.lastName} ${author.firstName}</td>
     </tr>
     <tr>
-        <td>
-            Project
-        </td>
-        <td>
-            ${project.name}
-        </td>
+        <th scope="row">Project:</th>
+        <td>${project.name}</td>
     </tr>
     <tr>
-        <td>
-            Start date
-        </td>
-        <td>
-            ${vacation.startDate}
-        </td>
+        <th scope="row">Start date:</th>
+        <td>${vacation.startDate}</td>
     </tr>
     <tr>
-        <td>
-            End date
-        </td>
-        <td>
-            ${vacation.endDate}
-        </td>
+        <th scope="row">End date:</th>
+        <td>${vacation.endDate}</td>
     </tr>
     <tr>
-        <td>
-            Project manager
-        </td>
-        <td>
-            ${projectManager.lastName} ${projectManager.firstName}
-        </td>
+        <th scope="row">Project manager:</th>
+        <td>${projectManager.lastName} ${projectManager.firstName}</td>
     </tr>
     <tr>
-        <td>
-            Line manager
-        </td>
-        <td>
-            ${lineManager.lastName} ${lineManager.firstName}
-        </td>
+        <th scope="row">Line manager:</th>
+        <td>${lineManager.lastName} ${lineManager.firstName}</td>
     </tr>
     <tr>
-        <td>
-            Project manager status
-        </td>
-        <td>
-            ${vacation.pmStatus}
-        </td>
+        <th scope="row">Project manager status:</th>
+        <td>${vacation.pmStatus}</td>
     </tr>
     <tr>
-        <td>
-            Line manager status
-        </td>
-        <td>
-            ${vacation.lmStatus}
-        </td>
+        <th scope="row">Line manager status:</th>
+        <td>${vacation.lmStatus}</td>
     </tr>
+    </tbody>
 </table>
 <%@include file="../errors/errorMap.jsp" %>
 <c:if test="${vacation.lmStatus eq 'WAITING_FOR_APPROVAL' && vacation.pmStatus eq 'WAITING_FOR_APPROVAL' && vacation.userId eq currentUser.userId}">
     <form action="/vacation/updateAuthorVacation/${vacation.vacationId}">
-        <button type="submit">Update vacation</button>
+        <button type="submit" class="btn btn-primary btn-md">Update vacation</button>
     </form>
 </c:if>
 <c:if test="${vacation.pmId ne vacation.lmId}">
 <c:if test="${currentUser.userId eq vacation.pmId}">
     PM status:
     <form action="/vacation/updateStatus/${vacation.vacationId}" method="post">
-        <button type="submit" name="status" value="APPROVED">Approve</button>
-        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+        <button type="submit" class="btn btn-primary btn-md" name="status" value="APPROVED">Approve</button>
+        <button type="submit" class="btn btn-primary btn-md" name="status" value="DISAPPROVED">Disapprove</button>
     </form>
     <br>
 </c:if>
 <c:if test="${currentUser.userId eq vacation.lmId}">
     LM status:
     <form action="/vacation/updateStatus/${vacation.vacationId}" method="post">
-        <button type="submit" name="status" value="APPROVED">Approve</button>
-        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+        <button type="submit" class="btn btn-primary btn-md" name="status" value="APPROVED">Approve</button>
+        <button type="submit" class="btn btn-primary btn-md" name="status" value="DISAPPROVED">Disapprove</button>
     </form>
     <br>
 </c:if>
@@ -103,10 +81,11 @@
 <c:if test="${vacation.pmId eq vacation.lmId}">
     PM and LM status:
     <form action="/vacation/updateStatus/${vacation.vacationId}" method="post">
-        <button type="submit" name="status" value="APPROVED">Approve</button>
-        <button type="submit" name="status" value="DISAPPROVED">Disapprove</button>
+        <button type="submit" class="btn btn-primary btn-md" name="status" value="APPROVED">Approve</button>
+        <button type="submit" class="btn btn-primary btn-md" name="status" value="DISAPPROVED">Disapprove</button>
     </form>
     <br>
 </c:if>
+</div>
 </body>
 </html>

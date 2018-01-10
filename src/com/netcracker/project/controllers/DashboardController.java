@@ -72,6 +72,10 @@ public class DashboardController {
       }
       return "dashboard/PMDashboard";
     }
+    if (currentUser.getJobTitle().name()
+        .equals(JobTitle.LINE_MANAGER.name())) {
+      return "dashboard/LMDashboard";
+    }
     return "dashboard/dashboard";
   }
 

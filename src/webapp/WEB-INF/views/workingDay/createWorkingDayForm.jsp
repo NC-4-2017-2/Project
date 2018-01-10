@@ -43,6 +43,6 @@
             <td><input name="sundayEndTime" type="time"></td>
         </tr>
     </table>
-
+    <br>
     <input type="submit" value="Create">
 </form>

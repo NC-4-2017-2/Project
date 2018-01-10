@@ -16,3 +16,4 @@
         <td>${project.projectStatus}</td>
     </tr>
 </table>
+<br>

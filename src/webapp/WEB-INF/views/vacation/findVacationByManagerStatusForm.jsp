@@ -1,4 +1,4 @@
-<form action="/businessTrip/viewPMTrip">
+<form action="/vacation/findVacationByManagerStatus">
     Choose status:<select name="status" required>
     <option value="APPROVED">APPROVED</option>
     <option value="DISAPPROVED">DISAPPROVED</option>

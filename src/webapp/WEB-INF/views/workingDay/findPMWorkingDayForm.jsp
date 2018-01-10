@@ -4,5 +4,6 @@
     <option value="DISAPPROVED">DISAPPROVED</option>
     <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
 </select><br>
+    <br>
     <input type="submit" value="Find">
 </form>

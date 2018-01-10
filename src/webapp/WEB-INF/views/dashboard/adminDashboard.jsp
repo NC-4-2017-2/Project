@@ -143,7 +143,9 @@
         <div class="col-sm-3">
             <div class="well">
                 <h4>Create project</h4>
-                <%@include file="../project/createProjectDashboardForm.jsp" %>
+                <form action="/project/createProject">
+                    <button type="submit">Create new project</button>
+                </form>
             </div>
         </div>
         <c:if test="${not empty workingHoursStatisticList}">

@@ -129,9 +129,6 @@
         <div class="well col-sm-4">
             <h4>Table working hours</h4>
             <%@include file="../workingDay/createWorkingDayForm.jsp" %>
-        </div>
-
-        <div class="well col-sm-4">
             <h4>Find working hours by status</h4>
             <%@include file="../workingDay/findPMWorkingDayForm.jsp" %>
         </div>
@@ -142,6 +139,8 @@
             <div class="well">
                 <h4>Create vacation on me</h4>
                 <%@include file="../vacation/createVacationForm.jsp" %>
+                <h4>Find vacation by status</h4>
+                <%@include file="../vacation/findVacationByManagerStatusForm.jsp" %>
             </div>
         </div>
         <div class="col-sm-3">

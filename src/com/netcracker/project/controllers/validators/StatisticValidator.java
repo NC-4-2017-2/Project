@@ -17,8 +17,6 @@ public class StatisticValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-
-
   public Map<String, String> validateProjectManager(User user) {
     if (user.getProjectStatus().name()
         .equals(ProjectStatus.TRANSIT.name())) {

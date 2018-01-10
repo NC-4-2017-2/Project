@@ -44,5 +44,5 @@
         </tr>
     </table>
     <br>
-    <input type="submit" value="Create">
+    <input type="submit" class="btn btn-primary btn-md" value="Create">
 </form>

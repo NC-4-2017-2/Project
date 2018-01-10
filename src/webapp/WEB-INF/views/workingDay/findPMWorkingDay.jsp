@@ -2,22 +2,33 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
-    <title>FindPMWorkingDayByStatus</title>
+    <title>Find PM working day by status</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
 <form action="/workingDay/viewPMWorkingDay">
-    Choose status:<select name="status" required>
-    <option value="APPROVED">APPROVED</option>
-    <option value="DISAPPROVED">DISAPPROVED</option>
-    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL</option>
-</select><br>
-    <%@include file="../errors/errorMap.jsp" %>
-    <input type="submit" value="Find">
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="status">Choose status:</label>
+            <div class="input-group">
+                <select name="status" id="status" required>
+                    <option value="APPROVED">APPROVED</option>
+                    <option value="DISAPPROVED">DISAPPROVED</option>
+                    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL
+                    </option>
+                </select>
+            </div>
+            <br>
+            <%@include file="../errors/errorMap.jsp" %>
+            <input type="submit" class="btn btn-primary btn-md" value="Find">
+        </div>
+    </div>
 </form>
 </body>
 </html>

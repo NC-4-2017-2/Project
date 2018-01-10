@@ -69,8 +69,7 @@
                 <td>Project Name:</td>
                 <td>
                     <select name="projectNames">
-                        <c:forEach items="${projectNamesList}"
-                                   var="projectNames">
+                        <c:forEach items="${projectNamesList}" var="projectNames">
                             <option value="${projectNames}">${projectNames}</option>
                         </c:forEach>
                     </select>

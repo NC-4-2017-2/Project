@@ -64,6 +64,11 @@ public class TaskValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validationFindTaskByProject(String project) {
+    validateProjects(project);
+    return getErrorMap();
+  }
+
   public Map<String, String> validationEntityTask(Task task) {
     validateTask(task);
     return getErrorMap();

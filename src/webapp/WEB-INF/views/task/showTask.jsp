@@ -34,7 +34,7 @@
 
 
 <form action="/task/updateTask/${task.taskId}">
-    <c:if test="${taskUser.userId eq curUser.userId or curUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
+    <c:if test="${taskUser.userId eq curUser.userId}">
     <button type="submit">Edit task</button>
     </c:if>
 </form>

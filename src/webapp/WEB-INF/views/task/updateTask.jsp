@@ -13,16 +13,12 @@
 </head>
 <body>
 <div align="center">
-    <form action="/task/updateTask/{taskId}" method="post"
+    <form action="/task/updateTask/${taskId}" method="post"
           commandName=taskForm">
         <table border="0">
                 <tr>
                 <tr>
                     <h2>Updating task</h2></td>
-                </tr>
-                <tr>
-                    <td><input type="text" name="taskId" size="20" hidden = false
-                               value=${task.taskId}></td>
                 </tr>
                 <tr>
                     <td>Task Name:</td>
@@ -60,7 +56,7 @@
                         <option value="LOW">LOW</option>
                     </select></td>
                 </tr>
-                <c:if test="${taskUser.userId eq curUser.userId or curUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
+                <c:if test="${taskUser.userId eq curUser.userId}">
                 <tr>
                     <td>Status:</td>
                     <td>
@@ -110,11 +106,11 @@
 
         <%@include file="../errors/errorMap.jsp" %>
 
+        <c:if test="${taskUser.userId eq curUser.userId}">
         <tr>
-            <c:if test="${taskUser.userId eq curUser.userId or curUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
             <td><input type="submit" value="Update" size="40" width="40"/></td>
-            </c:if>
         </tr>
+        </c:if>
         </table>
     </form>
 </div>

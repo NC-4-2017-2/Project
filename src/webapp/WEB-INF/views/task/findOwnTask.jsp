@@ -10,7 +10,7 @@
     }
 </style>
 <body>
-<form action="/task/findPMTask">
+<form action="/task/findOwnTask">
 
     Select task status:
     <select name="status">

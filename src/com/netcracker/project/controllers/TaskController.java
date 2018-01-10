@@ -148,9 +148,9 @@ public class TaskController {
     return "responseStatus/success";
   }
 
-  @RequestMapping(value = "/updateTask/{taskId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/updateTask/{id}", method = RequestMethod.POST)
   public String updateTask(
-      @RequestParam("taskId") String id,
+      @PathVariable("id") String id,
       @RequestParam("name") String name,
       @RequestParam("taskType") String type,
       @RequestParam("startDate") String startDate,
@@ -172,6 +172,14 @@ public class TaskController {
     Map<String, String> errorMap = new HashMap<>();
     Collection<String> projects = projectDAO.findAllOpenedProjects();
 
+    errorMap = validator.validateInputId(id);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/updateTask";
+    }
+
+    BigInteger validTaskId = new BigInteger(id);
+
     errorMap = validator.validationUpdate(name, type, startDate,
          plannedEndDate, priority, status,
          description, comments, projectName);
@@ -191,11 +199,6 @@ public class TaskController {
       return "task/updateTask";
     }
 
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "task/updateTask";
-    }
-    BigInteger validTaskId = new BigInteger(id);
 
     Integer existenceProject = projectDAO
         .findProjectByNameIfExist(projectName);
@@ -267,17 +270,20 @@ public class TaskController {
     return "responseStatus/success";
   }
 
-  @RequestMapping(value = "/updateTask/{taskId}", method = RequestMethod.GET)
-  public String updateTaskWithGetParams(@PathVariable("taskId") BigInteger taskId,
+  @RequestMapping(value = "/updateTask/{id}", method = RequestMethod.GET)
+  public String updateTaskWithGetParams(@PathVariable("id") String id,
       Model model, Principal principal) {
-    logger.info("editTaskWithGetParams method. taskId" + taskId);
+    logger.info("editTaskWithGetParams method. taskId" + id);
 
     String currentUserLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(currentUserLogin);
 
-    Task task = taskDAO.findTaskByTaskId(taskId);
+    BigInteger validId = new BigInteger(id);
+
+    Task task = taskDAO.findTaskByTaskId(validId);
     User taskUser = userDAO.findUserByUserId(task.getUserId());
     Collection<String> projects = projectDAO.findAllOpenedProjects();
+
     model.addAttribute("task", task);
     model.addAttribute("taskId", task.getTaskId());
     model.addAttribute("name", task.getName());
@@ -361,9 +367,16 @@ public class TaskController {
   }
 
   @Secured({"ROLE_PM"})
-  @RequestMapping(value = "findPMTask", method = RequestMethod.GET)
-  public String findPMTask() {
-    return "task/findPMTask";
+  @RequestMapping(value = "findTaskByProject", method = RequestMethod.GET)
+  public String findTaskByProject(Model model) {
+    Collection<String> projects = projectDAO.findAllOpenedProjects();
+    model.addAttribute("projectNamesList", projects);
+    return "task/findTaskByProject";
+  }
+
+  @RequestMapping(value = "findOwnTask", method = RequestMethod.GET)
+  public String findOwnTask() {
+    return "task/findOwnTask";
   }
 
   @RequestMapping(value = "findTaskByPriority", params = "priority", method = RequestMethod.GET)
@@ -405,7 +418,6 @@ public class TaskController {
     model.addAttribute("taskList", tasks);
     return "task/viewTask";
   }
-
 
   @RequestMapping(value = "findTaskPerPeriodAndStatus", params = {"status", "startDate",
       "endDate"}, method = RequestMethod.GET)
@@ -517,9 +529,8 @@ public class TaskController {
   }
 
 
-  @Secured({"ROLE_PM"})
-  @RequestMapping(value = "findPMTask", params = "status", method = RequestMethod.GET)
-  public String showTaskForPM(
+  @RequestMapping(value = "findOwnTask", params = "status", method = RequestMethod.GET)
+  public String showTaskOwnTask(
       @RequestParam(value = "status") String status, Model model,
       Principal principal) {
 
@@ -555,5 +566,52 @@ public class TaskController {
 
     return "task/viewTask";
   }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "findTaskByProject", params = "project", method = RequestMethod.GET)
+  public String showTaskListWithProjects(@RequestParam("project") String projectName, Model model) {
+
+    Collection<String> projects = projectDAO.findAllOpenedProjects();
+
+    Map<String, String> errorMap = new TaskValidator().validationFindTaskByProject(projectName);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      model.addAttribute("projectNamesList", projects);
+      return "task/findTaskByProject";
+    }
+
+    Integer existenceProject = projectDAO.findProjectByNameIfExist(projectName);
+    if (existenceProject != 1) {
+      errorMap.put("PROJECT_EXIST_ERROR", ErrorMessages.PROJECT_EXIST_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "task/findTaskByProject";
+    }
+
+
+    Project project = projectDAO.findProjectByName(projectName);
+    Collection<Task> tasks = taskDAO.findTaskByProjectId(project.getProjectId());
+
+    Task task = null;
+    if (tasks.size() >= 1) {
+      Iterator<Task> taskIterator = tasks.iterator();
+      while (taskIterator.hasNext()) {
+        task = taskIterator.next();
+      }
+    }
+
+    if (tasks.isEmpty()){
+      Map<String, String> existenceError = new TaskValidator().validationEntityTask(task);
+      if (!existenceError.isEmpty()) {
+        model.addAttribute("errorMap", existenceError);
+        return "task/viewTask";
+      }
+    }
+
+    model.addAttribute("taskList", tasks);
+
+    return "task/viewTask";
+  }
+
+
 
 }

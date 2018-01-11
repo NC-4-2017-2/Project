@@ -148,7 +148,7 @@
             <div class="well">
                 <h4>Create business trip</h4>
                 <form action="/businessTrip/createBusinessTrip">
-                    <button type="submit">Create</button>
+                    <button type="submit" class="btn btn-primary btn-md">Create</button>
                 </form>
                 <h4>Show trips by status</h4>
                 <%@include file="../businessTrip/findPMTripForm.jsp" %>
@@ -164,7 +164,7 @@
                 <%@include file="../project/showProjectForm.jsp" %>
 
                 <form action="/project/showProject/${project.projectId}">
-                    <button type="submit">More info</button>
+                    <button type="submit" class="btn btn-primary btn-md">More info</button>
                 </form>
 
             </div>

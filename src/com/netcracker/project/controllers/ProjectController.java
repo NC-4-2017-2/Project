@@ -352,11 +352,23 @@ public class ProjectController {
       userDAO
           .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());
 
+      Project project = projectDAO.findProjectByProjectId(validProjectId);
+
+      Date validaStartDate = converter.convertStringToDateFromJSP(startDate);
+      Date validaEndDate = converter.convertStringToDateFromJSP(endDate);
+
+      errorMap = validator.validateProjectAndWorkPeriodDates(project,
+          validaStartDate, validaEndDate);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "project/addUser";
+      }
+
       WorkPeriod workPeriod = new WorkPeriodBuilder()
           .userId(user.getUserId())
           .projectId(validProjectId)
-          .startWorkDate(converter.convertStringToDateFromJSP(startDate))
-          .endWorkDate(converter.convertStringToDateFromJSP(endDate))
+          .startWorkDate(validaStartDate)
+          .endWorkDate(validaEndDate)
           .workPeriodStatus(WorkPeriodStatus.WORKING)
           .build();
 

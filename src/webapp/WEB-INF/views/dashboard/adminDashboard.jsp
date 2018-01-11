@@ -144,7 +144,7 @@
             <div class="well">
                 <h4>Create project</h4>
                 <form action="/project/createProject">
-                    <button type="submit">Create new project</button>
+                    <button type="submit" class="btn btn-primary btn-md">Create new project</button>
                 </form>
             </div>
         </div>

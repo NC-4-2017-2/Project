@@ -313,7 +313,21 @@ public class VacationController {
       }
     }
 
-    return "responseStatus/success";
+    User author = userDAO.findUserByUserId(currentVacation.getUserId());
+    User lineManager = userDAO.findUserByUserId(currentVacation.getLmId());
+    User projectManager = userDAO.findUserByUserId(currentVacation.getPmId());
+    Project project = projectDAO
+        .findProjectByProjectId(currentVacation.getProjectId());
+
+    model.addAttribute("author", author);
+    model.addAttribute("lineManager", lineManager);
+    model.addAttribute("projectManager", projectManager);
+    model.addAttribute("project", project);
+    model.addAttribute("currentUser", currentUser);
+    model.addAttribute("vacation", currentVacation);
+
+    return "vacation/showVacation";
+//    return "responseStatus/success";
   }
 
   @Secured({"ROLE_PM", "ROLE_LM"})

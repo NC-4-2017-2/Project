@@ -363,6 +363,7 @@ public class BusinessTripController {
     Map<String, String> inputIdMap = validator.validateInputId(id);
     if (!inputIdMap.isEmpty()) {
       model.addAttribute("errorMap", inputIdMap);
+      return "businessTrip/showTrip";
     }
 
     BigInteger tripId = new BigInteger(id);

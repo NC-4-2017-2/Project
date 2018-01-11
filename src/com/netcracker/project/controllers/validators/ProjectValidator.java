@@ -4,6 +4,7 @@ import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 public class ProjectValidator extends AbstractValidator {
@@ -110,6 +111,19 @@ public class ProjectValidator extends AbstractValidator {
             ErrorMessages.SPRINT_NAME_EXISTENCE_ERROR);
         return getErrorMap();
       }
+    }
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateProjectAndWorkPeriodDates(Project project,
+      Date startDate, Date endDate) {
+    if (project.getStartDate().compareTo(startDate) == 1) {
+      setErrorToMap("WORK_PERIOD_START_DATE_ERROR",
+          ErrorMessages.WORK_PERIOD_START_DATE_ERROR);
+    }
+    if (project.getEndDate().compareTo(endDate) == -1) {
+      setErrorToMap("WORK_PERIOD_END_DATE_ERROR",
+          ErrorMessages.WORK_PERIOD_END_DATE_ERROR);
     }
     return getErrorMap();
   }

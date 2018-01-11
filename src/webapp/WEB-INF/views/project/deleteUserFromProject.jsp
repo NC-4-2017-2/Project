@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td>
-                <form action="/project/deleteUserFromProject/project/${projectId}/user/${user.userId}"
+                <form action="/project/deleteUserFromProject/project/${projectId}/user/${user.userId}/jobTitle/${user.jobTitle}"
                       method="post">
                     <button type="submit">Delete</button>
                 </form>

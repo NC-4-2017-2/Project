@@ -157,7 +157,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     logger.info(
         "Entering deleteUserByUserId(projectId=" + projectId + "," + " userId="
             + userId + ")");
-    template.update(DELETE_USERS_IN_PROJECT, userId, projectId);
+    template.update(DELETE_USERS_IN_PROJECT, projectId, userId);
   }
 
   @Override

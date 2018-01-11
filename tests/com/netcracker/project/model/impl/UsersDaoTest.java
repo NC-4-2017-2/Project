@@ -154,7 +154,7 @@ public class UsersDaoTest {
 
   @Test
   public void updateProjectStatus() {
-    userDao.updateProjectStatus(BigInteger.valueOf(2), 1);
+    userDao.updateProjectStatus(BigInteger.valueOf(2), 0);
   }
 
   @Test
@@ -255,9 +255,14 @@ public class UsersDaoTest {
 
 
   @Test
-  public void findIfLMExists() {
-    Integer result = userDao.findIfLMExists(BigInteger.valueOf(4));
+  public void findIfLMExistsOnProject() {
+    Integer result = userDao.findIfLMExistsOnProject(BigInteger.valueOf(4));
     assertEquals("1", result.toString());
   }
 
+  @Test
+  public void findIfLMExists() {
+    Integer result = userDao.findIfLMExists(BigInteger.valueOf(2));
+    assertEquals("1", result.toString());
+  }
 }

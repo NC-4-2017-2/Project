@@ -91,7 +91,7 @@ public class VacationController {
       lmStatus = Status.WAITING_FOR_APPROVAL;
     }
 
-    Integer projectLMExistence = userDAO.findIfLMExists(projectId);
+    Integer projectLMExistence = userDAO.findIfLMExistsOnProject(projectId);
     if (projectLMExistence > 0) {
       User lineManager = userDAO.findLMByProjectId(projectId);
       lmApproveId = lineManager.getUserId();
@@ -287,7 +287,7 @@ public class VacationController {
         .findVacationByVacationId(validVacationId);
 
     Integer lmExistence = userDAO
-        .findIfLMExists(currentVacation.getProjectId());
+        .findIfLMExistsOnProject(currentVacation.getProjectId());
 
     if (lmExistence != 1) {
       if (currentUser.getJobTitle().name()

@@ -34,7 +34,7 @@ public interface ProjectDAO {
 
   List<BigInteger> getIdUsers(BigInteger projectId);
 
-  void deleteUserByUserId(BigInteger userId, BigInteger projectID);
+  void deleteUserByUserId(BigInteger projectId, BigInteger userId);
 
   void updateEndDate(BigInteger projectId, Date endDate);
 
@@ -76,7 +76,8 @@ public interface ProjectDAO {
       "INSERT INTO OBJREFERENCE (ATTR_ID,OBJECT_ID,REFERENCE) VALUES (19,?,?)";
 
   String DELETE_USERS_IN_PROJECT =
-      "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ? AND REFERENCE = ?";
+      "DELETE FROM OBJREFERENCE WHERE OBJECT_ID = ? AND REFERENCE = ? "
+          + "AND ATTR_ID = 19";
 
   String FIND_PROJECT_BY_PROJECT_ID =
       "SELECT PROJECT_ID.OBJECT_ID AS PROJECT_ID, PR_NAME.VALUE AS NAME, START_DATE.DATE_VALUE AS START_DATE, END_DATE.DATE_VALUE AS END_DATE, "

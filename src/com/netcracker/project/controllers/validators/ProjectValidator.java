@@ -47,9 +47,10 @@ public class ProjectValidator extends AbstractValidator {
   }
 
   public Map<String, String> validateDeleteUser(String projectId,
-      String userId) {
+      String userId, String jobTitle) {
     validateId(projectId);
     validateId(userId);
+    validateJobTitle(jobTitle);
     return getErrorMap();
   }
 

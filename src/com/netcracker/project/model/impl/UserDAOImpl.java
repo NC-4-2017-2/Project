@@ -309,9 +309,14 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public Integer findIfLMExists(BigInteger projectId) {
-    logger.info("Entering findIfLMExists(projectId=" + projectId + ")");
+  public Integer findIfLMExistsOnProject(BigInteger projectId) {
+    logger.info("Entering findIfLMExistsOnProject(projectId=" + projectId + ")");
     return template.queryForObject(FIND_IF_LM_EXISTS_ON_PROJECT, new Object[]{projectId}, Integer.class);
   }
 
+  @Override
+  public Integer findIfLMExists(BigInteger userId) {
+    logger.info("Entering findIfLMExists(userId=" + userId + ")");
+    return template.queryForObject(FIND_IF_LM_EXIST, new Object[]{userId}, Integer.class);
+  }
 }

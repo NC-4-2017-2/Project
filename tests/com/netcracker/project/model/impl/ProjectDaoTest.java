@@ -323,7 +323,6 @@ public class ProjectDaoTest {
         + "startDate=2017-02-20, plannedEndDate=2018-02-20, "
         + "endDate=2018-02-20, status=OPENED}", result.toString());
   }
-
 }
 
 

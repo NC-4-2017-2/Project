@@ -206,16 +206,17 @@ public class ProjectController {
   }
 
   @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/deleteUserFromProject/project/{projectId}/user/{userId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/deleteUserFromProject/project/{projectId}/user/{userId}/jobTitle/{jobTitle}", method = RequestMethod.POST)
   public String deleteUserFromProject(
       @PathVariable("projectId") String projectId,
       @PathVariable("userId") String userId,
+      @PathVariable("jobTitle") String jobTitle,
       Model model) {
     logger.info("Entering deleteUserFromProject()");
     Map<String, String> errorMap = new HashMap<>();
     Map<String, String> existenceError = new HashMap<>();
     ProjectValidator validator = new ProjectValidator();
-    errorMap = validator.validateDeleteUser(projectId, userId);
+    errorMap = validator.validateDeleteUser(projectId, userId, jobTitle);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "project/deleteUserFromProject";
@@ -225,13 +226,22 @@ public class ProjectController {
     BigInteger validUserId = new BigInteger(userId);
     Integer projectExistence = projectDAO
         .findIfProjectExists(validProjectId);
-    Integer userExistence = userDAO.findIfSEExists(validUserId);
+    Integer userExistence = null;
+    if (jobTitle.equals(JobTitle.SOFTWARE_ENGINEER.name())) {
+      userExistence = userDAO.findIfSEExists(validUserId);
+    }
+    if (jobTitle.equals(JobTitle.LINE_MANAGER.name())) {
+      userExistence = userDAO.findIfLMExists(validUserId);
+    }
+    if (userExistence == null) {
+      return "responseStatus/unsuccess";
+    }
 
     errorMap = validator
         .validateProjectAndUserExistence(projectExistence, userExistence);
 
     if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", existenceError);
+      model.addAttribute("errorMap", errorMap);
       return "project/deleteUserFromProject";
     }
 
@@ -245,7 +255,7 @@ public class ProjectController {
       return "project/deleteUserFromProject";
     }
 
-    projectDAO.deleteUserByUserId(validUserId, validProjectId);
+    projectDAO.deleteUserByUserId(validProjectId, validUserId);
     userDAO
         .updateProjectStatus(validUserId, ProjectStatus.TRANSIT.getId());
     Date currentDate = new Date();
@@ -257,7 +267,7 @@ public class ProjectController {
         .findUserByProjectId(validProjectId);
     model.addAttribute("projectId", validProjectId);
     model.addAttribute("userList", userList);
-    return "responseStatus/success";
+    return "project/deleteUserFromProject";
   }
 
   @Secured({"ROLE_PM"})
@@ -331,7 +341,7 @@ public class ProjectController {
       }
 
       if (user.getJobTitle().name().equals(JobTitle.LINE_MANAGER.name())) {
-        Integer lmExistence = userDAO.findIfLMExists(validProjectId);
+        Integer lmExistence = userDAO.findIfLMExistsOnProject(validProjectId);
         if (lmExistence > 0) {
           errorMap.put("LM_EXIST_ERROR", ErrorMessages.LM_EXIST_ERROR);
           model.addAttribute("errorMap", errorMap);
@@ -340,7 +350,7 @@ public class ProjectController {
       }
 
       if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
-        Integer pmExistence = userDAO.findIfLMExists(validProjectId);
+        Integer pmExistence = userDAO.findIfLMExistsOnProject(validProjectId);
         if (pmExistence > 0) {
           errorMap.put("PM_EXIST_ERROR", ErrorMessages.PM_EXIST_ERROR);
           model.addAttribute("errorMap", errorMap);
@@ -408,7 +418,7 @@ public class ProjectController {
     }
 
     if (user.getJobTitle().equals(JobTitle.LINE_MANAGER)) {
-      Integer lmExistence = userDAO.findIfLMExists(validProjectId);
+      Integer lmExistence = userDAO.findIfLMExistsOnProject(validProjectId);
       if (lmExistence > 0) {
         errorMap.put("LM_EXIST_ERROR", ErrorMessages.LM_EXIST_ERROR);
         model.addAttribute("errorMap", errorMap);
@@ -417,7 +427,7 @@ public class ProjectController {
     }
 
     if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
-      Integer pmExistence = userDAO.findIfLMExists(validProjectId);
+      Integer pmExistence = userDAO.findIfLMExistsOnProject(validProjectId);
       if (pmExistence > 0) {
         errorMap.put("PM_EXIST_ERROR", ErrorMessages.PM_EXIST_ERROR);
         model.addAttribute("errorMap", errorMap);

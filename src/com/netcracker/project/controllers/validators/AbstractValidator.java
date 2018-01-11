@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
@@ -67,6 +68,25 @@ abstract class AbstractValidator {
       errorMap.put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
     }
   }
+  void validateJobTitle(String jobTitle) {
+    if (StringUtils.isEmpty(jobTitle)) {
+      errorMap.put("EMPTY_JOB_TITLE_ERROR", ErrorMessages.EMPTY_JOB_TITLE_ERROR);
+      return;
+    }
+    if (!jobTitleEnumCheck(jobTitle)) {
+
+    }
+
+  }
+
+  private boolean jobTitleEnumCheck(String jobTitle) {
+    for (JobTitle enumStatus : JobTitle.values()) {
+      if (enumStatus.name().equals(jobTitle)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   void validateStatus(String status) {
     if (StringUtils.isEmpty(status)) {
@@ -100,7 +120,6 @@ abstract class AbstractValidator {
         return true;
       }
     }
-
     return false;
   }
 

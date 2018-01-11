@@ -67,9 +67,11 @@ public class DashboardController {
           .equals(ProjectStatus.TRANSIT.name())) {
         BigInteger projectId = projectDAO
             .findProjectIdByPMLogin(principal.getName());
-        Project pmCurrentProject = projectDAO.findProjectByProjectId(projectId);
+        Project pmCurrentProject = projectDAO
+            .findProjectByProjectId(projectId);
         model.addAttribute("project", pmCurrentProject);
       }
+      model.addAttribute("currentUser", currentUser);
       return "dashboard/PMDashboard";
     }
     if (currentUser.getJobTitle().name()
@@ -78,5 +80,4 @@ public class DashboardController {
     }
     return "dashboard/dashboard";
   }
-
 }

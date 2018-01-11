@@ -8,8 +8,6 @@
           href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
     <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
 </head>
 <body>
 <form action="/project/createProject" method="post">

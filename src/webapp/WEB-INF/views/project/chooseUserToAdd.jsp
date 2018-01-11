@@ -10,8 +10,6 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<%--<form action="/project/addUserFromDuplicate/${projectId}/${startDate}/${endDate}"--%>
-<%--method="post">--%>
 <div class="col col-md-8">
     <table class="table table-hover table-dark" border="3">
         <thead>
@@ -42,7 +40,7 @@
                 <td style="text-align: center;">
                     <form action="/project/addUserFromDuplicate/${projectId}/${startDate}/${endDate}/${user.userId}"
                           method="post">
-                        <button type="submit" class="btn btn-primary btn-md"
+                            <button type="submit" class="btn btn-primary btn-md"
                                 value="Add">Add
                         </button>
                     </form>
@@ -51,22 +49,7 @@
         </c:forEach>
         </tbody>
     </table>
-
-    <%--<div class="form-group">--%>
-    <%--<label for="user">Choose user:</label>--%>
-    <%--<div class="input-group">--%>
-    <%--<select name="user" id="user">--%>
-    <%--<c:forEach items="${usersList}" var="user">--%>
-    <%--<option value="${user.userId}"--%>
-    <%--name="user">${user.lastName} ${user.firstName} ${user.dateOfBirth} ${user.jobTitle}</option>--%>
-    <%--</c:forEach>--%>
-    <%--</select>--%>
-    <%--</div>--%>
-    <%--</div>--%>
-    <%--<input type="submit" class="btn btn-primary btn-md" value="Add">--%>
-    <%--<br>--%>
     <%@include file="../errors/errorMap.jsp" %>
 </div>
-<%--</form>--%>
 </body>
 </html>

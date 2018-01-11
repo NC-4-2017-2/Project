@@ -31,7 +31,7 @@
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                 style: {
                   color: (Highcharts.theme
-                  && Highcharts.theme.contrastTextColor)
+                      && Highcharts.theme.contrastTextColor)
                   || 'black'
                 }
               }
@@ -68,7 +68,7 @@
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                 style: {
                   color: (Highcharts.theme
-                  && Highcharts.theme.contrastTextColor)
+                      && Highcharts.theme.contrastTextColor)
                   || 'black'
                 }
               }
@@ -140,7 +140,8 @@
                 <h4>Create vacation on me</h4>
                 <%@include file="../vacation/createVacationForm.jsp" %>
                 <h4>Find vacation by status</h4>
-                <%@include file="../vacation/findVacationByManagerStatusForm.jsp" %>
+                <%@include
+                        file="../vacation/findVacationByManagerStatusForm.jsp" %>
             </div>
         </div>
         <div class="col-sm-3">
@@ -148,7 +149,9 @@
             <div class="well">
                 <h4>Create business trip</h4>
                 <form action="/businessTrip/createBusinessTrip">
-                    <button type="submit" class="btn btn-primary btn-md">Create</button>
+                    <button type="submit" class="btn btn-primary btn-md">
+                        Create
+                    </button>
                 </form>
                 <h4>Show trips by status</h4>
                 <%@include file="../businessTrip/findPMTripForm.jsp" %>
@@ -159,14 +162,36 @@
             <div class="well">
                 <h4>Find projects by period</h4>
                 <%@include file="../project/findProjectByStartDateForm.jsp" %>
-
-                <h4>Current project</h4>
-                <%@include file="../project/showProjectForm.jsp" %>
-
-                <form action="/project/showProject/${project.projectId}">
-                    <button type="submit" class="btn btn-primary btn-md">More info</button>
-                </form>
-
+                <c:if test="${currentUser.projectStatus eq 'WORKING'}">
+                    <h4>Current project</h4>
+                    <table class="table table-hover table-dark" border="0">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Name:</th>
+                            <td>${project.name}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Start date:</th>
+                            <td>${project.startDate}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">End date:</th>
+                            <td>${project.endDate}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Project status:</th>
+                            <td>${project.projectStatus}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <form action="/project/showProject/${project.projectId}">
+                        <button type="submit" class="btn btn-primary btn-md">
+                            More
+                            info
+                        </button>
+                    </form>
+                </c:if>
             </div>
         </div>
     </div>

@@ -1,7 +1,12 @@
 <form action="/project/findProjectByStartDate">
-    Please, choose start and end of period:<br>
-    Start date: <br> <input type="date" name="startDate"><br>
-    End date: <br> <input type="date" name="endDate"><br>
+    <label for="startDate">Start date:</label>
+    <div class="input-group">
+        <input type="date" name="startDate" id="startDate">
+    </div>
+    <label for="endDate">Start date:</label>
+    <div class="input-group">
+        <input type="date" name="endDate" id="endDate">
+    </div>
     <br>
-    <input type="submit" value="Find">
+    <input type="submit" class="btn btn-primary btn-md" value="Find">
 </form>

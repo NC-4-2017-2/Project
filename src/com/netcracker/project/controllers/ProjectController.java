@@ -614,24 +614,6 @@ public class ProjectController {
   }
 
   @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/showSprint/{sprintId}", method = RequestMethod.GET)
-  public String showSprints(@PathVariable("sprintId") String sprintId,
-      Model model) {
-    logger.info("Entering showSprints()");
-    ProjectValidator validator = new ProjectValidator();
-    Map<String, String> errorMap = validator.validateInputId(sprintId);
-    if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "project/viewSprints";
-    }
-
-    BigInteger validSprintId = new BigInteger(sprintId);
-    Sprint sprint = projectDAO.findSprintBySprintId(validSprintId);
-    model.addAttribute("sprint", sprint);
-    return "project/showSprint";
-  }
-
-  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/closeSprint/{sprintId}", method = RequestMethod.POST)
   public String closeSprint(@PathVariable("sprintId") String sprintId,
       Model model) {
@@ -640,16 +622,14 @@ public class ProjectController {
     Map<String, String> errorMap = validator.validateInputId(sprintId);
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
-      return "project/showSprint";
+      return "responseStatus/unsuccess";
+
     }
     BigInteger validSprintId = new BigInteger(sprintId);
 
     Date date = new Date();
     projectDAO.updateSprintEndDate(validSprintId, date);
     projectDAO.updateSprintStatus(validSprintId, OCStatus.CLOSED);
-
-    Sprint sprint = projectDAO.findSprintBySprintId(validSprintId);
-    model.addAttribute("sprint", sprint);
-    return "project/showSprint";
+    return "responseStatus/success";
   }
 }

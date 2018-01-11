@@ -1,21 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
-<head>
-    <style>
-    p {
-        color: red;
-    }
-</style>
     <title>ProjectByStartDate</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-<form action="/project/findProjectByStartDate">
-    Please, choose start and end of period:<br>
-    Start date: <input type="date" name="startDate"><br>
-    End date: <input type="date" name="endDate"><br>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
+<div class="col-lg-6">
+    <%@include file="findProjectByStartDateForm.jsp" %>
     <%@include file="../errors/errorMap.jsp" %>
-    <input type="submit" value="Find">
-</form>
+</div>
 </body>
 </html>

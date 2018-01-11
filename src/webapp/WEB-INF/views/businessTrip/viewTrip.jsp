@@ -2,13 +2,11 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
+    <title>Show Business Trips</title>
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
     <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
-    <title>Show Business Trips</title>
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>

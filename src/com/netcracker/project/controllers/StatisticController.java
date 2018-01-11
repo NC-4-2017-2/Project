@@ -70,6 +70,9 @@ public class StatisticController {
     for (SprintStatistic sprint : sprintStat) {
       currentEnd.add(sprint.getTakeDays());
     }
+    if (sprintStat.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("sprintStatList", sprintStat);
     model.addAttribute("plannedDateList", plannedDate);
     model.addAttribute("currentEndList", currentEnd);
@@ -117,7 +120,10 @@ public class StatisticController {
         .getTaskCountByProjectIdAndDatePieChart(projectId,
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
-
+    if (projectTasks.getCritical() == 0 && projectTasks.getHigh() == 0
+        && projectTasks.getLow() == 0 && projectTasks.getNormal() == 0) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("critical", projectTasks.getCritical());
     model.addAttribute("high", projectTasks.getHigh());
     model.addAttribute("normal", projectTasks.getNormal());
@@ -178,6 +184,10 @@ public class StatisticController {
         .getTaskCountByUserIdPieChart(user.getUserId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
+    if (userTasks.getCritical() == 0 && userTasks.getHigh() == 0
+        && userTasks.getLow() == 0 && userTasks.getNormal() == 0) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("critical", userTasks.getCritical());
     model.addAttribute("high", userTasks.getHigh());
     model.addAttribute("normal", userTasks.getNormal());
@@ -240,6 +250,9 @@ public class StatisticController {
         .getWorkingHoursByUserId(user.getUserId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
+    if (workingHoursStatisticList.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("workingHoursStatisticList", workingHoursStatisticList);
     return "statistic/viewUserHoursStat";
   }
@@ -264,7 +277,9 @@ public class StatisticController {
 
     WorkPeriodStatistic workPeriod = statisticService
         .getWorkPeriodByProjectId(projectId);
-
+    if (workPeriod.getWorking() == 0 || workPeriod.getFired() == 0) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("working", workPeriod.getWorking());
     model.addAttribute("fired", workPeriod.getFired());
     return "statistic/viewWorkersProjectStat";
@@ -306,7 +321,9 @@ public class StatisticController {
         .getVacationsByProjectId(projectId,
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
-
+    if (vacationsByProjectId.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("vacationsList", vacationsByProjectId);
     return "statistic/viewWorkersVacations";
   }
@@ -338,6 +355,10 @@ public class StatisticController {
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
 
+    if (userTasks.getCritical() == 0 && userTasks.getHigh() == 0
+        && userTasks.getLow() == 0 && userTasks.getNormal() == 0) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("critical", userTasks.getCritical());
     model.addAttribute("high", userTasks.getHigh());
     model.addAttribute("normal", userTasks.getNormal());
@@ -370,7 +391,9 @@ public class StatisticController {
         .getWorkingHoursByUserId(currentUser.getUserId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
-
+    if (workingHoursStatisticList.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("workingHoursStatisticList", workingHoursStatisticList);
     return "statistic/viewUserHoursStat";
   }

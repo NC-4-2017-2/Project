@@ -144,6 +144,9 @@ public class VacationController {
         .findVacationByUserIdAndPmAndLmStatus(currentUser.getUserId(),
             Status.valueOf(pmStatus).getId(), Status.valueOf(lmStatus).getId());
 
+    if (vacations.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("vacationList", vacations);
     return "vacation/viewVacation";
   }
@@ -348,10 +351,12 @@ public class VacationController {
           .findVacationByLMIdAndLMStatus(currentUser.getUserId(),
               Status.valueOf(status).getId());
     }
-    if (vacations != null) {
-      model.addAttribute("vacationList", vacations);
-      return "vacation/viewVacation";
+
+    if (vacations == null || vacations.isEmpty()) {
+      return "responseStatus/noDataFound";
     }
+
+    model.addAttribute("vacationList", vacations);
     return "vacation/viewVacation";
   }
 }

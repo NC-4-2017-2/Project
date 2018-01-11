@@ -70,6 +70,9 @@ public class WorkingDayController {
         .findWorkingDayPerPeriod(user.getUserId(),
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
+    if (workingDays.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("workingDays", workingDays);
     return "workingDay/viewWorkingDay";
   }
@@ -97,6 +100,9 @@ public class WorkingDayController {
     Collection<WorkingDay> workingDays = workingDayDAO
         .findWorkingDayByPMIdAndStatus(currentUser.getUserId(),
             Status.valueOf(status).getId());
+    if (workingDays.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("workingDays", workingDays);
     return "workingDay/viewWorkingDay";
   }

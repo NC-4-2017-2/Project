@@ -263,6 +263,9 @@ public class BusinessTripController {
     Collection<BusinessTrip> trips = businessTripDAO
         .findTripByUserIdAndStatus(user.getUserId(),
             Status.valueOf(status).getId());
+    if (trips.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
 
     model.addAttribute("tripList", trips);
     return "businessTrip/viewTrip";
@@ -430,10 +433,13 @@ public class BusinessTripController {
     }
 
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    Collection<BusinessTrip> businessTrip = businessTripDAO
+    Collection<BusinessTrip> trips = businessTripDAO
         .findTripByPMIdAndStatus(currentUser.getUserId(),
             Status.valueOf(status).getId());
-    model.addAttribute("tripList", businessTrip);
+    if (trips.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
+    model.addAttribute("tripList", trips);
     return "businessTrip/viewTrip";
   }
 }

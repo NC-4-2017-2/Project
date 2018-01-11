@@ -141,6 +141,9 @@ public class ProjectController {
     Collection<Project> projectList = projectDAO
         .findProjectByStartDate(converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate));
+    if (projectList.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
     model.addAttribute("projectList", projectList);
     return "project/viewProject";
   }
@@ -578,7 +581,6 @@ public class ProjectController {
       model.addAttribute("errorMap", errorMap);
       return "project/viewSprints";
     }
-
     model.addAttribute("sprintList", sprints);
     return "project/viewSprints";
   }

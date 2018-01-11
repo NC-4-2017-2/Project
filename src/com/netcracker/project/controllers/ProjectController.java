@@ -53,10 +53,16 @@ public class ProjectController {
   public String createSprints(
       Model model) {
     logger.info("Entering createSprints()");
-
+    ProjectValidator validator = new ProjectValidator();
+    Map<String, String> errorMap = new HashMap<>();
     Collection<User> pmOnTransit = userDAO
         .findUsersByJobTitleAndProjectStatus(JobTitle.PROJECT_MANAGER.getId(),
             ProjectStatus.TRANSIT.getId());
+    errorMap = validator.validatePMTransitList(pmOnTransit);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
     model.addAttribute("pmOnTransitList", pmOnTransit);
     return "project/createProject";
   }

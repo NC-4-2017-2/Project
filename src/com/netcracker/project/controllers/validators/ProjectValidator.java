@@ -3,11 +3,21 @@ package com.netcracker.project.controllers.validators;
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Sprint;
+import com.netcracker.project.model.entity.User;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
 public class ProjectValidator extends AbstractValidator {
+
+  public Map<String, String> validatePMTransitList(
+      Collection<User> pmOnTransit) {
+    if (pmOnTransit.isEmpty()) {
+      setErrorToMap("PM_ON_TRANSIT_EMPTY_ERROR",
+          ErrorMessages.PM_ON_TRANSIT_EMPTY_ERROR);
+    }
+    return getErrorMap();
+  }
 
   public Map<String, String> validateDates(String start, String end) {
     validateStartEndDate(start, end);

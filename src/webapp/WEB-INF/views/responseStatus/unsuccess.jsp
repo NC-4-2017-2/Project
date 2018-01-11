@@ -10,9 +10,7 @@
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 <div class="col-lg-3">
-    <div class="alert alert-danger">
-        <strong>Unsuccessful operation!</strong>
-    </div>
+    <%@include file="../errors/errorMap.jsp" %>
 </div>
 </body>
 </html>

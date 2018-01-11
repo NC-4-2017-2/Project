@@ -42,8 +42,8 @@ public interface  ErrorMessages {
   String WRONG_USER_ERROR = "Wrong user!";
   String VACATION_MODIFY_ERROR = "Impossible to modify approved vacation!";
   String VACATION_EXIST_ERROR = "Vacation does not exist!";
-  String LM_EXIST_ERROR = "LM already exist on project, choose another user";
-  String PM_EXIST_ERROR = "LM already exist on project, choose another user";
+  String LM_EXIST_ERROR = "LM already exists on project, choose another user";
+  String PM_EXIST_ERROR = "PM already exists on project, choose another user";
   String TASK_ERROR = "Task does not exist!";
   String PROJECT_ACCESS_ERROR = "Can't get information about this project!";
   String SPRINT_START_DATE_ERROR = "Sprint start date can't be less than project start date!";
@@ -54,4 +54,5 @@ public interface  ErrorMessages {
   String TRIP_END_DATE_ERROR = "Trip end date can't be greater than project end date!";
   String WORK_PERIOD_START_DATE_ERROR = "Work period start date can't be less than project start date!";
   String WORK_PERIOD_END_DATE_ERROR = "Work period end date can't be greater than project end date!";
+  String PM_ON_TRANSIT_EMPTY_ERROR = "There is no any PM on transit!";
 }

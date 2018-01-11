@@ -53,7 +53,7 @@
     </tbody>
 </table>
 <%@include file="../errors/errorMap.jsp" %>
-<c:if test="${vacation.lmStatus eq 'WAITING_FOR_APPROVAL' && vacation.pmStatus eq 'WAITING_FOR_APPROVAL' && vacation.userId eq currentUser.userId}">
+<c:if test="${vacation.lmStatus ne 'APPROVED' && vacation.pmStatus ne 'APPROVED' && vacation.userId eq currentUser.userId}">
     <form action="/vacation/updateAuthorVacation/${vacation.vacationId}">
         <button type="submit" class="btn btn-primary btn-md">Update vacation</button>
     </form>

@@ -199,6 +199,7 @@ public class VacationController {
   @RequestMapping(value = "/updateAuthorVacation/{vacationId}", method = RequestMethod.GET)
   public String updateAuthorVacation(
       @PathVariable("vacationId") String vacationId,
+      Principal principal,
       Model model) {
     logger.info("Entering updateAuthorVacation()");
     VacationValidator validator = new VacationValidator();
@@ -218,8 +219,15 @@ public class VacationController {
       model.addAttribute("errorMap", errorMap);
       return "vacation/showVacation";
     }
-    model.addAttribute("vacation", vacation);
 
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    if(!currentUser.getUserId().equals(vacation.getUserId())) {
+      errorMap.put("WRONG_USER_ERROR", ErrorMessages.WRONG_USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
+    model.addAttribute("vacation", vacation);
     return "vacation/updateAuthorVacation";
   }
 

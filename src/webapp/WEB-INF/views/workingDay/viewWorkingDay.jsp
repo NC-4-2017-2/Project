@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 
-<div class="col-lg-2">
+<div class="col-lg-4 col-md-3">
     <table class="table table-hover table-dark" border="3">
         <thead>
         <tr>
@@ -19,10 +19,10 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${workingDays}" var="workingDay">
+        <c:forEach items="${workingDaysService}" var="workingDay">
             <tr>
                 <td>
-                    <a href="/workingDay/showWorkingDay/${workingDay.workingDayId}">${workingDay.date}</a><br>
+                    <a href="/workingDay/showWorkingDay/${workingDay.workingDay.workingDayId}">${workingDay.lastName} ${workingDay.firstName} ${workingDay.workingDay.date}</a><br>
                 </td>
             </tr>
         </c:forEach>

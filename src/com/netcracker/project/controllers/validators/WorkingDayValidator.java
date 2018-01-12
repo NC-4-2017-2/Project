@@ -15,24 +15,17 @@ public class WorkingDayValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  public Map<String, String> validateCreate(String start, String end,
+  public Map<String, String> validateCreate(String time,
       DayOfWeek day) {
-    validateIfNull(start, end, day);
+    validateIfNull(time, day);
     if (validateDayOfWeek(day)) {
       validateIfDayIsPrevious(day);
     }
-    if (start != null && end != null) {
-      validateIfStartIsEmpty(start, end, day);
-      validateIfEndIsEmpty(start, end, day);
-      if (!start.isEmpty() && !end.isEmpty()) {
-        if (!validateTime(start)) {
+    if (time != null) {
+      validateIfStartIsEmpty(time, day);
+      if (!time.isEmpty()) {
+        if (!validateTime(time)) {
           setErrorToMap("TIME_ERROR", day + ErrorMessages.TIME_ERROR);
-        }
-        if (!validateTime(end)) {
-          setErrorToMap("TIME_ERROR", day + ErrorMessages.TIME_ERROR);
-        }
-        if (validateTime(start) && validateTime(end)) {
-          validateTimeDiff(start, end, day);
         }
       }
     }
@@ -46,7 +39,8 @@ public class WorkingDayValidator extends AbstractValidator {
 
   public Map<String, String> validateExistence(Integer workingDayExistence) {
     if (workingDayExistence == 0) {
-      setErrorToMap("WORKING_EXISTENCE_ERROR", ErrorMessages.WORKING_EXISTENCE_ERROR);
+      setErrorToMap("WORKING_EXISTENCE_ERROR",
+          ErrorMessages.WORKING_EXISTENCE_ERROR);
     }
     return getErrorMap();
   }
@@ -56,43 +50,16 @@ public class WorkingDayValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  private void validateIfStartIsEmpty(String start, String end, DayOfWeek day) {
-    if (start.isEmpty() && !end.isEmpty()) {
-      setErrorToMap("EMPTY_START_DAY_ERROR", day + ErrorMessages.EMPTY_START_DAY_ERROR);
+  private void validateIfStartIsEmpty(String time, DayOfWeek day) {
+    if (time.isEmpty()) {
+      setErrorToMap("EMPTY_START_DAY_ERROR",
+          day + ErrorMessages.EMPTY_START_DAY_ERROR);
     }
   }
 
-
-  private void validateIfEndIsEmpty(String start, String end, DayOfWeek day) {
-    if (!start.isEmpty() && end.isEmpty()) {
-      setErrorToMap("EMPTY_END_DAY_ERROR", day + ErrorMessages.EMPTY_END_DAY_ERROR);
-    }
-  }
-
-  private void validateIfNull(String start, String end, DayOfWeek day) {
-    if (start == null || end == null) {
+  private void validateIfNull(String time, DayOfWeek day) {
+    if (time == null) {
       setErrorToMap("NULL_ERROR", day + ErrorMessages.NULL_ERROR);
-    }
-  }
-
-  private void validateTimeDiff(String start, String end, DayOfWeek day) {
-    DateConverterService converter = new DateConverterService();
-    Long minutesBetween = converter
-        .getMinutesBetweenLocalTimes(
-            converter.getLocalTimeFromString(start),
-            converter.getLocalTimeFromString(end));
-    DateConverterService service = new DateConverterService();
-    Double workHours = service.parseMinutes(minutesBetween);
-    if (workHours > 12.00) {
-      setErrorToMap("WORKING_DAY_OVERSTATEMENT_ERROR", day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
-    }
-    if (minutesBetween < 0) {
-      setErrorToMap("START_TIME_LESS_END_TIME_ERROR ",
-          day + ErrorMessages.START_TIME_LESS_END_TIME_ERROR);
-    }
-    if (minutesBetween == 0) {
-      setErrorToMap("START_TIME_EQUALS_END_TIME_ERROR",
-          day + ErrorMessages.START_TIME_EQUALS_END_TIME_ERROR);
     }
   }
 

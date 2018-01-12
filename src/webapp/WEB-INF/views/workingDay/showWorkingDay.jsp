@@ -16,7 +16,7 @@
         <table class="table table-hover table-dark" border="3">
             <thead>
             <tr>
-                <th scope="col" colspan="2" style="text-align: center;">Vacation</th>
+                <th scope="col" colspan="2" style="text-align: center;">Working Day</th>
             </tr>
             </thead>
             <tbody>

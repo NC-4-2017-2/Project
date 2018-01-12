@@ -8,6 +8,7 @@ import com.netcracker.project.model.WorkingDayDAO;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkingDay;
+import com.netcracker.project.model.entity.WorkingDayUserService;
 import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
@@ -15,6 +16,9 @@ import com.netcracker.project.services.impl.WorkingDayService;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,10 +104,17 @@ public class WorkingDayController {
     Collection<WorkingDay> workingDays = workingDayDAO
         .findWorkingDayByPMIdAndStatus(currentUser.getUserId(),
             Status.valueOf(status).getId());
+    Collection<WorkingDayUserService> userService = new ArrayList<>();
+    for (WorkingDay workingDay : workingDays) {
+      User user = userDAO.findUserByUserId(workingDay.getUserId());
+      userService.add(
+          new WorkingDayUserService(user.getLastName(), user.getFirstName(),
+              workingDay));
+    }
     if (workingDays.isEmpty()) {
       return "responseStatus/noDataFound";
     }
-    model.addAttribute("workingDays", workingDays);
+    model.addAttribute("workingDaysService", userService);
     return "workingDay/viewWorkingDay";
   }
 
@@ -222,20 +233,13 @@ public class WorkingDayController {
 
   @RequestMapping(value = "/createWorkingDay", method = RequestMethod.POST)
   public String createWorkingDayPost(
-      @RequestParam(value = "mondayStartTime") String mondayStartTime,
-      @RequestParam(value = "mondayEndTime") String mondayEndTime,
-      @RequestParam(value = "tuesdayStartTime") String tuesdayStartTime,
-      @RequestParam(value = "tuesdayEndTime") String tuesdayEndTime,
-      @RequestParam(value = "wednesdayStartTime") String wednesdayStartTime,
-      @RequestParam(value = "wednesdayEndTime") String wednesdayEndTime,
-      @RequestParam(value = "thursdayStartTime") String thursdayStartTime,
-      @RequestParam(value = "thursdayEndTime") String thursdayEndTime,
-      @RequestParam(value = "fridayStartTime") String fridayStartTime,
-      @RequestParam(value = "fridayEndTime") String fridayEndTime,
-      @RequestParam(value = "saturdayStartTime") String saturdayStartTime,
-      @RequestParam(value = "saturdayEndTime") String saturdayEndTime,
-      @RequestParam(value = "sundayStartTime") String sundayStartTime,
-      @RequestParam(value = "sundayEndTime") String sundayEndTime,
+      @RequestParam(value = "monday") String monday,
+      @RequestParam(value = "tuesday") String tuesday,
+      @RequestParam(value = "wednesday") String wednesday,
+      @RequestParam(value = "thursday") String thursday,
+      @RequestParam(value = "friday") String friday,
+      @RequestParam(value = "saturday") String saturday,
+      @RequestParam(value = "sunday") String sunday,
       Principal principal,
       Model model) {
     logger.info("Entering createWorkingDayPost()");
@@ -255,80 +259,65 @@ public class WorkingDayController {
 
     WorkingDayValidator validator = new WorkingDayValidator();
 
-    if (StringUtils.isEmpty(mondayStartTime) && StringUtils
-        .isEmpty(mondayEndTime) &&
-        StringUtils.isEmpty(tuesdayStartTime) && StringUtils
-        .isEmpty(tuesdayEndTime) &&
-        StringUtils.isEmpty(wednesdayStartTime) && StringUtils
-        .isEmpty(wednesdayEndTime) &&
-        StringUtils.isEmpty(thursdayStartTime) && StringUtils
-        .isEmpty(thursdayEndTime) &&
-        StringUtils.isEmpty(fridayStartTime) && StringUtils
-        .isEmpty(fridayEndTime) &&
-        StringUtils.isEmpty(saturdayStartTime) && StringUtils
-        .isEmpty(saturdayEndTime) &&
-        StringUtils.isEmpty(sundayStartTime) && StringUtils
-        .isEmpty(sundayEndTime)
-        ) {
+    if (StringUtils.isEmpty(monday) && StringUtils
+        .isEmpty(tuesday) &&
+        StringUtils.isEmpty(wednesday) && StringUtils
+        .isEmpty(thursday) &&
+        StringUtils.isEmpty(friday) && StringUtils
+        .isEmpty(saturday) &&
+        StringUtils.isEmpty(sunday)) {
       errorMap.put("EMPTY_DAY_ERROR", ErrorMessages.EMPTY_DAY_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "workingDay/createWorkingDay";
     }
-    if (!StringUtils.isEmpty(mondayStartTime) && !StringUtils
-        .isEmpty(mondayEndTime)) {
+    if (!StringUtils.isEmpty(monday)) {
       Map<String, String> mondayMap = validator
-          .validateCreate(mondayStartTime, mondayEndTime, DayOfWeek.MONDAY);
+          .validateCreate(monday, DayOfWeek.MONDAY);
       if (!mondayMap.isEmpty()) {
         errorMap.putAll(mondayMap);
       }
     }
-    if (!StringUtils.isEmpty(tuesdayStartTime) && !StringUtils
-        .isEmpty(tuesdayEndTime)) {
+    if (!StringUtils.isEmpty(tuesday)) {
       Map<String, String> tuesdayMap = validator
-          .validateCreate(tuesdayStartTime, tuesdayEndTime, DayOfWeek.TUESDAY);
+          .validateCreate(tuesday, DayOfWeek.TUESDAY);
       if (!tuesdayMap.isEmpty()) {
         errorMap.putAll(tuesdayMap);
       }
     }
-    if (!StringUtils.isEmpty(wednesdayStartTime) && !StringUtils
-        .isEmpty(wednesdayEndTime)) {
+    if (!StringUtils.isEmpty(wednesday)) {
       Map<String, String> wednesdayMap = validator
-          .validateCreate(wednesdayStartTime, wednesdayEndTime,
+          .validateCreate(wednesday,
               DayOfWeek.WEDNESDAY);
       if (!wednesdayMap.isEmpty()) {
         errorMap.putAll(wednesdayMap);
       }
     }
-    if (!StringUtils.isEmpty(thursdayStartTime) && !StringUtils
-        .isEmpty(thursdayEndTime)) {
+    if (!StringUtils.isEmpty(thursday)) {
       Map<String, String> thursdayMap = validator
-          .validateCreate(thursdayStartTime, thursdayEndTime,
+          .validateCreate(thursday,
               DayOfWeek.THURSDAY);
       if (!thursdayMap.isEmpty()) {
         errorMap.putAll(thursdayMap);
       }
     }
-    if (!StringUtils.isEmpty(fridayStartTime) && !StringUtils
-        .isEmpty(fridayEndTime)) {
+    if (!StringUtils.isEmpty(friday)) {
       Map<String, String> fridayMap = validator
-          .validateCreate(fridayStartTime, fridayEndTime, DayOfWeek.FRIDAY);
+          .validateCreate(friday, DayOfWeek.FRIDAY);
       if (!fridayMap.isEmpty()) {
         errorMap.putAll(fridayMap);
       }
     }
-    if (!StringUtils.isEmpty(saturdayStartTime) && !StringUtils
-        .isEmpty(saturdayEndTime)) {
+    if (!StringUtils.isEmpty(saturday)) {
       Map<String, String> saturdayMap = validator
-          .validateCreate(saturdayStartTime, saturdayEndTime,
+          .validateCreate(saturday,
               DayOfWeek.SATURDAY);
       if (!saturdayMap.isEmpty()) {
         errorMap.putAll(saturdayMap);
       }
     }
-    if (!StringUtils.isEmpty(sundayStartTime) && !StringUtils
-        .isEmpty(sundayEndTime)) {
+    if (!StringUtils.isEmpty(sunday)) {
       Map<String, String> sundayMap = validator
-          .validateCreate(sundayStartTime, sundayEndTime, DayOfWeek.SUNDAY);
+          .validateCreate(sunday, DayOfWeek.SUNDAY);
       if (!sundayMap.isEmpty()) {
         errorMap.putAll(sundayMap);
       }
@@ -339,9 +328,8 @@ public class WorkingDayController {
       return "workingDay/createWorkingDay";
     }
 
-    if (!StringUtils.isEmpty(mondayStartTime) && !StringUtils
-        .isEmpty(mondayEndTime)) {
-      createWorkingDay(mondayStartTime, mondayEndTime, user, project,
+    if (!StringUtils.isEmpty(monday)) {
+      createWorkingDay(monday, user, project,
           DayOfWeek.MONDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -349,54 +337,48 @@ public class WorkingDayController {
       }
     }
 
-    if (!StringUtils.isEmpty(tuesdayStartTime) && !StringUtils
-        .isEmpty(tuesdayEndTime)) {
-      createWorkingDay(tuesdayStartTime, tuesdayEndTime, user, project,
+    if (!StringUtils.isEmpty(tuesday)) {
+      createWorkingDay(tuesday, user, project,
           DayOfWeek.TUESDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
         return "workingDay/createWorkingDay";
       }
     }
-    if (!StringUtils.isEmpty(wednesdayStartTime) && !StringUtils
-        .isEmpty(wednesdayEndTime)) {
-      createWorkingDay(wednesdayStartTime, wednesdayEndTime, user, project,
+    if (!StringUtils.isEmpty(wednesday)) {
+      createWorkingDay(wednesday, user, project,
           DayOfWeek.WEDNESDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
         return "workingDay/createWorkingDay";
       }
     }
-    if (!StringUtils.isEmpty(thursdayStartTime) && !StringUtils
-        .isEmpty(thursdayEndTime)) {
-      createWorkingDay(thursdayStartTime, thursdayEndTime, user, project,
+    if (!StringUtils.isEmpty(thursday)) {
+      createWorkingDay(thursday, user, project,
           DayOfWeek.THURSDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
         return "workingDay/createWorkingDay";
       }
     }
-    if (!StringUtils.isEmpty(fridayStartTime) && !StringUtils
-        .isEmpty(fridayEndTime)) {
-      createWorkingDay(fridayStartTime, fridayEndTime, user, project,
+    if (!StringUtils.isEmpty(friday)) {
+      createWorkingDay(friday, user, project,
           DayOfWeek.FRIDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
         return "workingDay/createWorkingDay";
       }
     }
-    if (!StringUtils.isEmpty(saturdayStartTime) && !StringUtils
-        .isEmpty(saturdayEndTime)) {
-      createWorkingDay(saturdayStartTime, saturdayEndTime, user, project,
+    if (!StringUtils.isEmpty(saturday)) {
+      createWorkingDay(saturday, user, project,
           DayOfWeek.SATURDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
         return "workingDay/createWorkingDay";
       }
     }
-    if (!StringUtils.isEmpty(sundayStartTime) && !StringUtils
-        .isEmpty(sundayEndTime)) {
-      createWorkingDay(sundayStartTime, sundayEndTime, user, project,
+    if (!StringUtils.isEmpty(sunday)) {
+      createWorkingDay(sunday, user, project,
           DayOfWeek.SUNDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -407,11 +389,9 @@ public class WorkingDayController {
   }
 
   private void createWorkingDay(
-      String startTime,
-      String endTime, User user,
+      String time, User user,
       Project project, DayOfWeek day, Map<String, String> errorMap) {
-    WorkingDay workingDay = getWorkingDay(startTime, endTime,
-        user, project,
+    WorkingDay workingDay = getWorkingDay(time, user, project,
         day);
     Integer existWorkingDay = workingDayDAO
         .findIfWorkingDayExists(user.getUserId(),
@@ -440,15 +420,11 @@ public class WorkingDayController {
     }
   }
 
-  private WorkingDay getWorkingDay(String start, String end, User user,
+  private WorkingDay getWorkingDay(String time, User user,
       Project project, DayOfWeek dayOfWeek) {
-    Long minutesBetweenTimes = converter
-        .getMinutesBetweenLocalTimes(
-            converter.getLocalTimeFromString(start),
-            converter.getLocalTimeFromString(end));
 
     return new WorkingDayService()
-        .getWorkingDay(minutesBetweenTimes, dayOfWeek,
+        .getWorkingDay(time, dayOfWeek,
             user.getUserId(), project.getProjectManagerId());
   }
 }

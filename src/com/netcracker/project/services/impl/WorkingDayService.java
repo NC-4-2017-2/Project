@@ -14,11 +14,11 @@ import java.util.Locale;
 
 public class WorkingDayService {
 
-  public WorkingDay getWorkingDay(Long minutes,
+  public WorkingDay getWorkingDay(String time,
       DayOfWeek dayOfWeek, BigInteger userId,
       BigInteger pmId) {
     DateConverterService converter = new DateConverterService();
-    Double hoursCount = converter.parseMinutes(minutes);
+    Double hoursCount = converter.parseMinutes(time);
     int currentWeekNumber = getCurrentWeekNumber();
     LocalDate localDate = getLocalDatePrevious(currentWeekNumber, dayOfWeek);
 

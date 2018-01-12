@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DateConverterService{
+public class DateConverterService {
 
   private static final Logger logger = Logger
       .getLogger(BusinessTripDAOImpl.class);
@@ -65,15 +65,20 @@ public class DateConverterService{
   }
 
   public LocalTime getLocalTimeFromString(String time) {
-    return LocalTime.parse(time) ;
+    return LocalTime.parse(time);
   }
 
   public Long getMinutesBetweenLocalTimes(LocalTime start, LocalTime end) {
     return MINUTES.between(start, end);
   }
 
-  public Double parseMinutes(Long time) {
-    Double hours = (time / 60d);
-    return Math.floor(hours * 100) / 100;
+  public Double parseMinutes(String time) {
+    String[] timeSplit = time.split(":");
+    Integer hours = Integer.valueOf(timeSplit[0].trim());
+    Integer minutes = Integer.valueOf(timeSplit[1].trim());
+    double hoursDouble = hours;
+    double minutesDouble = minutes;
+    double sum = hoursDouble + (minutesDouble / 60);
+    return Math.floor(sum * 100) / 100;
   }
 }

@@ -11,6 +11,7 @@ import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.UserRole;
 import com.netcracker.project.model.enums.UserStatus;
 import com.netcracker.project.services.impl.DateConverterService;
+import com.netcracker.project.services.impl.PasswordService;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
@@ -270,5 +271,11 @@ public class UsersDaoTest {
   public void checkLoginExistence() {
     Integer result = userDao.checkLoginExistence("ivanov");
     assertEquals("1", result.toString());
+  }
+
+  @Test
+  public void generatePassword() {
+    String password = new PasswordService().generatePassword();
+    System.out.println(password);
   }
 }

@@ -319,4 +319,10 @@ public class UserDAOImpl implements UserDAO {
     logger.info("Entering findIfLMExists(userId=" + userId + ")");
     return template.queryForObject(FIND_IF_LM_EXIST, new Object[]{userId}, Integer.class);
   }
+
+  @Override
+  public Integer checkLoginExistence(String login) {
+    logger.info("Entering checkLoginExistence(login=" + login + ")");
+    return template.queryForObject(CHECK_LOGIN_EXISTENCE, new Object[]{login}, Integer.class);
+  }
 }

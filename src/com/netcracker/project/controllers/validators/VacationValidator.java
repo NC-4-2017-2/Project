@@ -6,6 +6,7 @@ import com.netcracker.project.model.enums.ProjectStatus;
 import java.util.Map;
 
 public class VacationValidator extends AbstractValidator {
+
   public Map<String, String> validateVacationStatus(String status) {
     validateStatus(status);
     return getErrorMap();

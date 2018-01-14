@@ -265,4 +265,10 @@ public class UsersDaoTest {
     Integer result = userDao.findIfLMExists(BigInteger.valueOf(2));
     assertEquals("1", result.toString());
   }
+
+  @Test
+  public void checkLoginExistence() {
+    Integer result = userDao.checkLoginExistence("ivanov");
+    assertEquals("1", result.toString());
+  }
 }

@@ -1,5 +1,7 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.UserValidator;
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.JobTitle;
@@ -11,9 +13,12 @@ import com.netcracker.project.services.impl.EmailServiceImpl;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,15 +30,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/user")
 public class UserController {
 
-  private static final Logger logger = Logger
-      .getLogger(UserController.class);
-  private DateConverterService converter = new DateConverterService();
   @Autowired
   private UserDAO userDAO;
   @Autowired
   private EmailServiceImpl emailService;
-  //private WorkPeriod workPeriod;
 
+  private static final Logger logger = Logger
+      .getLogger(UserController.class);
+
+  private DateConverterService converter = new DateConverterService();
+  private ShaPasswordEncoder encoder = new ShaPasswordEncoder();
 
   @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/createUser", method = RequestMethod.GET)
@@ -45,31 +51,35 @@ public class UserController {
   @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/createUser", method = RequestMethod.POST)
   public String createUserPost(
-      @RequestParam(value = "firstName") String firstName,
       @RequestParam(value = "lastName") String lastName,
+      @RequestParam(value = "firstName") String firstName,
       @RequestParam(value = "email") String email,
       @RequestParam(value = "dateOfBirth") String dateOfBirth,
       @RequestParam(value = "hireDate") String hireDate,
       @RequestParam(value = "phoneNumber") String phoneNumber,
-      @RequestParam(value = "jobTitle") JobTitle jobTitle,
+      @RequestParam(value = "jobTitle") String jobTitle,
       @RequestParam(value = "login") String login,
       @RequestParam(value = "password") String password,
-      @RequestParam(value = "userRole") UserRole userRole,
+      @RequestParam(value = "userRole") String userRole,
       Model model) {
-
-    //todo add and improve validation from my copy of controller
-    /*Map<String, String> errorMap = new HashMap<>();
+    Map<String, String> errorMap = new HashMap<>();
     UserValidator validator = new UserValidator();
-    Integer checkUserLogin = userDAO.findUserByLoginIfExist(login);
-    if (checkUserLogin >= 1) {
-      errorMap.put("USER_EXIST_ERROR",
-          login + " " + ErrorMessages.USER_EXIST_ERROR);
+    Integer loginExistence = userDAO.checkLoginExistence(login);
+    if (loginExistence > 0) {
+      errorMap.put("USER_EXIST_ERROR", ErrorMessages.USER_EXIST_ERROR);
       model.addAttribute("errorMap", errorMap);
-      return "user/createUser";
-    }*/
+      return "responseStatus/unsuccess";
+    }
 
-    logger.info("POST request createUser(). UserLogin: " + login);
+    errorMap = validator
+        .validateCreate(lastName, firstName, email, dateOfBirth,
+            hireDate, phoneNumber, jobTitle, userRole);
 
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    //todo validate phone number, dates
     User user = new User.UserBuilder()
         .lastName(lastName)
         .firstName(firstName)
@@ -77,25 +87,34 @@ public class UserController {
         .dateOfBirth(converter.convertStringToDateFromJSP(dateOfBirth))
         .hireDate(converter.convertStringToDateFromJSP(hireDate))
         .phoneNumber(phoneNumber)
-        .jobTitle(jobTitle)
+        .jobTitle(JobTitle.valueOf(jobTitle))
         .projectStatus(ProjectStatus.TRANSIT)
         .login(login)
-        .password(password)
-        .role(userRole)
-        .userStatus(UserStatus.FIRED)
+        .password(encoder.encodePassword(password, null))
+        .role(UserRole.valueOf(userRole))
+        .userStatus(UserStatus.WORKING)
         .build();
-
-    logger.info("createUser request from DB. UserLogin: " + login);
-
-    //User returnedUser =
     userDAO.createUser(user);
 
-    //catch null pointer in mailsender variable
-    /*MailSender mailSender = new JavaMailSenderImpl() ;
-    emailService.setMailSender(mailSender);
-    emailService.sendEmail(returnedUser.getEmail(), "Use your pass",
-                           returnedUser.getPassword());*/
     return "responseStatus/success";
+  }
+
+  @RequestMapping(value = "/showUser/{login}", method = RequestMethod.GET)
+  public String showUserProfile(@PathVariable(value = "login") String login,
+      Model model) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    Integer userExistence = userDAO.findUserByLoginIfExist(login);
+    errorMap = validator.validateUserLoginExistence(userExistence);
+
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    //todo add user system status
+    User user = userDAO.findUserByLogin(login);
+    model.addAttribute("user", user);
+    return "user/showUser";
   }
 
   @Secured({"ROLE_ADMIN"})
@@ -122,9 +141,6 @@ public class UserController {
     BigInteger bigIntegerId = new BigInteger(userId);
     userDAO.updatePassword(bigIntegerId, password);
     return "responseStatus/success";
-    /*!!!Uncomment when the sequences are added!!!
-    //logger.info("createUser request from DB. User id: " + userId);
-    //userDAO.createUser(user);*/
   }
 
   @Secured({"ROLE_ADMIN"})
@@ -171,75 +187,11 @@ public class UserController {
     return "responseStatus/success";
   }
 
-  /*@RequestMapping(value = "/updateUserProjectStatus", method = RequestMethod.GET)
-  public String updateUserProjectStatus(Model model,
-      Principal principal) {
-
-    String currentUserLogin = principal.getName();
-    User user = userDAO.findUserByLogin(currentUserLogin);
-    model.addAttribute("user", user);
-    return "user/updateUserProjectStatus";
-  }
-
-  @RequestMapping(value = "/updateUserProjectStatus", method = RequestMethod.POST)
-  public String updateUserPhoneNumber(Model model, Principal principal,
-      @RequestParam(value = "phoneNumber") String phoneNumber) {
-    String currentUserLogin = principal.getName();
-    User user = userDAO.findUserByLogin(currentUserLogin);
-    userDAO.updatePhoneNumber(user.getUserId(), phoneNumber);
-    return "responseStatus/success";
-  }*/
-//    return "responseStatus/success";
-//  }
-//
-//  @RequestMapping(value = "/edit_user/{userId}", method = RequestMethod.GET)
-//  public String editUserGet(@PathVariable("userId") Integer userId,
-//      Model model) {
-//    logger.info("editUserGet() method. userId: " + userId);
-//    User user = userDAO.findUserByUserId(BigInteger.valueOf(userId));
-//    model.addAttribute("userId", user.getUserId());
-//    model.addAttribute("firstName", user.getFirstName());
-//    model.addAttribute("lastName", user.getLastName());
-//    model.addAttribute("email", user.getEmail());
-//    model.addAttribute("phoneNumber", user.getPhoneNumber());
-//    model.addAttribute("photo", user.getPhoto());
-//    model.addAttribute("login", user.getLogin());
-//    model.addAttribute("password", user.getPassword());
-//    model.addAttribute("projectStatus", user.getProjectStatus());
-//
-//    return "project/edit_user";
-//  }
-
-  @RequestMapping(value = "/findUserByLogin/{login}", method = RequestMethod.GET)
-  public String findUserByLogin(Model model,
-      @PathVariable("login") String login) {
-    logger.info("findUserByLogin() method. Login: " + login);
-    //todo check user existence
-    //Integer checkUserLogin = userDAO.findUserByLoginIfExist(login);
-    User user = userDAO.findUserByLogin(login);
-    model.addAttribute("user", user);
-    return "user/showUser";
-  }
-
-  @RequestMapping(value = "/findUserByUserId/{userId}", method = RequestMethod.GET)
-  public String findUserByUserId(Model model,
-      @PathVariable("userId") Integer userId) {
-    logger.info("findUserById() method. userId: " + userId);
-    User user = userDAO.findUserByUserId(BigInteger.valueOf(userId));
-    model.addAttribute("user", user);
-    return "user/showUser";
-  }
-
   @RequestMapping(value = "/findUserByLastNameAndFirstName/lastName={lastName}&firstName={firstName}",
       method = RequestMethod.GET)
   public String findUserByLastNameAndFirstName(Model model,
       @PathVariable("lastName") String lastName,
       @PathVariable("firstName") String firstName) {
-
-    logger.info("findUserByLastNameAndFirstName() method. lastName: "
-        + lastName
-        + " ,firstName: "
-        + lastName);
     Collection<User> userCollection = userDAO
         .findUserByLastNameAndFirstName(lastName, firstName);
     model.addAttribute("modelUser", userCollection);
@@ -257,80 +209,5 @@ public class UserController {
 
     return "user/show_user_list";
   }
-
-  @RequestMapping(value = "/showUser/{userId}", method = RequestMethod.GET)
-  public String showUser(
-      @PathVariable("userId") String userId,
-      Model model) {
-    //todo check user existance
-    BigInteger bigIntegerUserId = new BigInteger(userId);
-    User user = userDAO.findUserByUserId(bigIntegerUserId);
-    model.addAttribute("user", user);
-    return "user/showUser";
-  }
-
-  @RequestMapping(value = "/viewUser/{userId}", method = RequestMethod.GET)
-  public String viewUserByUserId(
-      @PathVariable("userId") BigInteger userId,
-      Model model) {
-    logger.info(
-        "viewUserByUserId() method. Params: userId: " + userId);
-    User user = userDAO.findUserByUserId(userId);
-    model.addAttribute("vacation", user);
-    return "vacation/showUser";
-  }
-
-  //in future
-  /*@Secured({"ROLE_PM"})
-  @RequestMapping(value = "/create_workPeriod", method = RequestMethod.GET)
-  public String createWorkPeriodGet() {
-    logger.info("createWorkPeriodGet() method. Return create_workPeriod");
-    return "user/create_workPeriod";
-  }
-
-  @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/create_workPeriod", method = RequestMethod.POST)
-  public String createWorkPeriod(
-      @RequestParam(value = "userId") Integer userId,
-      @RequestParam(value = "workPeriodId") BigInteger workPeriodId,
-      @RequestParam(value = "projectId") BigInteger projectId,
-      @RequestParam(value = "startWorkDate") Date startWorkDate,
-      @RequestParam(value = "endWorkDate") Date endWorkDate,
-      @RequestParam(value = "workPeriodStatus") WorkPeriodStatus workPeriodStatus) {
-    // HERE'S AN QUESTION!!!
-    return "responseStatus/success";
-  }
-
-  @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/findWorkPeriodsByUserId/{id}", method = RequestMethod.GET)
-  public String findWorkPeriodsByUserId(Model model,
-      @PathVariable("id") BigInteger id) {
-    return "user/findWorkPeriodsByUserId";
-  }
-
-  @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/findWorkPeriodsByProjectId/{projectId}", method = RequestMethod.GET)
-  public String findWorkPeriodsByProjectId(Model model,
-      @PathVariable("projectId") BigInteger projectId) {
-    return "user/findWorkPeriodsByProjectId";
-  }
-
-  @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/findWorkPeriodByUserIdAndProjectId/userId={userId}&projectId={projectId}",
-      method = RequestMethod.GET)
-  public String findWorkPeriodByUserIdAndProjectId(Model model,
-      @PathVariable("userId") BigInteger userId,
-      @PathVariable("projectId") BigInteger projectId) {
-    return "user/findWorkPeriodByUserIdAndProjectId";
-  }
-
-  @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/findWorkPeriodByProjectIdAndStatus/projectId={projectId}&status={status}",
-      method = RequestMethod.GET)
-  public String findWorkPeriodByProjectIdAndStatus(Model model,
-      @PathVariable("projectId") BigInteger projectId,
-      @PathVariable("status") Integer status) {
-    return "user/findWorkPeriodByProjectIdAndStatus";
-  }*/
 }
 

@@ -25,34 +25,34 @@
                 <h2>CreateUser</h2></td>
             </tr>
             <tr>
-                <td>First Name:</td>
-                <td><input type="text" name="firstName" size="40"
-                           value=${firstName} required placeholder="Employee's firstname"></td>
-            </tr>
-            <tr>
                 <td>Last Name:</td>
                 <td><input type="text" name="lastName" size="40"
-                           value=${lastName} required placeholder="Employee's lastname"></td>
+                           required placeholder="Employee's last name"></td>
+            </tr>
+            <tr>
+                <td>First Name:</td>
+                <td><input type="text" name="firstName" size="40"
+                           required placeholder="Employee's first name"></td>
             </tr>
             <tr>
                 <td>Email:</td>
                 <td><input type="email" name="email" size="40"
-                           value=${email} required placeholder="email@example.com"></td>
+                           required placeholder="email@example.com"></td>
             </tr>
             <tr>
                 <td>Date Of Birth (mm/dd/yyyy):</td>
                 <td><input type="date" name="dateOfBirth" size="20"
-                           value=${dateOfBirth} required></td>
+                           required></td>
             </tr>
             <tr>
                 <td>Hire Date (mm/dd/yyyy):</td>
                 <td><input type="date" name="hireDate" size="20"
-                           value=${hireDate} required></td>
+                           required></td>
             </tr>
             <tr>
                 <td>Phone Number:</td>
                 <td><input type="text" name="phoneNumber" size="20"
-                           value=${phoneNumber} required placeholder="Employee's phone number"></td>
+                           required placeholder="Employee's phone number"></td>
             </tr>
             <tr>
                 <td>Job Title:</td>
@@ -66,12 +66,12 @@
             <tr>
                 <td>Login:</td>
                 <td><input type="text" name="login" size="25"
-                           value=${login} required placeholder="Employee's login"></td>
+                           required placeholder="Employee's login"></td>
             </tr>
             <tr>
                 <td>Password:</td>
                 <td><input type="password" name="password" size="25"
-                           value=${password} required placeholder="Employee's password"></td>
+                           required placeholder="Employee's password"></td>
             </tr>
             <tr>
                 <td>User's Role:</td>

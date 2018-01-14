@@ -68,15 +68,15 @@ abstract class AbstractValidator {
       errorMap.put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
     }
   }
+
   void validateJobTitle(String jobTitle) {
     if (StringUtils.isEmpty(jobTitle)) {
       errorMap.put("EMPTY_JOB_TITLE_ERROR", ErrorMessages.EMPTY_JOB_TITLE_ERROR);
       return;
     }
     if (!jobTitleEnumCheck(jobTitle)) {
-
+      errorMap.put("INCORRECT_STATUS_ERROR", ErrorMessages.INCORRECT_STATUS_ERROR);
     }
-
   }
 
   private boolean jobTitleEnumCheck(String jobTitle) {

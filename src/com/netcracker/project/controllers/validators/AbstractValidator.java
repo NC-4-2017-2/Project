@@ -47,6 +47,12 @@ abstract class AbstractValidator {
           errorMap
               .put("START_DATE_BIGGER_THAN_END_DATE_ERROR", ErrorMessages.START_DATE_BIGGER_THAN_END_DATE_ERROR);
         }
+
+        int compareStart = new Date().compareTo(start);
+
+        if (compareStart == 1) {
+        errorMap.put("START_DATE_ERROR", ErrorMessages.START_DATE_ERROR);
+        }
       }
     }
   }

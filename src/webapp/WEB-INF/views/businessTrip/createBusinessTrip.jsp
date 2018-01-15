@@ -68,7 +68,9 @@
             </c:otherwise>
             </c:choose>
         </div>
-        <%@include file="../errors/errorMap.jsp" %>
+        <div class="form-group">
+            <%@include file="../errors/errorMap.jsp" %>
+        </div>
     </div>
 </form>
 </body>

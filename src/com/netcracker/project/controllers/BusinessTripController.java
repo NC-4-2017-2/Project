@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers;
 
 import com.netcracker.project.controllers.validators.BusinessTripValidator;
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.BusinessTripDAO;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
@@ -8,6 +9,7 @@ import com.netcracker.project.model.entity.BusinessTrip;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.ListCountry;
@@ -51,6 +53,7 @@ public class BusinessTripController {
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
     BigInteger projectId = null;
+    Map<String, String> errorMap = new HashMap<>();
 
     if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
       projectId = projectDAO
@@ -58,6 +61,13 @@ public class BusinessTripController {
     } else {
       projectId = projectDAO
           .findProjectIdByUserLogin(userLogin);
+    }
+
+    if (user.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
+      errorMap
+          .put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
     }
 
     Collection<User> users = userDAO.findUserByProjectId(projectId);
@@ -124,7 +134,8 @@ public class BusinessTripController {
     Date validStartDate = converter.convertStringToDateFromJSP(startDate);
     Date validEndDate = converter.convertStringToDateFromJSP(endDate);
 
-    errorMap = validator.validateProjectAndTripDates(project, validStartDate, validEndDate);
+    errorMap = validator
+        .validateProjectAndTripDates(project, validStartDate, validEndDate);
     if (!errorMap.isEmpty()) {
       model.addAttribute("pmId", validPmId);
       model.addAttribute("projectId", validProjectId);

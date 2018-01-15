@@ -38,7 +38,7 @@ public interface  ErrorMessages {
   String VIEW_SPRINT_TRANSIT_PM_ERROR = "You are currently does not have a project!";
   String USER_FIRST_OR_LAST_NAME_ERROR = "Please type correct name!";
   String SPRINTS_EXIST_ERROR = "No sprints available for project!";
-  String USER_ON_TRANSIT_ERROR = "Can't create vacation while user is on transit!";
+  String USER_ON_TRANSIT_ERROR = "Can't create while user is on transit!";
   String WRONG_USER_ERROR = "Wrong user!";
   String VACATION_MODIFY_ERROR = "Impossible to modify approved vacation!";
   String VACATION_EXIST_ERROR = "Vacation does not exist!";
@@ -58,4 +58,5 @@ public interface  ErrorMessages {
   String WRONG_EMAIL_FORMAT_ERROR = "Wrong email format!";
   String EMPTY_USER_ROLE_ERROR = "User role can't be empty!";
   String INCORRECT_USER_ROLE_ERROR = "Incorrect user role!";
+  String START_DATE_ERROR = "Start date can't be less then current date!";
 }

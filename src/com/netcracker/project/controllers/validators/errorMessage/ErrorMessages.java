@@ -55,7 +55,7 @@ public interface  ErrorMessages {
   String WORK_PERIOD_START_DATE_ERROR = "Work period start date can't be less than project start date!";
   String WORK_PERIOD_END_DATE_ERROR = "Work period end date can't be greater than project end date!";
   String PM_ON_TRANSIT_EMPTY_ERROR = "There is no any PM on transit!";
-  String WRONG_EMAIL_ERROR = "Wrong email!";
+  String WRONG_EMAIL_FORMAT_ERROR = "Wrong email format!";
   String EMPTY_USER_ROLE_ERROR = "User role can't be empty!";
   String INCORRECT_USER_ROLE_ERROR = "Incorrect user role!";
 }

@@ -138,6 +138,10 @@
         <div class="col-sm-3">
             <div class="well">
                 <h4>Create new user in system</h4>
+                <form action="/user/createUser">
+                    <button type="submit" class="btn btn-primary btn-md">Create
+                        new user
+                    </button>
             </div>
         </div>
         <div class="col-sm-3">

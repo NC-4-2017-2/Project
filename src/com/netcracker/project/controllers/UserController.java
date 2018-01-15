@@ -65,8 +65,9 @@ public class UserController {
     Map<String, String> errorMap = new HashMap<>();
     UserValidator validator = new UserValidator();
     Integer loginExistence = userDAO.checkLoginExistence(login);
-    if (loginExistence > 0) {
-      errorMap.put("USER_EXIST_ERROR", ErrorMessages.USER_EXIST_ERROR);
+    errorMap = validator.validateUserLoginIfExist(loginExistence);
+
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
     }
@@ -94,7 +95,8 @@ public class UserController {
         .role(UserRole.valueOf(userRole))
         .userStatus(UserStatus.WORKING)
         .build();
-    userDAO.createUser(user);
+
+    //userDAO.createUser(user);
 
     return "responseStatus/success";
   }

@@ -17,7 +17,7 @@ public class UserValidator extends AbstractValidator {
     validateName(firstName);
     validateJobTitle(jobTitle);
     if (!validateEmail(email)) {
-      setErrorToMap("WRONG_EMAIL_ERROR", ErrorMessages.WRONG_EMAIL_ERROR);
+      setErrorToMap("WRONG_EMAIL_ERROR", ErrorMessages.WRONG_EMAIL_FORMAT_ERROR);
     }
     validateUserRole(userRole);
     return getErrorMap();
@@ -51,6 +51,13 @@ public class UserValidator extends AbstractValidator {
   }
 
   public Map<String, String> validateUserLoginExistence(Integer existence) {
+    if (existence == 0) {
+      setErrorToMap("USER_ERROR", ErrorMessages.USER_ERROR);
+    }
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateUserLoginIfExist(Integer existence) {
     if (existence > 0) {
       setErrorToMap("USER_EXIST_ERROR", ErrorMessages.USER_EXIST_ERROR);
     }

@@ -11,6 +11,7 @@
 
 
     <properties>
+        <java.version>1.8</java.version>
         <sprint-test.version>4.3.12.RELEASE</sprint-test.version>
         <spring.version>4.3.2.RELEASE</spring.version>
         <spring-security.version>4.2.0.RELEASE</spring-security.version>
@@ -163,6 +164,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
+                    <webResources>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>src/webapp/</directory>
+                        </resource>
+                    </webResources>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>

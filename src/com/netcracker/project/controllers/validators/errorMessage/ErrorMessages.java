@@ -58,5 +58,10 @@ public interface  ErrorMessages {
   String WRONG_EMAIL_FORMAT_ERROR = "Wrong email format!";
   String EMPTY_USER_ROLE_ERROR = "User role can't be empty!";
   String INCORRECT_USER_ROLE_ERROR = "Incorrect user role!";
+  String WRONG_BIRTHDAY_FORMAT_ERROR = "Wrong birthday format!";
+  String WRONG_BIRTH_DATE_ERROR = "User is less than 18 years old!";
+  String WRONG_HIRE_DATE_FORMAT_ERROR = "Wrong hire date format!";
   String START_DATE_ERROR = "Start date can't be less then current date!";
+  String HIRE_DATE_CURRENT_DATE_ERROR = "Hire date can't be greater than current date!";
+  String PHONE_NUMBER_FORMAT_ERROR = "Wrong phone number format!";
 }

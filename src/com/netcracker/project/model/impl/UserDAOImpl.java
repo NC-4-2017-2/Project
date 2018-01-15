@@ -321,7 +321,7 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public Integer checkLoginExistence(String login) {
+  public Integer findIfLoginExists(String login) {
     logger.info("Entering checkLoginExistence(login=" + login + ")");
     return template.queryForObject(CHECK_LOGIN_EXISTENCE, new Object[]{login}, Integer.class);
   }

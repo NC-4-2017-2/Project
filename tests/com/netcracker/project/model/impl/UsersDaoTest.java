@@ -269,7 +269,7 @@ public class UsersDaoTest {
 
   @Test
   public void checkLoginExistence() {
-    Integer result = userDao.checkLoginExistence("ivanov");
+    Integer result = userDao.findIfLoginExists("ivanov");
     assertEquals("1", result.toString());
   }
 

@@ -22,7 +22,8 @@ abstract class AbstractValidator {
 
   void validateStartEndDate(String startDate, String endDate) {
     if (startDate == null) {
-      errorMap.put("START_DATE_NULL_ERROR", ErrorMessages.START_DATE_NULL_ERROR);
+      errorMap
+          .put("START_DATE_NULL_ERROR", ErrorMessages.START_DATE_NULL_ERROR);
     }
 
     if (endDate == null) {
@@ -40,48 +41,54 @@ abstract class AbstractValidator {
         int dateCompare = start.compareTo(end);
 
         if (dateCompare == 0) {
-          errorMap.put("START_DATE_EQUALS_END_DATE_ERROR", ErrorMessages.START_DATE_EQUALS_END_DATE_ERROR);
+          errorMap.put("START_DATE_EQUALS_END_DATE_ERROR",
+              ErrorMessages.START_DATE_EQUALS_END_DATE_ERROR);
         }
 
         if (dateCompare == 1) {
           errorMap
-              .put("START_DATE_BIGGER_THAN_END_DATE_ERROR", ErrorMessages.START_DATE_BIGGER_THAN_END_DATE_ERROR);
+              .put("START_DATE_BIGGER_THAN_END_DATE_ERROR",
+                  ErrorMessages.START_DATE_BIGGER_THAN_END_DATE_ERROR);
         }
 
         int compareStart = new Date().compareTo(start);
 
         if (compareStart == 1) {
-        errorMap.put("START_DATE_ERROR", ErrorMessages.START_DATE_ERROR);
+          errorMap.put("START_DATE_ERROR", ErrorMessages.START_DATE_ERROR);
         }
       }
     }
   }
 
   void validateId(String id) {
-    if(StringUtils.isEmpty(id)) {
+    if (StringUtils.isEmpty(id)) {
       errorMap.put("EMPTY_ID_ERROR", ErrorMessages.EMPTY_ID_ERROR);
       return;
     }
 
-    if(!checkId(id)) {
-      errorMap.put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
+    if (!checkId(id)) {
+      errorMap
+          .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
       return;
     }
 
     try {
       BigInteger bigIntegerId = new BigInteger(id);
-    } catch(NumberFormatException ex) {
-      errorMap.put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
+    } catch (NumberFormatException ex) {
+      errorMap
+          .put("WRONG_ID_FORMAT_ERROR", ErrorMessages.WRONG_ID_FORMAT_ERROR);
     }
   }
 
   void validateJobTitle(String jobTitle) {
     if (StringUtils.isEmpty(jobTitle)) {
-      errorMap.put("EMPTY_JOB_TITLE_ERROR", ErrorMessages.EMPTY_JOB_TITLE_ERROR);
+      errorMap
+          .put("EMPTY_JOB_TITLE_ERROR", ErrorMessages.EMPTY_JOB_TITLE_ERROR);
       return;
     }
     if (!jobTitleEnumCheck(jobTitle)) {
-      errorMap.put("INCORRECT_STATUS_ERROR", ErrorMessages.INCORRECT_STATUS_ERROR);
+      errorMap
+          .put("INCORRECT_STATUS_ERROR", ErrorMessages.INCORRECT_STATUS_ERROR);
     }
   }
 
@@ -101,11 +108,12 @@ abstract class AbstractValidator {
     }
 
     if (!statusEnumCheck(status)) {
-      errorMap.put("INCORRECT_STATUS_ERROR", ErrorMessages.INCORRECT_STATUS_ERROR);
+      errorMap
+          .put("INCORRECT_STATUS_ERROR", ErrorMessages.INCORRECT_STATUS_ERROR);
     }
   }
 
-   void validateAbstractName(String name) {
+  void validateAbstractName(String name) {
     if (!checkName(name)) {
       errorMap.put("USER_FIRST_OR_LAST_NAME_ERROR",
           ErrorMessages.USER_FIRST_OR_LAST_NAME_ERROR);
@@ -131,7 +139,8 @@ abstract class AbstractValidator {
 
   private boolean checkStartDate(String startDate) {
     if (!checkDate(startDate)) {
-      errorMap.put("WRONG_START_DATE_FORMAT_ERROR", ErrorMessages.WRONG_START_DATE_FORMAT_ERROR);
+      errorMap.put("WRONG_START_DATE_FORMAT_ERROR",
+          ErrorMessages.WRONG_START_DATE_FORMAT_ERROR);
       return false;
     }
 
@@ -140,7 +149,8 @@ abstract class AbstractValidator {
 
   private boolean checkEndDate(String endDate) {
     if (!checkDate(endDate)) {
-      errorMap.put("WRONG_END_DATE_FORMAT_ERROR", ErrorMessages.WRONG_END_DATE_FORMAT_ERROR);
+      errorMap.put("WRONG_END_DATE_FORMAT_ERROR",
+          ErrorMessages.WRONG_END_DATE_FORMAT_ERROR);
       return false;
     }
 

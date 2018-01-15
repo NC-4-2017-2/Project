@@ -64,7 +64,7 @@ public class UserController {
       Model model) {
     Map<String, String> errorMap = new HashMap<>();
     UserValidator validator = new UserValidator();
-    Integer loginExistence = userDAO.checkLoginExistence(login);
+    Integer loginExistence = userDAO.findIfLoginExists(login);
     errorMap = validator.validateUserLoginIfExist(loginExistence);
 
     if (!errorMap.isEmpty()) {
@@ -80,7 +80,7 @@ public class UserController {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
     }
-    //todo validate phone number, dates
+
     User user = new User.UserBuilder()
         .lastName(lastName)
         .firstName(firstName)
@@ -96,7 +96,7 @@ public class UserController {
         .userStatus(UserStatus.WORKING)
         .build();
 
-    //userDAO.createUser(user);
+    userDAO.createUser(user);
 
     return "responseStatus/success";
   }

@@ -77,7 +77,7 @@ public interface UserDAO {
 
   Integer findIfLMExists(BigInteger userId);
 
-  Integer checkLoginExistence(String login);
+  Integer findIfLoginExists(String login);
 
   String CREATE_USER = "INSERT ALL " +
       "INTO OBJECTS (OBJECT_ID,PARENT_ID,OBJECT_TYPE_ID,NAME,DESCRIPTION,OBJECT_VERSION) VALUES (OBJECT_SEQUENCE.NEXTVAL,NULL,1,?,NULL,1) "

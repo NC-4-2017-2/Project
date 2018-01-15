@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import com.netcracker.project.model.impl.BusinessTripDAOImpl;
@@ -51,7 +52,6 @@ public class DateConverterService {
     return formattedDate;
   }
 
-
   public Date convertStringToDateFromJSP(String str) {
     Date date = null;
     String pattern = "yyyy-MM-dd";
@@ -81,4 +81,15 @@ public class DateConverterService {
     double sum = hoursDouble + (minutesDouble / 60);
     return Math.floor(sum * 100) / 100;
   }
+
+  public Integer getYearFromDate(Date date) {
+    int result = -1;
+    if (date != null) {
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(date);
+      result = cal.get(Calendar.YEAR);
+    }
+    return result;
+  }
+
 }

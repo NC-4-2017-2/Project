@@ -6,4 +6,5 @@ public interface RegexPatterns {
   String TIME_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
   String NAME_PATTERN = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
   String EMAIL_PATTERN = "^(\\S+)@([a-z0-9-]+)(\\.)([a-z]{2,4})(\\.?)([a-z]{0,4})+$";
+  String PHONE_NUMBER_PATTERN = "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})";
 }

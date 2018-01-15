@@ -2,6 +2,8 @@ package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.enums.UserRole;
+import com.netcracker.project.services.impl.DateConverterService;
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,26 +17,12 @@ public class UserValidator extends AbstractValidator {
       String userRole) {
     validateName(lastName);
     validateName(firstName);
+    validateEmail(email);
+    validateBirthDate(dateOfBirth);
+    validateHireDate(hireDate);
+    validatePhoneNumber(phoneNumber);
     validateJobTitle(jobTitle);
-    if (!validateEmail(email)) {
-      setErrorToMap("WRONG_EMAIL_ERROR", ErrorMessages.WRONG_EMAIL_FORMAT_ERROR);
-    }
     validateUserRole(userRole);
-    return getErrorMap();
-  }
-
-  public Map<String, String> validateInteger(String countSprints) {
-    validateId(countSprints);
-    return getErrorMap();
-  }
-
-  public Map<String, String> validateDates(String start, String end) {
-    validateStartEndDate(start, end);
-    return getErrorMap();
-  }
-
-  public Map<String, String> validateInputId(String id) {
-    validateId(id);
     return getErrorMap();
   }
 
@@ -71,7 +59,66 @@ public class UserValidator extends AbstractValidator {
     return getErrorMap();
   }
 
-  private boolean validateEmail(String email) {
+  public Map<String, String> validateEmail(String email) {
+    if (!validateEmailFormat(email)) {
+      setErrorToMap("WRONG_EMAIL_ERROR",
+          ErrorMessages.WRONG_EMAIL_FORMAT_ERROR);
+    }
+    return getErrorMap();
+  }
+
+
+  public Map<String, String> validateBirthDate(String birthDate) {
+    DateConverterService dateService = new DateConverterService();
+
+    if (!checkDate(birthDate)) {
+      setErrorToMap("WRONG_BIRTHDAY_FORMAT_ERROR",
+          ErrorMessages.WRONG_BIRTHDAY_FORMAT_ERROR);
+      return getErrorMap();
+    }
+
+    Date birthDayDate = dateService.convertStringToDateFromJSP(birthDate);
+
+    if (dateService.getYearFromDate(new Date()) - dateService
+        .getYearFromDate(birthDayDate) < 18) {
+      setErrorToMap("WRONG_BIRTH_DATE_ERROR",
+          ErrorMessages.WRONG_BIRTH_DATE_ERROR);
+    }
+
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateHireDate(String hireDate) {
+    DateConverterService dateService = new DateConverterService();
+
+    if (!checkDate(hireDate)) {
+      setErrorToMap("WRONG_HIRE_DATE_FORMAT_ERROR",
+          ErrorMessages.WRONG_HIRE_DATE_FORMAT_ERROR);
+      return getErrorMap();
+    }
+
+    Date hireDayDate = dateService.convertStringToDateFromJSP(hireDate);
+
+    int compareStart = new Date().compareTo(hireDayDate);
+
+    if (compareStart == -1) {
+      setErrorToMap("HIRE_DATE_CURRENT_DATE_ERROR",
+          ErrorMessages.HIRE_DATE_CURRENT_DATE_ERROR);
+    }
+
+    return getErrorMap();
+  }
+
+  public Map<String, String> validatePhoneNumber(String phoneNumber) {
+    if (!checkPhoneNumber(phoneNumber)) {
+      setErrorToMap("PHONE_NUMBER_FORMAT_ERROR",
+          ErrorMessages.PHONE_NUMBER_FORMAT_ERROR);
+    }
+
+    return getErrorMap();
+  }
+
+  private boolean validateEmailFormat(String email) {
     Pattern p = Pattern.compile(RegexPatterns.EMAIL_PATTERN);
     Matcher m = p.matcher(email);
     return m.matches();
@@ -96,5 +143,17 @@ public class UserValidator extends AbstractValidator {
       }
     }
     return false;
+  }
+
+  private boolean checkDate(String dateString) {
+    Pattern p = Pattern.compile(RegexPatterns.DATE_PATTERN);
+    Matcher m = p.matcher(dateString);
+    return m.matches();
+  }
+
+  private boolean checkPhoneNumber(String phoneNumber) {
+    Pattern p = Pattern.compile(RegexPatterns.PHONE_NUMBER_PATTERN);
+    Matcher m = p.matcher(phoneNumber);
+    return m.matches();
   }
 }

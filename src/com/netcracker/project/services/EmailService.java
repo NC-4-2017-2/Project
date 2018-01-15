@@ -5,8 +5,8 @@ import org.springframework.mail.MailSender;
 
 public interface EmailService {
 
-  void setMailSender(MailSender mailSender);
+//  void setMailSender(MailSender mailSender);
 
-  void sendEmail(String to, String login, String password);
+  void sendEmail(String emailAddressTo, String login, String password);
 
 }

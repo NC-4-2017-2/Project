@@ -64,11 +64,6 @@
                            required placeholder="Employee's login"></td>
             </tr>
             <tr>
-                <td>Password:</td>
-                <td><input type="password" name="password" size="25"
-                           required placeholder="Employee's password"></td>
-            </tr>
-            <tr>
                 <td>User's Role:</td>
                 <td>
                     <select name="userRole" required>

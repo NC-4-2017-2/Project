@@ -11,13 +11,16 @@
 
     <property name="javaMailProperties">
       <props>
+        <prop key="mail.transport.protocol">smtp</prop>
         <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.auth.mechanisms">XOAUTH2</prop>
         <prop key="mail.smtp.starttls.enable">true</prop>
+        <prop key="mail.debug">false</prop>
       </props>
     </property>
   </bean>
 
-  <bean id="emailServiceImpl" class="com.netcracker.project.services.impl.EmailServiceImpl">
+  <bean id="emailService" class="com.netcracker.project.services.impl.EmailServiceImpl">
     <property name="mailSender" ref="mailSender"/>
   </bean>
 

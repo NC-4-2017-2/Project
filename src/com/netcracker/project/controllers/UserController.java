@@ -1,15 +1,15 @@
 package com.netcracker.project.controllers;
 
 import com.netcracker.project.controllers.validators.UserValidator;
-import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.UserRole;
 import com.netcracker.project.model.enums.UserStatus;
+import com.netcracker.project.services.EmailService;
 import com.netcracker.project.services.impl.DateConverterService;
-import com.netcracker.project.services.impl.EmailServiceImpl;
+import com.netcracker.project.services.impl.PasswordService;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class UserController {
   @Autowired
   private UserDAO userDAO;
   @Autowired
-  private EmailServiceImpl emailService;
+  private EmailService emailService;
 
   private static final Logger logger = Logger
       .getLogger(UserController.class);
@@ -59,7 +59,6 @@ public class UserController {
       @RequestParam(value = "phoneNumber") String phoneNumber,
       @RequestParam(value = "jobTitle") String jobTitle,
       @RequestParam(value = "login") String login,
-      @RequestParam(value = "password") String password,
       @RequestParam(value = "userRole") String userRole,
       Model model) {
     Map<String, String> errorMap = new HashMap<>();
@@ -81,6 +80,8 @@ public class UserController {
       return "responseStatus/unsuccess";
     }
 
+    String password = new PasswordService().generatePassword();
+
     User user = new User.UserBuilder()
         .lastName(lastName)
         .firstName(firstName)
@@ -97,6 +98,7 @@ public class UserController {
         .build();
 
     userDAO.createUser(user);
+    emailService.sendEmail(email, login, password);
 
     return "responseStatus/success";
   }

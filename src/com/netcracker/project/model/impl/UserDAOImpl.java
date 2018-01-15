@@ -3,22 +3,18 @@ package com.netcracker.project.model.impl;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkPeriod;
-import com.netcracker.project.model.impl.mappers.EnumMapper;
+import com.netcracker.project.model.impl.mappers.FullUserMapper;
 import com.netcracker.project.model.impl.mappers.UserMapper;
 import com.netcracker.project.model.impl.mappers.WorkPeriodMapper;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
 
 @Component
 @ImportResource("classpath:Spring-User.xml")
@@ -62,6 +58,12 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public User findFullUserByUserLogin(String login) {
+    return template.queryForObject(FIND_FULL_USER_BY_USER_LOGIN, new Object[]{login},
+        new FullUserMapper());
+  }
+
+  @Override
   public User findUserByLogin(String login) {
     logger.info("Entering findUserByLogin(" + login + ")");
     return template.queryForObject(FIND_USER_BY_LOGIN, new Object[]{login},
@@ -71,13 +73,17 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public User findPMByProjectId(BigInteger projectId) {
     logger.info("Entering findPMByProjectId(" + projectId + ")");
-    return template.queryForObject(FIND_PM_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+    return template
+        .queryForObject(FIND_PM_BY_PROJECT_ID, new Object[]{projectId},
+            new UserMapper());
   }
 
   @Override
   public User findLMByProjectId(BigInteger projectId) {
     logger.info("Entering findLMByProjectId(" + projectId + ")");
-    return template.queryForObject(FIND_LM_BY_PROJECT_ID, new Object[]{projectId}, new UserMapper());
+    return template
+        .queryForObject(FIND_LM_BY_PROJECT_ID, new Object[]{projectId},
+            new UserMapper());
   }
 
   @Override
@@ -117,21 +123,6 @@ public class UserDAOImpl implements UserDAO {
             + projectStatus + ")");
     return template.query(FIND_USERS_BY_JOB_TITLE_AND_PROJECT_STATUS,
         new Object[]{jobTitle, projectStatus}, new UserMapper());
-  }
-
-  @Deprecated
-  @Override
-  public Map<String, String> getAllUserName() {
-    logger.info("Entering getAllUserName()");
-    List idAndName = template.queryForList(GET_ALL_USERS);
-    Map<String, String> result = new HashMap<>();
-    for (Object idName : idAndName) {
-      HashMap map = (HashMap) idName;
-      result.put(String.valueOf(map.get(EnumMapper.USER_ID.toString())),
-          String.valueOf(map.get(EnumMapper.FULL_NAME.toString())));
-    }
-
-    return result;
   }
 
   @Override
@@ -242,7 +233,8 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void updateWorkingPeriodEndDateByUserId(BigInteger userId, BigInteger projectId, Date date) {
+  public void updateWorkingPeriodEndDateByUserId(BigInteger userId,
+      BigInteger projectId, Date date) {
     logger.info(
         "Entering updateWorkingPeriodByUserId(userId=" + userId
             + ","
@@ -310,19 +302,24 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public Integer findIfLMExistsOnProject(BigInteger projectId) {
-    logger.info("Entering findIfLMExistsOnProject(projectId=" + projectId + ")");
-    return template.queryForObject(FIND_IF_LM_EXISTS_ON_PROJECT, new Object[]{projectId}, Integer.class);
+    logger
+        .info("Entering findIfLMExistsOnProject(projectId=" + projectId + ")");
+    return template
+        .queryForObject(FIND_IF_LM_EXISTS_ON_PROJECT, new Object[]{projectId},
+            Integer.class);
   }
 
   @Override
   public Integer findIfLMExists(BigInteger userId) {
     logger.info("Entering findIfLMExists(userId=" + userId + ")");
-    return template.queryForObject(FIND_IF_LM_EXIST, new Object[]{userId}, Integer.class);
+    return template
+        .queryForObject(FIND_IF_LM_EXIST, new Object[]{userId}, Integer.class);
   }
 
   @Override
   public Integer findIfLoginExists(String login) {
     logger.info("Entering checkLoginExistence(login=" + login + ")");
-    return template.queryForObject(CHECK_LOGIN_EXISTENCE, new Object[]{login}, Integer.class);
+    return template.queryForObject(CHECK_LOGIN_EXISTENCE, new Object[]{login},
+        Integer.class);
   }
 }

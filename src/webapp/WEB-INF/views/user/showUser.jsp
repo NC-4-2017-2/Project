@@ -10,50 +10,52 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<table class="table table-hover table-dark" border="3">
-    <thead>
-    <tr>
-        <th scope="col" colspan="2" style="text-align: center;">User
-            info:
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <th scope="row">User Name:</th>
-        <td>${user.firstName} ${user.lastName}</td>
-    </tr>
-    <tr>
-        <th scope="row">Email:</th>
-        <td>${user.email}</td>
-    </tr>
-    <tr>
-        <th scope="row">Birth date:</th>
-        <td>${user.dateOfBirth}</td>
-    </tr>
-    <tr>
-        <th scope="row">Hire date:</th>
-        <td>${user.hireDate}</td>
-    </tr>
-    <tr>
-        <th scope="row">Phone Number:</th>
-        <td>${user.phoneNumber}</td>
-    </tr>
-    <tr>
-        <th scope="row">Job Title:</th>
-        <td>${user.jobTitle}</td>
-    </tr>
-    <tr>
-        <th scope="row">User's status on project:</th>
-        <td>${user.projectStatus}</td>
-    </tr>
-    <tr>
-        <th scope="row">User status:</th>
-        <td>${user.userStatus}</td>
-    </tr>
-    </tbody>
-</table>
-<br>
-<%@include file="../errors/errorMap.jsp" %>
+<div class="col-lg-6">
+    <table class="table table-hover table-dark" border="3">
+        <thead>
+        <tr>
+            <th scope="col" colspan="2" style="text-align: center;">User
+                info:
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">User Name:</th>
+            <td>${user.firstName} ${user.lastName}</td>
+        </tr>
+        <tr>
+            <th scope="row">Email:</th>
+            <td>${user.email}</td>
+        </tr>
+        <tr>
+            <th scope="row">Birth date:</th>
+            <td>${user.dateOfBirth}</td>
+        </tr>
+        <tr>
+            <th scope="row">Hire date:</th>
+            <td>${user.hireDate}</td>
+        </tr>
+        <tr>
+            <th scope="row">Phone Number:</th>
+            <td>${user.phoneNumber}</td>
+        </tr>
+        <tr>
+            <th scope="row">Job Title:</th>
+            <td>${user.jobTitle}</td>
+        </tr>
+        <tr>
+            <th scope="row">User's status on project:</th>
+            <td>${user.projectStatus}</td>
+        </tr>
+        <tr>
+            <th scope="row">User status:</th>
+            <td>${user.userStatus}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <%@include file="../errors/errorMap.jsp" %>
+</div>
 </body>
 </html>

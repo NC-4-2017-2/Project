@@ -48,6 +48,7 @@ public enum EnumMapper {
   USER_NAME("USER_NAME"),
   USER_PASSWORD("USER_PASSWORD"),
   USER_ROLE("USER_ROLE"),
+  USER_SYSTEM_STATUS("USER_SYSTEM_STATUS"),
   FULL_NAME("FULL_NAME");
 
   private String fullName;

@@ -115,8 +115,8 @@ public class UserController {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
     }
-    //todo add user system status
-    User user = userDAO.findUserByLogin(login);
+
+    User user = userDAO.findFullUserByUserLogin(login);
     model.addAttribute("user", user);
     return "user/showUser";
   }

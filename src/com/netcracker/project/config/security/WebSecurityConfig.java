@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = false)
 @ImportResource("classpath:Spring-SecurityUser.xml")
 @ComponentScan("com.netcracker.project")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {

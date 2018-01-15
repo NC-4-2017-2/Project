@@ -37,7 +37,6 @@ public class UsersDaoTest {
   private static final String DELETE_FROM_ATTRIBUTES = "DELETE FROM ATTRIBUTES WHERE OBJECT_ID = ?";
   private static final String DELETE_FROM_OBJECTS = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
 
-
   @Before
   public void setUp() {
     Locale.setDefault(Locale.ENGLISH);
@@ -51,6 +50,15 @@ public class UsersDaoTest {
     assertEquals(
         "User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
             + " phoneNumber='09797979797', photo='null', jobTitle=PROJECT_MANAGER, login='null', password='null', userRole=null, workPeriods=null, userStatus=null, projectStatus=WORKING}",
+        user.toString());
+  }
+
+  @Test
+  public void findFullUserByUserId() {
+    User user = userDao.findFullUserByUserLogin("ivanov");
+    assertEquals(BigInteger.valueOf(1), user.getUserId());
+    assertEquals("User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+            + " phoneNumber='09797979797', jobTitle=PROJECT_MANAGER, login='ivanov', password='null', userRole=null, workPeriods=null, userStatus=WORKING, projectStatus=WORKING}",
         user.toString());
   }
 

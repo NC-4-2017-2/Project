@@ -142,6 +142,7 @@
                     <button type="submit" class="btn btn-primary btn-md">Create
                         new user
                     </button>
+                </form>
             </div>
         </div>
         <div class="col-sm-3">

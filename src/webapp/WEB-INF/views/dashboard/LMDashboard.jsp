@@ -146,7 +146,7 @@
             <div class="well">
                 <h4>Create business trip</h4>
                 <form action="/businessTrip/createBusinessTrip">
-                    <button type="submit">Create</button>
+                    <button type="submit" class="btn btn-primary btn-md">Create</button>
                 </form>
             </div>
         </div>

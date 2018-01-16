@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers;
 
 import com.netcracker.project.controllers.validators.UserValidator;
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import com.netcracker.project.model.UserDAO;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.JobTitle;
@@ -57,9 +58,9 @@ public class UserController {
       @RequestParam(value = "dateOfBirth") String dateOfBirth,
       @RequestParam(value = "hireDate") String hireDate,
       @RequestParam(value = "phoneNumber") String phoneNumber,
-      @RequestParam(value = "jobTitle") String jobTitle,
+      @RequestParam(value = "jobTitle", required = false) String jobTitle,
       @RequestParam(value = "login") String login,
-      @RequestParam(value = "userRole") String userRole,
+      @RequestParam(value = "admin", required = false) String admin,
       Model model) {
     Map<String, String> errorMap = new HashMap<>();
     UserValidator validator = new UserValidator();
@@ -71,36 +72,62 @@ public class UserController {
       return "responseStatus/unsuccess";
     }
 
+    if (jobTitle == null && admin == null) {
+      errorMap.put("JOB_TITLE_ERROR", ErrorMessages.JOB_TITLE_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
     errorMap = validator
         .validateCreate(lastName, firstName, email, dateOfBirth,
-            hireDate, phoneNumber, jobTitle, userRole);
+            hireDate, phoneNumber, jobTitle);
 
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
     }
+    String userRole = null;
+
+    if (admin != null) {
+      userRole = UserRole.ROLE_ADMIN.name();
+      jobTitle = JobTitle.SOFTWARE_ENGINEER.name();
+    } else {
+      if (jobTitle.equals(JobTitle.LINE_MANAGER.name())) {
+        userRole = UserRole.ROLE_LM.name();
+      }
+      if (jobTitle.equals(JobTitle.PROJECT_MANAGER.name())) {
+        userRole = UserRole.ROLE_PM.name();
+      }
+      if (jobTitle.equals(JobTitle.SOFTWARE_ENGINEER.name())) {
+        userRole = UserRole.ROLE_SE.name();
+      }
+    }
 
     String password = new PasswordService().generatePassword();
 
-    User user = new User.UserBuilder()
-        .lastName(lastName)
-        .firstName(firstName)
-        .email(email)
-        .dateOfBirth(converter.convertStringToDateFromJSP(dateOfBirth))
-        .hireDate(converter.convertStringToDateFromJSP(hireDate))
-        .phoneNumber(phoneNumber)
-        .jobTitle(JobTitle.valueOf(jobTitle))
-        .projectStatus(ProjectStatus.TRANSIT)
-        .login(login)
-        .password(encoder.encodePassword(password, null))
-        .role(UserRole.valueOf(userRole))
-        .userStatus(UserStatus.WORKING)
-        .build();
+    if (userRole != null) {
+      User user = new User.UserBuilder()
+          .lastName(lastName)
+          .firstName(firstName)
+          .email(email)
+          .dateOfBirth(converter.convertStringToDateFromJSP(dateOfBirth))
+          .hireDate(converter.convertStringToDateFromJSP(hireDate))
+          .phoneNumber(phoneNumber)
+          .jobTitle(JobTitle.valueOf(jobTitle))
+          .projectStatus(ProjectStatus.TRANSIT)
+          .login(login)
+          .password(encoder.encodePassword(password, null))
+          .role(UserRole.valueOf(userRole))
+          .userStatus(UserStatus.WORKING)
+          .build();
 
-    userDAO.createUser(user);
-    emailService.sendEmail(email, login, password);
+      userDAO.createUser(user);
+      emailService.sendEmail(email, login, password);
+      System.out.println(user.toString());
+      return "responseStatus/success";
+    }
 
-    return "responseStatus/success";
+    return "responseStatus/unsuccess";
   }
 
   @RequestMapping(value = "/showUser/{login}", method = RequestMethod.GET)

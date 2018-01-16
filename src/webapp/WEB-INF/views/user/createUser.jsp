@@ -8,10 +8,21 @@
           href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
     <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      $( document ).ready(function() {
+        $("#admin").change(function () {
+          if ($('#admin').prop('checked')) {
+            $(".jobTitle").prop("disabled", true);
+          }
+          else {
+            $(".jobTitle").prop("disabled", false);
+          }});
+      });
+    </script>
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<form action="/user/createUser" method="post" name="/user/createUser">
+<form action="/user/createUser" method="post">
     <div class="col-lg-6">
         <table border="0">
             <tr>
@@ -19,17 +30,17 @@
             </tr>
             <tr>
                 <td>Last Name:</td>
-                <td><input type="text" name="lastName" size="40"
+                <td><input type="text" name="lastName" size="20"
                            required placeholder="Employee's last name"></td>
             </tr>
             <tr>
                 <td>First Name:</td>
-                <td><input type="text" name="firstName" size="40"
+                <td><input type="text" name="firstName" size="20"
                            required placeholder="Employee's first name"></td>
             </tr>
             <tr>
                 <td>Email:</td>
-                <td><input type="email" name="email" size="40"
+                <td><input type="email" name="email" size="20"
                            required placeholder="email@example.com"></td>
             </tr>
             <tr>
@@ -50,29 +61,27 @@
             <tr>
                 <td>Job Title:</td>
                 <td>
-                    <select name="jobTitle" required>
+                    <select class="jobTitle" id="jobTitle" name="jobTitle">
                         <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>
                         <option value="LINE_MANAGER">LINE_MANAGER</option>
                         <option selected="selected" value="SOFTWARE_ENGINEER">
                             SOFTWARE_ENGINEER
                         </option>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                 Admin:
+                </td>
+                <td>
+                    <input type="checkbox" onchange="jobTitle.value='SOFTWARE_ENGINEER';" name="admin" id="admin" value="true"/>
+                </td>
             </tr>
             <tr>
                 <td>Login:</td>
-                <td><input type="text" name="login" size="25"
+                <td><input type="text" name="login" size="20"
                            required placeholder="Employee's login"></td>
-            </tr>
-            <tr>
-                <td>User's Role:</td>
-                <td>
-                    <select name="userRole" required>
-                        <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-                        <option value="ROLE_PM">ROLE_PM</option>
-                        <option value="ROLE_LM">ROLE_LM</option>
-                        <option selected="selected" value="ROLE_SE">ROLE_SE
-                        </option>
-                    </select>
             </tr>
             <tr>
                 <td><input type="submit" class="btn btn-primary btn-md"

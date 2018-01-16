@@ -13,16 +13,16 @@ public class UserValidator extends AbstractValidator {
 
   public Map<String, String> validateCreate(String lastName,
       String firstName, String email, String dateOfBirth,
-      String hireDate, String phoneNumber, String jobTitle,
-      String userRole) {
+      String hireDate, String phoneNumber, String jobTitle) {
     validateName(lastName);
     validateName(firstName);
     validateEmail(email);
     validateBirthDate(dateOfBirth);
     validateHireDate(hireDate);
     validatePhoneNumber(phoneNumber);
-    validateJobTitle(jobTitle);
-    validateUserRole(userRole);
+    if (jobTitle != null) {
+      validateJobTitle(jobTitle);
+    }
     return getErrorMap();
   }
 
@@ -84,7 +84,11 @@ public class UserValidator extends AbstractValidator {
       setErrorToMap("WRONG_BIRTH_DATE_ERROR",
           ErrorMessages.WRONG_BIRTH_DATE_ERROR);
     }
-
+    if (dateService.getYearFromDate(new Date()) - dateService
+        .getYearFromDate(birthDayDate) > 60) {
+      setErrorToMap("WRONG_BIRTH_DATE_ERROR",
+          ErrorMessages.WRONG_BIRTH_DATE_ERROR);
+    }
     return getErrorMap();
   }
 

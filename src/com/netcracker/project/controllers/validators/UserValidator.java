@@ -26,6 +26,11 @@ public class UserValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateInputId(String id) {
+    validateId(id);
+    return getErrorMap();
+  }
+
   public Map<String, String> validateName(String name) {
     validateAbstractName(name);
     return getErrorMap();

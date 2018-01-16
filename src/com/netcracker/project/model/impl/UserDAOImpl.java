@@ -87,12 +87,19 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public Integer findUserByLoginIfExist(String login) {
-    logger.info("Entering findUserByLoginIfExist(login=" + login + ")");
+  public Integer findUserByLoginIfExists(String login) {
+    logger.info("Entering findUserByLoginIfExists(login=" + login + ")");
     return template
-        .queryForObject(FIND_USER_BY_LOGIN_IF_EXIST, new Object[]{login},
+        .queryForObject(FIND_USER_BY_LOGIN_IF_EXISTS, new Object[]{login},
             Integer.class);
   }
+
+  @Override
+  public Integer findUserByUserIdIfExists(BigInteger id) {
+    logger.info("Entering findUserByUserIdIfExists(id=" + id + ")");
+    return template
+        .queryForObject(FIND_USER_BY_USER_ID_IF_EXISTS, new Object[]{id},
+            Integer.class);  }
 
   @Override
   public Collection<User> findUserByLastNameAndFirstName(String lastName,

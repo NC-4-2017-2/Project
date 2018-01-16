@@ -135,7 +135,7 @@ public class UserController {
       Model model) {
     UserValidator validator = new UserValidator();
     Map<String, String> errorMap = new HashMap<>();
-    Integer userExistence = userDAO.findUserByLoginIfExist(login);
+    Integer userExistence = userDAO.findUserByLoginIfExists(login);
     errorMap = validator.validateUserLoginExistence(userExistence);
 
     if (!errorMap.isEmpty()) {
@@ -146,18 +146,6 @@ public class UserController {
     User user = userDAO.findFullUserByUserLogin(login);
     model.addAttribute("user", user);
     return "user/showUser";
-  }
-
-  @Secured({"ROLE_ADMIN"})
-  @RequestMapping(value = "/updateUserPassword/{userId}", method = RequestMethod.GET)
-  public String updateUserPassword(Model model,
-      @PathVariable(value = "userId") String userId) {
-
-    logger.info("updateUserPassword() method. userId: " + userId);
-    BigInteger bigIntegerId = new BigInteger(userId);
-    User user = userDAO.findUserByUserId(bigIntegerId);
-    model.addAttribute("user", user);
-    return "user/updateUserPassword";
   }
 
   @Secured({"ROLE_ADMIN"})
@@ -178,10 +166,19 @@ public class UserController {
   @RequestMapping(value = "/updateUserEmail/{userId}", method = RequestMethod.GET)
   public String updateUserEmail(Model model,
       @PathVariable(value = "userId") String userId) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
 
-    logger.info("updateUserEmail() method. userId: " + userId);
-    BigInteger bigIntegerId = new BigInteger(userId);
-    User user = userDAO.findUserByUserId(bigIntegerId);
+    errorMap = validator.validateInputId(userId);
+    if(!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    BigInteger validaUserId = new BigInteger(userId);
+
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validaUserId);
+
+    User user = userDAO.findUserByUserId(validaUserId);
     model.addAttribute("user", user);
     return "user/updateUserEmail";
   }

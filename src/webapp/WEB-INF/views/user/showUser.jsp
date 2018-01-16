@@ -54,8 +54,13 @@
         </tr>
         </tbody>
     </table>
+    <table>
+        <form action="/user/updateUserEmail/${user.id}">
+            <button type="submit" class="btn btn-primary btn-md">Update email
+            </button>
+        </form>
+    </table>
     <br>
-    <%@include file="../errors/errorMap.jsp" %>
 </div>
 </body>
 </html>

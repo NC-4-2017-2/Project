@@ -282,6 +282,12 @@ public class UsersDaoTest {
   }
 
   @Test
+  public void findUserByUserIdIfExists() {
+    Integer result = userDao.findUserByUserIdIfExists(BigInteger.valueOf(1));
+    assertEquals("1", result.toString());
+  }
+
+  @Test
   public void generatePassword() {
     String password = new PasswordService().generatePassword();
     System.out.println(password);

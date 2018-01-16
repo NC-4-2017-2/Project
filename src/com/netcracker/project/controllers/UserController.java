@@ -149,16 +149,32 @@ public class UserController {
   }
 
   @Secured({"ROLE_ADMIN"})
-  @RequestMapping(value = "/updateUserPassword/{userId}", method = RequestMethod.POST)
-  public String updateUserPassword(Model model,
-      @PathVariable(value = "userId") String userId,
-      @RequestParam(value = "password") String password) {
+  @RequestMapping(value = "/updatePassword/{userId}", method = RequestMethod.POST)
+  public String updateUserPasswordPost(Model model,
+      @PathVariable(value = "userId") String userId) {
+    logger.info("updateUserPassword() method. User id" + userId);
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
 
-    logger.info("updateUserPassword() method. User id" + userId
-        + "password: " + password);
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
 
-    BigInteger bigIntegerId = new BigInteger(userId);
-    userDAO.updatePassword(bigIntegerId, password);
+    BigInteger validaUserId = new BigInteger(userId);
+    Integer userIfExist = userDAO
+        .findUserByUserIdIfExists(validaUserId);
+    errorMap = validator.validateUserExistence(userIfExist);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
+    User user = userDAO.findUserByUserId(validaUserId);
+    String password = new PasswordService().generatePassword();
+    userDAO.updatePassword(user.getUserId(), password);
+    emailService.sendEmail(user.getEmail(), user.getLogin(), password);
     return "responseStatus/success";
   }
 

@@ -283,7 +283,7 @@ public class UsersDaoTest {
 
   @Test
   public void findUserByUserIdIfExists() {
-    Integer result = userDao.findUserByUserIdIfExists(BigInteger.valueOf(1));
+    Integer result = userDao.findUserByUserIdIfExists(BigInteger.valueOf(3));
     assertEquals("1", result.toString());
   }
 

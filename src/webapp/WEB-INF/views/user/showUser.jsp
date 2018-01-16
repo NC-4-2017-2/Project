@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <title>User</title>
@@ -9,7 +10,8 @@
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-<jsp:include page="../fragments/header.jsp"></jsp:include>
+<jsp:include page="../fragments/header.jsp"/>
+<sec:authorize access="hasRole('ROLE_ADMIN')" var="isAdmin"/>
 <div class="col-lg-6">
     <table class="table table-hover table-dark" border="3">
         <thead>
@@ -54,12 +56,20 @@
         </tr>
         </tbody>
     </table>
-    <table>
-        <form action="/user/updateUserEmail/${user.id}">
-            <button type="submit" class="btn btn-primary btn-md">Update email
+    <c:if test="${isAdmin}">
+        <form action="/user/updateUserEmail/${user.userId}">
+            <button type="submit" class="btn btn-primary btn-md">Update
+                email
             </button>
         </form>
-    </table>
+    </c:if>
+    <c:if test="${currentUser.userId eq user.userId || isAdmin}">
+        <form action="/user/updateUserPhoneNumber/${user.userId}">
+            <button type="submit" class="btn btn-primary btn-md">Update
+                phone number
+            </button>
+        </form>
+    </c:if>
     <br>
 </div>
 </body>

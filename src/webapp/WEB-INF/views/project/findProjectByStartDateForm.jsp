@@ -3,7 +3,7 @@
     <div class="input-group">
         <input type="date" name="startDate" id="startDate">
     </div>
-    <label for="endDate">Start date:</label>
+    <label for="endDate">End date:</label>
     <div class="input-group">
         <input type="date" name="endDate" id="endDate">
     </div>

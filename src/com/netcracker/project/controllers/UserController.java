@@ -16,6 +16,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -132,6 +133,7 @@ public class UserController {
 
   @RequestMapping(value = "/showUser/{login}", method = RequestMethod.GET)
   public String showUserProfile(@PathVariable(value = "login") String login,
+      Principal principal,
       Model model) {
     UserValidator validator = new UserValidator();
     Map<String, String> errorMap = new HashMap<>();
@@ -143,7 +145,9 @@ public class UserController {
       return "responseStatus/unsuccess";
     }
 
+    User currentUser = userDAO.findUserByLogin(principal.getName());
     User user = userDAO.findFullUserByUserLogin(login);
+    model.addAttribute("currentUser", currentUser);
     model.addAttribute("user", user);
     return "user/showUser";
   }
@@ -180,54 +184,115 @@ public class UserController {
 
   @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/updateUserEmail/{userId}", method = RequestMethod.GET)
-  public String updateUserEmail(Model model,
-      @PathVariable(value = "userId") String userId) {
+  public String updateUserEmail(@PathVariable(value = "userId") String userId,
+      Model model) {
     UserValidator validator = new UserValidator();
     Map<String, String> errorMap = new HashMap<>();
-
     errorMap = validator.validateInputId(userId);
-    if(!errorMap.isEmpty()) {
+    if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
     }
-    BigInteger validaUserId = new BigInteger(userId);
-
-    Integer userExistence = userDAO.findUserByUserIdIfExists(validaUserId);
-
-    User user = userDAO.findUserByUserId(validaUserId);
+    BigInteger validUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validUserId);
+    errorMap = validator.validateUserExistence(userExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    User user = userDAO.findUserByUserId(validUserId);
     model.addAttribute("user", user);
     return "user/updateUserEmail";
   }
 
   @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/updateUserEmail/{userId}", method = RequestMethod.POST)
-  public String updateUserEmail(Model model,
-      @PathVariable(value = "userId") String userId,
-      @RequestParam(value = "email") String email) {
+  public String updateUserEmail(@PathVariable(value = "userId") String userId,
+      @RequestParam(value = "email") String email,
+      Model model) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    BigInteger validUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validUserId);
+    errorMap = validator.validateUserExistence(userExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    errorMap = validator.validateEmail(email);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
 
-    logger.info("updateUserPassword() method. User id" + userId
-        + "email: " + email);
-    BigInteger bigIntegerId = new BigInteger(userId);
-    userDAO.updateEmail(bigIntegerId, email);
+    userDAO.updateEmail(validUserId, email);
     return "responseStatus/success";
   }
 
-  @RequestMapping(value = "/updateUserPhoneNumber", method = RequestMethod.GET)
-  public String updateUserPhoneNumber(Model model,
-      Principal principal) {
+  @RequestMapping(value = "/updateUserPhoneNumber/{userId}", method = RequestMethod.GET)
+  public String updateUserPhoneNumber(@PathVariable("userId") String userId,
+      Principal principal,
+      HttpServletRequest request,
+      Model model) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    BigInteger validUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validUserId);
+    errorMap = validator.validateUserExistence(userExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
 
-    String currentUserLogin = principal.getName();
-    User user = userDAO.findUserByLogin(currentUserLogin);
+    User user = userDAO.findUserByUserId(validUserId);
+
+    User currentUser = userDAO.findUserByLogin(principal.getName());
+    if(!currentUser.getUserId().equals(user.getUserId()) && !request.isUserInRole("ROLE_ADMIN"))  {
+      errorMap.put("INVALID_USER_ERROR", ErrorMessages.INVALID_USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
     model.addAttribute("user", user);
     return "user/updateUserPhoneNumber";
   }
 
-  @RequestMapping(value = "/updateUserPhoneNumber", method = RequestMethod.POST)
-  public String updateUserPhoneNumber(Model model, Principal principal,
-      @RequestParam(value = "phoneNumber") String phoneNumber) {
-    String currentUserLogin = principal.getName();
-    User user = userDAO.findUserByLogin(currentUserLogin);
-    userDAO.updatePhoneNumber(user.getUserId(), phoneNumber);
+  @RequestMapping(value = "/updateUserPhoneNumber/{userId}", method = RequestMethod.POST)
+  public String updateUserPhoneNumber(@PathVariable(value = "userId") String userId,
+      @RequestParam(value = "phoneNumber") String phoneNumber,
+      Principal principal,
+      Model model) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    BigInteger validUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validUserId);
+    errorMap = validator.validateUserExistence(userExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    errorMap = validator.validatePhoneNumber(phoneNumber);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
+    userDAO.updatePhoneNumber(validUserId, phoneNumber);
     return "responseStatus/success";
   }
 

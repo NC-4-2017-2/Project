@@ -21,10 +21,9 @@
                            value=${name}></td>
             </tr>
             <tr>
-                <td>Task Type:</td>
-                <td><select name="taskType">
-                    <option value="REQUEST_TASK">REQUEST_TASK</option>
+                <td><select name="taskType" hidden="false" required>
                     <option value="PROJECT_TASK">PROJECT_TASK</option>
+                    <option value="REQUEST_TASK">REQUEST_TASK</option>
                 </select></td>
             </tr>
             <tr>
@@ -38,7 +37,7 @@
             </tr>
             <tr>
                 <td>Priority:</td>
-                <td><select name="priority">
+                <td><select name="priority" required>
                     <option value="CRITICAL">CRITICAL</option>
                     <option value="HIGH">HIGH</option>
                     <option value="NORMAL">NORMAL</option>
@@ -49,11 +48,6 @@
                 <td>Description task:</td>
                 <td><input type="text" name="description" size="70"
                            value=${description}></td>
-            </tr>
-            <tr>
-                <td>Comments:</td>
-                <td><input type="text" name="comments" size="70"
-                           value=${comments}></td>
             </tr>
             <tr>
                 <td>User last name:</td>
@@ -75,6 +69,7 @@
                     </select>
                 </td>
             </tr>
+
         <%@include file="../errors/errorMap.jsp" %>
         <tr>
             <td><input type="submit" value="Create" size="40" width="40"/>

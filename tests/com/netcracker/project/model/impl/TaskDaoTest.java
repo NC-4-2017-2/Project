@@ -50,7 +50,7 @@ public class TaskDaoTest {
     DateConverterService mdc = new DateConverterService();
     Date date = mdc.convertStringToDate("01.12.2017");
     task = new TaskBuilder()
-        .taskId(BigInteger.valueOf(300))
+        .taskId(BigInteger.valueOf(1078))
         .name("ERP-12")
         .taskType(TaskType.PROJECT_TASK)
         .startDate(date)
@@ -134,19 +134,6 @@ public class TaskDaoTest {
     Collection<Task> tasks = taskDao.findTaskByProjectIdAndStatus(BigInteger.valueOf(300), TaskStatus.CLOSED.getId());
   }
 
-//  @Test
-//  public void test5findStatusByUserIdAndDate(){
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-//    Date date = null;
-//    try {
-//      date = dateFormat.parse("01.12.2017");
-//    } catch (ParseException e) {
-//      e.printStackTrace();
-//    }
-//
-//    Collection<Task> task = taskDao.findTaskByUserIdAndDate(BigInteger.valueOf(1), date);
-//
-//  }
 
   @Test
   public void findTaskByProjectIdAndTaskId(){

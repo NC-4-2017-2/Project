@@ -40,6 +40,8 @@ public interface TaskDAO {
 
   void updateReopenCounter(Integer counter, BigInteger taskId);
 
+  void updateComment(String comment, BigInteger taskId);
+
   Integer findIfTaskExists(BigInteger id);
 
   String UPDATE_END_DATE =

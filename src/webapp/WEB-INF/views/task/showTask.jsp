@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<body>
 <head>
 <style>
     p {
@@ -10,6 +9,7 @@
 </style>
     <title>Your task</title>
 </head>
+
 <br>
     <tr>
        Task name: <td>${task.name}</td><br>
@@ -23,21 +23,28 @@
        Status: <td>${task.status}</td><br>
        Description: <td>${task.description}</td><br>
        Reopen counter: <td>${task.reopenCounter}</td><br>
-       Comments: <td>${task.comments}</td><br>
-       Author id: <td>${taskAuthor.lastName} ${taskAuthor.firstName}</td><br>
-       User id: <td>${taskUser.lastName} ${taskUser.firstName}</td><br>
-       Project id: <td>${project.name}</td><br>
-      </br>
+       Author task: <td>${taskAuthor.lastName} ${taskAuthor.firstName}</td><br>
+       Assigned on user: <td>${taskUser.lastName} ${taskUser.firstName}</td><br>
+       <c:if test="${task.taskType eq 'PROJECT_TASK'}">
+       Project: <td>${project.name}</td><br>
+       </c:if>
+        </br>
     </tr>
-</tbody>
-<%@include file="../errors/errorMap.jsp" %>
 
+<br>
+<br>
 
 <form action="/task/updateTask/${task.taskId}">
     <c:if test="${taskUser.userId eq curUser.userId}">
-    <button type="submit">Edit task</button>
+        <button type="submit">Edit task</button>
     </c:if>
 </form>
 
-    </body>
+<form action="/task/createComment/${task.taskId}">
+        <button type="submit">Add comment</button>
+</form>
+
+<%@include file="../errors/errorMap.jsp" %>
+
+
 </html>

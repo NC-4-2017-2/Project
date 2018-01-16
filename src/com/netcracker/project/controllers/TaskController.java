@@ -1,10 +1,14 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.CommentValidator;
 import com.netcracker.project.controllers.validators.TaskValidator;
+import com.netcracker.project.controllers.validators.UserValidator;
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.CommentDAO;
 import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.TaskDAO;
 import com.netcracker.project.model.UserDAO;
+import com.netcracker.project.model.entity.Comment;
 import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.Task.TaskBuilder;
 import com.netcracker.project.model.entity.User;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 @RequestMapping("/task")
 public class TaskController {
@@ -44,13 +49,29 @@ public class TaskController {
   private UserDAO userDAO;
   @Autowired
   private ProjectDAO projectDAO;
+  @Autowired
+  private CommentDAO commentDAO;
+
 
   @Secured({"ROLE_PM"})
-  @RequestMapping(value = "/createTask", method = RequestMethod.GET)
-  public String createTaskWithUsers(Model model) {
-    logger.info("createTask with get params.: ");
+  @RequestMapping(value = "selectTaskType", method = RequestMethod.GET)
+  public String createTaskType() {
+    return "task/selectTaskType";
+  }
+
+  @Secured({"ROLE_PM"})
+  @RequestMapping(value = "selectTaskType", params = "taskType", method = RequestMethod.GET)
+  public String createType(@RequestParam("taskType") String taskType, Model model) {
+    Map<String, String> errorMap = new HashMap<>();
+    TaskValidator validator = new TaskValidator();
+    errorMap = validator.validateType(taskType);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/selectTaskType";
+    }
     Collection<String> projects = projectDAO.findAllOpenedProjects();
     model.addAttribute("projectNamesList", projects);
+
     return "task/createTask";
   }
 
@@ -63,7 +84,6 @@ public class TaskController {
       @RequestParam("plannedEndDate") String plannedEndDate,
       @RequestParam("priority") String priority,
       @RequestParam("description") String description,
-      @RequestParam("comments") String comments,
       @RequestParam("projectNames") String projectName,
       @RequestParam("lastName") String lastName,
       @RequestParam("firstName") String firstName,
@@ -73,9 +93,10 @@ public class TaskController {
     TaskValidator validator = new TaskValidator();
     Map<String, String> errorMap = new HashMap<>();
     Collection<String> projects = projectDAO.findAllOpenedProjects();
+
     errorMap = validator
         .validationCreate(name, taskType, startDate, plannedEndDate, priority,
-            description, comments, projectName);
+            description, projectName);
 
     if (!errorMap.isEmpty()) {
       model.addAttribute("name", name);
@@ -84,12 +105,10 @@ public class TaskController {
       model.addAttribute("plannedEndDate", plannedEndDate);
       model.addAttribute("priority", priority);
       model.addAttribute("description", description);
-      model.addAttribute("comments", comments);
       model.addAttribute("projectNamesList", projects);
       model.addAttribute("errorMap", errorMap);
       return "task/createTask";
     }
-
 
     Integer existenceProject = projectDAO
         .findProjectByNameIfExist(projectName);
@@ -139,12 +158,11 @@ public class TaskController {
         .authorId(currentUser.getUserId())
         .userId(user.getUserId())
         .reopenCounter(0)
-        .comments(comments)
         .projectId(project.getProjectId())
         .build();
-
     logger.info("createTask request from DB. Task name: " + name);
     taskDAO.createTask(task);
+
     return "responseStatus/success";
   }
 
@@ -160,7 +178,6 @@ public class TaskController {
       @RequestParam("status") String status,
       @RequestParam("description") String description,
       @RequestParam("reopenCounter") Integer reopenCounter,
-      @RequestParam("comments") String comments,
       @RequestParam("lastName") String lastName,
       @RequestParam("firstName") String firstName,
       @RequestParam("projectNames") String projectName, Model model,
@@ -182,8 +199,7 @@ public class TaskController {
 
     errorMap = validator.validationUpdate(name, type, startDate,
          plannedEndDate, priority, status,
-         description, comments, projectName);
-
+         description, projectName);
 
     if (!errorMap.isEmpty()) {
       model.addAttribute("name", name);
@@ -193,7 +209,6 @@ public class TaskController {
       model.addAttribute("priority", priority);
       model.addAttribute("status", status);
       model.addAttribute("description", description);
-      model.addAttribute("comments", comments);
       model.addAttribute("projectNamesList", projects);
       model.addAttribute("errorMap", errorMap);
       return "task/updateTask";
@@ -233,10 +248,8 @@ public class TaskController {
       }
     }
 
-
     Project updationProject = projectDAO.findProjectByName(projectName);
     User currentUser = userDAO.findUserByLogin(principal.getName());
-
 
     Task updatingTask = new Task.TaskBuilder()
         .taskId(validTaskId)
@@ -249,7 +262,6 @@ public class TaskController {
         .status(TaskStatus.valueOf(status))
         .description(description)
         .reopenCounter(0)
-        .comments(comments)
         .authorId(currentUser.getUserId())
         .userId(user.getUserId())
         .projectId(updationProject.getProjectId())
@@ -284,6 +296,7 @@ public class TaskController {
     User taskUser = userDAO.findUserByUserId(task.getUserId());
     Collection<String> projects = projectDAO.findAllOpenedProjects();
 
+
     model.addAttribute("task", task);
     model.addAttribute("taskId", task.getTaskId());
     model.addAttribute("name", task.getName());
@@ -295,7 +308,6 @@ public class TaskController {
     model.addAttribute("status", task.getStatus());
     model.addAttribute("description", task.getDescription());
     model.addAttribute("reopenCounter", task.getReopenCounter());
-    model.addAttribute("comments", task.getComments());
     model.addAttribute("taskUser", taskUser);
     model.addAttribute("projectNamesList", projects);
     model.addAttribute("curUser", currentUser);
@@ -329,6 +341,7 @@ public class TaskController {
     User taskAuthor = userDAO.findUserByUserId(task.getAuthorId());
     User taskUser = userDAO.findUserByUserId(task.getUserId());
     Project project = projectDAO.findProjectByProjectId(task.getProjectId());
+
     model.addAttribute("task", task);
     model.addAttribute("taskId", task.getTaskId());
     model.addAttribute("name", task.getName());
@@ -340,7 +353,6 @@ public class TaskController {
     model.addAttribute("status", task.getStatus());
     model.addAttribute("description", task.getDescription());
     model.addAttribute("reopenCounter", task.getReopenCounter());
-    model.addAttribute("comments", task.getComments());
     model.addAttribute("taskAuthor", taskAuthor);
     model.addAttribute("taskUser", taskUser);
     model.addAttribute("project", project);
@@ -353,8 +365,6 @@ public class TaskController {
   public String findTaskByPriority() {
     return "task/findTaskByPriority";
   }
-
-
 
   @RequestMapping(value = "findTaskPerPeriodAndStatus", method = RequestMethod.GET)
   public String findTaskPerPeriodAndStatus() {
@@ -472,8 +482,7 @@ public class TaskController {
   public String showTaskListWithUsers(
       @RequestParam("lastName") String lastName,
       @RequestParam("firstName") String firstName,
-      @RequestParam("status") String status, Model model,
-      Principal principal) {
+      @RequestParam("status") String status, Model model) {
 
     Map<String, String> errorMap = new TaskValidator().validateLastNameAndFirstName(lastName, firstName);
     if (!errorMap.isEmpty()) {
@@ -527,7 +536,6 @@ public class TaskController {
 
     return "task/viewTask";
   }
-
 
   @RequestMapping(value = "findOwnTask", params = "status", method = RequestMethod.GET)
   public String showTaskOwnTask(
@@ -612,6 +620,92 @@ public class TaskController {
     return "task/viewTask";
   }
 
+  @RequestMapping(value = "/createComment/taskId/{taskId}/userId/{userId}/creationDate/{creationDate}",
+      method = RequestMethod.POST)
+  public String createComment(
+      @RequestParam("bodyComment") String bodyComment,
+      @PathVariable("creationDate") String creationDate,
+      @PathVariable("taskId") String taskId,
+      @PathVariable("userId") String userId,
+      Model model, Principal principal) {
+
+    logger.info("begin work with creation comment : ");
+    CommentValidator validator = new CommentValidator();
+    Map<String, String> errorMap = new HashMap<>();
+
+    errorMap = validator.validationCreate(bodyComment);
+
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("bodyComment", bodyComment);
+      model.addAttribute("errorMap", errorMap);
+      return "task/createComment";
+    }
+
+    TaskValidator taskValidator = new TaskValidator();
+    errorMap = taskValidator.validateInputId(taskId);
+    if (!errorMap.isEmpty()){
+      model.addAttribute("errorMap", errorMap);
+    }
+
+    UserValidator userValidator = new UserValidator();
+    errorMap = userValidator.validateInputId(userId);
 
 
+    BigInteger validTaskId = new BigInteger(taskId);
+    Task tasks = taskDAO.findTaskByTaskId(validTaskId);
+
+    String currentUserLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(currentUserLogin);
+
+    if (!errorMap.isEmpty()){
+      model.addAttribute("errorMap", errorMap);
+    }
+
+    Date date = new Date();
+    creationDate = converter.convertDateToString(date);
+
+    if (!errorMap.isEmpty()){
+      model.addAttribute("creationDate", creationDate);
+      model.addAttribute("errorMap", errorMap);
+    }
+
+
+    Comment comment = new Comment.CommentBuilder()
+        .bodyComment(bodyComment)
+        .creationDate(converter.convertStringToDateFromJSP(creationDate))
+        .userId(currentUser.getUserId())
+        .taskId(tasks.getTaskId())
+        .build();
+
+    commentDAO.createComment(comment);
+
+    return "responseStatus/success";
+  }
+
+  @RequestMapping(value = "/createComment/{taskId}", method = RequestMethod.GET)
+  public String createCommentGet(@PathVariable(value = "taskId") String taskId, Model model, Principal principal) {
+    logger.info("createComment with get params.: ");
+    Map<String, String> errorMap = new HashMap<>();
+    TaskValidator validator = new TaskValidator();
+
+    errorMap = validator.validateInputId(taskId);
+    if (!errorMap.isEmpty()){
+      model.addAttribute("errorMap", errorMap);
+    }
+
+    if (!errorMap.isEmpty()){
+      model.addAttribute("errorMap", errorMap);
+    }
+
+    String currentUserLogin = principal.getName();
+    User currentUser = userDAO.findUserByLogin(currentUserLogin);
+
+    Date date = new Date();
+
+    model.addAttribute("errorMap", errorMap);
+    model.addAttribute("userId", currentUser.getUserId());
+    model.addAttribute("creationDate", date);
+
+    return "task/createComment";
+  }
 }

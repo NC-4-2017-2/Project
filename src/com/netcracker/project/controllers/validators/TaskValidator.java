@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.entity.Comment;
 import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.model.enums.TaskPriority;
 import com.netcracker.project.model.enums.TaskStatus;
@@ -19,14 +20,13 @@ public class TaskValidator extends AbstractValidator {
 
   public Map<String, String> validationCreate(String name, String taskType, String startDate,
       String plannedEndDate, String priority,
-      String description, String comment, String projectName) {
+      String description,  String projectName) {
 
     validateName(name);
     validateTaskType(taskType);
     validateStartEndDate(startDate, plannedEndDate);
     validatePriority(priority);
     validateDescription(description);
-    validateComment(comment);
     validateProjects(projectName);
 
     return getErrorMap();
@@ -34,7 +34,7 @@ public class TaskValidator extends AbstractValidator {
 
   public Map<String, String> validationUpdate(String name, String taskType, String startDate,
       String plannedEndDate, String priority, String status,
-      String description, String comment, String project) {
+      String description,  String project) {
 
     validateName(name);
     validateTaskType(taskType);
@@ -42,7 +42,6 @@ public class TaskValidator extends AbstractValidator {
     validatePriority(priority);
     validateTaskStatus(status);
     validateDescription(description);
-    validateComment(comment);
     validateProjects(project);
 
     return getErrorMap();
@@ -83,6 +82,11 @@ public class TaskValidator extends AbstractValidator {
     if (task == null){
       setErrorToMap("existence_error", "You haven't task!");
     }
+  }
+
+  public Map<String, String> validateType(String taskType){
+    validateTaskType(taskType);
+    return getErrorMap();
   }
 
   public Map<String, String> validateInputId(String id) {
@@ -149,14 +153,12 @@ public class TaskValidator extends AbstractValidator {
   }
 
 
-  private void validateUserId(String userId){
-    if (userId.isEmpty() || userId == null){
-      setErrorToMap("user_error","User is null");
-    }
-    if (!checkString(userId.toString())){
-      setErrorToMap("user_error","User is incorrect");
+  private void validateCommentEntity(Comment comment){
+    if (comment == null){
+      setErrorToMap("comment_error", "We must write comment!");
     }
   }
+
 
   private void validateProjects(String projectName){
     if (projectName.isEmpty() || projectName == null){

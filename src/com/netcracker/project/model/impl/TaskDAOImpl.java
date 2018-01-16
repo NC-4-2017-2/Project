@@ -251,6 +251,14 @@ public class TaskDAOImpl implements TaskDAO {
   }
 
   @Override
+  public void updateComment(String comment, BigInteger taskId) {
+    logger.info(
+        "Entering updateStatus(comment=" + comment + ")" + "Entering taskId="
+            + taskId);
+    template.update(UPDATE_TASK_BY_COMMENT, comment, taskId);
+  }
+
+  @Override
   public BigInteger findTaskIdByPMLogin(String pmLogin) {
     logger.info("Entering findProjectIdByPMLogin(startDate=" + pmLogin + ")");
     return template

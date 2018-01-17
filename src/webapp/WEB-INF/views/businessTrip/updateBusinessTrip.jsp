@@ -39,8 +39,10 @@
                        name="endDate" placeholder="Enter end date" required>
             </div>
         </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-md" value="Update">
+        </div>
         <%@include file="../errors/errorMap.jsp" %>
-        <input type="submit" class="btn btn-primary btn-md" value="Update">
     </div>
 </form>
 </body>

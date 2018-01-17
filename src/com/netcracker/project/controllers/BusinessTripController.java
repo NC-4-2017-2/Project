@@ -55,19 +55,19 @@ public class BusinessTripController {
     BigInteger projectId = null;
     Map<String, String> errorMap = new HashMap<>();
 
+    if (user.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
+      errorMap
+          .put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
     if (user.getJobTitle().equals(JobTitle.PROJECT_MANAGER)) {
       projectId = projectDAO
           .findProjectIdByPMLogin(userLogin);
     } else {
       projectId = projectDAO
           .findProjectIdByUserLogin(userLogin);
-    }
-
-    if (user.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
-      errorMap
-          .put("USER_ON_TRANSIT_ERROR", ErrorMessages.USER_ON_TRANSIT_ERROR);
-      model.addAttribute("errorMap", errorMap);
-      return "responseStatus/unsuccess";
     }
 
     Collection<User> users = userDAO.findUserByProjectId(projectId);
@@ -332,7 +332,7 @@ public class BusinessTripController {
     return "businessTrip/findTripByStatusPerPeriod";
   }
 
-  @RequestMapping(value = "/showTrip", params = {"status", "startDate",
+  @RequestMapping(value = "/viewTrip", params = {"status", "startDate",
       "endDate"}, method = RequestMethod.GET)
   public String findTripStatusAndPerPeriodGET(
       @RequestParam(value = "status") String status,
@@ -359,7 +359,12 @@ public class BusinessTripController {
             converter.convertStringToDateFromJSP(startDate),
             converter.convertStringToDateFromJSP(endDate),
             Status.valueOf(status).getId());
-    return "businessTrip/showTrip";
+    if (businessTrips.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
+
+    model.addAttribute("tripList", businessTrips);
+    return "businessTrip/viewTrip";
   }
 
   @Secured({"ROLE_PM"})

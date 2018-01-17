@@ -9,11 +9,9 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<div class="col-lg-3">
+<div class="col-lg-6">
     <div class="form-group">
-        <div class="input-group">
             <%@include file="../errors/errorMap.jsp" %>
-        </div>
     </div>
     <div class="form-group">
         <div class="input-group">

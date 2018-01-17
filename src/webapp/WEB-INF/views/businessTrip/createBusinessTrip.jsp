@@ -40,39 +40,30 @@
             </div>
         </div>
         <c:choose>
-        <c:when test="${authorId eq pmId }">
-        <input type="hidden" name="authorId" value="${pmId}"/>
-        <div class="form-group">
-            <label for="user">Choose user:</label>
-            <div class="input-group">
-                <select name="user" id="user">
-                    <c:forEach items="${userList}" var="user">
-                        <option value="${user.userId}"
-                                name="user">${user.firstName} ${user.lastName} ${user.dateOfBirth}</option>
-                    </c:forEach>
-                </select>
-            </div>
-            <br>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary btn-md"
-                       value="Create"/>
-            </div>
+            <c:when test="${authorId eq pmId }">
+                <input type="hidden" name="authorId" value="${pmId}"/>
+                <div class="form-group">
+                    <label for="user">Choose user:</label>
+                    <div class="input-group">
+                        <select name="user" id="user">
+                            <c:forEach items="${userList}" var="user">
+                                <option value="${user.userId}"
+                                        name="user">${user.firstName} ${user.lastName} ${user.dateOfBirth}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
             </c:when>
             <c:otherwise>
-                <div class="input-group">
-                    <input type="hidden" name="user" value="${authorId}"/>
-                    <input type="hidden" name="authorId" value="${authorId}"/>
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary btn-md"
-                           value="Create"/>
-                </div>
+                <input type="hidden" name="user" value="${authorId}"/>
+                <input type="hidden" name="authorId" value="${authorId}"/>
             </c:otherwise>
-            </c:choose>
-        </div>
+        </c:choose>
         <div class="form-group">
-            <%@include file="../errors/errorMap.jsp" %>
+            <input type="submit" class="btn btn-primary btn-md"
+                   value="Create"/>
         </div>
+        <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>
 </body>

@@ -7,6 +7,7 @@ import com.netcracker.project.model.entity.User;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import org.springframework.util.StringUtils;
 
 public class ProjectValidator extends AbstractValidator {
 
@@ -136,6 +137,14 @@ public class ProjectValidator extends AbstractValidator {
     if (project.getEndDate().compareTo(endDate) == -1) {
       setErrorToMap("WORK_PERIOD_END_DATE_ERROR",
           ErrorMessages.WORK_PERIOD_END_DATE_ERROR);
+    }
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateProjectName(String projectName) {
+    if (StringUtils.isEmpty(projectName)) {
+      setErrorToMap("PROJECT_EMPTY_NAME_ERROR",
+          ErrorMessages.PROJECT_EMPTY_NAME_ERROR);
     }
     return getErrorMap();
   }

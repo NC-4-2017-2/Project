@@ -1,8 +1,11 @@
 package com.netcracker.project.controllers;
 
+import com.netcracker.project.controllers.validators.ProjectValidator;
 import com.netcracker.project.controllers.validators.UserValidator;
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.ProjectDAO;
 import com.netcracker.project.model.UserDAO;
+import com.netcracker.project.model.entity.Project;
 import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.enums.JobTitle;
 import com.netcracker.project.model.enums.ProjectStatus;
@@ -36,6 +39,8 @@ public class UserController {
 
   @Autowired
   private UserDAO userDAO;
+  @Autowired
+  private ProjectDAO projectDAO;
   @Autowired
   private EmailService emailService;
 
@@ -421,8 +426,8 @@ public class UserController {
         User fullUser = userDAO.findFullUserByUserId(user.getUserId());
         duplicateUsers.add(fullUser);
       }
-      model.addAttribute("usersList", duplicateUsers);
-      return "user/chooseUserToAdd";
+      model.addAttribute("userList", duplicateUsers);
+      return "user/chooseUser";
     }
     User user = null;
     Iterator<User> iterator = users.iterator();
@@ -441,16 +446,43 @@ public class UserController {
     return "responseStatus/unsuccess";
   }
 
-  @RequestMapping(value = "/findUserByProjectId/{projectId}", method = RequestMethod.GET)
-  public String findUserByProjectId(
-      @PathVariable("projectId") BigInteger projectId,
+  @RequestMapping(value = "/findUserByProjectName", method = RequestMethod.GET)
+  public String findUserByProjectName() {
+    return "user/findUserByProjectName";
+  }
+
+  @RequestMapping(value = "/findUserByProjectName", params = {
+      "projectName"}, method = RequestMethod.GET)
+  public String findUserByProjectName(
+      @RequestParam("projectName") String projectName,
       Model model) {
+    ProjectValidator projectValidator = new ProjectValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = projectValidator.validateProjectName(projectName);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    Integer projectExistence = projectDAO.findProjectByNameIfExist(projectName);
+    errorMap = projectValidator.validateExistence(projectExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    Project chosenProject = projectDAO.findProjectByName(projectName);
+    Collection<User> users = userDAO
+        .findUserByProjectId(chosenProject.getProjectId());
+    if (users.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
+    Collection<User> duplicateUsers = new ArrayList<>();
+    for (User user : users) {
+      User fullUser = userDAO.findFullUserByUserId(user.getUserId());
+      duplicateUsers.add(fullUser);
+    }
 
-    logger.info("findUserByProjectId() method. projectId: " + projectId);
-    Collection<User> userCollection = userDAO.findUserByProjectId(projectId);
-    model.addAttribute("modelUser", userCollection);
-
-    return "user/show_user_list";
+    model.addAttribute("userList", duplicateUsers);
+    return "user/chooseUser";
   }
 }
 

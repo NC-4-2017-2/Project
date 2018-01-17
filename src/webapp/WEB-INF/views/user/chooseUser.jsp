@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${usersList}" var="user">
+        <c:forEach items="${userList}" var="user">
             <tr>
                 <td style="text-align: center;">
                         ${user.lastName}

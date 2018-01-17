@@ -11,8 +11,11 @@
             <li><a href="#">Page 2</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/user/showUser/${principal}"><span class="glyphicon glyphicon-user"></span>${principal}</a></li>
-            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Log out</a></li>
+            <li><a href="/user/showUser/${principal}"><span
+                    class="glyphicon glyphicon-user"></span>${principal}</a>
+            </li>
+            <li><a href="/logout"><span
+                    class="glyphicon glyphicon-log-out"></span>Log out</a></li>
         </ul>
     </div>
 </nav>

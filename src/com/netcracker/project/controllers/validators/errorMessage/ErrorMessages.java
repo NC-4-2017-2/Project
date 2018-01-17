@@ -65,4 +65,5 @@ public interface  ErrorMessages {
   String HIRE_DATE_CURRENT_DATE_ERROR = "Hire date can't be greater than current date!";
   String PHONE_NUMBER_FORMAT_ERROR = "Wrong phone number format!";
   String JOB_TITLE_ERROR = "JobTitle should be selected!";
+  String PROJECT_EMPTY_NAME_ERROR = "Project name can't be empty!";
 }

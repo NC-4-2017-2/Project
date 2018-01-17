@@ -171,4 +171,11 @@ public class UserValidator extends AbstractValidator {
     Matcher m = p.matcher(phoneNumber);
     return m.matches();
   }
+
+  public Map<String, String> validateLastAndFirstName(String lastName,
+      String firstName) {
+    validateAbstractName(lastName);
+    validateAbstractName(firstName);
+    return getErrorMap();
+  }
 }

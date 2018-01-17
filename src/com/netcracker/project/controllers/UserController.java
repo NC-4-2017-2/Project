@@ -13,8 +13,10 @@ import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.PasswordService;
 import java.math.BigInteger;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
@@ -384,15 +386,59 @@ public class UserController {
     return "responseStatus/success";
   }
 
-  @RequestMapping(value = "/findUserByLastNameAndFirstName/lastName={lastName}&firstName={firstName}",
+  @RequestMapping(value = "/findUserByLastNameAndFirstName",
+      method = RequestMethod.GET)
+  public String findUserByLastNameAndFirstName() {
+    return "user/findUserByLastNameAndFirstName";
+  }
+
+  @RequestMapping(value = "/findUserByLastNameAndFirstName", params = {
+      "lastName", "firstName"},
       method = RequestMethod.GET)
   public String findUserByLastNameAndFirstName(Model model,
-      @PathVariable("lastName") String lastName,
-      @PathVariable("firstName") String firstName) {
-    Collection<User> userCollection = userDAO
+      @RequestParam("lastName") String lastName,
+      @RequestParam("firstName") String firstName,
+      Principal principal) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = validator
+        .validateLastAndFirstName(lastName, firstName);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    Collection<User> users = userDAO
         .findUserByLastNameAndFirstName(lastName, firstName);
-    model.addAttribute("modelUser", userCollection);
-    return "user/show_user_list";
+
+    if (users.isEmpty()) {
+      errorMap.put("USER_ERROR", ErrorMessages.USER_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "user/findUserByLastNameAndFirstName";
+    }
+
+    if (users.size() > 1) {
+      Collection<User> duplicateUsers = new ArrayList<>();
+      for (User user : users) {
+        User fullUser = userDAO.findFullUserByUserId(user.getUserId());
+        duplicateUsers.add(fullUser);
+      }
+      model.addAttribute("usersList", duplicateUsers);
+      return "user/chooseUserToAdd";
+    }
+    User user = null;
+    Iterator<User> iterator = users.iterator();
+    while (iterator.hasNext()) {
+      user = iterator.next();
+    }
+
+    if (user != null) {
+      User fullUser = userDAO.findFullUserByUserId(user.getUserId());
+      User currentUser = userDAO.findUserByLogin(principal.getName());
+      model.addAttribute("currentUser", currentUser);
+      model.addAttribute("user", fullUser);
+      return "user/showUser";
+    }
+
+    return "responseStatus/unsuccess";
   }
 
   @RequestMapping(value = "/findUserByProjectId/{projectId}", method = RequestMethod.GET)

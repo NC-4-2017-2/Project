@@ -59,7 +59,15 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User findFullUserByUserLogin(String login) {
+    logger.info("Entering findFullUserByUserLogin(login=" + login + ")");
     return template.queryForObject(FIND_FULL_USER_BY_USER_LOGIN, new Object[]{login},
+        new FullUserMapper());
+  }
+
+  @Override
+  public User findFullUserByUserId(BigInteger id) {
+    logger.info("Entering findFullUserByUserId(id= " + id + ")");
+    return template.queryForObject(FIND_FULL_USER_BY_USER_ID, new Object[]{id},
         new FullUserMapper());
   }
 

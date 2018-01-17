@@ -54,7 +54,7 @@ public class UsersDaoTest {
   }
 
   @Test
-  public void findFullUserByUserId() {
+  public void findFullUserByUserLogin() {
     User user = userDao.findFullUserByUserLogin("ivanov");
     assertEquals(BigInteger.valueOf(1), user.getUserId());
     assertEquals(
@@ -303,5 +303,14 @@ public class UsersDaoTest {
   public void generatePassword() {
     String password = new PasswordService().generatePassword();
     System.out.println(password);
+  }
+
+  @Test
+  public void findFullUserByUserId() {
+    User user = userDao.findFullUserByUserId(BigInteger.valueOf(3));
+    assertEquals(
+        "User{userId=3, firstName='Admin', lastName='Adminov', email='admin@gmail.com', dateOfBirth=1991-03-30, hireDate=2011-04-30, phoneNumber='09797979795', jobTitle=SOFTWARE_ENGINEER, login='admin', password='null',"
+            + " userRole=null, workPeriods=null, userStatus=WORKING, projectStatus=WORKING}",
+        user.toString());
   }
 }

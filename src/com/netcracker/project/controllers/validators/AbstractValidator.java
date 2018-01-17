@@ -50,12 +50,19 @@ abstract class AbstractValidator {
               .put("START_DATE_BIGGER_THAN_END_DATE_ERROR",
                   ErrorMessages.START_DATE_BIGGER_THAN_END_DATE_ERROR);
         }
+      }
+    }
+  }
 
-        int compareStart = new Date().compareTo(start);
+  void validateStartDateToNewDate(String startDate) {
+    if (checkStartDate(startDate)) {
+      Date start = new DateConverterService()
+          .convertStringToDateFromJSP(startDate);
 
-        if (compareStart == 1) {
-          errorMap.put("START_DATE_ERROR", ErrorMessages.START_DATE_ERROR);
-        }
+      int compareStart = new Date().compareTo(start);
+
+      if (compareStart == 1) {
+        errorMap.put("START_DATE_ERROR", ErrorMessages.START_DATE_ERROR);
       }
     }
   }

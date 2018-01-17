@@ -20,6 +20,7 @@ public class VacationValidator extends AbstractValidator {
   public Map<String, String> validateCreateVacation(String startDate,
       String endDate, User user) {
     validateStartEndDate(startDate, endDate);
+    validateStartDateToNewDate(startDate);
     if (user.getProjectStatus().name()
         .equals(ProjectStatus.TRANSIT.name())) {
       setErrorToMap("USER_ON_TRANSIT_ERROR",
@@ -39,6 +40,7 @@ public class VacationValidator extends AbstractValidator {
       String startDate, String endDate) {
     validateId(vacationId);
     validateStartEndDate(startDate, endDate);
+    validateStartDateToNewDate(startDate);
     return getErrorMap();
   }
 

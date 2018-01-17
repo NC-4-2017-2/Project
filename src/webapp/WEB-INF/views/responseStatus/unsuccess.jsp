@@ -10,7 +10,16 @@
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 <div class="col-lg-3">
-    <%@include file="../errors/errorMap.jsp" %>
+    <div class="form-group">
+        <div class="input-group">
+            <%@include file="../errors/errorMap.jsp" %>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="input-group">
+            <img src="https://boygeniusreport.files.wordpress.com/2017/10/porg.gif?w=782Q">
+        </div>
+    </div>
 </div>
 </body>
 </html>

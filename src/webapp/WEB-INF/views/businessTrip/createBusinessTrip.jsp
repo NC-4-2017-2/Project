@@ -59,8 +59,10 @@
             </div>
             </c:when>
             <c:otherwise>
-                <input type="hidden" name="user" value="${authorId}"/>
-                <input type="hidden" name="authorId" value="${authorId}"/>
+                <div class="input-group">
+                    <input type="hidden" name="user" value="${authorId}"/>
+                    <input type="hidden" name="authorId" value="${authorId}"/>
+                </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary btn-md"
                            value="Create"/>

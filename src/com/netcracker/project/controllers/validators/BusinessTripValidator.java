@@ -18,6 +18,7 @@ public class BusinessTripValidator extends AbstractValidator {
       String endDate) {
     validateCountry(country);
     validateStartEndDate(startDate, endDate);
+    validateStartDateToNewDate(startDate);
     return getErrorMap();
   }
 
@@ -25,6 +26,7 @@ public class BusinessTripValidator extends AbstractValidator {
       String endDate) {
     validateCountry(country);
     validateStartEndDate(startDate, endDate);
+    validateStartDateToNewDate(startDate);
     return getErrorMap();
   }
 

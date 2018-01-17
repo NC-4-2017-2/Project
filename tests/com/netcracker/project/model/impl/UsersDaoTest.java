@@ -57,7 +57,8 @@ public class UsersDaoTest {
   public void findFullUserByUserId() {
     User user = userDao.findFullUserByUserLogin("ivanov");
     assertEquals(BigInteger.valueOf(1), user.getUserId());
-    assertEquals("User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
+    assertEquals(
+        "User{userId=1, firstName='Ivan', lastName='Ivanov', email='ivanov@gmail.com', dateOfBirth=1993-03-30, hireDate=2011-04-30,"
             + " phoneNumber='09797979797', jobTitle=PROJECT_MANAGER, login='ivanov', password='null', userRole=null, workPeriods=null, userStatus=WORKING, projectStatus=WORKING}",
         user.toString());
   }
@@ -256,7 +257,7 @@ public class UsersDaoTest {
 
   @Test
   public void deleteUser() {
-    BigInteger id = BigInteger.valueOf(1001);
+    BigInteger id = BigInteger.valueOf(1084);
 
     template.update(DELETE_FROM_ATTRIBUTES, new Object[]{id});
     template.update(DELETE_FROM_OBJECTS, new Object[]{id});
@@ -273,6 +274,17 @@ public class UsersDaoTest {
   public void findIfLMExists() {
     Integer result = userDao.findIfLMExists(BigInteger.valueOf(2));
     assertEquals("1", result.toString());
+  }
+
+  @Test
+  public void updateUserRoleAndJobTitle() {
+    userDao.updateJobTitleAndUserRole(BigInteger.valueOf(1085),
+        UserRole.ROLE_LM.getId(), JobTitle.LINE_MANAGER.getId());
+    User result = userDao.findUserByUserId(BigInteger.valueOf(1085));
+    assertEquals(
+        "User{userId=1085, firstName='Alexander', lastName='Yanov', email='yanov.alexander@gmail.com', dateOfBirth=1991-02-17, hireDate=2018-01-15, phoneNumber='1111111112', jobTitle=LINE_MANAGER, login='null', password='null',"
+            + " userRole=null, workPeriods=null, userStatus=null, projectStatus=TRANSIT}",
+        result.toString());
   }
 
   @Test

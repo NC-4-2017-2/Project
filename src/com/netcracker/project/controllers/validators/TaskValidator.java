@@ -25,6 +25,7 @@ public class TaskValidator extends AbstractValidator {
     validateName(name);
     validateTaskType(taskType);
     validateStartEndDate(startDate, plannedEndDate);
+    validateStartDateToNewDate(startDate);
     validatePriority(priority);
     validateDescription(description);
     validateProjects(projectName);

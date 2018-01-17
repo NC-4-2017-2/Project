@@ -39,6 +39,8 @@ public interface UserDAO {
 
   void updatePassword(BigInteger id, String password);
 
+  void updateJobTitleAndUserRole(BigInteger userId,Integer userRole, Integer jobTitle);
+
   void updatePhoto(BigInteger id, String photo);
 
   void updateProjectStatus(BigInteger id, Integer status);
@@ -482,7 +484,17 @@ public interface UserDAO {
       "SET ATTRIBUTES.VALUE = ? " +
       "WHERE ATTRIBUTES.OBJECT_ID = ? AND " +
       "ATTRIBUTES.ATTR_ID = 11";
-  //TODO change status to enum
+
+  String UPDATE_JOB_TITLE = "UPDATE ATTRIBUTES " +
+      "SET ATTRIBUTES.LIST_VALUE_ID = ? " +
+      "WHERE ATTRIBUTES.OBJECT_ID = ? AND " +
+      "ATTRIBUTES.ATTR_ID = 8";
+
+  String UPDATE_USER_ROLE = "UPDATE ATTRIBUTES " +
+      "SET ATTRIBUTES.LIST_VALUE_ID = ? " +
+      "WHERE ATTRIBUTES.OBJECT_ID = ? AND " +
+      "ATTRIBUTES.ATTR_ID = 12";
+
   String UPDATE_USER_PROJECT_STATUS = "UPDATE ATTRIBUTES " +
       "SET ATTRIBUTES.LIST_VALUE_ID = ? " +
       "WHERE ATTRIBUTES.OBJECT_ID = ? AND " +

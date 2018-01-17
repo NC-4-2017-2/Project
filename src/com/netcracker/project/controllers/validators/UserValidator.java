@@ -26,6 +26,11 @@ public class UserValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateUserJobTitle(String jobTitle) {
+    validateJobTitle(jobTitle);
+    return getErrorMap();
+  }
+
   public Map<String, String> validateInputId(String id) {
     validateId(id);
     return getErrorMap();
@@ -42,6 +47,7 @@ public class UserValidator extends AbstractValidator {
     }
     return getErrorMap();
   }
+
 
   public Map<String, String> validateUserLoginExistence(Integer existence) {
     if (existence == 0) {

@@ -62,6 +62,14 @@
                 email
             </button>
         </form>
+        <form action="/user/updatePassword/${user.userId}/${user.login}" method="post">
+            <button type="submit" class="btn btn-primary btn-md">Refresh password
+            </button>
+        </form>
+        <form action="/user/updateJobTitle/${user.userId}"">
+            <button type="submit" class="btn btn-primary btn-md">Update job title
+            </button>
+        </form>
     </c:if>
     <c:if test="${currentUser.userId eq user.userId || isAdmin}">
         <form action="/user/updateUserPhoneNumber/${user.userId}">

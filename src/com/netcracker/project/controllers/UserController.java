@@ -153,9 +153,10 @@ public class UserController {
   }
 
   @Secured({"ROLE_ADMIN"})
-  @RequestMapping(value = "/updatePassword/{userId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/updatePassword/{userId}/{userLogin}", method = RequestMethod.POST)
   public String updateUserPasswordPost(Model model,
-      @PathVariable(value = "userId") String userId) {
+      @PathVariable(value = "userId") String userId,
+      @PathVariable("userLogin") String login) {
     logger.info("updateUserPassword() method. User id" + userId);
     UserValidator validator = new UserValidator();
     Map<String, String> errorMap = new HashMap<>();
@@ -174,13 +175,98 @@ public class UserController {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
     }
-
+    Integer loginExist = userDAO.findIfLoginExists(login);
+    errorMap = validator.validateUserExistence(loginExist);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
     User user = userDAO.findUserByUserId(validaUserId);
     String password = new PasswordService().generatePassword();
-    userDAO.updatePassword(user.getUserId(), password);
-    emailService.sendEmail(user.getEmail(), user.getLogin(), password);
+    userDAO.updatePassword(user.getUserId(),
+        encoder.encodePassword(password, null));
+    emailService.sendEmail(user.getEmail(), login, password);
     return "responseStatus/success";
   }
+
+  @Secured({"ROLE_ADMIN"})
+  @RequestMapping(value = "/updateJobTitle/{userId}", method = RequestMethod.GET)
+  public String updateJobTitle(@PathVariable(value = "userId") String userId,
+      Model model) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    BigInteger validUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validUserId);
+    errorMap = validator.validateUserExistence(userExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    User user = userDAO.findUserByUserId(validUserId);
+    model.addAttribute("user", user);
+    return "user/updateUserJobTitle";
+  }
+
+  @Secured({"ROLE_ADMIN"})
+  @RequestMapping(value = "/updateJobTitle/{userId}", method = RequestMethod.POST)
+  public String updateJobTitlePost(@PathVariable("userId") String userId,
+      Model model,
+      @RequestParam(value = "jobTitle", required = false) String jobTitle,
+      @RequestParam(value = "admin", required = false) String admin) {
+    UserValidator validator = new UserValidator();
+    Map<String, String> errorMap = new HashMap<>();
+    errorMap = validator.validateInputId(userId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+    BigInteger validUserId = new BigInteger(userId);
+    Integer userExistence = userDAO.findUserByUserIdIfExists(validUserId);
+    errorMap = validator.validateUserExistence(userExistence);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
+    if (jobTitle == null && admin == null) {
+      errorMap.put("JOB_TITLE_ERROR", ErrorMessages.JOB_TITLE_ERROR);
+      model.addAttribute("errorMap", errorMap);
+      return "responseStatus/unsuccess";
+    }
+
+    if (jobTitle != null) {
+      errorMap = validator.validateUserJobTitle(jobTitle);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "responseStatus/unsuccess";
+      }
+    }
+    String userRole = null;
+
+    if (admin != null) {
+      userRole = UserRole.ROLE_ADMIN.name();
+      jobTitle = JobTitle.SOFTWARE_ENGINEER.name();
+    } else {
+      if (jobTitle.equals(JobTitle.LINE_MANAGER.name())) {
+        userRole = UserRole.ROLE_LM.name();
+      }
+      if (jobTitle.equals(JobTitle.SOFTWARE_ENGINEER.name())) {
+        userRole = UserRole.ROLE_SE.name();
+      }
+      if (jobTitle.equals(JobTitle.PROJECT_MANAGER.name())) {
+        userRole = UserRole.ROLE_PM.name();
+      }
+    }
+    userDAO.updateJobTitleAndUserRole(validUserId,
+        UserRole.valueOf(userRole).getId(), JobTitle.valueOf(jobTitle).getId());
+    return "responseStatus/success";
+  }
+
 
   @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/updateUserEmail/{userId}", method = RequestMethod.GET)
@@ -257,7 +343,8 @@ public class UserController {
     User user = userDAO.findUserByUserId(validUserId);
 
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    if(!currentUser.getUserId().equals(user.getUserId()) && !request.isUserInRole("ROLE_ADMIN"))  {
+    if (!currentUser.getUserId().equals(user.getUserId()) && !request
+        .isUserInRole("ROLE_ADMIN")) {
       errorMap.put("INVALID_USER_ERROR", ErrorMessages.INVALID_USER_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
@@ -268,7 +355,8 @@ public class UserController {
   }
 
   @RequestMapping(value = "/updateUserPhoneNumber/{userId}", method = RequestMethod.POST)
-  public String updateUserPhoneNumber(@PathVariable(value = "userId") String userId,
+  public String updateUserPhoneNumber(
+      @PathVariable(value = "userId") String userId,
       @RequestParam(value = "phoneNumber") String phoneNumber,
       Principal principal,
       Model model) {

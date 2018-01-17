@@ -155,6 +155,15 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
+  public void updateJobTitleAndUserRole(BigInteger userId,Integer userRole, Integer jobTitle) {
+    logger.info(
+        "Entering updateJobTitleAndUserRole(userId=" + userId + "," + " userRole=" + userRole
+            + " jobTitle=" + jobTitle + ")");
+    template.update(UPDATE_JOB_TITLE, jobTitle, userId);
+    template.update(UPDATE_USER_ROLE, userRole, userId);
+  }
+
+  @Override
   public void updatePhoto(BigInteger id, String photo) {
     //don't forget about File!!!
   }

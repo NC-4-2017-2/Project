@@ -52,6 +52,7 @@ public class ProjectValidator extends AbstractValidator {
       setErrorToMap("PROJECT_NAME_ERROR", ErrorMessages.PROJECT_NAME_ERROR);
     }
     validateStartEndDate(startDate, endDate);
+    validateStartDateToNewDate(startDate);
     validateId(id);
     return getErrorMap();
   }

@@ -9,6 +9,8 @@
             </select>
         </div>
         <br>
-        <input type="submit" class="btn btn-primary btn-md" value="Find">
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-md" value="Find">
+        </div>
     </div>
 </form>

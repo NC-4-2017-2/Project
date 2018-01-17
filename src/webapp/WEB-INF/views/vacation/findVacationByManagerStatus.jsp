@@ -20,8 +20,10 @@
         </select>
     </div>
     <br>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-md" value="Find">
+    </div>
     <%@include file="../errors/errorMap.jsp" %>
-    <input type="submit" class="btn btn-primary btn-md" value="Find">
 </div>
 </form>
 </body>

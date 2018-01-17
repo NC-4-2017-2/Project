@@ -30,5 +30,7 @@
         </tr>
     </table>
     <br>
-    <input type="submit" class="btn btn-primary btn-md" value="Create">
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-md" value="Create">
+    </div>
 </form>

@@ -504,6 +504,10 @@ public class ProjectController {
         WorkPeriodStatus.FIRED.getId());
     projectDAO.updateStatus(validProjectId, OCStatus.CLOSED);
     Date date = new Date();
+    int compareEndDate = project.getStartDate().compareTo(date);
+    if (compareEndDate == 1) {
+      date = project.getStartDate();
+    }
     projectDAO.updateEndDate(validProjectId, date);
     return "responseStatus/success";
   }

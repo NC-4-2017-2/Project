@@ -26,7 +26,9 @@
                        name="firstName" placeholder="Enter first name"
                        required></div>
         </div>
-        <input type="submit" class="btn btn-primary btn-md" value="Find">
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-md" value="Find">
+        </div>
         <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>

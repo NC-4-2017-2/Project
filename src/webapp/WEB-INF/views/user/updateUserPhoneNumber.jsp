@@ -40,16 +40,15 @@
             <label for="phoneNumber">Phone number: </label>
             <div class="input-group">
                 <input type="text" name="phoneNumber" id="phoneNumber" size="20"
-                       value="${user.phoneNumber}" pattern="\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})"
+                       value="${user.phoneNumber}"
+                       pattern="\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})"
                        required>
             </div>
         </div>
         <div class="form-group">
-            <%@include file="../errors/errorMap.jsp" %>
-        </div>
-        <div class="form-group">
             <input type="submit" class="btn btn-primary btn-md" value="Update">
         </div>
+        <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>
 </body>

@@ -42,8 +42,10 @@
                 <td><input name="sunday" type="time"></td>
             </tr>
         </table>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-md" value="Create">
+        </div>
         <%@include file="../errors/errorMap.jsp" %>
-        <input type="submit" class="btn btn-primary btn-md" value="Create">
     </div>
 </form>
 </body>

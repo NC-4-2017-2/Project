@@ -46,11 +46,9 @@
             </div>
         </div>
         <div class="form-group">
-            <%@include file="../errors/errorMap.jsp" %>
-        </div>
-        <div class="form-group">
             <input type="submit" class="btn btn-primary btn-md" value="Update">
         </div>
+        <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>
 </body>

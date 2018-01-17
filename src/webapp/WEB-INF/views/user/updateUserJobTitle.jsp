@@ -8,14 +8,15 @@
     <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
     <script>
-      $( document ).ready(function() {
+      $(document).ready(function () {
         $("#admin").change(function () {
           if ($('#admin').prop('checked')) {
             $(".jobTitle").prop("disabled", true);
           }
           else {
             $(".jobTitle").prop("disabled", false);
-          }});
+          }
+        });
       });
     </script>
 </head>
@@ -52,8 +53,9 @@
             <label for="email">Email: </label>
             <div class="input-group">
                 <input type="email" name="email" id="email" size="20"
-                       value="${user.email}" pattern="^(\S+)@([a-z0-9-]+)(\.)([a-z]{2,4})(\.?)([a-z]{0,4})+$"
-                        disabled>
+                       value="${user.email}"
+                       pattern="^(\S+)@([a-z0-9-]+)(\.)([a-z]{2,4})(\.?)([a-z]{0,4})+$"
+                       disabled>
             </div>
         </div>
         <div class="form-group">
@@ -70,14 +72,14 @@
         </div>
         <div class="form-group">
             <label for="admin">Admin: </label>
-                <input type="checkbox" onchange="jobTitle.value='SOFTWARE_ENGINEER';" name="admin" id="admin" value="true"/>
-        </div>
-        <div class="form-group">
-            <%@include file="../errors/errorMap.jsp" %>
+            <input type="checkbox"
+                   onchange="jobTitle.value='SOFTWARE_ENGINEER';" name="admin"
+                   id="admin" value="true"/>
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary btn-md" value="Update">
         </div>
+        <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>
 

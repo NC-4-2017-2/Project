@@ -23,6 +23,7 @@
                            value="Find"/></td>
             </tr>
         </table>
+        <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>
 </body>

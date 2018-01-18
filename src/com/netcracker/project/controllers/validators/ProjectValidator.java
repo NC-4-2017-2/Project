@@ -95,6 +95,13 @@ public class ProjectValidator extends AbstractValidator {
     return getErrorMap();
   }
 
+  public Map<String, String> validateAddingUserProjectStartDate(Project project, Date startDate) {
+    if (project.getStartDate().compareTo(startDate) == 1) {
+      setErrorToMap("USER_START_DATE_ERROR", ErrorMessages.USER_START_DATE_ERROR);
+    }
+    return getErrorMap();
+  }
+
   public Map<String, String> validateProjectSprintDates(Project project,
       Collection<Sprint> sprints,
       Sprint sprint) {

@@ -416,6 +416,11 @@ public class WorkingDayController {
             Status.WAITING_FOR_APPROVAL.getId());
       }
     } else if (existWorkingDay == 0) {
+      if (workingDay.getWorkingHours() > 12) {
+        errorMap.put("WORKING_DAY_OVERSTATEMENT_ERROR",
+            day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
+        return;
+      }
       workingDayDAO.createWorkingDay(workingDay);
     }
   }

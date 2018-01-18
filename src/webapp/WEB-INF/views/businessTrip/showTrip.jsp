@@ -55,24 +55,29 @@
         </tbody>
     </table>
     <%@include file="../errors/errorMap.jsp" %>
-    <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
-        <form action="/businessTrip/updateTripStatus/${businessTrip.businessTripId}"
-              method="post">
-            <button type="submit" class="btn btn-primary btn-md" name="status"
-                    value="APPROVED">Approve
-            </button>
-            <button type="submit" class="btn btn-primary btn-md" name="status"
-                    value="DISAPPROVED">Disapprove
-            </button>
-        </form>
-    </c:if>
-    <c:if test="${businessTrip.status ne 'APPROVED' or businessTrip.pmId eq currentUser.userId}">
-        <form action="/businessTrip/updateBusinessTrip/${businessTrip.businessTripId}">
-            <button type="submit" class="btn btn-primary btn-md" value="Update">
-                Update
-            </button>
-        </form>
-    </c:if>
+    <div class="row">
+        <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
+            <form action="/businessTrip/updateTripStatus/${businessTrip.businessTripId}"
+                  method="post">
+                <button type="submit" class="btn btn-primary btn-md"
+                        name="status"
+                        value="APPROVED">Approve
+                </button>
+                <button type="submit" class="btn btn-primary btn-md"
+                        name="status"
+                        value="DISAPPROVED">Disapprove
+                </button>
+            </form>
+        </c:if>
+        <c:if test="${businessTrip.status ne 'APPROVED' or businessTrip.pmId eq currentUser.userId}">
+            <form action="/businessTrip/updateBusinessTrip/${businessTrip.businessTripId}">
+                <button type="submit" class="btn btn-primary btn-md"
+                        value="Update">
+                    Update
+                </button>
+            </form>
+        </c:if>
+    </div>
 </div>
 </body>
 </html>

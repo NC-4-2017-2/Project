@@ -10,32 +10,27 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<div class="col-lg-4">
+<div class="col-lg-6">
     <%@include file="showProjectForm.jsp" %>
-    <%@include file="../errors/errorMap.jsp" %>
     <c:if test="${currentUser.userId eq projectManager.userId && project.projectStatus ne 'CLOSED'}">
-        <form action="/project/showProjectUsersToDelete/${project.projectId}">
-            <button type="submit" class="btn btn-primary btn-md">Show users
-            </button>
-        </form>
-        <form action="/project/userToAdd/${project.projectId}">
-            <button type="submit" class="btn btn-primary btn-md">Add user
-            </button>
-        </form>
-        <form action="/project/closeProject/${project.projectId}" method="post">
-            <button type="submit" class="btn btn-primary btn-md">Close project
-            </button>
-        </form>
-        <form action="/project/viewSprints/${project.projectId}">
-            <button type="submit" class="btn btn-primary btn-md">Show sprint
-                list
-            </button>
-        </form>
-        <form action="/project/createSprint/${project.projectId}">
-            <button type="submit" class="btn btn-primary btn-md">Add sprint
-            </button>
-        </form>
+    <form id="closeProject" action="/project/closeProject/${project.projectId}" method="post">
+    </form>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+                <a href="/project/showProjectUsersToDelete/${project.projectId}"
+                   class="btn btn-primary btn-md">Show users</a>
+                <a href="/project/userToAdd/${project.projectId}"
+                   class="btn btn-primary btn-md">Add user</a>
+                <a href="javascript:;" onclick="document.getElementById('closeProject').submit();"
+                   class="btn btn-primary btn-md">Close project</a>
+                <a href="/project/viewSprints/${project.projectId}"
+                   class="btn btn-primary btn-md">Show sprint list</a>
+                <a href="/project/createSprint/${project.projectId}"
+                   class="btn btn-primary btn-md">Add sprint</a>
+            </div>
+        </div>
     </c:if>
+    <%@include file="../errors/errorMap.jsp" %>
 </div>
 </body>
 </html>

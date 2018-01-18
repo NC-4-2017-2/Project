@@ -66,4 +66,5 @@ public interface  ErrorMessages {
   String PHONE_NUMBER_FORMAT_ERROR = "Wrong phone number format!";
   String JOB_TITLE_ERROR = "JobTitle should be selected!";
   String PROJECT_EMPTY_NAME_ERROR = "Project name can't be empty!";
+  String USER_START_DATE_ERROR = "Work period start date can't be less then project start date!";
 }

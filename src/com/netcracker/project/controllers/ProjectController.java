@@ -261,10 +261,17 @@ public class ProjectController {
       return "project/deleteUserFromProject";
     }
 
+    WorkPeriod currentWorkPeriod = userDAO
+        .findWorkingWorkPeriodByUserIdAndProjectId(validUserId, validProjectId);
     projectDAO.deleteUserByUserId(validProjectId, validUserId);
     userDAO
         .updateProjectStatus(validUserId, ProjectStatus.TRANSIT.getId());
     Date currentDate = new Date();
+    int compareEndDate = currentWorkPeriod.getStartWorkDate()
+        .compareTo(currentDate);
+    if (compareEndDate == 1) {
+      currentDate = currentWorkPeriod.getStartWorkDate();
+    }
     userDAO.updateWorkingPeriodEndDateByUserId(validUserId, validProjectId,
         currentDate);
     userDAO.updateWorkingPeriodStatusByUserId(validUserId,
@@ -363,15 +370,20 @@ public class ProjectController {
           return "project/addUser";
         }
       }
+      Project project = projectDAO.findProjectByProjectId(validProjectId);
+      Date validaStartDate = converter.convertStringToDateFromJSP(startDate);
+      Date validaEndDate = converter.convertStringToDateFromJSP(endDate);
+
+      errorMap = validator
+          .validateAddingUserProjectStartDate(project, validaStartDate);
+      if (!errorMap.isEmpty()) {
+        model.addAttribute("errorMap", errorMap);
+        return "project/addUser";
+      }
 
       projectDAO.addUser(validProjectId, user.getUserId());
       userDAO
           .updateProjectStatus(user.getUserId(), ProjectStatus.WORKING.getId());
-
-      Project project = projectDAO.findProjectByProjectId(validProjectId);
-
-      Date validaStartDate = converter.convertStringToDateFromJSP(startDate);
-      Date validaEndDate = converter.convertStringToDateFromJSP(endDate);
 
       errorMap = validator.validateProjectAndWorkPeriodDates(project,
           validaStartDate, validaEndDate);
@@ -440,6 +452,16 @@ public class ProjectController {
         return "project/addUser";
       }
     }
+    Project project = projectDAO.findProjectByProjectId(validProjectId);
+    Date validaStartDate = converter.convertStringToDateFromJSP(startDate);
+    Date validaEndDate = converter.convertStringToDateFromJSP(endDate);
+
+    errorMap = validator
+        .validateAddingUserProjectStartDate(project, validaStartDate);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "project/addUser";
+    }
 
     projectDAO.addUser(validProjectId, user.getUserId());
     userDAO
@@ -448,8 +470,8 @@ public class ProjectController {
     WorkPeriod workPeriod = new WorkPeriodBuilder()
         .userId(user.getUserId())
         .projectId(validProjectId)
-        .startWorkDate(converter.convertStringToDateFromJSP(startDate))
-        .endWorkDate(converter.convertStringToDateFromJSP(endDate))
+        .startWorkDate(validaStartDate)
+        .endWorkDate(validaEndDate)
         .workPeriodStatus(WorkPeriodStatus.WORKING)
         .build();
 
@@ -472,7 +494,8 @@ public class ProjectController {
     BigInteger validProjectId = new BigInteger(projectId);
     Collection<User> users = userDAO
         .findUserByProjectId(validProjectId);
-
+    Project project = projectDAO
+        .findProjectByProjectId(validProjectId);
     for (User user : users) {
       Integer workPeriodIfExist = userDAO
           .findWorkingWorkPeriodIfExist(user.getUserId(), validProjectId);
@@ -488,17 +511,47 @@ public class ProjectController {
       WorkPeriod workPeriod = userDAO
           .findWorkingWorkPeriodByUserIdAndProjectId(user.getUserId(),
               validProjectId);
+      Date workPeriodDate = new Date();
+      int workerWPStartDate = workPeriod.getStartWorkDate()
+          .compareTo(workPeriodDate);
+      if (workerWPStartDate > 0) {
+        workPeriodDate = workPeriod.getStartWorkDate();
+      }
+      userDAO.updateWorkingPeriodEndDateByUserId(workPeriod.getUserId(),
+          project.getProjectId(), workPeriodDate);
       userDAO.updateWorkingPeriodStatusByUserId(user.getUserId(),
           workPeriod.getProjectId(), WorkPeriodStatus.FIRED.getId());
     }
-    Project project = projectDAO
-        .findProjectByProjectId(validProjectId);
+
+    Collection<Sprint> projectSprints = projectDAO
+        .getAllSprints(project.getProjectId());
+    if (!projectSprints.isEmpty()) {
+      for (Sprint sprint : projectSprints) {
+        if (sprint.getStatus().name().equals(OCStatus.OPENED.name())) {
+          Date date = new Date();
+          int compareEndDate = sprint.getStartDate().compareTo(date);
+          if (compareEndDate == 1) {
+            date = sprint.getStartDate();
+          }
+          projectDAO.updateSprintEndDate(sprint.getSprintId(), date);
+          projectDAO.updateSprintStatus(sprint.getSprintId(), OCStatus.CLOSED);
+        }
+      }
+    }
     BigInteger projectManagerId = project.getProjectManagerId();
     userDAO
         .updateProjectStatus(projectManagerId, ProjectStatus.TRANSIT.getId());
     WorkPeriod pMWorkPeriod = userDAO
         .findWorkingWorkPeriodByUserIdAndProjectId(projectManagerId,
             validProjectId);
+    Date workPeriodDate = new Date();
+    int pmWPStartDate = pMWorkPeriod.getStartWorkDate()
+        .compareTo(workPeriodDate);
+    if (pmWPStartDate > 0) {
+      workPeriodDate = pMWorkPeriod.getStartWorkDate();
+    }
+    userDAO.updateWorkingPeriodEndDateByUserId(projectManagerId,
+        project.getProjectId(), workPeriodDate);
     userDAO.updateWorkingPeriodStatusByUserId(projectManagerId,
         pMWorkPeriod.getProjectId(),
         WorkPeriodStatus.FIRED.getId());
@@ -631,7 +684,12 @@ public class ProjectController {
     }
     BigInteger validSprintId = new BigInteger(sprintId);
 
+    Sprint currentSprint = projectDAO.findSprintBySprintId(validSprintId);
     Date date = new Date();
+    int compareEndDate = currentSprint.getStartDate().compareTo(date);
+    if (compareEndDate == 1) {
+      date = currentSprint.getStartDate();
+    }
     projectDAO.updateSprintEndDate(validSprintId, date);
     projectDAO.updateSprintStatus(validSprintId, OCStatus.CLOSED);
     return "responseStatus/success";

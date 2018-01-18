@@ -292,6 +292,7 @@ public class StatisticController {
     return "statistic/findVacationProjectStatByPeriod";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "/vacationProjectStat", params = {"startDate",
       "endDate"}, method = RequestMethod.GET)
   public String vacationsByProjectIdAndPeriod(

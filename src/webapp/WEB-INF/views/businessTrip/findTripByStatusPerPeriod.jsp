@@ -35,7 +35,6 @@
                        name="endDate" placeholder="Enter end date" required>
             </div>
         </div>
-        <br>
         <div class="form-group">
             <input type="submit" class="btn btn-primary btn-md" value="Find">
         </div>

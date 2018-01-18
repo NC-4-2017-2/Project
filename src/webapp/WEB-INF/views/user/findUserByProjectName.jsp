@@ -13,11 +13,14 @@
     <div class="col col-md-8">
         <table border="0">
             <tr>
-                <td>Project name:</td>
-                <td><input type="text" name="projectName" size="20"
-                           required placeholder="Project name"></td>
+                <label for="projectName">Project name:</label>
+                <div class="input-group">
+                    <input type="text" id="projectName" name="projectName"
+                           size="20"
+                           required placeholder="Project name">
+                </div>
             </tr>
-
+            <br>
             <tr>
                 <td><input type="submit" class="btn btn-primary btn-md"
                            value="Find"/></td>

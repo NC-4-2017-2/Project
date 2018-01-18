@@ -22,6 +22,7 @@
                     </option>
                 </select>
             </div>
+            <br>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary btn-md"
                        value="Find">

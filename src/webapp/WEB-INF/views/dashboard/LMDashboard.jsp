@@ -31,7 +31,7 @@
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                 style: {
                   color: (Highcharts.theme
-                  && Highcharts.theme.contrastTextColor)
+                      && Highcharts.theme.contrastTextColor)
                   || 'black'
                 }
               }
@@ -68,7 +68,7 @@
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                 style: {
                   color: (Highcharts.theme
-                  && Highcharts.theme.contrastTextColor)
+                      && Highcharts.theme.contrastTextColor)
                   || 'black'
                 }
               }
@@ -123,60 +123,58 @@
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 <%@include file="../errors/errorMap.jsp" %>
 
-<div class="col-sm-9">
-    <h4>Working hours</h4>
-    <div class="row">
-        <div class="well col-sm-4">
-            <h4>Table working hours</h4>
-            <%@include file="../workingDay/createWorkingDayForm.jsp" %>
+<div class="col-lg-11">
+    <div class="well col-sm-4"
+         style="width: 270px; height: 400px; margin: 10px">
+        <h4>Table working hours</h4>
+        <%@include file="../workingDay/createWorkingDayForm.jsp" %>
+    </div>
+    <div class="well col-sm-4"
+         style="width: 270px; height: 400px; margin: 10px">
+        <h4>Create vacation on me</h4>
+        <%@include file="../vacation/createVacationForm.jsp" %>
+        <h4>Find vacation by status</h4>
+        <%@include file="../vacation/findVacationByManagerStatusForm.jsp" %>
+    </div>
+    <div class="col-sm-3">
+        <div class="well" style="width: 270px; height: 130px; margin: 10px">
+            <h4>Create business trip</h4>
+            <form action="/businessTrip/createBusinessTrip">
+                <button type="submit" class="btn btn-primary btn-md">
+                    Create
+                </button>
+            </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-3">
-            <h4>Vacations</h4>
-            <div class="well">
-                <h4>Create vacation on me</h4>
-                <%@include file="../vacation/createVacationForm.jsp" %>
-                <h4>Find vacation by status</h4>
-                <%@include file="../vacation/findVacationByManagerStatusForm.jsp" %>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <h4>Business trips</h4>
-            <div class="well">
-                <h4>Create business trip</h4>
-                <form action="/businessTrip/createBusinessTrip">
-                    <button type="submit" class="btn btn-primary btn-md">Create</button>
-                </form>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <h4>Projects</h4>
-            <div class="well">
-                <h4>Find projects by period</h4>
-                <%@include file="../project/findProjectByStartDateForm.jsp" %>
-            </div>
-        </div>
-    </div>
-    <c:if test="${not empty workingHoursStatisticList}">
-        <div class="col-sm-6">
-            <div class="well">
-                <h4>User hours</h4>
-                <div id="container1"
-                     style="width: 600px; height: 400px; margin: 0 auto"></div>
-            </div>
-        </div>
-    </c:if>
-    <c:if test="${critical ne 0 || high ne 0 || normal ne 0 || low ne 0}">
-        <div class="col-sm-6">
-            <div class="well">
-                <h4>Task statistic</h4>
-                <div id="container2"
-                     style="width: 600px; height: 400px; margin: 0 auto"></div>
-            </div>
-        </div>
-    </c:if>
-</div>
+    <table>
+        <tr>
+            <td>
+                <c:if test="${not empty workingHoursStatisticList}">
+                    <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 620px; height: 500px; margin: 15px">
+                        <h4>User hours</h4>
+                        <div id="container1"
+                             style="width: 570px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                    </div>
+                </c:if>
+            </td>
+            <td>
+                <c:if test="${critical ne 0 || high ne 0 || normal ne 0 || low ne 0}">
+                    <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 620px; height: 500px; margin: 15px">
+                        <h4>Task statistic</h4>
+                        <div id="container2"
+                             style="width: 570px; height: 400px; margin: 0 auto">
+                        </div>
+                    </div>
+                    </div>
+                </c:if>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

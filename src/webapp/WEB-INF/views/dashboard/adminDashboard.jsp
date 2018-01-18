@@ -123,20 +123,31 @@
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 <%@include file="../errors/errorMap.jsp" %>
 
-<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-    <div class="well col-sm-4">
+<div class="col-lg-11">
+    <div class="well col-sm-4"
+         style="width: 270px; height: 350px; margin: 10px">
         <h4>Table working hours</h4>
         <%@include file="../workingDay/createWorkingDayForm.jsp" %>
     </div>
-    <div class="row">
+    <div>
         <div class="col-sm-3">
-            <div class="well">
+            <div class="well" style="width: 270px; height: 350px; margin: 10px">
                 <h4>Create vacation on me</h4>
                 <%@include file="../vacation/createVacationForm.jsp" %>
             </div>
         </div>
+            <div class="col-sm-3">
+                <div class="well" style="width: 270px; height: 130px; margin: 10px">
+                    <h4>Create business trip</h4>
+                    <form action="/businessTrip/createBusinessTrip">
+                        <button type="submit" class="btn btn-primary btn-md">
+                            Create
+                        </button>
+                    </form>
+                </div>
+            </div>
         <div class="col-sm-3">
-            <div class="well">
+            <div class="well" style="width: 270px; height: 130px; margin: 10px">
                 <h4>Create new user in system</h4>
                 <form action="/user/createUser">
                     <button type="submit" class="btn btn-primary btn-md">Create
@@ -146,7 +157,7 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="well">
+            <div class="well" style="width: 270px; height: 130px; margin: 10px">
                 <h4>Create project</h4>
                 <form action="/project/createProject">
                     <button type="submit" class="btn btn-primary btn-md">Create
@@ -155,27 +166,31 @@
                 </form>
             </div>
         </div>
-            <c:if test="${not empty workingHoursStatisticList}">
-                <div class="col-sm-6 col-md-auto form-group">
+    </div>
+    <table>
+        <tr>
+            <td>
+                <c:if test="${not empty workingHoursStatisticList}">
                     <div class="well"
-                         style="width: 700px; height: 500px; margin: 15px">
+                         style="width: 620px; height: 500px; margin: 15px">
                         <h4 style="text-align: center;">User hours</h4>
                         <div id="container1"
-                             style="width: 600px; height: 400px; margin: 0 auto"></div>
+                             style="width: 570px; height: 400px; margin: 0 auto"></div>
                     </div>
-                </div>
-            </c:if>
-            <c:if test="${critical ne 0 || high ne 0 || normal ne 0 || low ne 0}">
-                <div class="col-sm-6 col-md-auto form-group">
+                </c:if>
+            </td>
+            <td>
+                <c:if test="${critical ne 0 || high ne 0 || normal ne 0 || low ne 0}">
                     <div class="well"
-                         style="width: 700px; height: 500px; margin: 15px">
+                         style="width: 620px; height: 500px; margin: 15px">
                         <h4 style="text-align: center;">Task statistic</h4>
                         <div id="container2"
-                             style="width: 600px; height: 400px; margin: 0 auto"></div>
+                             style="width: 570px; height: 400px; margin: 0 auto"></div>
                     </div>
-                </div>
-            </c:if>
-    </div>
+                </c:if>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

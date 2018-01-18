@@ -54,7 +54,6 @@
         </tr>
         </tbody>
     </table>
-    <%@include file="../errors/errorMap.jsp" %>
     <div class="row">
         <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
             <form action="/businessTrip/updateTripStatus/${businessTrip.businessTripId}"
@@ -78,6 +77,7 @@
             </form>
         </c:if>
     </div>
+    <%@include file="../errors/errorMap.jsp" %>
 </div>
 </body>
 </html>

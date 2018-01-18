@@ -56,28 +56,30 @@
         </tr>
         </tbody>
     </table>
-    <c:if test="${isAdmin}">
-        <form action="/user/updateUserEmail/${user.userId}">
-            <button type="submit" class="btn btn-primary btn-md">Update
-                email
-            </button>
-        </form>
-        <form action="/user/updatePassword/${user.userId}/${user.login}" method="post">
-            <button type="submit" class="btn btn-primary btn-md">Refresh password
-            </button>
-        </form>
-        <form action="/user/updateJobTitle/${user.userId}"">
-            <button type="submit" class="btn btn-primary btn-md">Update job title
-            </button>
-        </form>
-    </c:if>
-    <c:if test="${currentUser.userId eq user.userId || isAdmin}">
-        <form action="/user/updateUserPhoneNumber/${user.userId}">
-            <button type="submit" class="btn btn-primary btn-md">Update
-                phone number
-            </button>
-        </form>
-    </c:if>
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group mr-2" role="group">
+
+            <c:if test="${isAdmin}">
+                <form id="updatePassword"
+                      action="/user/updatePassword/${user.userId}/${user.login}"
+                      method="post">
+                </form>
+                <a href="/user/updateUserEmail/${user.userId}"
+                   class="btn btn-primary btn-md">Update email</a>
+                <a href="javascript:;"
+                   onclick="document.getElementById('updatePassword').submit();"
+                   class="btn btn-primary btn-md">Refresh password</a>
+                <a href="/user/updateJobTitle/${user.userId}"
+                   class="btn btn-primary btn-md">Update job title</a>
+
+            </c:if>
+            <c:if test="${currentUser.userId eq user.userId || isAdmin}">
+                <a href="/user/updateUserPhoneNumber/${user.userId}"
+                   class="btn btn-primary btn-md">Update
+                    phone number</a>
+            </c:if>
+        </div>
+    </div>
     <br>
 </div>
 </body>

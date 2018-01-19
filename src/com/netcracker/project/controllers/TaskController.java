@@ -358,19 +358,23 @@ public class TaskController {
     model.addAttribute("project", project);
     model.addAttribute("curUser", currentUser);
 
+
     return "task/showTask";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "findTaskByPriority", method = RequestMethod.GET)
   public String findTaskByPriority() {
     return "task/findTaskByPriority";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "findTaskPerPeriodAndStatus", method = RequestMethod.GET)
   public String findTaskPerPeriodAndStatus() {
     return "task/findTaskPerPeriodAndStatus";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "findTaskByFirstAndLastName", method = RequestMethod.GET)
   public String findTaskByFirstAndLastName() {
     return "task/findTaskByFirstAndLastName";
@@ -389,6 +393,7 @@ public class TaskController {
     return "task/findOwnTask";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "findTaskByPriority", params = "priority", method = RequestMethod.GET)
   public String showTaskListWithPriority(
       @RequestParam(value = "priority") String priority, Model model,
@@ -429,6 +434,7 @@ public class TaskController {
     return "task/viewTask";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "findTaskPerPeriodAndStatus", params = {"status", "startDate",
       "endDate"}, method = RequestMethod.GET)
   public String findTaskListWithPeriods(@RequestParam("status") String status,
@@ -478,6 +484,7 @@ public class TaskController {
     return "task/viewTask";
   }
 
+  @Secured({"ROLE_PM"})
   @RequestMapping(value = "findTaskByFirstAndLastName", params = {"lastName", "firstName", "status"}, method = RequestMethod.GET)
   public String showTaskListWithUsers(
       @RequestParam("lastName") String lastName,
@@ -661,20 +668,21 @@ public class TaskController {
       model.addAttribute("errorMap", errorMap);
     }
 
-    Date date = new Date();
-    creationDate = converter.convertDateToString(date);
-
     if (!errorMap.isEmpty()){
       model.addAttribute("creationDate", creationDate);
       model.addAttribute("errorMap", errorMap);
     }
 
+    Date date = new Date();
+    creationDate = converter.convertDateToString(date);
 
     Comment comment = new Comment.CommentBuilder()
         .bodyComment(bodyComment)
         .creationDate(converter.convertStringToDateFromJSP(creationDate))
         .userId(currentUser.getUserId())
         .taskId(tasks.getTaskId())
+        .lastName(currentUser.getLastName())
+        .firstName(currentUser.getFirstName())
         .build();
 
     commentDAO.createComment(comment);
@@ -708,4 +716,37 @@ public class TaskController {
 
     return "task/createComment";
   }
+
+  @RequestMapping(value = "/showAllComments/{taskId}", method = RequestMethod.GET)
+  public String showAllComments(@PathVariable("taskId") String taskId, Model model){
+
+    CommentValidator commentValidator = new CommentValidator();
+    TaskValidator taskValidator = new TaskValidator();
+    Map<String, String> errorMap = new HashMap<>();
+
+    errorMap = taskValidator.validateInputId(taskId);
+    if (!errorMap.isEmpty()) {
+      model.addAttribute("errorMap", errorMap);
+      return "task/showAllComments";
+    }
+
+    BigInteger validTaskId = new BigInteger(taskId);
+
+    Task task = taskDAO.findTaskByTaskId(validTaskId);
+
+    Integer commentExistence = commentDAO.findIfCommentExists(validTaskId);
+    Map<String, String> existenceError = commentValidator.validateExistenceComment(commentExistence);
+    if (!existenceError.isEmpty()) {
+      model.addAttribute("errorMap", existenceError);
+      return "task/showAllComments";
+    }
+
+    Collection<Comment> comments = commentDAO.getCommentsForTask(validTaskId);
+
+    model.addAttribute("task", task);
+    model.addAttribute("comments", comments);
+
+    return "task/showAllComments";
+  }
+
 }

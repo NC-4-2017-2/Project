@@ -11,6 +11,8 @@ public class Comment {
   private Date creationDate;
   private BigInteger userId;
   private BigInteger taskId;
+  private String lastName;
+  private String firstName;
 
   public Comment(CommentBuilder commentBuilder) {
     this.commentId = commentBuilder.commentId;
@@ -18,6 +20,8 @@ public class Comment {
     this.creationDate = commentBuilder.creationDate;
     this.userId = commentBuilder.userId;
     this.taskId = commentBuilder.taskId;
+    this.lastName = commentBuilder.lastName;
+    this.firstName = commentBuilder.firstName;
   }
 
   public Comment() {
@@ -33,10 +37,6 @@ public class Comment {
         ", userId=" + userId +
         ", taskId=" + taskId +
         '}';
-  }
-
-  public BigInteger getCommentId() {
-    return commentId;
   }
 
   public BigInteger getUserId() {
@@ -55,12 +55,22 @@ public class Comment {
     return taskId;
   }
 
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
   public static class CommentBuilder{
     private BigInteger commentId;
     private String bodyComment;
     private Date creationDate;
     private BigInteger userId;
     private BigInteger taskId;
+    private String lastName;
+    private String firstName;
 
     public CommentBuilder() {
     }
@@ -88,6 +98,16 @@ public class Comment {
 
     public CommentBuilder taskId(BigInteger taskId){
       this.taskId = taskId;
+      return this;
+    }
+
+    public CommentBuilder lastName(String lastName){
+      this.lastName = lastName;
+      return this;
+    }
+
+    public CommentBuilder firstName(String firstName){
+      this.firstName = firstName;
       return this;
     }
 

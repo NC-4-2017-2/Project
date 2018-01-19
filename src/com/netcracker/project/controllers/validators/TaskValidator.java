@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class TaskValidator extends AbstractValidator {
 
   private String datePattern = "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])";
-  private String symbolPattern = "^[\\pL\\pN0-9\\p{Punct}\\s]+$";
+  private String symbolPattern = "^[\\pL\\pN0-9\\p{Punct}\\s]+";
 
   public Map<String, String> validationCreate(String name, String taskType, String startDate,
       String plannedEndDate, String priority,

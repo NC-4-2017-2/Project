@@ -40,8 +40,12 @@
     </c:if>
 </form>
 
+<form action="/task/showAllComments/${task.taskId}">
+        <button type="submit">Show all comments</button>
+</form>
+
 <form action="/task/createComment/${task.taskId}">
-        <button type="submit">Add comment</button>
+    <button type="submit">Add comment</button>
 </form>
 
 <%@include file="../errors/errorMap.jsp" %>

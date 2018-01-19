@@ -57,4 +57,11 @@ public class CommentDAOImpl implements CommentDAO {
         new CommentMapper());
   }
 
+  @Override
+  public Integer findIfCommentExists(BigInteger taskId) {
+    logger.info("Entering findIfCommentExists(taskId=" + taskId + ")");
+    return template.queryForObject(FIND_COMMENT_IF_EXIST, new Object[]{taskId},
+            Integer.class);
+  }
+
 }

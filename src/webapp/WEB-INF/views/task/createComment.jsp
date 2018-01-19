@@ -5,8 +5,6 @@
 </head>
 <body>
     <form action="/task/createComment/taskId/${taskId}/userId/${userId}/creationDate/${creationDate}" method="post">
-
-
         <td>Enter your comment:</td><br>
         <td><textarea rows="10" cols="45" name="bodyComment" value=${bodyComment}></textarea></td>
         <br>

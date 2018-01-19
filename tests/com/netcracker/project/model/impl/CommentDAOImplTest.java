@@ -37,10 +37,12 @@ public class CommentDAOImplTest {
     DateConverterService mdc = new DateConverterService();
     Date date = new Date();
     testComment = new Comment.CommentBuilder()
-        .bodyComment("We are fixing bug for comment")
+        .bodyComment("LFname")
         .creationDate(date)
         .userId(BigInteger.valueOf(1))
-        .taskId(BigInteger.valueOf(7))
+        .taskId(BigInteger.valueOf(1111))
+        .lastName("Adminov")
+        .firstName("Admin")
         .build();
 
     commentDAO.createComment(testComment);

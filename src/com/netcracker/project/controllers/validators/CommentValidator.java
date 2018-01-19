@@ -1,5 +1,6 @@
 package com.netcracker.project.controllers.validators;
 
+import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +14,8 @@ public class CommentValidator  extends AbstractValidator {
   public Map<String, String> validationCreate(String body) {
 
     validateBody(body);
+  //  validateCreationDate(creationDate);
+
     return getErrorMap();
   }
 
@@ -25,19 +28,20 @@ public class CommentValidator  extends AbstractValidator {
     }
   }
 
-  public Map<String, String> validateLastNameAndFirstName(String lastName, String firstName) {
-    validateAbstractName(lastName);
-    validateAbstractName(firstName);
+  public Map<String, String> validateExistenceComment(Integer commentExistence) {
+    if (commentExistence == 0) {
+      setErrorToMap("COMMENT_ERROR", ErrorMessages.COMMENT_ERROR);
+    }
     return getErrorMap();
   }
 
-  private boolean validateCommentDate(String date) {
-    if (!checkDate(date)) {
-      setErrorToMap("dateError", "Wrong data format!");
-      return false;
+  void validateCreationDate(String creationDate) {
+    if (creationDate == null) {
+      setErrorToMap("COMMENT_ERROR", ErrorMessages.COMMENT_DATE_ERROR);
     }
-
-    return true;
+    if (!checkDate(creationDate)) {
+      setErrorToMap("COMMENT_ERROR", ErrorMessages.COMMENT_DATE_ERROR);
+    }
   }
 
   private boolean checkDate(String dateString) {

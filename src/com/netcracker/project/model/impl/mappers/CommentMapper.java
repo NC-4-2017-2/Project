@@ -19,6 +19,8 @@ public class CommentMapper implements RowMapper<Comment> {
             resultSet.getString(EnumMapper.USER_ID.getFullName())))
         .taskId(new BigInteger(
             resultSet.getString(EnumMapper.TASK_ID.getFullName())))
+        .lastName(resultSet.getString(EnumMapper.LAST_NAME.getFullName()))
+        .firstName(resultSet.getString(EnumMapper.FIRST_NAME.getFullName()))
         .build();
   }
 }

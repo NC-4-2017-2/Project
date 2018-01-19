@@ -67,4 +67,6 @@ public interface  ErrorMessages {
   String JOB_TITLE_ERROR = "JobTitle should be selected!";
   String PROJECT_EMPTY_NAME_ERROR = "Project name can't be empty!";
   String USER_START_DATE_ERROR = "Work period start date can't be less then project start date!";
+  String COMMENT_ERROR = "Comment does not exist!";
+  String COMMENT_DATE_ERROR = "Date isn't correct";
 }

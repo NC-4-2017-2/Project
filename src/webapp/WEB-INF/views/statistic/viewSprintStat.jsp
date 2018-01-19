@@ -3,10 +3,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<script type="text/javascript" src="${ctx}/resources/js/highcharts.js"></script>
 <script type="text/javascript"
-        src="${ctx}/resources/js/jquery-2.1.4.js"></script>
-
+        src="${pageContext.request.contextPath}/resources/js/highcharts.js"></script>
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+<script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+<script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
   jQuery(document).ready(function () {
     var options = {
@@ -74,19 +76,14 @@
   });
 </script>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
-    <title>SprintStatistic</title>
+    <title>Sprint statistic</title>
 </head>
 <body>
+<jsp:include page="../fragments/header.jsp"></jsp:include>
 <c:if test="${errorMap eq null}">
     <div id="container"
          style="width: 600px; height: 400px; margin: 0 auto"></div>
 </c:if>
-
 <%@include file="../errors/errorMap.jsp" %>
 </body>
 </html>

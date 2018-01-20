@@ -20,12 +20,15 @@
                            required placeholder="Project name">
                 </div>
             </tr>
-            <br>
-            <tr>
-                <td><input type="submit" class="btn btn-primary btn-md"
-                           value="Find"/></td>
-            </tr>
         </table>
+        <br>
+        <div class="form-group">
+            <input onclick="window.history.go(-1); return false;"
+                   type="button" class="btn btn-primary btn-md"
+                   value="Back"/>
+            <input type="submit" class="btn btn-primary btn-md"
+                   value="Find"/>
+        </div>
         <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>

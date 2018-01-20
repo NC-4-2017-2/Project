@@ -42,7 +42,11 @@
                 <td><input name="sunday" type="time"></td>
             </tr>
         </table>
+        <br>
         <div class="form-group">
+            <input onclick="window.history.go(-1); return false;"
+                   type="button" class="btn btn-primary btn-md"
+                   value="Back"/>
             <input type="submit" class="btn btn-primary btn-md" value="Create">
         </div>
         <%@include file="../errors/errorMap.jsp" %>

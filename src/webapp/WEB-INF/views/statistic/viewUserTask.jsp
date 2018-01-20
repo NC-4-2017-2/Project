@@ -84,5 +84,11 @@
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 <div id="container" style="width: 600px; height: 400px; margin: 0 auto"></div>
+<div class="form-group">
+    <input onclick="window.history.go(-1); return false;"
+           type="button" class="btn btn-primary btn-md"
+           value="Back"/>
+</div>
+<%@include file="../errors/errorMap.jsp" %>
 </body>
 </html>

@@ -16,6 +16,19 @@
         <tr>
             <th scope="col" colspan="2" style="text-align: center;">Business
                 trip
+                <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
+                    <form action="/businessTrip/updateTripStatus/${businessTrip.businessTripId}"
+                          method="post">
+                        <button type="submit" class="btn btn-primary btn-md"
+                                name="status"
+                                value="APPROVED">Approve
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-md"
+                                name="status"
+                                value="DISAPPROVED">Disapprove
+                        </button>
+                    </form>
+                </c:if>
             </th>
         </tr>
         </thead>
@@ -54,28 +67,25 @@
         </tr>
         </tbody>
     </table>
-    <div class="row">
-        <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
-            <form action="/businessTrip/updateTripStatus/${businessTrip.businessTripId}"
-                  method="post">
-                <button type="submit" class="btn btn-primary btn-md"
-                        name="status"
-                        value="APPROVED">Approve
-                </button>
-                <button type="submit" class="btn btn-primary btn-md"
-                        name="status"
-                        value="DISAPPROVED">Disapprove
-                </button>
-            </form>
-        </c:if>
-        <c:if test="${businessTrip.status ne 'APPROVED' or businessTrip.pmId eq currentUser.userId}">
-            <form action="/businessTrip/updateBusinessTrip/${businessTrip.businessTripId}">
-                <button type="submit" class="btn btn-primary btn-md"
-                        value="Update">
-                    Update
-                </button>
-            </form>
-        </c:if>
+    <div class="form-group">
+        <c:choose>
+            <c:when test="${businessTrip.status ne 'APPROVED' or businessTrip.pmId eq currentUser.userId}">
+                <form action="/businessTrip/updateBusinessTrip/${businessTrip.businessTripId}">
+                    <input onclick="window.history.go(-1); return false;"
+                           type="button" class="btn btn-primary btn-md"
+                           value="Back"/>
+                    <button type="submit" class="btn btn-primary btn-md"
+                            value="Update">
+                        Update
+                    </button>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <input onclick="window.history.go(-1); return false;"
+                       type="button" class="btn btn-primary btn-md"
+                       value="Back"/>
+            </c:otherwise>
+        </c:choose>
     </div>
     <%@include file="../errors/errorMap.jsp" %>
 </div>

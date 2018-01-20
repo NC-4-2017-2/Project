@@ -34,6 +34,9 @@
             </div>
         </div>
         <div class="form-group">
+            <input onclick="window.history.go(-1); return false;"
+                   type="button" class="btn btn-primary btn-md"
+                   value="Back"/>
             <input type="submit" class="btn btn-primary btn-md" value="Find">
         </div>
         <%@include file="../errors/errorMap.jsp" %>

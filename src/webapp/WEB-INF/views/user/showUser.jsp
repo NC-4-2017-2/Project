@@ -58,26 +58,42 @@
     </table>
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
+            <c:choose>
+                <c:when test="${isAdmin}">
+                    <form id="updatePassword"
+                          action="/user/updatePassword/${user.userId}/${user.login}"
+                          method="post">
+                    </form>
+                    <input onclick="window.history.go(-1); return false;"
+                           type="button"
+                           class="btn btn-primary btn-md" value="Back"/>
+                    <a href="/user/updateUserPhoneNumber/${user.userId}"
+                       class="btn btn-primary btn-md">Update
+                        phone number</a>
+                    <a href="/user/updateUserEmail/${user.userId}"
+                       class="btn btn-primary btn-md">Update email</a>
+                    <a href="javascript:;"
+                       onclick="document.getElementById('updatePassword').submit();"
+                       class="btn btn-primary btn-md">Refresh password</a>
+                    <a href="/user/updateJobTitle/${user.userId}"
+                       class="btn btn-primary btn-md">Update job title</a>
+                </c:when>
 
-            <c:if test="${isAdmin}">
-                <form id="updatePassword"
-                      action="/user/updatePassword/${user.userId}/${user.login}"
-                      method="post">
-                </form>
-                <a href="/user/updateUserEmail/${user.userId}"
-                   class="btn btn-primary btn-md">Update email</a>
-                <a href="javascript:;"
-                   onclick="document.getElementById('updatePassword').submit();"
-                   class="btn btn-primary btn-md">Refresh password</a>
-                <a href="/user/updateJobTitle/${user.userId}"
-                   class="btn btn-primary btn-md">Update job title</a>
+                <c:when test="${currentUser.userId eq user.userId}">
+                    <input onclick="window.history.go(-1); return false;"
+                           type="button" class="btn btn-primary btn-md"
+                           value="Back"/>
+                    <a href="/user/updateUserPhoneNumber/${user.userId}"
+                       class="btn btn-primary btn-md">Update
+                        phone number</a>
+                </c:when>
 
-            </c:if>
-            <c:if test="${currentUser.userId eq user.userId || isAdmin}">
-                <a href="/user/updateUserPhoneNumber/${user.userId}"
-                   class="btn btn-primary btn-md">Update
-                    phone number</a>
-            </c:if>
+                <c:otherwise>
+                    <input onclick="window.history.go(-1); return false;"
+                           type="button" class="btn btn-primary btn-md"
+                           value="Back"/>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
     <br>

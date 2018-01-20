@@ -60,6 +60,8 @@
             </c:otherwise>
         </c:choose>
         <div class="form-group">
+            <input onclick="window.history.go(-1); return false;" type="button"
+                   class="btn btn-primary btn-md" value="Back"/>
             <input type="submit" class="btn btn-primary btn-md"
                    value="Create"/>
         </div>

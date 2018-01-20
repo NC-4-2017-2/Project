@@ -40,7 +40,7 @@
                 <td style="text-align: center;">
                     <form action="/project/addUserFromDuplicate/${projectId}/${startDate}/${endDate}/${user.userId}"
                           method="post">
-                            <button type="submit" class="btn btn-primary btn-md"
+                        <button type="submit" class="btn btn-primary btn-md"
                                 value="Add">Add
                         </button>
                     </form>
@@ -49,6 +49,11 @@
         </c:forEach>
         </tbody>
     </table>
+    <div class="form-group">
+        <input onclick="window.history.go(-1); return false;"
+               type="button" class="btn btn-primary btn-md"
+               value="Back"/>
+    </div>
     <%@include file="../errors/errorMap.jsp" %>
 </div>
 </body>

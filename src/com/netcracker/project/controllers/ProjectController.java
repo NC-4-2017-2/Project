@@ -680,7 +680,6 @@ public class ProjectController {
     if (!errorMap.isEmpty()) {
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";
-
     }
     BigInteger validSprintId = new BigInteger(sprintId);
 

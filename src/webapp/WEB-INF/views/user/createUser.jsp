@@ -83,11 +83,16 @@
                 <td><input type="text" name="login" size="20"
                            required placeholder="Employee's login"></td>
             </tr>
-            <tr>
-                <td><input type="submit" class="btn btn-primary btn-md"
-                           value="Create"/></td>
-            </tr>
         </table>
+        <br>
+        <div class="form-group">
+            <input onclick="window.history.go(-1); return false;"
+                       type="button" class="btn btn-primary btn-md"
+                       value="Back"/>
+            <input type="submit" class="btn btn-primary btn-md"
+                       value="Create"/>
+        </div>
+        <%@include file="../errors/errorMap.jsp" %>
     </div>
 </form>
 </body>

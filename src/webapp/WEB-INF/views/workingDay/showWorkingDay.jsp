@@ -10,49 +10,61 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<form action="/workingDay/showUpdatePMWorkingDayStatus/${workingDay.workingDayId}"
-      method="post">
-    <div class="col-lg-4">
-        <table class="table table-hover table-dark" border="3">
-            <thead>
-            <tr>
-                <th scope="col" colspan="2" style="text-align: center;">Working Day</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">Date:</th>
-                <td>${workingDay.date}</td>
-            </tr>
-            <tr>
-                <th scope="row">Status:</th>
-                <td>${workingDay.status}</td>
-            </tr>
-            <tr>
-                <th scope="row">User:</th>
-                <td>${workingDayUser}</td>
-            </tr>
-            <tr>
-                <th scope="row">PM:</th>
-                <td>${workingDayPm}</td>
-            </tr>
-            <tr>
-                <th scope="row">Working hours:</th>
-                <td>${workingDay.workingHours}</td>
-            </tr>
-            <tr>
-                <th scope="row">Week number:</th>
-                <td>${workingDay.weekNumber}</td>
-            </tr>
-            </tbody>
-        </table>
-    <c:if test="${workingDay.pmId eq currentUser.userId}">
-        <button type="submit" class="btn btn-primary btn-md" name="status" value="APPROVED">Approve</button>
-        <button type="submit" class="btn btn-primary btn-md" name="status" value="DISAPPROVED">Disapprove
-        </button>
-    </c:if>
-    <%@include file="../errors/errorMap.jsp" %>
+<div class="col-lg-4">
+    <table class="table table-hover table-dark" border="3">
+        <thead>
+        <tr>
+            <th scope="col" colspan="2" style="text-align: center;">Working
+                Day
+                <c:if test="${workingDay.pmId eq currentUser.userId}">
+                    <form action="/workingDay/showUpdatePMWorkingDayStatus/${workingDay.workingDayId}"
+                          method="post">
+                        <button type="submit" class="btn btn-primary btn-md"
+                                name="status"
+                                value="APPROVED">Approve
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-md"
+                                name="status"
+                                value="DISAPPROVED">Disapprove
+                        </button>
+                    </form>
+                </c:if>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">Date:</th>
+            <td>${workingDay.date}</td>
+        </tr>
+        <tr>
+            <th scope="row">Status:</th>
+            <td>${workingDay.status}</td>
+        </tr>
+        <tr>
+            <th scope="row">User:</th>
+            <td>${workingDayUser}</td>
+        </tr>
+        <tr>
+            <th scope="row">PM:</th>
+            <td>${workingDayPm}</td>
+        </tr>
+        <tr>
+            <th scope="row">Working hours:</th>
+            <td>${workingDay.workingHours}</td>
+        </tr>
+        <tr>
+            <th scope="row">Week number:</th>
+            <td>${workingDay.weekNumber}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-group">
+        <input onclick="window.history.go(-1); return false;"
+               type="button" class="btn btn-primary btn-md"
+               value="Back"/>
     </div>
-</form>
+    <%@include file="../errors/errorMap.jsp" %>
+</div>
 </body>
 </html>

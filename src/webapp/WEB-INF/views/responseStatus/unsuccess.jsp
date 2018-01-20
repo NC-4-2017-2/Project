@@ -14,6 +14,11 @@
             <%@include file="../errors/errorMap.jsp" %>
     </div>
     <div class="form-group">
+        <input onclick="window.history.go(-1); return false;"
+               type="button" class="btn btn-primary btn-md"
+               value="Back"/>
+    </div>
+    <div class="form-group">
         <div class="input-group">
             <img src="https://boygeniusreport.files.wordpress.com/2017/10/porg.gif?w=782Q">
         </div>

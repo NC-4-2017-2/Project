@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
   public void sendEmail(String emailAddressTo, String login, String password) {
     SimpleMailMessage message = new SimpleMailMessage();
     message.setTo("<" + emailAddressTo + ">");
-    message.setFrom("<team.erp.4.2017@gmail.com>");
+    message.setFrom("<team.erp.4.2017@outlook.com>");
     message.setSubject("Welcome to ERP system!");
     message.setText("Your login: " + login + "\n" + "Your password: " + password);
     mailSender.send(message);

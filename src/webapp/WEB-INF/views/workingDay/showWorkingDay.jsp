@@ -46,7 +46,7 @@
             </tr>
             </tbody>
         </table>
-    <c:if test="${currentUser.jobTitle.name() eq 'PROJECT_MANAGER'}">
+    <c:if test="${workingDay.pmId eq currentUser.userId}">
         <button type="submit" class="btn btn-primary btn-md" name="status" value="APPROVED">Approve</button>
         <button type="submit" class="btn btn-primary btn-md" name="status" value="DISAPPROVED">Disapprove
         </button>

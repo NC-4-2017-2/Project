@@ -10,13 +10,17 @@ import com.netcracker.project.model.entity.User;
 import com.netcracker.project.model.entity.WorkingDay;
 import com.netcracker.project.model.entity.WorkingDayUserService;
 import com.netcracker.project.model.enums.JobTitle;
+import com.netcracker.project.model.enums.ProjectStatus;
 import com.netcracker.project.model.enums.Status;
 import com.netcracker.project.services.impl.DateConverterService;
 import com.netcracker.project.services.impl.WorkingDayService;
 import java.math.BigInteger;
 import java.security.Principal;
+import java.util.Date;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -77,7 +81,15 @@ public class WorkingDayController {
     if (workingDays.isEmpty()) {
       return "responseStatus/noDataFound";
     }
-    model.addAttribute("workingDays", workingDays);
+    Collection<WorkingDayUserService> userService = new ArrayList<>();
+    for (WorkingDay workingDay : workingDays) {
+      User workingDayUser = userDAO.findUserByUserId(workingDay.getUserId());
+      userService.add(
+          new WorkingDayUserService(workingDayUser.getLastName(),
+              workingDayUser.getFirstName(),
+              workingDay));
+    }
+    model.addAttribute("workingDays", userService);
     return "workingDay/viewWorkingDay";
   }
 
@@ -88,7 +100,7 @@ public class WorkingDayController {
     return "workingDay/findPMWorkingDay";
   }
 
-  @Secured({"ROLE_PM"})
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "/viewPMWorkingDay", params = "status", method = RequestMethod.GET)
   public String viewPMWorkingDay(@RequestParam(value = "status") String status,
       Principal principal,
@@ -114,11 +126,11 @@ public class WorkingDayController {
     if (workingDays.isEmpty()) {
       return "responseStatus/noDataFound";
     }
-    model.addAttribute("workingDaysService", userService);
+    model.addAttribute("workingDays", userService);
     return "workingDay/viewWorkingDay";
   }
 
-  @Secured({"ROLE_PM"})
+  @Secured({"ROLE_PM", "ROLE_ADMIN"})
   @RequestMapping(value = "/showUpdatePMWorkingDayStatus/{id}", method = RequestMethod.POST)
   public String showUpdatePMWorkingDayStatus(
       @PathVariable(value = "id") String id,
@@ -182,6 +194,7 @@ public class WorkingDayController {
     User currentUser = userDAO.findUserByLogin(principal.getName());
     WorkingDay workingDay = workingDayDAO.findWorkingDayById(bigIntegerId);
     if (!currentUser.getUserId().equals(workingDay.getUserId()) && !currentUser
+        .getUserId().equals(workingDay.getPmId()) && !currentUser
         .getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
       errorMap.put("INVALID_USER_ERROR", ErrorMessages.INVALID_USER_ERROR);
       model.addAttribute("errorMap", errorMap);
@@ -221,12 +234,23 @@ public class WorkingDayController {
     Collection<WorkingDay> workingDays = workingDayDAO
         .findWorkingDayByUserIdAndStatus(currentUser.getUserId(),
             Status.valueOf(status).getId());
-    model.addAttribute("workingDays", workingDays);
+    if (workingDays.isEmpty()) {
+      return "responseStatus/noDataFound";
+    }
+    Collection<WorkingDayUserService> userService = new ArrayList<>();
+    for (WorkingDay workingDay : workingDays) {
+      User workingDayUser = userDAO.findUserByUserId(workingDay.getUserId());
+      userService.add(
+          new WorkingDayUserService(workingDayUser.getLastName(),
+              workingDayUser.getFirstName(),
+              workingDay));
+    }
+    model.addAttribute("workingDays", userService);
     return "workingDay/viewWorkingDay";
   }
 
   @RequestMapping(value = "/createWorkingDay", method = RequestMethod.GET)
-  public String createWorkingDays() {
+  public String createWorkingDays(Principal principal, Model model) {
     logger.info("Entering createWorkingDays()");
     return "workingDay/createWorkingDay";
   }
@@ -245,16 +269,24 @@ public class WorkingDayController {
     logger.info("Entering createWorkingDayPost()");
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
-    BigInteger projectId;
-    if (user.getJobTitle() != JobTitle.PROJECT_MANAGER) {
-      projectId = projectDAO
-          .findProjectIdByUserLogin(userLogin);
+    BigInteger projectManagerId;
+    if (user.getProjectStatus().name().equals(ProjectStatus.TRANSIT.name())) {
+      projectManagerId = BigInteger.valueOf(18);
     } else {
-      projectId = projectDAO
-          .findProjectIdByPMLogin(userLogin);
+
+      BigInteger projectId;
+      if (user.getJobTitle() != JobTitle.PROJECT_MANAGER) {
+        projectId = projectDAO
+            .findProjectIdByUserLogin(userLogin);
+      } else {
+        projectId = projectDAO
+            .findProjectIdByPMLogin(userLogin);
+      }
+
+      Project project = projectDAO.findProjectByProjectId(projectId);
+      projectManagerId = project.getProjectManagerId();
     }
 
-    Project project = projectDAO.findProjectByProjectId(projectId);
     Map<String, String> errorMap = new HashMap<>();
 
     WorkingDayValidator validator = new WorkingDayValidator();
@@ -329,7 +361,7 @@ public class WorkingDayController {
     }
 
     if (!StringUtils.isEmpty(monday)) {
-      createWorkingDay(monday, user, project,
+      createWorkingDay(monday, user, projectManagerId,
           DayOfWeek.MONDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -338,7 +370,7 @@ public class WorkingDayController {
     }
 
     if (!StringUtils.isEmpty(tuesday)) {
-      createWorkingDay(tuesday, user, project,
+      createWorkingDay(tuesday, user, projectManagerId,
           DayOfWeek.TUESDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -346,7 +378,7 @@ public class WorkingDayController {
       }
     }
     if (!StringUtils.isEmpty(wednesday)) {
-      createWorkingDay(wednesday, user, project,
+      createWorkingDay(wednesday, user, projectManagerId,
           DayOfWeek.WEDNESDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -354,7 +386,7 @@ public class WorkingDayController {
       }
     }
     if (!StringUtils.isEmpty(thursday)) {
-      createWorkingDay(thursday, user, project,
+      createWorkingDay(thursday, user, projectManagerId,
           DayOfWeek.THURSDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -362,7 +394,7 @@ public class WorkingDayController {
       }
     }
     if (!StringUtils.isEmpty(friday)) {
-      createWorkingDay(friday, user, project,
+      createWorkingDay(friday, user, projectManagerId,
           DayOfWeek.FRIDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -370,7 +402,7 @@ public class WorkingDayController {
       }
     }
     if (!StringUtils.isEmpty(saturday)) {
-      createWorkingDay(saturday, user, project,
+      createWorkingDay(saturday, user, projectManagerId,
           DayOfWeek.SATURDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -378,7 +410,7 @@ public class WorkingDayController {
       }
     }
     if (!StringUtils.isEmpty(sunday)) {
-      createWorkingDay(sunday, user, project,
+      createWorkingDay(sunday, user, projectManagerId,
           DayOfWeek.SUNDAY, errorMap);
       if (!errorMap.isEmpty()) {
         model.addAttribute("errorMap", errorMap);
@@ -390,8 +422,9 @@ public class WorkingDayController {
 
   private void createWorkingDay(
       String time, User user,
-      Project project, DayOfWeek day, Map<String, String> errorMap) {
-    WorkingDay workingDay = getWorkingDay(time, user, project,
+      BigInteger projectManagerId, DayOfWeek day,
+      Map<String, String> errorMap) {
+    WorkingDay workingDay = getWorkingDay(time, user, projectManagerId,
         day);
     Integer existWorkingDay = workingDayDAO
         .findIfWorkingDayExists(user.getUserId(),
@@ -400,20 +433,38 @@ public class WorkingDayController {
       WorkingDay actualWorkingDay = workingDayDAO
           .findWorkingDayByUserIdAndDate(user.getUserId(),
               workingDay.getDate());
-      if ((actualWorkingDay.getWorkingHours() + workingDay.getWorkingHours())
-          > 12) {
-        errorMap.put("WORKING_DAY_OVERSTATEMENT_ERROR",
-            day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
-        return;
-      }
-      workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),
-          workingDay.getWorkingHours());
-      if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
-        workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
-            Status.WAITING_FOR_APPROVAL.getId());
+      if (!actualWorkingDay.getStatus().name()
+          .equals(Status.DISAPPROVED.name())) {
+        if ((actualWorkingDay.getWorkingHours() + workingDay.getWorkingHours())
+            > 12) {
+          errorMap.put("WORKING_DAY_OVERSTATEMENT_ERROR",
+              day + ErrorMessages.WORKING_DAY_OVERSTATEMENT_ERROR);
+          return;
+        }
+        workingDayDAO.updateWorkingHours(actualWorkingDay.getWorkingDayId(),
+            workingDay.getWorkingHours());
+        if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+          workingDayDAO
+              .updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
+                  Status.WAITING_FOR_APPROVAL.getId());
+        } else {
+          workingDayDAO
+              .updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
+                  Status.WAITING_FOR_APPROVAL.getId());
+        }
       } else {
-        workingDayDAO.updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
-            Status.WAITING_FOR_APPROVAL.getId());
+        workingDayDAO
+            .updateDisapprovedWorkingHours(actualWorkingDay.getWorkingDayId(),
+                workingDay.getWorkingHours());
+        if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
+          workingDayDAO
+              .updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
+                  Status.WAITING_FOR_APPROVAL.getId());
+        } else {
+          workingDayDAO
+              .updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
+                  Status.WAITING_FOR_APPROVAL.getId());
+        }
       }
     } else if (existWorkingDay == 0) {
       if (workingDay.getWorkingHours() > 12) {
@@ -426,10 +477,10 @@ public class WorkingDayController {
   }
 
   private WorkingDay getWorkingDay(String time, User user,
-      Project project, DayOfWeek dayOfWeek) {
+      BigInteger projectManagerId, DayOfWeek dayOfWeek) {
 
     return new WorkingDayService()
         .getWorkingDay(time, dayOfWeek,
-            user.getUserId(), project.getProjectManagerId());
+            user.getUserId(), projectManagerId);
   }
 }

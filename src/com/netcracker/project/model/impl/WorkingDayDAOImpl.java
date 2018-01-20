@@ -54,6 +54,12 @@ public class WorkingDayDAOImpl implements WorkingDayDAO {
   }
 
   @Override
+  public void updateDisapprovedWorkingHours(BigInteger workingDayId, Double hours) {
+    logger.info("Entering updateDisapprovedWorkingHours(workingDayId=" + workingDayId + ", " + "hours=" + hours + ")");
+    template.update(UPDATE_DISAPPROVED_WORKING_HOURS, hours, workingDayId);
+  }
+
+  @Override
   public WorkingDay findWorkingDayById(BigInteger id) {
     logger.info("Entering findWorkingDayById(id=" + id + ")");
     return template.queryForObject(FIND_WORKING_DAY_BY_ID, new Object[]{id}, new WorkingDayMapper());

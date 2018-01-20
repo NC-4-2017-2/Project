@@ -124,52 +124,75 @@
 <%@include file="../errors/errorMap.jsp" %>
 
 <div class="col-lg-11">
-    <div class="well col-sm-4"
-         style="width: 270px; height: 350px; margin: 10px">
-        <h4>Table working hours</h4>
-        <%@include file="../workingDay/createWorkingDayForm.jsp" %>
-    </div>
-    <div>
-        <div class="col-sm-3">
-            <div class="well" style="width: 270px; height: 350px; margin: 10px">
-                <h4>Create vacation on me</h4>
-                <%@include file="../vacation/createVacationForm.jsp" %>
-            </div>
-        </div>
-            <div class="col-sm-3">
-                <div class="well" style="width: 270px; height: 130px; margin: 10px">
-                    <h4>Create business trip</h4>
-                    <form action="/businessTrip/createBusinessTrip">
-                        <button type="submit" class="btn btn-primary btn-md">
-                            Create
-                        </button>
-                    </form>
-                </div>
-            </div>
-        <div class="col-sm-3">
-            <div class="well" style="width: 270px; height: 130px; margin: 10px">
-                <h4>Create new user in system</h4>
-                <form action="/user/createUser">
-                    <button type="submit" class="btn btn-primary btn-md">Create
-                        new user
-                    </button>
-                </form>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="well" style="width: 270px; height: 130px; margin: 10px">
-                <h4>Create project</h4>
-                <form action="/project/createProject">
-                    <button type="submit" class="btn btn-primary btn-md">Create
-                        new project
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
     <table>
         <tr>
+            <td rowspan="2">
+                <div class="well col-sm-4"
+                     style="width: 270px; height: 460px; margin: 10px">
+                    <h4>Create working hours</h4>
+                    <%@include file="../workingDay/createWorkingDayForm.jsp" %>
+                    <h4>Find working hours by status</h4>
+                    <%@include file="../workingDay/findPMWorkingDayForm.jsp" %>
+                </div>
+            </td>
+            <td rowspan="2">
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 350px; margin: 10px">
+                        <h4>Create vacation on me</h4>
+                        <%@include file="../vacation/createVacationForm.jsp" %>
+                    </div>
+                </div>
+            </td>
             <td>
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 130px; margin: 10px">
+                        <h4>Create business trip</h4>
+                        <form action="/businessTrip/createBusinessTrip">
+                            <button type="submit"
+                                    class="btn btn-primary btn-md">
+                                Create
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 130px; margin: 10px">
+                        <h4>Create project</h4>
+                        <form action="/project/createProject">
+                            <button type="submit"
+                                    class="btn btn-primary btn-md">
+                                Create
+                                new project
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 130px; margin: 10px">
+                        <h4>Create new user in system</h4>
+                        <form action="/user/createUser">
+                            <button type="submit"
+                                    class="btn btn-primary btn-md">
+                                Create
+                                new user
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
                 <c:if test="${not empty workingHoursStatisticList}">
                     <div class="well"
                          style="width: 620px; height: 500px; margin: 15px">
@@ -179,7 +202,7 @@
                     </div>
                 </c:if>
             </td>
-            <td>
+            <td colspan="2">
                 <c:if test="${critical ne 0 || high ne 0 || normal ne 0 || low ne 0}">
                     <div class="well"
                          style="width: 620px; height: 500px; margin: 15px">

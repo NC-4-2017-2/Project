@@ -19,7 +19,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${workingDaysService}" var="workingDay">
+        <c:forEach items="${workingDays}" var="workingDay">
             <tr>
                 <td>
                     <a href="/workingDay/showWorkingDay/${workingDay.workingDay.workingDayId}">${workingDay.lastName} ${workingDay.firstName} ${workingDay.workingDay.date}</a><br>

@@ -41,14 +41,14 @@ public class WorkingDayService {
         .build();
   }
 
-  private int getCurrentWeekNumber() {
+  public int getCurrentWeekNumber() {
     Date date = new Date();
     Calendar calendar = Calendar.getInstance(Locale.US);
     calendar.setTime(date);
     return calendar.get(Calendar.WEEK_OF_YEAR);
   }
 
-  private LocalDate getLocalDatePrevious(int currentWeekNumber,
+  public LocalDate getLocalDatePrevious(int currentWeekNumber,
       DayOfWeek dayOfWeek) {
     return LocalDate.now()
         .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, currentWeekNumber)

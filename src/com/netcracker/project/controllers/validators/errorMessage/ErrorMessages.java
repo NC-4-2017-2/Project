@@ -59,14 +59,14 @@ public interface  ErrorMessages {
   String EMPTY_USER_ROLE_ERROR = "User role can't be empty!";
   String INCORRECT_USER_ROLE_ERROR = "Incorrect user role!";
   String WRONG_BIRTHDAY_FORMAT_ERROR = "Wrong birthday format!";
-  String WRONG_BIRTH_DATE_ERROR = "User is less than 18 or higher then 60 years old!";
+  String WRONG_BIRTH_DATE_ERROR = "User is less than 18 or higher than 60 years old!";
   String WRONG_HIRE_DATE_FORMAT_ERROR = "Wrong hire date format!";
-  String START_DATE_ERROR = "Start date can't be less then current date!";
+  String START_DATE_ERROR = "Start date can't be less than current date!";
   String HIRE_DATE_CURRENT_DATE_ERROR = "Hire date can't be greater than current date!";
   String PHONE_NUMBER_FORMAT_ERROR = "Wrong phone number format!";
   String JOB_TITLE_ERROR = "JobTitle should be selected!";
   String PROJECT_EMPTY_NAME_ERROR = "Project name can't be empty!";
-  String USER_START_DATE_ERROR = "Work period start date can't be less then project start date!";
+  String USER_START_DATE_ERROR = "Work period start date can't be less than project start date!";
   String COMMENT_ERROR = "Comment does not exist!";
-  String COMMENT_DATE_ERROR = "Date isn't correct";
+  String COMMENT_DATE_ERROR = "Date isn't correct!";
 }

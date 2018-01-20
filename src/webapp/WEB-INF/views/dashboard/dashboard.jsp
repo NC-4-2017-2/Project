@@ -122,7 +122,14 @@
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
 <%@include file="../errors/errorMap.jsp" %>
-
+<c:if test="${not empty workingDayError}">
+    <div class="alert alert-danger col-lg-6 form-group">
+        Error:
+        <c:forEach items="${workingDayError}" var="error">
+            ${error.value}<br>
+        </c:forEach>
+    </div>
+</c:if>
 <div class="col-lg-11">
     <div class="well col-sm-4" style="width: 270px; height: 350px; margin: 10px">
         <h4>Table working hours</h4>

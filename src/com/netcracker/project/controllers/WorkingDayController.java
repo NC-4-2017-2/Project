@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/workingDay")
@@ -264,8 +266,9 @@ public class WorkingDayController {
       @RequestParam(value = "friday") String friday,
       @RequestParam(value = "saturday") String saturday,
       @RequestParam(value = "sunday") String sunday,
-      Principal principal,
-      Model model) {
+      Principal principal, HttpServletRequest request,
+      RedirectAttributes attributes,
+          Model model) {
     logger.info("Entering createWorkingDayPost()");
     String userLogin = principal.getName();
     User user = userDAO.findUserByLogin(userLogin);
@@ -299,8 +302,8 @@ public class WorkingDayController {
         .isEmpty(saturday) &&
         StringUtils.isEmpty(sunday)) {
       errorMap.put("EMPTY_DAY_ERROR", ErrorMessages.EMPTY_DAY_ERROR);
-      model.addAttribute("errorMap", errorMap);
-      return "workingDay/createWorkingDay";
+      attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
     }
     if (!StringUtils.isEmpty(monday)) {
       Map<String, String> mondayMap = validator
@@ -356,16 +359,16 @@ public class WorkingDayController {
     }
 
     if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "workingDay/createWorkingDay";
+      attributes.addFlashAttribute("workingDayError", errorMap);
+      return "redirect:/";
     }
 
     if (!StringUtils.isEmpty(monday)) {
       createWorkingDay(monday, user, projectManagerId,
           DayOfWeek.MONDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
 
@@ -373,51 +376,52 @@ public class WorkingDayController {
       createWorkingDay(tuesday, user, projectManagerId,
           DayOfWeek.TUESDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
     if (!StringUtils.isEmpty(wednesday)) {
       createWorkingDay(wednesday, user, projectManagerId,
           DayOfWeek.WEDNESDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
     if (!StringUtils.isEmpty(thursday)) {
       createWorkingDay(thursday, user, projectManagerId,
           DayOfWeek.THURSDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
     if (!StringUtils.isEmpty(friday)) {
       createWorkingDay(friday, user, projectManagerId,
           DayOfWeek.FRIDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
     if (!StringUtils.isEmpty(saturday)) {
       createWorkingDay(saturday, user, projectManagerId,
           DayOfWeek.SATURDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
     if (!StringUtils.isEmpty(sunday)) {
       createWorkingDay(sunday, user, projectManagerId,
           DayOfWeek.SUNDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        model.addAttribute("errorMap", errorMap);
-        return "workingDay/createWorkingDay";
+        attributes.addFlashAttribute("workingDayError", errorMap);
+        return "redirect:/";
       }
     }
-    return "responseStatus/success";
+    attributes.addFlashAttribute("success", "success");
+    return "redirect:/";
   }
 
   private void createWorkingDay(

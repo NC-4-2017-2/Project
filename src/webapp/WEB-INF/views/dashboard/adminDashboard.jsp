@@ -126,22 +126,32 @@
 <div class="col-lg-11">
     <table>
         <tr>
-            <td rowspan="2">
+            <td colspan="2">
+                <c:if test="${not empty workingDayError}">
+                    <div class="alert alert-danger col-lg-8 form-group">
+                        Error:
+                        <c:forEach items="${workingDayError}" var="error">
+                            ${error.value}<br>
+                        </c:forEach>
+                    </div>
+                </c:if>
+                <c:if test="${not empty success}">
+                    <div class="col-lg-6">
+                        <div class="alert alert-success">
+                            <strong>Successful operation!</strong>
+                        </div>
+                    </div>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="3">
                 <div class="well col-sm-4"
-                     style="width: 270px; height: 460px; margin: 10px">
+                     style="width: 270px; height: 500px; margin: 10px">
                     <h4>Create working hours</h4>
                     <%@include file="../workingDay/createWorkingDayForm.jsp" %>
                     <h4>Find working hours by status</h4>
                     <%@include file="../workingDay/findPMWorkingDayForm.jsp" %>
-                </div>
-            </td>
-            <td rowspan="2">
-                <div class="col-sm-3">
-                    <div class="well"
-                         style="width: 270px; height: 350px; margin: 10px">
-                        <h4>Create vacation on me</h4>
-                        <%@include file="../vacation/createVacationForm.jsp" %>
-                    </div>
                 </div>
             </td>
             <td>
@@ -158,6 +168,17 @@
                     </div>
                 </div>
             </td>
+            <td rowspan="3">
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 350px; margin: 10px">
+                        <h4>Create vacation on me</h4>
+                        <%@include file="../vacation/createVacationForm.jsp" %>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <div class="col-sm-3">
                     <div class="well"

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/vacation")
@@ -52,7 +53,7 @@ public class VacationController {
   public String createVacationPost(
       @RequestParam("startDate") String startDate,
       @RequestParam("endDate") String endDate,
-      Principal principal,
+      Principal principal, RedirectAttributes attributes,
       Model model) {
     logger.info("Entering createVacationPost()");
     User currentUser = userDAO.findUserByLogin(principal.getName());
@@ -62,8 +63,8 @@ public class VacationController {
     errorMap = validator
         .validateCreateVacation(startDate, endDate, currentUser);
     if (!errorMap.isEmpty()) {
-      model.addAttribute("errorMap", errorMap);
-      return "vacation/createVacation";
+      attributes.addFlashAttribute("errorMap", errorMap);
+      return "redirect:/";
     }
 
     Status pmStatus = null;
@@ -113,7 +114,8 @@ public class VacationController {
 
     vacationDAO.createVacation(vacation);
 
-    return "responseStatus/success";
+    attributes.addFlashAttribute("success", "success");
+    return "redirect:/";
   }
 
   @RequestMapping(value = "/findVacationByStatus", method = RequestMethod.GET)
@@ -221,7 +223,7 @@ public class VacationController {
     }
 
     User currentUser = userDAO.findUserByLogin(principal.getName());
-    if(!currentUser.getUserId().equals(vacation.getUserId())) {
+    if (!currentUser.getUserId().equals(vacation.getUserId())) {
       errorMap.put("WRONG_USER_ERROR", ErrorMessages.WRONG_USER_ERROR);
       model.addAttribute("errorMap", errorMap);
       return "responseStatus/unsuccess";

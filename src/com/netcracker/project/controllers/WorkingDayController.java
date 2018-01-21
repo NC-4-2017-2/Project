@@ -302,7 +302,7 @@ public class WorkingDayController {
         .isEmpty(saturday) &&
         StringUtils.isEmpty(sunday)) {
       errorMap.put("EMPTY_DAY_ERROR", ErrorMessages.EMPTY_DAY_ERROR);
-      attributes.addFlashAttribute("workingDayError", errorMap);
+      attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
     }
     if (!StringUtils.isEmpty(monday)) {
@@ -450,7 +450,7 @@ public class WorkingDayController {
         if (user.getJobTitle().name().equals(JobTitle.PROJECT_MANAGER.name())) {
           workingDayDAO
               .updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),
-                  Status.WAITING_FOR_APPROVAL.getId());
+                  Status.APPROVED.getId());
         } else {
           workingDayDAO
               .updateWorkingDayStatus(actualWorkingDay.getWorkingDayId(),

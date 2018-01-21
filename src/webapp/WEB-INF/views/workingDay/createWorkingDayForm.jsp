@@ -5,13 +5,31 @@
             <td><input name="monday" type="time"></td>
             <c:choose>
                 <c:when test="${MondayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt;">    ${MondayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${MondayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${MondayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt;">    ${MondayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${MondayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${MondayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt;">    ${MondayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${MondayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
         </tr>
@@ -20,13 +38,31 @@
             <td><input name="tuesday" type="time"></td>
             <c:choose>
                 <c:when test="${TuesdayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt">     ${TuesdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${TuesdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${TuesdayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt">     ${TuesdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${TuesdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${TuesdayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt">     ${TuesdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${TuesdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
         </tr>
@@ -35,13 +71,31 @@
             <td><input name="wednesday" type="time"></td>
             <c:choose>
                 <c:when test="${WednesdayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt">     ${WednesdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${WednesdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${WednesdayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt">     ${WednesdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${WednesdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${WednesdayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt">     ${WednesdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${WednesdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
         </tr>
@@ -50,13 +104,31 @@
             <td><input name="thursday" type="time"></td>
             <c:choose>
                 <c:when test="${ThursdayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt">     ${ThursdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${ThursdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${ThursdayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt">     ${ThursdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${ThursdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${ThursdayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt">     ${ThursdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${ThursdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
         </tr>
@@ -65,13 +137,31 @@
             <td><input name="friday" type="time"></td>
             <c:choose>
                 <c:when test="${FridayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt">     ${FridayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${FridayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${FridayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt">     ${FridayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${FridayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${FridayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt">     ${FridayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${FridayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
         </tr>
@@ -80,13 +170,31 @@
             <td><input name="saturday" type="time"></td>
             <c:choose>
                 <c:when test="${SaturdayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt">     ${SaturdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${SaturdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${SaturdayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt">     ${SaturdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${SaturdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${SaturdayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt">     ${SaturdayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${SaturdayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
         </tr>
@@ -95,30 +203,33 @@
             <td><input name="sunday" type="time"></td>
             <c:choose>
                 <c:when test="${SundayTime.status.name() eq 'APPROVED'}">
-                    <td style="color: #0000FF; font-size:17pt">     ${SundayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-success" style="font-size:17pt;">
+                                <abbr title="Approved">${SundayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${SundayTime.status.name() eq 'DISAPPROVED'}">
-                    <td style="color: #8B0000; font-size:17pt">     ${SundayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-danger" style="font-size:17pt;">
+                                <abbr title="Disapproved">${SundayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
                 <c:when test="${SundayTime.status.name() eq 'WAITING_FOR_APPROVAL'}">
-                    <td style="color: #FF4500; font-size:17pt">     ${SundayTime.workingHours}</td>
+                    <td>
+                        <div class="container">
+                            <div class="text-info" style="font-size:17pt;">
+                                <abbr title="Waiting for approval">${SundayTime.workingHours}</abbr>
+                            </div>
+                        </div>
+                    </td>
                 </c:when>
             </c:choose>
-        </tr>
-        <tr>
-            <td style="color: #0000FF; font-size:10pt" colspan="3">
-                approved
-            </td>
-        </tr>
-        <tr>
-            <td style="color: #8B0000; font-size:10pt" colspan="3">
-                disapproved
-            </td>
-        </tr>
-        <tr>
-            <td style="color: #FF4500; font-size:10pt" colspan="3">
-                waiting for approval
-            </td>
         </tr>
     </table>
     <br>

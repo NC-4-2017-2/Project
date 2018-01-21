@@ -124,6 +124,24 @@
 <div class="col-lg-11">
     <table>
         <tr>
+            <td colspan="2">
+                <c:if test="${not empty errorMap}">
+                    <div class="alert alert-danger col-lg-8 form-group">
+                        <c:forEach items="${errorMap}" var="error">
+                            ${error.value}<br>
+                        </c:forEach>
+                    </div>
+                </c:if>
+                <c:if test="${not empty success}">
+                    <div class="col-lg-6">
+                        <div class="alert alert-success">
+                            <strong>Successful operation!</strong>
+                        </div>
+                    </div>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
             <td valign="top">
                 <div class="well col-sm-4"
                      style="width: 270px; height: 370px; margin: 10px">

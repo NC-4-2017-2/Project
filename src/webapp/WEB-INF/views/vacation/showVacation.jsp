@@ -15,6 +15,43 @@
         <thead>
         <tr>
             <th scope="col" colspan="2" style="text-align: center;">Vacation
+                <c:if test="${vacation.pmId ne vacation.lmId}">
+                    <c:if test="${currentUser.userId eq vacation.pmId}">
+                        <form action="/vacation/updateStatus/${vacation.vacationId}"
+                              method="post">
+                            <button type="submit" class="btn btn-primary btn-md"
+                                    name="status" value="APPROVED">Approve
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-md"
+                                    name="status" value="DISAPPROVED">Disapprove
+                            </button>
+                        </form>
+                        <br>
+                    </c:if>
+                    <c:if test="${currentUser.userId eq vacation.lmId}">
+                        <form action="/vacation/updateStatus/${vacation.vacationId}"
+                              method="post">
+                            <button type="submit" class="btn btn-primary btn-md"
+                                    name="status" value="APPROVED">Approve
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-md"
+                                    name="status" value="DISAPPROVED">Disapprove
+                            </button>
+                        </form>
+                        <br>
+                    </c:if>
+                </c:if>
+                <c:if test="${vacation.pmId eq vacation.lmId}">
+                    <form action="/vacation/updateStatus/${vacation.vacationId}"
+                          method="post">
+                        <button type="submit" class="btn btn-primary btn-md" name="status"
+                                value="APPROVED">Approve
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-md" name="status"
+                                value="DISAPPROVED">Disapprove
+                        </button>
+                    </form>
+                </c:if>
             </th>
         </tr>
         </thead>
@@ -53,59 +90,24 @@
         </tr>
         </tbody>
     </table>
-    <c:if test="${vacation.lmStatus ne 'APPROVED' && vacation.pmStatus ne 'APPROVED' && vacation.userId eq currentUser.userId}">
-        <form action="/vacation/updateAuthorVacation/${vacation.vacationId}">
-            <button type="submit" class="btn btn-primary btn-md">Update
-                vacation
-            </button>
-        </form>
-    </c:if>
-    <c:if test="${vacation.pmId ne vacation.lmId}">
-        <c:if test="${currentUser.userId eq vacation.pmId}">
-            PM status:
-            <form action="/vacation/updateStatus/${vacation.vacationId}"
-                  method="post">
-                <button type="submit" class="btn btn-primary btn-md"
-                        name="status" value="APPROVED">Approve
-                </button>
-                <button type="submit" class="btn btn-primary btn-md"
-                        name="status" value="DISAPPROVED">Disapprove
+    <c:choose>
+        <c:when test="${vacation.lmStatus ne 'APPROVED' && vacation.pmStatus ne 'APPROVED' && vacation.userId eq currentUser.userId}">
+            <form action="/vacation/updateAuthorVacation/${vacation.vacationId}">
+                <input onclick="window.history.go(-1); return false;"
+                       type="button" class="btn btn-primary btn-md"
+                       value="Back"/>
+                <button type="submit" class="btn btn-primary btn-md">Update
                 </button>
             </form>
-            <br>
-        </c:if>
-        <c:if test="${currentUser.userId eq vacation.lmId}">
-            LM status:
-            <form action="/vacation/updateStatus/${vacation.vacationId}"
-                  method="post">
-                <button type="submit" class="btn btn-primary btn-md"
-                        name="status" value="APPROVED">Approve
-                </button>
-                <button type="submit" class="btn btn-primary btn-md"
-                        name="status" value="DISAPPROVED">Disapprove
-                </button>
-            </form>
-            <br>
-        </c:if>
-    </c:if>
-    <c:if test="${vacation.pmId eq vacation.lmId}">
-        PM and LM status:
-        <form action="/vacation/updateStatus/${vacation.vacationId}"
-              method="post">
-            <button type="submit" class="btn btn-primary btn-md" name="status"
-                    value="APPROVED">Approve
-            </button>
-            <button type="submit" class="btn btn-primary btn-md" name="status"
-                    value="DISAPPROVED">Disapprove
-            </button>
-        </form>
-        <br>
-    </c:if>
-    <div class="form-group">
-        <input onclick="window.history.go(-1); return false;"
-               type="button" class="btn btn-primary btn-md"
-               value="Back"/>
-    </div>
+        </c:when>
+        <c:otherwise>
+            <div class="form-group">
+                <input onclick="window.history.go(-1); return false;"
+                       type="button" class="btn btn-primary btn-md"
+                       value="Back"/>
+            </div>
+        </c:otherwise>
+    </c:choose>
     <%@include file="../errors/errorMap.jsp" %>
 </div>
 </body>

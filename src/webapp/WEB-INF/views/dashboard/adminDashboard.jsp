@@ -127,7 +127,6 @@
             <td colspan="2">
                 <c:if test="${not empty errorMap}">
                     <div class="alert alert-danger col-lg-8 form-group">
-                        Error:
                         <c:forEach items="${errorMap}" var="error">
                             ${error.value}<br>
                         </c:forEach>

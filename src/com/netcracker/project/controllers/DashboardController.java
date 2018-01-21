@@ -53,12 +53,12 @@ public class DashboardController {
     List<WorkingHoursStatistic> workingHoursStatisticList = statisticService
         .getWorkingHoursByUserId(currentUser.getUserId(),
             converter.convertStringToDateFromJSP("1991-01-01"),
-            converter.convertStringToDateFromJSP("2018-01-01"));
+            converter.convertStringToDateFromJSP("2019-01-01"));
 
     UserTaskStatistic userTasks = statisticService
         .getTaskCountByUserIdPieChart(currentUser.getUserId(),
             converter.convertStringToDateFromJSP("1991-01-01"),
-            converter.convertStringToDateFromJSP("2018-01-01"));
+            converter.convertStringToDateFromJSP("2019-01-01"));
 
     model.addAttribute("userName", userName);
     model.addAttribute("workingHoursStatisticList", workingHoursStatisticList);

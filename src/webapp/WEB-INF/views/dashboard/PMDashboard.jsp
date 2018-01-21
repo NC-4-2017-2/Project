@@ -121,78 +121,105 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<%@include file="../errors/errorMap.jsp" %>
-
 <div class="col-lg-11">
-    <div class="well col-sm-4"
-         style="width: 270px; height: 460px; margin: 10px">
-        <h4>Table working hours</h4>
-        <%@include file="../workingDay/createWorkingDayForm.jsp" %>
-        <h4>Find working hours by status</h4>
-        <%@include file="../workingDay/findPMWorkingDayForm.jsp" %>
-    </div>
-    <div>
-        <div class="col-sm-3">
-            <div class="well" style="width: 270px; height: 460px; margin: 10px">
-                <h4>Create vacation on me</h4>
-                <%@include file="../vacation/createVacationForm.jsp" %>
-                <h4>Find vacation by status</h4>
-                <%@include
-                        file="../vacation/findVacationByManagerStatusForm.jsp" %>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="well" style="width: 270px; height: 350px; margin: 10px">
-                <h4>Create business trip</h4>
-                <form action="/businessTrip/createBusinessTrip">
-                    <button type="submit" class="btn btn-primary btn-md">
-                        Create
-                    </button>
-                </form>
-                <h4>Show trips by status</h4>
-                <%@include file="../businessTrip/findPMTripForm.jsp" %>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="well" style="width: 270px; height: 570px; margin: 10px">
-                <h4>Find projects by period</h4>
-                <%@include file="../project/findProjectByStartDateForm.jsp" %>
-                <c:if test="${currentUser.projectStatus eq 'WORKING'}">
-                    <h4>Current project</h4>
-                    <table class="table table-hover table-dark" border="0">
-                        <tbody>
-                        <tr>
-                            <th scope="row">Name:</th>
-                            <td>${project.name}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Start date:</th>
-                            <td>${project.startDate}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">End date:</th>
-                            <td>${project.endDate}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Project status:</th>
-                            <td>${project.projectStatus}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <br>
-                    <form action="/project/showProject/${project.projectId}">
-                        <button type="submit" class="btn btn-primary btn-md">
-                            More
-                            info
-                        </button>
-                    </form>
-                </c:if>
-            </div>
-        </div>
-    </div>
     <table>
         <tr>
-            <td>
+            <td valign="top">
+                <div class="well col-sm-4"
+                     style="width: 270px; height: 510px; margin: 10px">
+                    <h4>Table working hours</h4>
+                    <%@include file="../workingDay/createWorkingDayForm.jsp" %>
+                    <h4>Find working hours by status</h4>
+                    <%@include file="../workingDay/findPMWorkingDayForm.jsp" %>
+                </div>
+            </td>
+            <td valign="top">
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 400px; margin: 10px">
+                        <h4>Create vacation on me</h4>
+                        <%@include file="../vacation/createVacationForm.jsp" %>
+                        <h4>Find vacation by status</h4>
+                        <%@include
+                                file="../vacation/findVacationByManagerStatusForm.jsp" %>
+                    </div>
+                </div>
+            </td>
+            <td valign="top">
+                <div class="col-sm-3">
+                    <div class="well"
+                         style="width: 270px; height: 250px; margin: 10px">
+                        <h4>Create business trip</h4>
+                        <form action="/businessTrip/createBusinessTrip">
+                            <button type="submit"
+                                    class="btn btn-primary btn-md">
+                                Create
+                            </button>
+                        </form>
+                        <h4>Show trips by status</h4>
+                        <%@include file="../businessTrip/findPMTripForm.jsp" %>
+                    </div>
+                </div>
+            </td>
+            <c:choose>
+                <c:when test="${currentUser.projectStatus eq 'WORKING'}">
+                    <td valign="top">
+                        <div class="col-sm-3">
+                            <div class="well"
+                                 style="width: 270px; height: 500px; margin: 10px">
+                                <h4>Find projects by period</h4>
+                                <%@include
+                                        file="../project/findProjectByStartDateForm.jsp" %>
+                                <h4>Current project</h4>
+                                <table class="table table-hover table-dark"
+                                       border="0">
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">Name:</th>
+                                        <td>${project.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Start date:</th>
+                                        <td>${project.startDate}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">End date:</th>
+                                        <td>${project.endDate}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Project status:</th>
+                                        <td>${project.projectStatus}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <form action="/project/showProject/${project.projectId}">
+                                    <button type="submit"
+                                            class="btn btn-primary btn-md">
+                                        More
+                                        info
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </c:when>
+                <c:otherwise>
+                    <td valign="top">
+                        <div class="col-sm-3">
+                            <div class="well"
+                                 style="width: 270px; height: 230px; margin: 10px">
+                                <h4>Find projects by period</h4>
+                                <%@include
+                                        file="../project/findProjectByStartDateForm.jsp" %>
+                            </div>
+                        </div>
+                    </td>
+                </c:otherwise>
+            </c:choose>
+        </tr>
+        <tr>
+            <td colspan="2">
                 <c:if test="${not empty workingHoursStatisticList}">
                     <div class="col-sm-3">
                         <div class="well"
@@ -204,7 +231,7 @@
                     </div>
                 </c:if>
             </td>
-            <td>
+            <td colspan="2">
                 <c:if test="${critical ne 0 || high ne 0 || normal ne 0 || low ne 0}">
                     <div class="col-sm-3">
                         <div class="well"

@@ -121,16 +121,14 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-<%@include file="../errors/errorMap.jsp" %>
-
 <div class="col-lg-11">
     <table>
         <tr>
             <td colspan="2">
-                <c:if test="${not empty workingDayError}">
+                <c:if test="${not empty errorMap}">
                     <div class="alert alert-danger col-lg-8 form-group">
                         Error:
-                        <c:forEach items="${workingDayError}" var="error">
+                        <c:forEach items="${errorMap}" var="error">
                             ${error.value}<br>
                         </c:forEach>
                     </div>

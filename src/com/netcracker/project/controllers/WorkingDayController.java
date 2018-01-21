@@ -359,7 +359,7 @@ public class WorkingDayController {
     }
 
     if (!errorMap.isEmpty()) {
-      attributes.addFlashAttribute("workingDayError", errorMap);
+      attributes.addFlashAttribute("errorMap", errorMap);
       return "redirect:/";
     }
 
@@ -367,7 +367,7 @@ public class WorkingDayController {
       createWorkingDay(monday, user, projectManagerId,
           DayOfWeek.MONDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }
@@ -376,7 +376,7 @@ public class WorkingDayController {
       createWorkingDay(tuesday, user, projectManagerId,
           DayOfWeek.TUESDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }
@@ -384,7 +384,7 @@ public class WorkingDayController {
       createWorkingDay(wednesday, user, projectManagerId,
           DayOfWeek.WEDNESDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }
@@ -392,7 +392,7 @@ public class WorkingDayController {
       createWorkingDay(thursday, user, projectManagerId,
           DayOfWeek.THURSDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }
@@ -400,7 +400,7 @@ public class WorkingDayController {
       createWorkingDay(friday, user, projectManagerId,
           DayOfWeek.FRIDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }
@@ -408,7 +408,7 @@ public class WorkingDayController {
       createWorkingDay(saturday, user, projectManagerId,
           DayOfWeek.SATURDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }
@@ -416,7 +416,7 @@ public class WorkingDayController {
       createWorkingDay(sunday, user, projectManagerId,
           DayOfWeek.SUNDAY, errorMap);
       if (!errorMap.isEmpty()) {
-        attributes.addFlashAttribute("workingDayError", errorMap);
+        attributes.addFlashAttribute("errorMap", errorMap);
         return "redirect:/";
       }
     }

@@ -1,6 +1,7 @@
 package com.netcracker.project.controllers.validators;
 
 import com.netcracker.project.controllers.validators.errorMessage.ErrorMessages;
+import com.netcracker.project.model.entity.Comment;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +42,22 @@ public class CommentValidator  extends AbstractValidator {
     }
     if (!checkDate(creationDate)) {
       setErrorToMap("COMMENT_ERROR", ErrorMessages.COMMENT_DATE_ERROR);
+    }
+  }
+
+  public Map<String, String> validationEntityComment(Comment comment) {
+    validateComment(comment);
+    return getErrorMap();
+  }
+
+  public Map<String, String> validateInputId(String id) {
+    validateId(id);
+    return getErrorMap();
+  }
+
+  public void validateComment(Comment comment){
+    if (comment == null){
+      setErrorToMap("existence_error", "You else haven't comments!");
     }
   }
 

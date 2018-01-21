@@ -19,10 +19,12 @@ import com.netcracker.project.model.entity.Task;
 import com.netcracker.project.services.impl.DateConverterService;
 import java.math.BigInteger;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -673,9 +675,6 @@ public class TaskController {
       model.addAttribute("errorMap", errorMap);
     }
 
-    Date date = new Date();
-    creationDate = converter.convertDateToString(date);
-
     Comment comment = new Comment.CommentBuilder()
         .bodyComment(bodyComment)
         .creationDate(converter.convertStringToDateFromJSP(creationDate))
@@ -687,11 +686,14 @@ public class TaskController {
 
     commentDAO.createComment(comment);
 
+    commentDAO.updateCreationDate(comment.getCreationDate(), comment.getCommentId());
+
     return "responseStatus/success";
   }
 
   @RequestMapping(value = "/createComment/{taskId}", method = RequestMethod.GET)
-  public String createCommentGet(@PathVariable(value = "taskId") String taskId, Model model, Principal principal) {
+  public String createCommentGet(@PathVariable(value = "taskId") String taskId,
+      Model model, Principal principal) {
     logger.info("createComment with get params.: ");
     Map<String, String> errorMap = new HashMap<>();
     TaskValidator validator = new TaskValidator();
@@ -708,11 +710,12 @@ public class TaskController {
     String currentUserLogin = principal.getName();
     User currentUser = userDAO.findUserByLogin(currentUserLogin);
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date date = new Date();
 
     model.addAttribute("errorMap", errorMap);
     model.addAttribute("userId", currentUser.getUserId());
-    model.addAttribute("creationDate", date);
+    model.addAttribute("creationDate",  sdf.format(date));
 
     return "task/createComment";
   }
@@ -734,14 +737,22 @@ public class TaskController {
 
     Task task = taskDAO.findTaskByTaskId(validTaskId);
 
-    Integer commentExistence = commentDAO.findIfCommentExists(validTaskId);
-    Map<String, String> existenceError = commentValidator.validateExistenceComment(commentExistence);
-    if (!existenceError.isEmpty()) {
-      model.addAttribute("errorMap", existenceError);
-      return "task/showAllComments";
+    List<Comment> comments = commentDAO.getCommentsForTask(validTaskId);
+    Comment comment = null;
+    if (comments.size() >= 1) {
+      Iterator<Comment> commentIterator = comments.iterator();
+      while (commentIterator.hasNext()) {
+        comment = commentIterator.next();
+      }
     }
 
-    Collection<Comment> comments = commentDAO.getCommentsForTask(validTaskId);
+    if (comments.isEmpty()){
+      Map<String, String> existenceError = new CommentValidator().validationEntityComment(comment);
+      if (!existenceError.isEmpty()) {
+        model.addAttribute("errorMap", existenceError);
+        return "task/showAllComments";
+      }
+    }
 
     model.addAttribute("task", task);
     model.addAttribute("comments", comments);

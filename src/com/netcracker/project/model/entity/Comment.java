@@ -63,6 +63,10 @@ public class Comment {
     return firstName;
   }
 
+  public BigInteger getCommentId() {
+    return commentId;
+  }
+
   public static class CommentBuilder{
     private BigInteger commentId;
     private String bodyComment;

@@ -15,6 +15,7 @@
         <c:forEach items="${comments}" var="comment">
         <tr>
                     <td>${comment.getCreationDate()}</td><br>
+                    <br>
                     <td>${comment.getLastName()}</td> <td>${comment.getFirstName()}</td> added comment:<br>
             <br>
                     <br>
@@ -24,7 +25,9 @@
         </tr>
         </c:forEach>
 
-
+        <%@include file="../errors/errorMap.jsp" %>
+        <br>
+        <br>
         <form action="/task/createComment/${task.taskId}">
             <button type="submit">Add comment</button>
         </form>

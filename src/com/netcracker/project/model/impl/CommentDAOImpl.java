@@ -6,6 +6,8 @@ import com.netcracker.project.model.entity.Comment;
 import com.netcracker.project.model.impl.mappers.CommentMapper;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +53,15 @@ public class CommentDAOImpl implements CommentDAO {
   }
 
   @Override
-  public Collection<Comment> getCommentsForTask(BigInteger taskId) {
+  public void updateCreationDate(Date creationDate, BigInteger commentId) {
+    logger.info(
+        "Entering updateStatus(date=" + creationDate + ")" + "Entering commentId="
+            + commentId);
+    template.update(UPDATE_CREATION_DATE, creationDate, commentId);
+  }
+
+  @Override
+  public List<Comment> getCommentsForTask(BigInteger taskId) {
     logger.info("Entering getCommentsForTask(taskId=" + taskId + ")");
     return template.query(GET_ALL_COMMENTS_FOR_TASK, new Object[]{taskId},
         new CommentMapper());

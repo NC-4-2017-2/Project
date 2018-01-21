@@ -2,7 +2,8 @@ package com.netcracker.project.model;
 
 import com.netcracker.project.model.entity.Comment;
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public interface CommentDAO {
 
@@ -12,7 +13,9 @@ public interface CommentDAO {
 
   void updateCommentBody(String commentBody, BigInteger commentId);
 
-  Collection<Comment> getCommentsForTask(BigInteger taskId);
+  void updateCreationDate(Date creationDate, BigInteger commentId);
+
+  List<Comment> getCommentsForTask(BigInteger taskId);
 
   Integer findIfCommentExists(BigInteger taskId);
 
@@ -33,6 +36,12 @@ public interface CommentDAO {
      " SET ATTRIBUTES.VALUE = ? " +
      " WHERE ATTRIBUTES.OBJECT_ID = ? AND " +
      " ATTRIBUTES.ATTR_ID = 66 ";
+
+  String UPDATE_CREATION_DATE =
+      " UPDATE ATTRIBUTES " +
+      " SET DATE_VALUE = ? " +
+      " WHERE ATTRIBUTES.OBJECT_ID = ? " +
+      " AND ATTRIBUTES.ATTR_ID = 67 ";
 
   String GET_ALL_COMMENTS_FOR_TASK =
             "  SELECT COMMENTS.OBJECT_ID AS COMMENT_ID, COMMENT_BODY.VALUE AS COMMENT_BODY, COMMENT_DATE.DATE_VALUE AS COMMENT_DATE, "
@@ -79,6 +88,6 @@ public interface CommentDAO {
       + "  AND LAST_NAME.ATTR_ID = 1 "
       + "  AND LAST_NAME.OBJECT_ID = USER_ID_REF.REFERENCE "
       + "  AND FIRST_NAME.ATTR_ID = 2 "
-      + "  AND FIRST_NAME.OBJECT_ID = USER_ID_REF.REFERENCE ";;
+      + "  AND FIRST_NAME.OBJECT_ID = USER_ID_REF.REFERENCE " ;
 
 }

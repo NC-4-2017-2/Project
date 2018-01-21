@@ -29,7 +29,7 @@ public class ApplicationContext {
   @Bean(name = "dataSource")
   public DataSource getDataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
-    dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+    dataSource.setDriverClassName(System.getenv("jdbc.driverClassName"));
     dataSource.setUrl(System.getenv("jdbc.url"));
     dataSource.setUsername(System.getenv("jdbc.username"));
     dataSource.setPassword(System.getenv("jdbc.password"));

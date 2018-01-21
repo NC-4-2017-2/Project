@@ -14,7 +14,7 @@ public class SecurityUserDAOImpl implements SecurityUserDAO {
   private JdbcTemplate template;
 
   public void setDataSource(DataSource dataSource) {
-    this.template = new JdbcTemplate(dataSource);
+    template = new JdbcTemplate(dataSource);
   }
 
   public SecurityUser findByUsername(String userName) {

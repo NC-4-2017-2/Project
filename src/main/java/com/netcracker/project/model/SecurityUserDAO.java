@@ -3,6 +3,7 @@ package com.netcracker.project.model;
 import com.netcracker.project.model.entity.SecurityUser;
 
 public interface SecurityUserDAO {
+
   SecurityUser findByUsername(String userName);
 
   String FIND_BY_USERNAME = "SELECT USER_LOGIN.VALUE AS USER_NAME, USER_PASSWORD.VALUE AS USER_PASSWORD, ROLE_VALUE.VALUE AS USER_ROLE "

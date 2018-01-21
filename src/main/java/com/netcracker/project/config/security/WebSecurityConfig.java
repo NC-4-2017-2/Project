@@ -17,8 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@ImportResource("classpath:Spring-SecurityUser.xml")
-@ComponentScan("com.netcracker.project")
+//@ImportResource("classpath:Spring-SecurityUser.xml")
+@ComponentScan("com.netcracker")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
@@ -35,7 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests()
-        .antMatchers("/WEB-INF/**").permitAll()
+        .antMatchers("/WEB-INF/**")
+        .permitAll()
         .anyRequest()
         .authenticated()
         .and()

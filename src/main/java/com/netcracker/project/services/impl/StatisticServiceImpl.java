@@ -12,6 +12,7 @@ import java.util.List;
 import com.netcracker.project.model.entity.WorkingHoursStatistic;
 import com.netcracker.project.services.StatisticService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class StatisticServiceImpl implements StatisticService {
 
-  private ApplicationContext context =
-      new ClassPathXmlApplicationContext("Spring-Module.xml");
-  private StatisticDAO statistic =
-      (StatisticDAO) context.getBean("statisticDAO");
+  @Autowired
+  private StatisticDAO statisticDAO;
+
+//  private ApplicationContext context =
+//      new ClassPathXmlApplicationContext("Spring-Module.xml");
+//  private StatisticDAO statistic =
+//      (StatisticDAO) context.getBean("statisticDAO");
   private static final Logger logger = Logger.getLogger(StatisticServiceImpl.class);
 
 
@@ -31,7 +35,7 @@ public class StatisticServiceImpl implements StatisticService {
       BigInteger projectId) {
     logger.info(
         "getProjectSprintStatLineChart() method. projectId = " + projectId);
-    return statistic.findProjectSprintStatByProjectId(projectId);
+    return statisticDAO.findProjectSprintStatByProjectId(projectId);
   }
 
   @Override
@@ -40,7 +44,7 @@ public class StatisticServiceImpl implements StatisticService {
     logger.info(
         "getTaskCountByProjectIdAndDatePieChart() method. projectId = " + projectId
             + " startDate : " + startDate + " endDate : " + endDate);
-    return statistic
+    return statisticDAO
         .findProjectTaskStatisticCountByProjectIdAndPeriod(projectId, startDate,
             endDate);
   }
@@ -51,7 +55,7 @@ public class StatisticServiceImpl implements StatisticService {
     logger.info(
         "getTaskCountByUserIdPieChart() method. userId = " + userId
             + " startDate : " + startDate + " endDate : " + endDate);
-    return statistic
+    return statisticDAO
         .findUserTaskCountByUserIdAndPeriod(userId, startDate, endDate);
   }
 
@@ -61,7 +65,7 @@ public class StatisticServiceImpl implements StatisticService {
     logger.info(
         "getWorkingHoursByUserId() method. userId = " + userId
             + " startDate : " + startDate + " endDate : " + endDate);
-    return statistic
+    return statisticDAO
         .findUserWorkingHoursByUserIdAndPeriod(userId, startDate, endDate);
   }
 
@@ -69,7 +73,7 @@ public class StatisticServiceImpl implements StatisticService {
   public WorkPeriodStatistic getWorkPeriodByProjectId(BigInteger projectId) {
     logger.info(
         "getWorkPeriodByProjectId() method. projectId = " + projectId);
-    return statistic.findWorkPeriodByProjectIdAndStatus(projectId);
+    return statisticDAO.findWorkPeriodByProjectIdAndStatus(projectId);
   }
 
   @Override
@@ -78,7 +82,7 @@ public class StatisticServiceImpl implements StatisticService {
     logger.info(
         "getVacationsByProjectId() method. projectId = " + projectId
             + " startDate : " + startDate + " endDate : " + endDate);
-    return statistic
+    return statisticDAO
         .findVacationsByProjectIdAndPeriod(projectId, startDate, endDate);
   }
 }

@@ -39,6 +39,8 @@ public class DashboardController {
   private StatisticService statisticService;
   @Autowired
   private WorkingDayDAO workingDayDAO;
+  @Autowired
+  private DateConverterService converterService;
 
 
   private DateConverterService converter = new DateConverterService();
@@ -85,6 +87,7 @@ public class DashboardController {
         WorkingDay monday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("MondayTime", monday);
+        model.addAttribute("MondayTimeHours", converterService.getHoursFromDouble(monday.getWorkingHours()));
       }
     }
     if (currentDayValue >= DayOfWeek.TUESDAY.getValue()) {
@@ -98,6 +101,7 @@ public class DashboardController {
         WorkingDay tuesday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("TuesdayTime", tuesday);
+        model.addAttribute("TuesdayTimeHours", converterService.getHoursFromDouble(tuesday.getWorkingHours()));
       }
     }
     if (currentDayValue >= DayOfWeek.WEDNESDAY.getValue()) {
@@ -111,6 +115,7 @@ public class DashboardController {
         WorkingDay wednesday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("WednesdayTime", wednesday);
+        model.addAttribute("WednesdayTimeHours", converterService.getHoursFromDouble(wednesday.getWorkingHours()));
       }
     }
     if (currentDayValue >= DayOfWeek.THURSDAY.getValue()) {
@@ -124,7 +129,7 @@ public class DashboardController {
         WorkingDay thursday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("ThursdayTime", thursday);
-
+        model.addAttribute("ThursdayTimeHours", converterService.getHoursFromDouble(thursday.getWorkingHours()));
       }
     }
     if (currentDayValue >= DayOfWeek.FRIDAY.getValue()) {
@@ -138,6 +143,7 @@ public class DashboardController {
         WorkingDay friday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("FridayTime", friday);
+        model.addAttribute("FridayTimeHours", converterService.getHoursFromDouble(friday.getWorkingHours()));
       }
     }
     if (currentDayValue >= DayOfWeek.SATURDAY.getValue()) {
@@ -151,6 +157,7 @@ public class DashboardController {
         WorkingDay saturday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("SaturdayTime", saturday);
+        model.addAttribute("SaturdayTimeHours", converterService.getHoursFromDouble(saturday.getWorkingHours()));
       }
     }
     if (currentDayValue >= DayOfWeek.SUNDAY.getValue()) {
@@ -164,6 +171,7 @@ public class DashboardController {
         WorkingDay sunday = workingDayDAO
             .findWorkingDayByUserIdAndDate(user.getUserId(), from);
         model.addAttribute("SundayTime", sunday);
+        model.addAttribute("SundayTimeHours", converterService.getHoursFromDouble(sunday.getWorkingHours()));
       }
     }
     if (request.isUserInRole("ROLE_ADMIN")) {

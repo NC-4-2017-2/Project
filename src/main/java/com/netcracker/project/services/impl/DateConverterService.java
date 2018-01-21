@@ -82,6 +82,13 @@ public class DateConverterService {
     return Math.floor(sum * 100) / 100;
   }
 
+  public String getHoursFromDouble(double hours){
+    long iPart = (long)hours;
+    double fPart = hours - iPart;
+    double x = Math.ceil(fPart * 60.0) / 100;
+    return String.valueOf(iPart + x);
+  }
+
   public Integer getYearFromDate(Date date) {
     int result = -1;
     if (date != null) {

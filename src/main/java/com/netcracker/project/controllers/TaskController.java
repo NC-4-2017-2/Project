@@ -263,7 +263,7 @@ public class TaskController {
         .priority(TaskPriority.valueOf(priority))
         .status(TaskStatus.valueOf(status))
         .description(description)
-        .reopenCounter(0)
+        .reopenCounter(reopenCounter)
         .authorId(currentUser.getUserId())
         .userId(user.getUserId())
         .projectId(updationProject.getProjectId())

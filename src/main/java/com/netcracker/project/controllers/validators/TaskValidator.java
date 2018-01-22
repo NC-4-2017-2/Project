@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class TaskValidator extends AbstractValidator {
 
   private String datePattern = "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])";
-  private String symbolPattern = "^[\\pL\\pN0-9\\p{Punct}\\s]+";
+  private String symbolPattern = "[\\pL\\pN0-9\\p{Punct}\\s]+";
 
   public Map<String, String> validationCreate(String name, String taskType, String startDate,
       String plannedEndDate, String priority,
@@ -106,21 +106,21 @@ public class TaskValidator extends AbstractValidator {
 
   private void validateTaskType(String taskType){
     if (taskType == null || taskType.toString().isEmpty()){
-      setErrorToMap("task_type_error", "Task type can't to be null");
+      setErrorToMap("task_type_error", "Task type can't to be null!");
     }
     if (!taskTypeCheck(taskType)){
-      setErrorToMap("task_type_error", "This task type not found");
+      setErrorToMap("task_type_error", "This task type not found!");
     }
   }
 
 
   private void validatePriority(String priority){
     if (priority == null || priority.toString().isEmpty()){
-      setErrorToMap("priority_error", "Priority can't to be empty");
+      setErrorToMap("priority_error", "Priority can't to be empty!");
     }
 
     if (!taskPriorityCheck(priority)){
-      setErrorToMap("priority_error", "This task priority not found");
+      setErrorToMap("priority_error", "This task priority not found!");
     }
   }
 
@@ -149,7 +149,7 @@ public class TaskValidator extends AbstractValidator {
       setErrorToMap("comment_error", "We must write comment!");
     }
     if (!checkString(comment)){
-      setErrorToMap("comment_error", "You entered incorrect comment");
+      setErrorToMap("comment_error", "You entered incorrect comment!");
     }
   }
 
@@ -163,10 +163,10 @@ public class TaskValidator extends AbstractValidator {
 
   private void validateProjects(String projectName){
     if (projectName.isEmpty() || projectName == null){
-      setErrorToMap("projectName_error","Project name is null");
+      setErrorToMap("projectName_error","Project name is null!");
     }
     if (!checkString(projectName.toString())){
-      setErrorToMap("projectName_error","Project name is incorrect");
+      setErrorToMap("projectName_error","Project name is incorrect!");
     }
   }
 

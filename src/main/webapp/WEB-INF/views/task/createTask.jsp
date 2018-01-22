@@ -75,7 +75,6 @@
                     </select>
             </div>
 
-        <%@include file="../errors/errorMap.jsp" %>
         <br>
         <br>
            <div class="form-group">
@@ -83,6 +82,8 @@
                        class="btn btn-primary btn-md" value="Back"/>
                 <input type="submit" value="Create" class="btn btn-primary btn-md"/>
             </div>
+
+           <%@include file="../errors/errorMap.jsp" %>
        </div>
     </form>
 </body>

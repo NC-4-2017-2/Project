@@ -1,111 +1,129 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" %>
 <html>
 <head>
-    <style>
-        p {
-            color: red;
-        }
-    </style>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Update task</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </head>
-<body>
-<div align="center">
-    <form action="/task/updateTask/${taskId}" method="post"
-          commandName=taskForm">
-        <table border="0">
-            <tr>
-            <tr>
-                <h2>Updating task</h2></td>
-            </tr>
-            <tr>
-                <td>Task Name:</td>
-                <td><input type="text" name="name" size="20"
-                           value=${task.name}></td>
-            </tr>
-            <tr>
-                <td>Task Type:</td>
-                <td><select name="taskType">
+<jsp:include page="../fragments/header.jsp"></jsp:include>
+    <form action="/task/updateTask/${taskId}" method="post" commandName=taskForm">
+        <div class="col-lg-6">
+
+            <div class="form-group">
+                <label for="name">Task name:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="name" name="name"
+                           value=${task.name} required>
+                </div>
+            </div>
+
+            <label for="taskType">Type of task:</label>
+            <div class="form-group">
+                <select name="taskType" id="taskType" name="taskType">
                     <option value="REQUEST_TASK">REQUEST_TASK</option>
                     <option value="PROJECT_TASK">PROJECT_TASK</option>
-                </select></td >
-            </tr>
-            <tr>
-                <td>StartDate:</td>
-                <td><input type="date" name="startDate"
-                           value="${task.startDate}" ></td>
-            </tr>
-            <tr>
-                <td><input type="date" name="endDate" size="20" hidden = false
-                           value=${task.endDate}></td>
-            </tr>
-            <tr>
-            <tr>
-                <td>PlannedEndDate:</td>
-                <td><input type="date" name="plannedEndDate" size="20"
-                           value=${task.plannedEndDate}></td>
-            </tr>
-            <tr>
-                <td>Priority:</td>
-                <td><select name="priority">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="startDate">Start date:</label>
+                <div class="input-group">
+                    <input type="date" class="form-control" id="startDate"
+                           name="startDate" value=${task.startDate}
+                           required></div>
+            </div>
+
+
+            <div class="form-group">
+                    <label for="endDate">End date:</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control" id="endDate" name="endDate"
+                               value=${task.endDate} required>
+                    </div>
+            </div>
+
+            <div class="form-group">
+                <label for="plannedEndDate">Planned end date:</label>
+                <div class="input-group">
+                    <input type="date" class="form-control" id="plannedEndDate" name="plannedEndDate" value=${task.plannedEndDate} required>
+                </div>
+            </div>
+
+            <label for="priority">Priority of task:</label>
+            <div class="form-group">
+                <select class="priority" id="priority" name="priority">
                     <option value="CRITICAL">CRITICAL</option>
                     <option value="HIGH">HIGH</option>
                     <option value="NORMAL">NORMAL</option>
                     <option value="LOW">LOW</option>
-                </select></td>
-            </tr>
+                </select>
+            </div>
+
             <c:if test="${taskUser.userId eq curUser.userId}">
-                <tr>
-                    <td>Status:</td>
-                    <td>
-                        <select name="status">
-                            <option value="OPENED">OPENED</option>
-                            <option value="CLOSED">CLOSED</option>
-                            <option value="REOPENED">REOPENED</option>
-                            <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
-                        </select>
-                    </td>
-                </tr>
-            </c:if>
-            <tr>
-                <td>Description task:</td>
-                <td><input type="text" name="description" size="70"
-                           value=${task.description}></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="reopenCounter" size="20" hidden = false
-                           value=${task.reopenCounter}></td>
-            </tr>
-                <td>User last name:</td>
-                <td><input type="text" name="lastName" value=${taskUser.lastName}>
-                </td>
-            </tr>
-            <tr>
-                <td>User first name:</td>
-                <td><input type="text" name="firstName" value=${taskUser.firstName}>
-                </td>
-            </tr>
-            <tr>
-                <td>Project Name:</td>
-                <td>
-                    <select name="projectNames">
-                        <c:forEach items="${projectNamesList}" var="projectNames">
-                            <option value="${projectNames}">${projectNames}</option>
-                        </c:forEach>
+                <label for="status">Status of task:</label>
+                <div class="form-group">
+                    <select class="status" id="status" name="status">
+                        <option value="OPENED">OPENED</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="REOPENED">REOPENED</option>
+                        <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
                     </select>
-                </td>
-            </tr>
-        </table>
-        <%@include file="../errors/errorMap.jsp" %>
-        <c:if test="${taskUser.userId eq curUser.userId}">
-            <tr>
-                <td><input type="submit" value="Update" size="40" width="40"/></td>
-            </tr>
-        </c:if>
-        </table>
+                </div>
+            </c:if>
+
+            <div class="form-group">
+                <label for="description">Description of task:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" width="100" id="description" name="description"
+                           value=${task.description} required>
+                </div>
+            </div>
+
+            <input type="text" class="reopenCounter" id="reopenCounter" name="reopenCounter"
+                   hidden = false  value=${task.reopenCounter}>
+
+
+            <div class="form-group">
+                <label for="lastName">User last name:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="lastName" name="lastName"
+                           value=${taskUser.lastName} required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName">User first name:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                           value=${taskUser.firstName} required>
+                </div>
+            </div>
+
+            <label for="projectNames">Project:</label>
+            <div class="form-group">
+                <select name="projectNames" id = "projectNames">
+                    <c:forEach items="${projectNamesList}" var="projectNames" >
+                        <option value="${projectNames}">${projectNames}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <br>
+            <br>
+
+            <div class="form-group">
+                <input onclick="window.history.go(-1); return false;" type="button"
+                       class="btn btn-primary btn-md" value="Back"/>
+            <c:if test="${taskUser.userId eq curUser.userId}">
+                <td><input type="submit" value="Update" class="btn btn-primary btn-md"/></td>
+            </c:if>
+
+            <%@include file="../errors/errorMap.jsp" %>
+
+        </div>
+        </div>
     </form>
-</div>
 </body>
 </html>

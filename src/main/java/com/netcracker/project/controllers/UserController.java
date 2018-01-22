@@ -129,7 +129,7 @@ public class UserController {
           .userStatus(UserStatus.WORKING)
           .build();
 
-      //userDAO.createUser(user);
+      userDAO.createUser(user);
       emailService.sendEmail(email, login, password);
       System.out.println(user.toString());
       return "responseStatus/success";

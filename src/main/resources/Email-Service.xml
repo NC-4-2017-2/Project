@@ -17,7 +17,6 @@
         <prop key="mail.smtp.starttls.enable">true</prop>
         <prop key="mail.debug">false</prop>
         <prop key="security.require-ssl">true</prop>
-        <prop key="mail.smtp.starttls.enable">true</prop>
       </props>
     </property>
   </bean>

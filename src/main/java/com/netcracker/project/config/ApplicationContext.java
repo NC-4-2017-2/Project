@@ -18,10 +18,13 @@ import com.netcracker.project.model.impl.TaskDAOImpl;
 import com.netcracker.project.model.impl.UserDAOImpl;
 import com.netcracker.project.model.impl.VacationDAOImpl;
 import com.netcracker.project.model.impl.WorkingDayDAOImpl;
+import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 public class ApplicationContext {
@@ -98,5 +101,26 @@ public class ApplicationContext {
     StatisticDAOImpl statisticDAO = new StatisticDAOImpl();
     statisticDAO.setDataSource(getDataSource());
     return statisticDAO;
+  }
+
+  @Bean(name = "mailSender")
+  public JavaMailSender javaMailSender() {
+    Properties mailProperties = new Properties();
+    mailProperties.put("mail.smtp.auth", "true");
+    mailProperties.put("mail.transport.protocol", "smtp");
+    mailProperties.put("mail.smtp.auth.mechanisms", "XOAUTH2");
+    mailProperties.put("mail.smtp.starttls.enable", "true");
+    mailProperties.put("mail.debug", "true");
+    mailProperties.put("security.require-ssl", "true");
+
+    JavaMailSenderImpl emailService = new JavaMailSenderImpl();
+    emailService.setHost("smtp.office365.com");
+    emailService.setPort(587);
+    emailService.setUsername("team.erp.4.2017@outlook.com");
+    emailService.setPassword("netcracker2017");
+    emailService.setProtocol("smtp");
+    emailService.setJavaMailProperties(mailProperties);
+
+    return emailService;
   }
 }

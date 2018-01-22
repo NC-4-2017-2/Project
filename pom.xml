@@ -25,6 +25,7 @@
         <springmailer.version>4.2.5.RELEASE</springmailer.version>
         <javamail.version>1.4</javamail.version>
         <apache-commons.version>3.4</apache-commons.version>
+        <com.oracle.ojdbc7.version>12.1.0.2</com.oracle.ojdbc7.version>
     </properties>
 
     <repositories>
@@ -148,7 +149,8 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
-            <version>12.1.0.2</version>
+            <version>${com.oracle.ojdbc7.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

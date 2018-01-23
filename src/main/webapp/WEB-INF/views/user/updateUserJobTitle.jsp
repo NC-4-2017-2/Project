@@ -62,10 +62,10 @@
             <label for="jobTitle">JobTitle: </label>
             <div class="input-group">
                 <select class="jobTitle" id="jobTitle" name="jobTitle">
-                    <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>
-                    <option value="LINE_MANAGER">LINE_MANAGER</option>
+                    <option value="PROJECT_MANAGER">Project manager</option>
+                    <option value="LINE_MANAGER">Line manager</option>
                     <option selected="selected" value="SOFTWARE_ENGINEER">
-                        SOFTWARE_ENGINEER
+                        Software engineer
                     </option>
                 </select>
             </div>

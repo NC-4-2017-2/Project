@@ -16,10 +16,10 @@
         <label for="priority">Choose priority your task:</label>
         <div class="form-group">
             <select class="priority" id="priority" name="priority">
-                <option value="CRITICAL">CRITICAL</option>
-                <option value="HIGH">HIGH</option>
-                <option value="NORMAL">NORMAL</option>
-                <option selected="selected" value="LOW">LOW</option>
+                <option value="CRITICAL">Critical</option>
+                <option value="HIGH">High</option>
+                <option value="NORMAL">Normal</option>
+                <option selected="selected" value="LOW">Low</option>
             </select>
         </div>
 

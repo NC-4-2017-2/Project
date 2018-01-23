@@ -15,8 +15,8 @@
         <div class="form-group">
             <label for="taskType">Select type of task:</label>
             <select name="taskType" id = "taskType" required>
-                <option value="PROJECT_TASK">PROJECT_TASK</option>
-                <option value="REQUEST_TASK">REQUEST_TASK</option>
+                <option value="PROJECT_TASK">Project task</option>
+                <option value="REQUEST_TASK">Request task</option>
             </select>
         </div>
 

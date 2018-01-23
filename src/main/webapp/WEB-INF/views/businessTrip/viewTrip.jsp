@@ -21,7 +21,7 @@
         <c:forEach items="${tripList}" var="trip">
             <tr>
                 <td>
-                    <a href="/businessTrip/showTrip/${trip.businessTripId}">BusinessTrip${trip.businessTripId}</a>
+                    <a href="/businessTrip/showTrip/${trip.businessTripId}">BusinessTrip ${trip.country} ${trip.businessTripId}</a>
                 </td>
             </tr>
         </c:forEach>

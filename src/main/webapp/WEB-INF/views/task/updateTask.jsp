@@ -23,8 +23,8 @@
             <label for="taskType">Type of task:</label>
             <div class="form-group">
                 <select name="taskType" id="taskType" name="taskType">
-                    <option value="REQUEST_TASK">REQUEST_TASK</option>
-                    <option value="PROJECT_TASK">PROJECT_TASK</option>
+                    <option value="REQUEST_TASK">Request task</option>
+                    <option value="PROJECT_TASK">Project task</option>
                 </select>
             </div>
 
@@ -55,10 +55,10 @@
             <label for="priority">Priority of task:</label>
             <div class="form-group">
                 <select class="priority" id="priority" name="priority">
-                    <option value="CRITICAL">CRITICAL</option>
-                    <option value="HIGH">HIGH</option>
-                    <option value="NORMAL">NORMAL</option>
-                    <option value="LOW">LOW</option>
+                    <option value="CRITICAL">Critical</option>
+                    <option value="HIGH">High</option>
+                    <option value="NORMAL">Normal</option>
+                    <option value="LOW">Low</option>
                 </select>
             </div>
 
@@ -66,10 +66,10 @@
                 <label for="status">Status of task:</label>
                 <div class="form-group">
                     <select class="status" id="status" name="status">
-                        <option value="OPENED">OPENED</option>
-                        <option value="CLOSED">CLOSED</option>
-                        <option value="REOPENED">REOPENED</option>
-                        <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
+                        <option value="OPENED">Opened</option>
+                        <option value="CLOSED">Closed</option>
+                        <option value="REOPENED">Reopened</option>
+                        <option value="READY_FOR_TESTING">Ready for testing</option>
                     </select>
                 </div>
             </c:if>

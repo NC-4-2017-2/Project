@@ -16,9 +16,9 @@
             <label for="pmStatus">Choose PM status:</label>
             <div class="input-group">
                 <select name="pmStatus" id="pmStatus" required>
-                    <option value="APPROVED">APPROVED</option>
-                    <option value="DISAPPROVED">DISAPPROVED</option>
-                    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL
+                    <option value="APPROVED">Approved</option>
+                    <option value="DISAPPROVED">Disapproved</option>
+                    <option value="WAITING_FOR_APPROVAL">Waiting for approval
                     </option>
                 </select>
             </div>
@@ -26,9 +26,9 @@
             <label for="lmStatus">Choose LM status:</label>
             <div class="input-group">
                 <select name="lmStatus" id="lmStatus" required>
-                    <option value="APPROVED">APPROVED</option>
-                    <option value="DISAPPROVED">DISAPPROVED</option>
-                    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL
+                    <option value="APPROVED">Approved</option>
+                    <option value="DISAPPROVED">Disapproved</option>
+                    <option value="WAITING_FOR_APPROVAL">Waiting for approval
                     </option>
                 </select>
             </div>

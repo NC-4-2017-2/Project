@@ -16,9 +16,9 @@
             <label for="status">Choose status:</label>
             <div class="input-group">
                 <select name="status" id="status" required>
-                    <option value="APPROVED">APPROVED</option>
-                    <option value="DISAPPROVED">DISAPPROVED</option>
-                    <option value="WAITING_FOR_APPROVAL">WAITING_FOR_APPROVAL
+                    <option value="APPROVED">Approved</option>
+                    <option value="DISAPPROVED">Disapproved</option>
+                    <option value="WAITING_FOR_APPROVAL">Waiting for approval
                     </option>
                 </select>
             </div>

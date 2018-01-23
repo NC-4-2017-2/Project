@@ -28,10 +28,10 @@
         <label for="status">Status of task:</label>
         <div class="form-group">
             <select class="status" id="status" name="status">
-                <option value="OPENED">OPENED</option>
-                <option value="CLOSED">CLOSED</option>
-                <option value="REOPENED">REOPENED</option>
-                <option value="READY_FOR_TESTING">READY_FOR_TESTING</option>
+                <option value="OPENED">Opened</option>
+                <option value="CLOSED">Closed</option>
+                <option value="REOPENED">Reopened</option>
+                <option value="READY_FOR_TESTING">Ready for testing</option>
             </select>
         </div>
 

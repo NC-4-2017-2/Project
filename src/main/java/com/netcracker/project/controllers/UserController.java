@@ -131,7 +131,6 @@ public class UserController {
 
       userDAO.createUser(user);
       emailService.sendEmail(email, login, password);
-      System.out.println(user.toString());
       return "responseStatus/success";
     }
 

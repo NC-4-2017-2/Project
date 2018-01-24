@@ -23,6 +23,13 @@
                 </ul>
             </li>
             <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Task
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/task/findOwnTask">Find own task</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Project
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -34,7 +41,6 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vacation
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="/vacation/createVacation">Create vacation</a></li>
                     <li><a href="/vacation/findVacationByStatus">Find vacation by status</a></li>
                 </ul>
             </li>
@@ -70,11 +76,23 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">User
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">User
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/user/findUserByLastNameAndFirstName">Find user by name</a></li>
+                    <li><a href="/user/findUserByProjectName">Find user by project name</a></li>
+                </ul>
+            </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Task
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/user/findUserByLastNameAndFirstName">Find user by name</a></li>
-                        <li><a href="/user/findUserByProjectName">Find user by project name</a></li>
+                        <li><a href="/task/selectTaskType">Create task</a></li>
+                        <li><a href="/task/findTaskByPriority">Find task by priority</a></li>
+                        <li><a href="/task/findTaskPerPeriodAndStatus">Find task by status</a></li>
+                        <li><a href="/task/findTaskByFirstAndLastName">Find task by user name</a></li>
+                        <li><a href="/task/findTaskByProject">Find task by project</a></li>
+                        <li><a href="/task/findOwnTask">Find own task</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -88,7 +106,6 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vacation
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/vacation/createVacation">Create vacation</a></li>
                         <li><a href="/vacation/findVacationByStatus">Find vacation by status</a></li>
                         <li><a href="/vacation/findVacationByManagerStatus">Find vacation by manager status</a></li>
                     </ul>
@@ -141,6 +158,13 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Task
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/task/findOwnTask">Find own task</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Project
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -151,7 +175,6 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vacation
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/vacation/createVacation">Create vacation</a></li>
                         <li><a href="/vacation/findVacationByStatus">Find vacation by status</a></li>
                         <li><a href="/vacation/findVacationByManagerStatus">Find vacation by manager status</a></li>
                     </ul>
@@ -196,6 +219,13 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Task
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/task/findOwnTask">Find own task</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Project
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -206,7 +236,6 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vacation
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/vacation/createVacation">Create vacation</a></li>
                         <li><a href="/vacation/findVacationByStatus">Find vacation by status</a></li>
                     </ul>
                 </li>

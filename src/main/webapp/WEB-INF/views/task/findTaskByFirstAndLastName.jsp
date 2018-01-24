@@ -27,7 +27,7 @@
 
         <label for="status">Status of task:</label>
         <div class="form-group">
-            <select class="status" id="status" name="status">
+            <select class="status" style="width: 176px; height: 30px;" id="status" name="status">
                 <option value="OPENED">Opened</option>
                 <option value="CLOSED">Closed</option>
                 <option value="REOPENED">Reopened</option>

@@ -10,19 +10,20 @@
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
     <form action="/task/createComment/taskId/${taskId}/userId/${userId}/creationDate/${creationDate}" method="post">
-        <div class="col-lg-2">
+        <div class="col-lg-4">
 
            <div class="panel-body">
             <label for="bodyComment">Comment:</label>
-            <textarea class="form-control" name="bodyComment" id="bodyComment"  placeholder="Add your comment" value=${bodyComment}></textarea>
+            <textarea class="form-control" name="bodyComment" id="bodyComment"
+                      style = "resize:none;" cols = "60" rows= "7" placeholder="Add your comment" value=${bodyComment}></textarea>
         </div>
 
             <%@include file="../errors/errorMap.jsp" %>
             <div class="form-group">
-                <button class="btn btn-sm btn-primary pull-right" type="submit">Add comment</button>
                 <input onclick="window.history.go(-1); return false;"
                        type="button" class="btn btn-primary btn-md"
                        value="Back"/>
+                <input type="submit" value="Create" class="btn btn-primary btn-md"/>
             </div>
         </div>
 

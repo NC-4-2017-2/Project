@@ -15,7 +15,7 @@
 
         <label for="priority">Choose priority your task:</label>
         <div class="form-group">
-            <select class="priority" id="priority" name="priority">
+            <select class="priority" style="width: 176px; height: 30px;" id="priority" name="priority">
                 <option value="CRITICAL">Critical</option>
                 <option value="HIGH">High</option>
                 <option value="NORMAL">Normal</option>

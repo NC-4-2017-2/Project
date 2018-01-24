@@ -9,9 +9,10 @@
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-4">
     <form action="/task/updateTask/${taskId}" method="post" commandName=taskForm">
-        <div class="col-lg-6">
-
             <div class="form-group">
                 <label for="name">Task name:</label>
                 <div class="input-group">
@@ -22,7 +23,7 @@
 
             <label for="taskType">Type of task:</label>
             <div class="form-group">
-                <select name="taskType" id="taskType" name="taskType">
+                <select style="width: 176px; height: 30px;" name="taskType" id="taskType" name="taskType">
                     <option value="REQUEST_TASK">Request task</option>
                     <option value="PROJECT_TASK">Project task</option>
                 </select>
@@ -54,7 +55,7 @@
 
             <label for="priority">Priority of task:</label>
             <div class="form-group">
-                <select class="priority" id="priority" name="priority">
+                <select class="priority" style="width: 176px; height: 30px;" id="priority" name="priority">
                     <option value="CRITICAL">Critical</option>
                     <option value="HIGH">High</option>
                     <option value="NORMAL">Normal</option>
@@ -65,7 +66,7 @@
             <c:if test="${taskUser.userId eq curUser.userId}">
                 <label for="status">Status of task:</label>
                 <div class="form-group">
-                    <select class="status" id="status" name="status">
+                    <select class="status" style="width: 176px; height: 30px;" id="status" name="status">
                         <option value="OPENED">Opened</option>
                         <option value="CLOSED">Closed</option>
                         <option value="REOPENED">Reopened</option>
@@ -73,14 +74,6 @@
                     </select>
                 </div>
             </c:if>
-
-            <div class="form-group">
-                <label for="description">Description of task:</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" width="100" id="description" name="description"
-                           value=${task.description} required>
-                </div>
-            </div>
 
             <input type="text" class="reopenCounter" id="reopenCounter" name="reopenCounter"
                    hidden = false  value=${task.reopenCounter}>
@@ -104,12 +97,22 @@
 
             <label for="projectNames">Project:</label>
             <div class="form-group">
-                <select name="projectNames" id = "projectNames">
+                <select name="projectNames" style="width: 176px; height: 30px;" id = "projectNames">
                     <c:forEach items="${projectNamesList}" var="projectNames" >
                         <option value="${projectNames}">${projectNames}</option>
                     </c:forEach>
                 </select>
             </div>
+
+        <div class="form-group">
+            <label for="description">Description of task:</label>
+            <div class="input-group">
+                <textarea type="text" class="form-control" width="100" id="description" name="description"
+                          style = "resize:none;" cols = "40" value=${task.description} required>
+                </textarea>
+            </div>
+        </div>
+
             <br>
             <br>
 
@@ -121,9 +124,11 @@
             </c:if>
 
             <%@include file="../errors/errorMap.jsp" %>
+            </div>
 
+            </form>
         </div>
-        </div>
-    </form>
+    </div>
+</div>
 </body>
 </html>

@@ -11,8 +11,10 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
+<div class="container">
+<div class="row">
+<div class="col-lg-3 col-lg-offset-4">
     <form action="/task/createTask" method="post">
-       <div class="col-lg-6">
         <div class="form-group">
             <label for="name">Enter task name:</label>
             <div class="input-group">
@@ -40,19 +42,13 @@
 
            <label for="priority">Choose priority your task:</label>
            <div class="form-group">
-                <select class="priority" id="priority" name="priority">
+                <select style="width: 176px; height: 30px;" class="priority" id="priority" name="priority">
                     <option value="CRITICAL">Critical</option>
                     <option value="HIGH">High</option>
                     <option value="NORMAL">Normal</option>
                     <option selected="selected" value="LOW">Low</option>
                 </select>
            </div>
-
-        <div class="form-group">
-            <label for="description">Enter description of task:</label>
-            <div class="input-group">
-                <input type="text" class="form-control" width="100" id="description" name="description" placeholder="Enter description" required></div>
-        </div>
 
         <div class="form-group">
             <label for="lastName">Enter user last name:</label>
@@ -68,12 +64,20 @@
 
            <label for="projectNames">Choose project for your task:</label>
            <div class="form-group">
-                    <select name="projectNames" id = "projectNames">
+                    <select style="width: 176px; height: 30px;" name="projectNames" id = "projectNames">
                         <c:forEach items="${projectNamesList}" var="projectNames" >
                             <option value="${projectNames}">${projectNames}</option>
                         </c:forEach>
                     </select>
             </div>
+
+        <div class="form-group">
+            <label for="description">Enter description of task:</label>
+            <div class="input-group">
+                <textarea type="text" class="form-control" style = "resize:none;" cols = "40" rows= "5"
+                          id="description" name="description" placeholder="Enter description" required> </textarea>
+            </div>
+        </div>
 
         <br>
         <br>
@@ -84,7 +88,9 @@
             </div>
 
            <%@include file="../errors/errorMap.jsp" %>
-       </div>
     </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

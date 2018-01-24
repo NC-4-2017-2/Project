@@ -15,7 +15,7 @@
 
     <label for="projectNames">Project:</label>
     <div class="form-group">
-        <select name="project" id = "projectNames">
+        <select name="project" style="width: 176px; height: 30px;" id = "projectNames">
             <c:forEach items="${projectNamesList}" var="projectNames" >
                 <option value="${projectNames}">${projectNames}</option>
             </c:forEach>

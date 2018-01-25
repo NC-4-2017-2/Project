@@ -10,7 +10,6 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
-
 <div class="col-lg-4 col-md-3">
     <table class="table table-hover table-dark" border="3">
         <thead>

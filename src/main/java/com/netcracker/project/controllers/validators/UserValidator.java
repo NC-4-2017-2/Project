@@ -96,7 +96,7 @@ public class UserValidator extends AbstractValidator {
           ErrorMessages.WRONG_BIRTH_DATE_ERROR);
     }
     if (dateService.getYearFromDate(new Date()) - dateService
-        .getYearFromDate(birthDayDate) > 60) {
+        .getYearFromDate(birthDayDate) > 80) {
       setErrorToMap("WRONG_BIRTH_DATE_ERROR",
           ErrorMessages.WRONG_BIRTH_DATE_ERROR);
     }
@@ -120,7 +120,6 @@ public class UserValidator extends AbstractValidator {
       setErrorToMap("HIRE_DATE_CURRENT_DATE_ERROR",
           ErrorMessages.HIRE_DATE_CURRENT_DATE_ERROR);
     }
-
     return getErrorMap();
   }
 
@@ -129,7 +128,6 @@ public class UserValidator extends AbstractValidator {
       setErrorToMap("PHONE_NUMBER_FORMAT_ERROR",
           ErrorMessages.PHONE_NUMBER_FORMAT_ERROR);
     }
-
     return getErrorMap();
   }
 

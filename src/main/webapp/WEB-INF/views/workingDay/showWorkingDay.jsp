@@ -16,7 +16,7 @@
         <tr>
             <th scope="col" colspan="2" style="text-align: center;">Working
                 Day
-                <c:if test="${workingDay.pmId eq currentUser.userId}">
+                <c:if test="${workingDay.pmId eq currentUser.userId && workingDay.status.name() ne 'APPROVED'}">
                     <form action="/workingDay/showUpdatePMWorkingDayStatus/${workingDay.workingDayId}"
                           method="post">
                         <button type="submit" class="btn btn-primary btn-md"

@@ -121,6 +121,7 @@
 </head>
 <body>
 <jsp:include page="../fragments/header.jsp"></jsp:include>
+<jsp:include page="../fragments/footer.jsp"></jsp:include>
 <div class="col-lg-11">
     <table>
         <tr>

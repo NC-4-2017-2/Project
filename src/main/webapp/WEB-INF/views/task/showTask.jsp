@@ -80,8 +80,9 @@
                value="Back"/>
 <br>
 <br>
+
 <form action="/task/updateTask/${task.taskId}">
-    <c:if test="${taskUser.userId eq curUser.userId}">
+    <c:if test="${taskUser.userId eq curUser.userId or curUser.userId eq task.authorId}">
         <button type="submit" class="btn btn-primary btn-md">Edit task</button>
     </c:if>
 </form>

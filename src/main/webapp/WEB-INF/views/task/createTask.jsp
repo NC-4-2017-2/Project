@@ -15,13 +15,13 @@
 <div class="row">
 <div class="col-lg-3 col-lg-offset-4">
     <form action="/task/createTask" method="post">
+
         <div class="form-group">
             <label for="name">Enter task name:</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
             </div>
         </div>
-
 
         <select class="taskType" id="taskType" name="taskType" hidden="false">
             <option value="REQUEST_TASK">REQUEST_TASK</option>
@@ -74,7 +74,7 @@
         <div class="form-group">
             <label for="description">Enter description of task:</label>
             <div class="input-group">
-                <textarea type="text" class="form-control" style = "resize:none;" cols = "40" rows= "5"
+                <textarea type="text" class="form-control" style = "resize:none;" cols = "60" rows= "7"
                           id="description" name="description" placeholder="Enter description" required> </textarea>
             </div>
         </div>
